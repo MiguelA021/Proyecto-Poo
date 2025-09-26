@@ -43,12 +43,11 @@ public class Product {
 
   // Name should be of less than 100 characters and nos empty
   public void setName(String name) {
-    String[] nameComplete = name.split(" ");
     if (name.length() < 100 && !name.isEmpty()) {
       this.name = name;
     } else {
-      if (!(name.length() < 100)) {
-        System.out.println("The name should have less than 100 characters");
+      if (name.length() > 100) {
+        System.out.println("The name should be less than 100 characters");
       }
       if (name.isEmpty()) {
         System.out.println("The name shouldn't be empty");
