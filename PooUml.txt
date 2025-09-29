@@ -1,0 +1,36 @@
+@startuml
+class App
+App : main(String[] args)
+
+class Ticket{
+--  Private Attributes  --
+ int amount
+ ArrayList<Product> productList
+ {static} int MAX_PRODUCT
+
+--  Methods --
+ +add(Product product)
+ +remove(Product product)
+}
+
+class Product{
+ --  Private Attributes  --
+ int id
+ String name
+ int price
+ int cuantity
+ type category
+
+ --  Methods --
+ +getCuantity()
+ +getId()
+ +getName()
+ +getName()
+ +getPrice()
+ +getDiscountedPrice()
+ +setCuantity()
+ +setId()
+ +setName()
+ +setPrice()
+}
+@enduml
