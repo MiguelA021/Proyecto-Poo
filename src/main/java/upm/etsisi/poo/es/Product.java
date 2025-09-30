@@ -5,7 +5,7 @@ import java.util.*;
 import static upm.etsisi.poo.es.type.MERCH;
 
 enum type {
-  MERCH, PAPELERIA, ROPA, LIBRO, ELECTRONICA
+  MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS
 }
 
 public class Product {
@@ -47,7 +47,9 @@ public class Product {
     this.id = id;
   }
 
-  // Name should be of less than 100 characters and nos empty
+  /**
+   * @param name should be of less than 100 characters and not empty
+   */
   public void setName(String name) {
     if (name.length() < 100 && !name.isEmpty()) {
       this.name = name;
@@ -61,9 +63,11 @@ public class Product {
     }
   }
 
-  // Price is always positive
+  /**
+   * @param price must be always higher than zero
+   */
   public void setPrice(int price) {
-    if (price > 0) {
+    if (price > 0) { // Se debería incluir un control de que no este en null
       this.price = price;
     } else {
       this.price = 1;
@@ -71,7 +75,10 @@ public class Product {
     }
 
   }
-
+  /**
+   * @param quantityOfProduct the amount of products of the Product (Object)
+   * @return the discount that is allowed with the amount of the product
+   */
   public double getDiscountedPrice(int quantityOfProduct) {
     if (quantityOfProduct <= 1) {
       return price; //No discount
@@ -82,16 +89,16 @@ public class Product {
       case MERCH:
         discountRate = 0.0;
         break;
-      case PAPELERIA:
+      case STATIONERY:
         discountRate = 0.05;
         break;
-      case ROPA:
+      case CLOTHES:
         discountRate = 0.07;
         break;
-      case LIBRO:
+      case BOOK:
         discountRate = 0.10;
         break;
-      case ELECTRONICA:
+      case ELECTRONICS:
         discountRate = 0.03;
         break;
       default:
