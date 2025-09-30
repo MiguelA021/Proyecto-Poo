@@ -1,7 +1,5 @@
 package upm.etsisi.poo.es;
 
-import java.util.*;
-
 import static upm.etsisi.poo.es.type.MERCH;
 
 enum type {
@@ -11,16 +9,16 @@ enum type {
 public class Product {
   private int id;
   private String name;
-  private int price;
+  private double price;
   private int cuantity;
   private type category;
 
-
-  public Product(String name, int price, int id, int cuantity) {
+  public Product(String name, double price, int id, int cuantity, type category) {
     this.name = name;
     this.price = price;
     this.id = id;
     this.cuantity = cuantity;
+    this.category = category;
   }
 
   public int getCuantity() {
@@ -35,7 +33,7 @@ public class Product {
     return name;
   }
 
-  public int getPrice() {
+  public double getPrice() {
     return price;
   }
 
@@ -75,17 +73,18 @@ public class Product {
     }
 
   }
+
   /**
    * @param quantityOfProduct the amount of products of the Product (Object)
    * @return the discount that is allowed with the amount of the product
    */
-  public double getDiscountedPrice(int quantityOfProduct) {
+  public double getDiscountedPrice(double quantityOfProduct) {
     if (quantityOfProduct <= 1) {
-      return price; //No discount
+      return price; // No discount
     }
 
     double discountRate;
-    switch (category) {
+    switch (this.category) {
       case MERCH:
         discountRate = 0.0;
         break;
@@ -106,6 +105,12 @@ public class Product {
     }
 
     return price * (1 - discountRate);
+  }
+
+  @Override
+  public String toString() {
+    return "{class:Product, Id: " + this.id + ", name: " + this.name + ", category: " + this.category + ", price: "
+        + this.price + "}";
   }
 
 }
