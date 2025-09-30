@@ -110,7 +110,7 @@ public class Product {
   @Override
   public String toString() {
     return "{class:Product, Id: " + this.id + ", name: " + this.name + ", category: " + this.category + ", price: "
-        + this.price + "}";
+        + this.price + " €" + "}";
   }
 
 }
