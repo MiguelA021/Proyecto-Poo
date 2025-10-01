@@ -26,18 +26,21 @@ public class Ticket {
    */
   public boolean prodAdd(int id, String name, type category, double price) { // Metodo
     boolean done = true;
-    Product product = new Product(name, price, id, 1, category);
-    if (this.productList.contains(product)) {
-      int productPosition = productList.indexOf(product);
-      int amount = productList.get(productPosition).getCuantity();
-      if (amount < 200) {
-        productList.get(productPosition).setCuantity(amount + 1);
-      } else {
-        done = false;
-      }
+    if (amount < MAX_PRODUCT) {
+      Product product = new Product(name, price, id, 1, category);
+      if (this.productList.contains(product)) {
+        int productPosition = productList.indexOf(product);
+        int amount = productList.get(productPosition).getCuantity();
+        if (amount < 200) {
+          productList.get(productPosition).setCuantity(amount + 1);
+        } else {
+          done = false;
+        }
 
-    } else {
-      productList.add(product);
+      } else {
+        productList.add(product);
+        amount++;
+      }
     }
     return done;
   }
@@ -65,6 +68,10 @@ public class Ticket {
       }
       int amount = product.getCuantity();
       product.setCuantity(amount - 1);
+      if (amount - 1 == 0) {
+        productList.remove(id);
+      } else
+        productList.set(id, product);
       removed = true;
     }
     return removed;
@@ -133,4 +140,45 @@ public class Ticket {
       return sc.toString();
   }
 
+  public boolean updateCategoria(int id, type category) {
+    boolean done = false;
+    Iterator<Product> it = productList.iterator();
+    while (it.hasNext() && !done) {
+      Product product = it.next();
+      if (product.getId() == id) {
+        product.SetCategory(category);
+        productList.set(id, product);
+        done = true;
+      }
+    }
+    return done;
+  }
+
+  public boolean updateName(int id, String name) {
+    boolean done = false;
+    Iterator<Product> it = productList.iterator();
+    while (it.hasNext() && !done) {
+      Product product = it.next();
+      if (product.getId() == id) {
+        product.setName(name);
+        productList.set(id, product);
+        done = true;
+      }
+    }
+    return done;
+  }
+
+  public boolean updateAmount(int id, int amount) {
+    boolean done = false;
+    Iterator<Product> it = productList.iterator();
+    while (it.hasNext() && !done) {
+      Product product = it.next();
+      if (product.getId() == id) {
+        product.setCuantity(amount);
+        productList.set(id, product);
+        done = true;
+      }
+    }
+    return done;
+  }
 }
