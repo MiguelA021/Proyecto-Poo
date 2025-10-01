@@ -1,5 +1,5 @@
 package upm.etsisi.poo.es;
-
+//BORRAR ESTE COMENTARIO
 import static upm.etsisi.poo.es.type.MERCH;
 
 enum type {
@@ -56,7 +56,7 @@ public class Product {
     if (name.length() < 100 && !name.isEmpty()) {
       this.name = name;
     } else {
-      if (name.length() > 100) {
+      if (name.length() >= 100) {
         System.out.println("The name should be less than 100 characters");
       }
       if (name.isEmpty()) {
@@ -114,7 +114,7 @@ public class Product {
   @Override
   public String toString() {
     return "{class:Product, Id: " + this.id + ", name: " + this.name + ", category: " + this.category + ", price: "
-        + this.price + "}";
+        + this.price + " €" + "}";
   }
 
 }
