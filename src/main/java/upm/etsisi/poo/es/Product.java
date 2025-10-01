@@ -45,6 +45,10 @@ public class Product {
     this.id = id;
   }
 
+  public void SetCategory(type category) {
+    this.category = category;
+  }
+
   /**
    * @param name should be of less than 100 characters and not empty
    */
