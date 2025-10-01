@@ -1,5 +1,5 @@
 package upm.etsisi.poo.es;
-
+//BORAR ESTE COMENTARIO
 import java.lang.reflect.Type;
 import java.util.Scanner;
 
@@ -20,14 +20,14 @@ public class App
         Scanner scan = new Scanner(System.in);
         boolean end = false;
         Ticket ticket = new Ticket();
-        Shop shop = new Shop();
+       
 
         while(!end){
             String command = scan.nextLine();
             String [] commandArray = command.split(" ");
             switch (commandArray[0]){
                 case "prod":
-                    commandProd(commandArray,shop);
+                    commandProd(commandArray,ticket);
                     break;
                 case "ticket":
                     switch (commandArray[1]){
@@ -55,12 +55,13 @@ public class App
 
     }
 
-    private void commandProd(String[] commandArray,Shop shop) {
+    private void commandProd(String[] commandArray,Ticket ticket) {
         switch (commandArray[1]) {
             case "add":
+                double price = -1;
                 boolean correct = true;
                 try {
-                    double price = Double.parseDouble(commandArray[5]);
+                    price = Double.parseDouble(commandArray[5]);
                     type type = upm.etsisi.poo.es.type.valueOf(commandArray[4]);
                 } catch (NumberFormatException e) {
                     System.out.println("Introduce los datos correctos");
@@ -68,7 +69,7 @@ public class App
                 }
                 if (correct) {
 //                            Product product = new Product(commandArray[2],Double.parseDouble(commandArray[5]),commandArray[2],type.valueOf(commandArray[4]),);   falta revisar el constructor.
-                    boolean add = shop.addProduct(product);
+                    boolean add = ticket.prodAdd(Integer.getInteger(commandArray[2]),commandArray[3],type.valueOf(commandArray[4]),price);
                     if (add) {
                         System.out.println(product.toString());
                         System.out.println("prod add: ok");
@@ -76,18 +77,18 @@ public class App
                 }
                 break;
             case "list":
-                System.out.println(shop.toString());
+                System.out.println(ticket.toString());
                 break;
             case "update":
                 switch (commandArray[3]) {
                     case "NOMBRE":
-                        shop.updateName();
+                        ticket.updateName();
                         break;
                     case "CATEGORIA":
-                        shop.updateType();
+                        ticket.updateType();
                         break;
                     case "PRECIO":
-                        shop.updatePrice();
+                        ticket.updatePrice();
                         break;
                 }
             case "remove":
