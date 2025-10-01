@@ -35,6 +35,7 @@ public class Ticket {
         productList.add(product);
         amount++;
       }
+      System.out.println(product.toString());
     }
     return done;
   }
