@@ -134,10 +134,15 @@ public class Ticket {
       sc.append("\nUPM STORE\n");
       sc.append(String.format("%-10s %-50s%n", "Amount", "Product"));
       Iterator<Product> iterator = productList.iterator();
+      double finalPricePerElement = 0.0;
       while(iterator.hasNext()){
         Product product = iterator.next();
+        finalPricePerElement += product.getPrice()*product.getCuantity();
         sc.append(String.format("%-10d %-50s%n", product.getCuantity(), product.toString()));
       }
+      sc.append("Total price: ");
+      sc.append(finalPricePerElement);
+      sc.append(" €\n");
       return sc.toString();
   }
 
