@@ -1,4 +1,5 @@
 package upm.etsisi.poo.es;
+
 //BORRAR ESTE COMENTARIO
 import static upm.etsisi.poo.es.type.MERCH;
 
@@ -10,19 +11,13 @@ public class Product {
   private int id;
   private String name;
   private double price;
-  private int cuantity;
   private type category;
 
-  public Product(String name, double price, int id, int cuantity, type category) {
+  public Product(String name, double price, int id, type category) {
     this.name = name;
     this.price = price;
     this.id = id;
-    this.cuantity = cuantity;
     this.category = category;
-  }
-
-  public int getCuantity() {
-    return cuantity;
   }
 
   public int getId() {
@@ -37,8 +32,8 @@ public class Product {
     return price;
   }
 
-  public void setCuantity(int cuantity) {
-    this.cuantity = cuantity;
+  public type getCategory() {
+    return this.category;
   }
 
   public void setId(int id) {
