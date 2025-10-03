@@ -1,11 +1,11 @@
 package upm.etsisi.poo.es;
 
-public class Tienda {
+public class Store {
     int MAX_PRODUCT = 100;
     Product[] productList;
 
 
-    public Tienda(Product[] products) {
+    public Store(Product[] products) {
         this.productList = new Product[MAX_PRODUCT];
     }
 
