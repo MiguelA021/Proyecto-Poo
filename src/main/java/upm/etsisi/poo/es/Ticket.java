@@ -3,16 +3,20 @@ package upm.etsisi.poo.es;
 
 public class Ticket {
   final static int MAX_PRODUCT = 100;
+  Store store;
   Product[] productList;
+  Product[] storeProducts;
+  int amount;
 
   public Ticket() {
     this.productList = new Product[MAX_PRODUCT];
+    this.storeProducts = store.getProducts();
+    this.amount = 0;
   }
 
   /**
-   * @param id
-   *           Method that add the product to the list just when the amount
-   *           is below 100.
+   * Method that add the product to the list just when the amount
+   * is below 100.
    * @return boolean
    */
   public boolean prodAdd(String name, double price, int id, type category) { // Metodo
@@ -62,11 +66,8 @@ public class Ticket {
    *         set the
    *         ticket amount to new amount.
    */
-
-
-  public boolean ticketAdd(int prodId, int amount) {
+  public boolean ticketAdd(int prodId, int amount) { // Agrega al ticket la cantidad del producto
     boolean found = false;
-
     for (int i = 0; i < MAX_PRODUCT; i++) {
       if (productList[i].getId() == prodId) {
         found = true;
@@ -75,6 +76,9 @@ public class Ticket {
       boolean added = true;
       for (int j = 0; j < amount && added; j++) {
       }
+    }
+    if(found){
+      this.amount+= amount;
     }
 
     return found;
@@ -87,17 +91,56 @@ public class Ticket {
    */
   public boolean ticketRemove(int prodId) { // (elimina todas las apariciones del producto, revisa si existe el id )
     boolean removed = false;
+    int count= 0;
     for (int i = 0; i < MAX_PRODUCT; i++) {
       if (productList[i].getId() == prodId) {
         productList[i] = null;
+        count ++;
         removed = true;
       }
     }
-    return removed;
+    this.amount -= count;
+       return removed;
   }
 
-  //[null,null,null,null,null,null,null,B,C,D,E,F,F,F,G,H,I,I,J,J,K,L,M,N,O,O,O, null, null, null, null, etc]
-
+    public boolean updateAmount(int id, int amount) {
+        boolean done = false;
+        int contador = 0;
+        Product product = null;
+        for (int i = 0; i < MAX_PRODUCT; i++) {
+            if (productList[i].getId() == id) {
+                product = productList[i];
+                contador++;
+            }
+        }
+        if (contador < amount) {
+            boolean equals = false; // boolean that sees if we reached the needed cuantity of profuct
+            for (int i = contador; i < amount && !equals; i++) {
+                boolean added = false;
+                for (int j = 0; j < MAX_PRODUCT && !added; j++) {
+                    if (productList[j] == null) {
+                        productList[j] = product;
+                    }
+                }
+                if (i == amount) {
+                    equals = true;
+                }
+                done = equals;
+            }
+        } else {
+            for (int i = contador; i > MAX_PRODUCT; i++) {
+                boolean found = false;
+                for (int j = MAX_PRODUCT; j > 0 && !found; j++) {
+                    if (productList[j] == product) {
+                        found = true;
+                        productList[j] = null;
+                    }
+                }
+            }
+            done = true;
+        }
+        return done;
+    }
   /**
    * @return the ticket printed
    */
@@ -106,70 +149,10 @@ public class Ticket {
     sc.append("\nUPM STORE\n");
     sc.append(String.format("%-10s %-50s%n", "Amount", "Product"));
     for (int i = 0; i < MAX_PRODUCT; i++) {
-      sc.append(String.format("%-10d %-50s%n", productList[i]. productList[i].toString()));// REVISAR
+      sc.append(String.format("%-10d %-50s%n", productList[i].toString()));// REVISAR
     }
-    //Hacer el coste total de todos los productos de nuevo pero con un array.
     return sc.toString();
   }
 
-  public boolean updateCategoria(int id, type category) {
-    boolean done = false;
-    for (int i = 0; i < MAX_PRODUCT; i++) {
-      if (productList[i].getId() == id) {
-        productList[i].SetCategory(category);
-        done = true;
-      }
-    }
-    return done;
-  }
 
-  public boolean updateName(int id, String name) {
-    boolean done = false;
-    for (int i = 0; i < MAX_PRODUCT; i++) {
-      if (productList[i].getId() == id) {
-        productList[i].setName(name);
-        done = true;
-      }
-    }
-    return done;
-  }
-
-  public boolean updateAmount(int id, int amount) {
-    boolean done = false;
-    int contador = 0;
-    Product product = null;
-    for (int i = 0; i < MAX_PRODUCT; i++) {
-      if (productList[i].getId() == id) {
-        product = productList[i];
-        contador++;
-      }
-    }
-    if (contador < amount) {
-      boolean equals = false; // boolean that sees if we reached the needed cuantity of profuct
-      for (int i = contador; i < amount && !equals; i++) {
-        boolean added = false;
-        for (int j = 0; j < MAX_PRODUCT && !added; j++) {
-          if (productList[j] == null) {
-            productList[j] = product;
-          }
-        }
-        if (i == amount) {
-          equals = true;
-        }
-        done = equals;
-      }
-    } else {
-      for (int i = contador; i > MAX_PRODUCT; i++) {
-        boolean found = false;
-        for (int j = MAX_PRODUCT; j > 0 && !found; j++) {
-          if (productList[j] == product) {
-            found = true;
-            productList[j] = null;
-          }
-        }
-      }
-      done = true;
-    }
-    return done;
-  }
 }
