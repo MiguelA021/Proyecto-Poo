@@ -5,7 +5,7 @@ public class Store {
     Product[] productList;
 
 
-    public Store(Product[] products) {
+    public Store() {
         this.productList = new Product[MAX_PRODUCT];
     }
 
@@ -13,9 +13,8 @@ public class Store {
         return productList;
     }
 
-    public boolean prodAdd(String name, double price, int id, type category) { // Metodo
+    public boolean prodAdd(Product product) { // Metodo
         boolean done = true;
-        Product product = new Product(name, price, id, category);
         for (int i = 0; i < MAX_PRODUCT && !done; i++) {
             if (productList[i] == null) {
                 productList[i] = product;
@@ -36,7 +35,7 @@ public class Store {
         return found;
     }
 
-    public boolean updateCategoria(int id, type category) {
+    public boolean updateType(int id, type category) {
         boolean done = false;
         for (int i = 0; i < MAX_PRODUCT; i++) {
             if (productList[i].getId() == id) {
@@ -57,7 +56,15 @@ public class Store {
         }
         return done;
     }
-
-
+    public boolean updatePrice(int id, double price) {
+        boolean done = false;
+        for (int i = 0; i < MAX_PRODUCT; i++) {
+            if (productList[i].getId() == id) {
+                productList[i].setPrice(price);
+                done = true;
+            }
+        }
+        return done;
+    }
 }
 

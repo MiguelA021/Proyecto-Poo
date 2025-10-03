@@ -20,6 +20,7 @@ public class App
         Scanner scan = new Scanner(System.in);
         boolean end = false;
         Ticket ticket = new Ticket();
+        Store store = new Store();
        
 
         while(!end){
@@ -27,7 +28,7 @@ public class App
             String [] commandArray = command.split(" ");
             switch (commandArray[0]){
                 case "prod":
-                    commandProd(commandArray,ticket);
+                    commandProd(commandArray,store,ticket);
                     break;
                 case "ticket":
                     switch (commandArray[1]){
@@ -42,7 +43,7 @@ public class App
                     try {
                         String[] commandMarks = command.split("\"");
                         System.out.println(commandMarks[1]);
-                    }catch(ArrayIndexOutOfBoundsException){
+                    }catch(ArrayIndexOutOfBoundsException e ){
                         System.out.println("Incorrect format, try again.");
                     }
                     break;
@@ -55,7 +56,7 @@ public class App
 
     }
 
-    private void commandProd(String[] commandArray,Ticket ticket) {
+    private void commandProd(String[] commandArray,Store store, Ticket ticket) {
         switch (commandArray[1]) {
             case "add":
                 double price = -1;
@@ -69,7 +70,8 @@ public class App
                 }
                 if (correct) {
 //                            Product product = new Product(commandArray[2],Double.parseDouble(commandArray[5]),commandArray[2],type.valueOf(commandArray[4]),);   falta revisar el constructor.
-                    boolean add = ticket.prodAdd(Integer.getInteger(commandArray[2]),commandArray[3],type.valueOf(commandArray[4]),price);
+                    Product product = new Product(Integer.getInteger(commandArray[2]),commandArray[3],type.valueOf(commandArray[4]),price);
+                    boolean add = store.prodAdd(product);
                     if (add) {
                         System.out.println(product.toString());
                         System.out.println("prod add: ok");
@@ -77,18 +79,18 @@ public class App
                 }
                 break;
             case "list":
-                System.out.println(ticket.toString());
+                System.out.println(ticket.prodList());
                 break;
             case "update":
                 switch (commandArray[3]) {
                     case "NOMBRE":
-                        Store.updateName();
+                        store.updateName(Integer.getInteger(commandArray[4]), commandArray[5]);
                         break;
                     case "CATEGORIA":
-                        Store.updateType();
+                        store.updateType(Integer.getInteger(commandArray[4]), type.valueOf(commandArray[5]));
                         break;
                     case "PRECIO":
-                        Store.updatePrice();
+                        store.updatePrice(Integer.getInteger(commandArray[4]),Double.parseDouble(commandArray[5]));
                         break;
                 }
             case "remove":
