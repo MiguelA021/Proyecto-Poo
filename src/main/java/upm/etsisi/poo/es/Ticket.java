@@ -4,11 +4,14 @@ package upm.etsisi.poo.es;
 
 public class Ticket {
   final static int MAX_PRODUCT = 100;
+  Store store;
   Product[] productList;
+  Product[] storeProducts;
   int amount;
 
   public Ticket() {
     this.productList = new Product[MAX_PRODUCT];
+    this.storeProducts = store.getProducts();
     this.amount = 0;
   }
 
