@@ -1,6 +1,5 @@
 package upm.etsisi.poo.es;
 
-//BORRAR ESTE COMENTARIO
 
 public class Ticket {
   final static int MAX_PRODUCT = 100;
@@ -13,13 +12,10 @@ public class Ticket {
   }
 
   /**
-   * @param id
-   *           Method that add the product to the list just when the amount
-   *           is below 100.
+   * Method that add the product to the list just when the amount
+   * is below 100.
    * @return boolean
    */
-
-
   public String prodList() {
     String list = "";
     for (int i = 0; i < MAX_PRODUCT; i++) {
@@ -27,8 +23,6 @@ public class Ticket {
     }
     return list;
   }
-
-
 
   /**
    * @return a new ticket, which has been reset
