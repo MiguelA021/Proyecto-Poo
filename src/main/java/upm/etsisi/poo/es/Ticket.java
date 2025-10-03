@@ -94,14 +94,13 @@ public class Ticket {
       int count = 0;
       boolean encontrado = false;
       int i = 0;
-      int frist;
       while (productList[i].getId() != prodId){ // encuentra la primera aparición del obejeto que buscamos
           i++;
       }
-      frist = i;
-      while ( productList[i].getId()== prodId){
-          productList[i]= null;
-          i++;
+      int first = i;
+      while (productList[first].getId()== prodId){
+          productList[first]= null;
+          first++;
       }
     //  for ( int a = )
       return resul;
@@ -150,11 +149,37 @@ public class Ticket {
    */
   public String ticketPrint() {
     StringBuilder sc = new StringBuilder();
-    sc.append("\nUPM STORE\n");
-    sc.append(String.format("%-10s %-50s%n", "Amount", "Product"));
-    for (int i = 0; i < MAX_PRODUCT; i++) {
-      sc.append(String.format("%-10d %-50s%n", productList[i].toString()));// REVISAR
+    int I=0;
+    int posBehindOfI=I-1;
+    int amount=0;
+    double totalPrice=0, totalDiscount=0;
+    double finalPrice=0;
+    while(productList[I]!=null || productList[posBehindOfI]!=null){
+        if(productList[I]!=null){
+            sc.append(productList[I].toString());
+            totalPrice += productList[I].getPrice();
+        }
+        if(posBehindOfI>=0){
+            if(productList[I]==productList[posBehindOfI]){
+                amount++;
+            }else{
+                int amountReal=amount+1;
+                totalDiscount += productList[posBehindOfI].getDiscounted(amountReal); //It's not necessary to check if amountReal<1 because the method can difference it
+                finalPrice += productList[posBehindOfI].getDiscountedPrice(amountReal); //This method also can difference it.
+                amount=0;
+            }
+        }
+        I++;
+        posBehindOfI++;
+        sc.append("\n");
     }
+    sc.append("Total price: ");
+    sc.append(totalPrice);
+    sc.append("\nTotal discount: ");
+    sc.append(totalDiscount);
+    sc.append("\nFinal price: ");
+    sc.append(finalPrice);
+    sc.append("\nticket print: ok");
     return sc.toString();
   }
 

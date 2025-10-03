@@ -85,7 +85,7 @@ public class Product {
     double discountRate;
     switch (this.category) {
       case MERCH:
-        discountRate = 0.0;
+        discountRate = 0;
         break;
       case STATIONERY:
         discountRate = 0.05;
@@ -103,7 +103,40 @@ public class Product {
         discountRate = 0.0;
     }
 
-    return price * (1 - discountRate);
+    return price * (1 - discountRate)*quantityOfProduct;
+  }
+
+  /**
+   * @param amountOfProduct the amount of the products from Ticket
+   * @return the total discount of a kind of product with his amount.
+   */
+  public double getDiscounted(int amountOfProduct){
+    if(amountOfProduct <= 1){
+      return price;
+    }
+    double discountRate;
+    switch (this.category) {
+      case MERCH:
+        discountRate = 0;
+        break;
+      case STATIONERY:
+        discountRate = 0.05;
+        break;
+      case CLOTHES:
+        discountRate = 0.07;
+        break;
+      case BOOK:
+        discountRate = 0.10;
+        break;
+      case ELECTRONICS:
+        discountRate = 0.03;
+        break;
+      default:
+        discountRate = 0.0;
+    }
+    double totallyWithOutDiscount = price*amountOfProduct;
+    double totallyWithDiscount = getDiscountedPrice(amountOfProduct);
+    return totallyWithOutDiscount - totallyWithDiscount;
   }
 
   @Override
