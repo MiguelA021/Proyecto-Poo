@@ -42,7 +42,7 @@ public class App
                     try {
                         String[] commandMarks = command.split("\"");
                         System.out.println(commandMarks[1]);
-                    }catch(ArrayIndexOutOfBoundsException){
+                    }catch(ArrayIndexOutOfBoundsException e){
                         System.out.println("Incorrect format, try again.");
                     }
                     break;
@@ -56,44 +56,44 @@ public class App
     }
 
     private void commandProd(String[] commandArray,Ticket ticket) {
-        switch (commandArray[1]) {
-            case "add":
-                double price = -1;
-                boolean correct = true;
-                try {
-                    price = Double.parseDouble(commandArray[5]);
-                    type type = upm.etsisi.poo.es.type.valueOf(commandArray[4]);
-                } catch (NumberFormatException e) {
-                    System.out.println("Introduce los datos correctos");
-                    correct = false;
-                }
-                if (correct) {
-//                            Product product = new Product(commandArray[2],Double.parseDouble(commandArray[5]),commandArray[2],type.valueOf(commandArray[4]),);   falta revisar el constructor.
-                    boolean add = ticket.prodAdd(Integer.getInteger(commandArray[2]),commandArray[3],type.valueOf(commandArray[4]),price);
-                    if (add) {
-                        System.out.println(product.toString());
-                        System.out.println("prod add: ok");
-                    }
-                }
-                break;
-            case "list":
-                System.out.println(ticket.toString());
-                break;
-            case "update":
-                switch (commandArray[3]) {
-                    case "NOMBRE":
-                        Store.updateName();
-                        break;
-                    case "CATEGORIA":
-                        Store.updateType();
-                        break;
-                    case "PRECIO":
-                        Store.updatePrice();
-                        break;
-                }
-            case "remove":
-                break;
-        }
+//        switch (commandArray[1]) {
+//            case "add":
+//                double price = -1;
+//                boolean correct = true;
+//                try {
+//                    price = Double.parseDouble(commandArray[5]);
+//                    type type = upm.etsisi.poo.es.type.valueOf(commandArray[4]);
+//                } catch (NumberFormatException e) {
+//                    System.out.println("Introduce los datos correctos");
+//                    correct = false;
+//                }
+//                if (correct) {
+//////                            Product product = new Product(commandArray[2],Double.parseDouble(commandArray[5]),commandArray[2],type.valueOf(commandArray[4]),);   falta revisar el constructor.
+////                    boolean add = ticket.prodAdd(Integer.getInteger(commandArray[2]),commandArray[3],type.valueOf(commandArray[4]),price);
+////                    if (add) {
+////                        System.out.println(product.toString());
+////                        System.out.println("prod add: ok");
+//                    }
+//                }
+//                break;
+//            case "list":
+//                System.out.println(ticket.toString());
+//                break;
+//            case "update":
+//                switch (commandArray[3]) {
+//                    case "NOMBRE":
+//                        Store.updateName();
+//                        break;
+//                    case "CATEGORIA":
+//                        Store.updateType();
+//                        break;
+//                    case "PRECIO":
+//                        Store.updatePrice();
+//                        break;
+//                }
+//            case "remove":
+//                break;
+//        }
     }
 
     /**
