@@ -1,6 +1,5 @@
 package upm.etsisi.poo.es;
 
-//BORRAR ESTE COMENTARIO
 
 public class Ticket {
   final static int MAX_PRODUCT = 100;
@@ -63,8 +62,11 @@ public class Ticket {
    *         set the
    *         ticket amount to new amount.
    */
-  public boolean ticketAdd(int prodId, int amount) { // Agrega al ticket la cantidad del producto
+
+
+  public boolean ticketAdd(int prodId, int amount) {
     boolean found = false;
+
     for (int i = 0; i < MAX_PRODUCT; i++) {
       if (productList[i].getId() == prodId) {
         found = true;
@@ -94,6 +96,8 @@ public class Ticket {
     return removed;
   }
 
+  //[null,null,null,null,null,null,null,B,C,D,E,F,F,F,G,H,I,I,J,J,K,L,M,N,O,O,O, null, null, null, null, etc]
+
   /**
    * @return the ticket printed
    */
@@ -102,8 +106,9 @@ public class Ticket {
     sc.append("\nUPM STORE\n");
     sc.append(String.format("%-10s %-50s%n", "Amount", "Product"));
     for (int i = 0; i < MAX_PRODUCT; i++) {
-      sc.append(String.format("%-10d %-50s%n", productList[i].toString()));// REVISAR
+      sc.append(String.format("%-10d %-50s%n", productList[i]. productList[i].toString()));// REVISAR
     }
+    //Hacer el coste total de todos los productos de nuevo pero con un array.
     return sc.toString();
   }
 
