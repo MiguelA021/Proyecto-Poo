@@ -21,7 +21,7 @@ public class App
         boolean end = false;
         Ticket ticket = new Ticket();
         Store store = new Store();
-       
+
 
         while(!end){
             String command = scan.nextLine();
@@ -98,6 +98,9 @@ public class App
         }
     }
 
+    /**
+     * The method prints all the commands allowed and their format
+     */
     private void printHelp() {
         System.out.println("Commands:");
         System.out.println("pro add <id> \"<name>\"<category><price>");
@@ -113,6 +116,9 @@ public class App
         System.out.println("exit");
     }
 
+    /**
+     * It initializes the App
+     */
     private void init() {
         System.out.println("Welcome to the ticket module APP.");
         System.out.println("Ticket module. Type 'help' to see commands.");
