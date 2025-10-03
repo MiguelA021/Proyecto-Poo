@@ -4,33 +4,44 @@ App : main(String[] args)
 
 class Ticket{
 --  Private Attributes  --
- int amount
- ArrayList<Product> productList
- {static} int MAX_PRODUCT
+ -int amount
+ -Product[] productList
+ -{static} int MAX_PRODUCT
 
 --  Methods --
- +add(Product product)
- +remove(Product product)
+ +prodList()
+ +prodRemove(int id
+ +ticketNew()
+ +ticketAdd(int ProdId, int amount)
+ +ticketRemove(int prodId)
+ +ticketPrint()
+ +updateCategory(int id, type category)
+ +updateName(int id, String name)
+ +updateAmount(int id, int amount)
+ 
 }
 
 class Product{
  --  Private Attributes  --
- int id
- String name
- int price
- int cuantity
- type category
+ -int id
+ -String name
+ -int price
+ -int cuantity
+ -type category
 
  --  Methods --
- +getCuantity()
  +getId()
- +getName()
  +getName()
  +getPrice()
  +getDiscountedPrice()
- +setCuantity()
+ +getCategory()
  +setId()
  +setName()
  +setPrice()
+ +setCategory()
+ +toString()
 }
+App-->Ticket
+Ticket-->Product
+@enduml
 @enduml
