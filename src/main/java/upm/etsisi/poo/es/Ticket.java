@@ -83,6 +83,44 @@ public class Ticket {
        return removed;
   }
 
+    public boolean updateAmount(int id, int amount) {
+        boolean done = false;
+        int contador = 0;
+        Product product = null;
+        for (int i = 0; i < MAX_PRODUCT; i++) {
+            if (productList[i].getId() == id) {
+                product = productList[i];
+                contador++;
+            }
+        }
+        if (contador < amount) {
+            boolean equals = false; // boolean that sees if we reached the needed cuantity of profuct
+            for (int i = contador; i < amount && !equals; i++) {
+                boolean added = false;
+                for (int j = 0; j < MAX_PRODUCT && !added; j++) {
+                    if (productList[j] == null) {
+                        productList[j] = product;
+                    }
+                }
+                if (i == amount) {
+                    equals = true;
+                }
+                done = equals;
+            }
+        } else {
+            for (int i = contador; i > MAX_PRODUCT; i++) {
+                boolean found = false;
+                for (int j = MAX_PRODUCT; j > 0 && !found; j++) {
+                    if (productList[j] == product) {
+                        found = true;
+                        productList[j] = null;
+                    }
+                }
+            }
+            done = true;
+        }
+        return done;
+    }
   /**
    * @return the ticket printed
    */

@@ -82,13 +82,13 @@ public class App
             case "update":
                 switch (commandArray[3]) {
                     case "NOMBRE":
-                        ticket.updateName();
+                        Store.updateName();
                         break;
                     case "CATEGORIA":
-                        ticket.updateType();
+                        Store.updateType();
                         break;
                     case "PRECIO":
-                        ticket.updatePrice();
+                        Store.updatePrice();
                         break;
                 }
             case "remove":
