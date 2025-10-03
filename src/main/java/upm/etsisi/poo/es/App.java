@@ -115,7 +115,7 @@ public class App
     }
 
     /**
-     * It initializes the Appp
+     * It initializes the App
      */
     private void init() {
         System.out.println("Welcome to the ticket module APP.");
