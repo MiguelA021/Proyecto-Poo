@@ -1,20 +1,34 @@
 @startuml
-class App
-App : main(String[] args)
+class App{
+--  Methods --
+ +main(String[] args)
+ -void end()
+ -void start()
+ -void commandProd(String[] commandArray, Store store, Ticket ticket)
+ -void printHelp()
+ -void init()
+}
+
 
 class Ticket{
---  Private Attributes  --
- -int amount
- -Product[] productList
+--   Attributes  --
  -{static} int MAX_PRODUCT
+ -Store store
+ -Product[] productList
+ -int amount
+ -Product[] storeProducts
+ -Comparator <Product> nameComp
 
 --  Methods --
- +prodList()
- +prodRemove(int id
- +ticketNew()
- +ticketAdd(int ProdId, int amount)
- +ticketRemove(int prodId)
- +ticketPrint()
+ +boolean prodAdd (int id, String name, type category, double price)
+ +String prodList()
+ +boolean prodRemove(int id)
+ +Product[] ticketNew()
+ +boolean ticketAdd(int ProdId, int amount)
+ +boolean ticketRemove(int prodId)
+ +String ticketPrint()
+ +void sort()
+ 
  +updateCategory(int id, type category)
  +updateName(int id, String name)
  +updateAmount(int id, int amount)
@@ -22,7 +36,7 @@ class Ticket{
 }
 
 class Product{
- --  Private Attributes  --
+ --   Attributes  --
  -int id
  -String name
  -int price
@@ -41,7 +55,23 @@ class Product{
  +setCategory()
  +toString()
 }
+
+class Store{
+ --   Attributes  --
+ -{static} int MAX_PRODUCT
+ -Product[] productList
+
+ --  Methods --
+ +getProducts()
+ +boolean prodAdd(Product product)
+ +boolean prodRemove(int id)
+ +boolean updateType(int id, type category)
+ +boolean updateName(int id, String name)
+ +booelan updatePrice(int id, double price)
+}
+
 App-->Ticket
 Ticket-->Product
-@enduml
+Ticket-->Store
+Store-->Product
 @enduml
