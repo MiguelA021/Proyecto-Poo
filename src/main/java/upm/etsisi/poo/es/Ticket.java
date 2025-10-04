@@ -1,6 +1,5 @@
 package upm.etsisi.poo.es;
 
-
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -107,7 +106,7 @@ public class Ticket {
             productList[first] = null;
             first++;
         }
-        //  for ( int a = )
+        // for ( int a = )
         return resul;
     }
 
@@ -155,42 +154,31 @@ public class Ticket {
      */
     public String ticketPrint() {
         StringBuilder sc = new StringBuilder();
-        int I = 0;
-        int posBehindOfI = I - 1;
+        int i = 0;
         int amount = 0;
         double totalPrice = 0, totalDiscount = 0;
         double finalPrice = 0;
-        while (productList[I] != null || productList[posBehindOfI] != null) {
-            if (productList[I] != null) {
-                sc.append(productList[I].toString());
-                totalPrice += productList[I].getPrice();
-            }
-            if (posBehindOfI >= 0) {
-                if (productList[I] == productList[posBehindOfI]) {
-                    amount++;
-                } else {
-                    int amountReal = amount + 1;
-                    totalDiscount += productList[posBehindOfI].getDiscountedPrice(amountReal); //It's not necessary to check if amountReal<1 because the method can difference it
-                    finalPrice += productList[posBehindOfI].getDiscountedPrice(amountReal); //This method also can difference it.
-                    amount = 0;
-                }
-            }
-            I++;
-            posBehindOfI++;
+        sort();
+        while (productList[i] != null) {
+            sc.append(productList[i].toString());
+            totalPrice += productList[i].getPrice();
+            totalDiscount += productList[i].getDiscountedPrice();
+            i++;
             sc.append("\n");
         }
+        finalPrice = totalPrice - totalDiscount;
         sc.append("Total price: ");
-        sc.append(totalPrice);
+        sc.append(totalPrice + "\n");
         sc.append("\nTotal discount: ");
-        sc.append(totalDiscount);
+        sc.append(totalDiscount + "\n");
         sc.append("\nFinal price: ");
-        sc.append(finalPrice);
+        sc.append(finalPrice + "\n");
         sc.append("\nticket print: ok");
         return sc.toString();
     }
-    public void sort() {
-        Arrays.sort(productList,nameComp);
-    }
 
+    public void sort() {
+        Arrays.sort(productList, nameComp);
+    }
 
 }

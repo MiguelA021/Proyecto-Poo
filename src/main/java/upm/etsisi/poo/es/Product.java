@@ -2,8 +2,6 @@ package upm.etsisi.poo.es;
 
 //BORRAR ESTE COMENTARIO
 
-import static upm.etsisi.poo.es.type.MERCH;
-
 enum type {
     MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS
 }
@@ -72,17 +70,12 @@ public class Product {
             System.out.println("WARNING: The price should be a positive number");
         }
 
-  }
+    }
 
     /**
-     * @param quantityOfProduct the amount of products of the Product (Object)
      * @return the discount that is allowed with the amount of the product
      */
-    public double getDiscountedPrice(double quantityOfProduct) {
-        if (quantityOfProduct <= 1) {
-            return price; // No discount
-        }
-
+    public double getDiscountedPrice() {
         double discountRate;
         switch (this.category) {
             case MERCH:
@@ -110,7 +103,7 @@ public class Product {
     @Override
     public String toString() {
         return "{class:Product, Id: " + this.id + ", name: " + this.name + ", category: " + this.category + ", price: "
-                + this.price + " €" + "}";
+                + this.price + "}" + " **discount -" + this.getDiscountedPrice();
     }
 
 }
