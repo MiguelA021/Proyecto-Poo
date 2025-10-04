@@ -77,7 +77,7 @@ public class App {// REVISAR: Se deberia hacer una parte static para inicializar
      * @param command the command given by the user
      * @return
      */
-    private boolean readCommandAux(String[] commandArray, Store store, Ticket ticket, String command){
+    private boolean readCommandAux(String[] commandArray, Store store, Ticket ticket, String command){//REVISAR: Se deberían considerar casos como null o comandos mal escritos
         boolean end=false;
         switch (commandArray[0]){
             case "prod":

@@ -11,6 +11,9 @@ public class Product {
     private String name;
     private double price;
     private type category;
+    private final static String NAME_LENGTH_ERROR = "The name should be less than 100 characters";
+    private final static String NAME_NULL_ERROR = "The name shouldn't be empty";
+    private final static String PRICE_ERROR = "WARNING: The price should be a positive number";
 
     public Product(int id, String name, type category, double price) {
         this.name = name;
@@ -51,10 +54,10 @@ public class Product {
             this.name = name;
         } else {
             if (name.length() >= 100) {
-                System.out.println("The name should be less than 100 characters");
+                System.out.println(NAME_LENGTH_ERROR);
             }
             if (name.isEmpty()) {
-                System.out.println("The name shouldn't be empty");
+                System.out.println(NAME_NULL_ERROR);
             }
         }
     }
@@ -67,7 +70,7 @@ public class Product {
             this.price = price;
         } else {
             this.price = 1;
-            System.out.println("WARNING: The price should be a positive number");
+            System.out.println(PRICE_ERROR);
         }
 
     }
