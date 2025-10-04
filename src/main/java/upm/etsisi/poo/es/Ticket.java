@@ -19,12 +19,35 @@ public class Ticket {
    * is below 100.
    * @return boolean
    */
+  public boolean prodAdd(String name, double price, int id, type category) { // Metodo
+    boolean done = true;
+    Product product = new Product(name, price, id, category);
+    for (int i = 0; i < MAX_PRODUCT && !done; i++) {
+      if (productList[i] == null) {
+        productList[i] = product;
+        done = true;
+      }
+    }
+    return done;
+  }
+
   public String prodList() {
     String list = "";
     for (int i = 0; i < MAX_PRODUCT; i++) {
       list += productList[i].toString() + "\n";
     }
     return list;
+  }
+
+  public boolean prodRemove(int id) {
+    boolean found = false;
+    for (int i = 0; i < MAX_PRODUCT; i++) {
+      if (productList[i].getId() == id) {
+        found = true;
+        productList[i] = null;
+      }
+    }
+    return found;
   }
 
   /**
@@ -67,17 +90,20 @@ public class Ticket {
    * @return it's a boolean that checks if the product is removed
    */
   public boolean ticketRemove(int prodId) { // (elimina todas las apariciones del producto, revisa si existe el id )
-    boolean removed = false;
-    int count= 0;
-    for (int i = 0; i < MAX_PRODUCT; i++) {
-      if (productList[i].getId() == prodId) {
-        productList[i] = null;
-        count ++;
-        removed = true;
+      boolean resul = false;
+      int count = 0;
+      boolean encontrado = false;
+      int i = 0;
+      while (productList[i].getId() != prodId){ // encuentra la primera aparición del obejeto que buscamos
+          i++;
       }
-    }
-    this.amount -= count;
-       return removed;
+      int first = i;
+      while (productList[first].getId()== prodId){
+          productList[first]= null;
+          first++;
+      }
+    //  for ( int a = )
+      return resul;
   }
 
     public boolean updateAmount(int id, int amount) {
@@ -123,11 +149,37 @@ public class Ticket {
    */
   public String ticketPrint() {
     StringBuilder sc = new StringBuilder();
-    sc.append("\nUPM STORE\n");
-    sc.append(String.format("%-10s %-50s%n", "Amount", "Product"));
-    for (int i = 0; i < MAX_PRODUCT; i++) {
-      sc.append(String.format("%-10d %-50s%n", productList[i].toString()));// REVISAR
+    int I=0;
+    int posBehindOfI=I-1;
+    int amount=0;
+    double totalPrice=0, totalDiscount=0;
+    double finalPrice=0;
+    while(productList[I]!=null || productList[posBehindOfI]!=null){
+        if(productList[I]!=null){
+            sc.append(productList[I].toString());
+            totalPrice += productList[I].getPrice();
+        }
+        if(posBehindOfI>=0){
+            if(productList[I]==productList[posBehindOfI]){
+                amount++;
+            }else{
+                int amountReal=amount+1;
+                totalDiscount += productList[posBehindOfI].getDiscounted(amountReal); //It's not necessary to check if amountReal<1 because the method can difference it
+                finalPrice += productList[posBehindOfI].getDiscountedPrice(amountReal); //This method also can difference it.
+                amount=0;
+            }
+        }
+        I++;
+        posBehindOfI++;
+        sc.append("\n");
     }
+    sc.append("Total price: ");
+    sc.append(totalPrice);
+    sc.append("\nTotal discount: ");
+    sc.append(totalDiscount);
+    sc.append("\nFinal price: ");
+    sc.append(finalPrice);
+    sc.append("\nticket print: ok");
     return sc.toString();
   }
 

@@ -72,7 +72,7 @@ public class Product {
             System.out.println("WARNING: The price should be a positive number");
         }
 
-    }
+  }
 
     /**
      * @param quantityOfProduct the amount of products of the Product (Object)
