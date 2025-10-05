@@ -94,20 +94,27 @@ public class Ticket {
      * @return it's a boolean that checks if the product is removed
      */
     public boolean ticketRemove(int prodId) { // (elimina todas las apariciones del producto, revisa si existe el id )
-        boolean resul = false;
-        int count = 0;
         boolean encontrado = false;
         int i = 0;
         while (productList[i].getId() != prodId) { // encuentra la primera aparición del obejeto que buscamos
             i++;
+            encontrado= true;
         }
-        int first = i;
-        while (productList[first].getId() == prodId) {
-            productList[first] = null;
-            first++;
+        if (encontrado){
+            int first = i;
+            while (productList[first].getId() == prodId) {
+                productList[first] = null;
+                first++;
+            }
+            for (int a = i ; i<productList.length;i++){
+                if (first<productList.length && productList[first] != null){
+                    productList[i]= productList[first];
+                    first++;
+                }
+            }
         }
-        // for ( int a = )
-        return resul;
+        sort();
+        return encontrado;
     }
 
     public boolean updateAmount(int id, int amount) {
