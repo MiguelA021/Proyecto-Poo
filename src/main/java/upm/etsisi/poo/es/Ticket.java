@@ -11,9 +11,10 @@ public class Ticket {
     int amount;
     Comparator<Product> nameComp = Comparator.comparing(Product::getName);
 
-    public Ticket() {
+    public Ticket(Store store) {
         this.productList = new Product[MAX_PRODUCT];
-        this.storeProducts = store.getProducts();
+        this.store = store;
+        this.storeProducts = this.store.getProducts();
         this.amount = 0;
     }
 
@@ -36,11 +37,11 @@ public class Ticket {
     }
 
     public String prodList() {
-        String list = "";
+        StringBuilder list = new StringBuilder();
         for (int i = 0; i < MAX_PRODUCT; i++) {
-            list += productList[i].toString() + "\n";
+            list.append(productList[i].toString()).append("\n");
         }
-        return list;
+        return list.toString();
     }
 
     public boolean prodRemove(int id) {
@@ -93,28 +94,30 @@ public class Ticket {
      *               This method remove all occurrences of the product
      * @return it's a boolean that checks if the product is removed
      */
-    public boolean ticketRemove(int prodId) { // (elimina todas las apariciones del producto, revisa si existe el id )
+    public Product ticketRemove(int prodId) { // (elimina todas las apariciones del producto, revisa si existe el id )
         boolean encontrado = false;
+        Product resul = null;
         int i = 0;
         while (productList[i].getId() != prodId) { // encuentra la primera aparición del obejeto que buscamos
             i++;
             encontrado= true;
         }
         if (encontrado){
+            resul = productList[i];
             int first = i;
             while (productList[first].getId() == prodId) {
                 productList[first] = null;
                 first++;
             }
-            for (int a = i ; i<productList.length;i++){
+            for (int a = i ; i<productList.length;a++){
                 if (first<productList.length && productList[first] != null){
-                    productList[i]= productList[first];
+                    productList[a]= productList[first];
                     first++;
                 }
             }
         }
         sort();
-        return encontrado;
+        return resul;
     }
 
     public boolean updateAmount(int id, int amount) {

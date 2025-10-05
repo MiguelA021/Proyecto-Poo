@@ -1,11 +1,14 @@
 package upm.etsisi.poo.es;
 //BORAR ESTE COMENTARIO
+
 import java.lang.reflect.Type;
 import java.util.Scanner;
 
-public class App
-{
-    public static void main( String[] args ) {
+public class App {
+    public final String INCORRECT = "Incorrect Format, please try again.";
+    public final String NOTEXIST = "Product doesn't exist.";
+
+    public static void main(String[] args) {
         App app = new App();
         app.init();
         app.start();
@@ -19,33 +22,23 @@ public class App
     private void start() {
         Scanner scan = new Scanner(System.in);
         boolean end = false;
-        Ticket ticket = new Ticket();
         Store store = new Store();
-
-
-        while(!end){
+        Ticket ticket = new Ticket(store);
+        while (!end) {
             String command = scan.nextLine();
-            String [] commandArray = command.split(" ");
-            switch (commandArray[0]){
+            String[] commandArray = command.split(" ");
+            switch (commandArray[0]) {
                 case "prod":
-                    commandProd(commandArray,store,ticket);
+                    commandProd(commandArray, store, ticket);
                     break;
                 case "ticket":
-                    switch (commandArray[1]){
-                        case "new":
-                            ticket= new Ticket();
-                    }
+                    commandTicket(commandArray, ticket, store);
                     break;
                 case "help":
                     printHelp();
                     break;
                 case "echo":
-                    try {
-                        String[] commandMarks = command.split("\"");
-                        System.out.println(commandMarks[1]);
-                    }catch(ArrayIndexOutOfBoundsException e ){
-                        System.out.println("Incorrect format, try again.");
-                    }
+                    commandEcho(command);
                     break;
                 case "exit":
                     end = true;
@@ -56,45 +49,175 @@ public class App
 
     }
 
-    private void commandProd(String[] commandArray,Store store, Ticket ticket) {
+    private void commandEcho(String command) {
+        try {
+            String[] commandMarks = command.split("\"");
+            System.out.println(commandMarks[1]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println(INCORRECT);
+        }
+    }
+
+    private void commandTicket(String[] commandArray, Ticket ticket, Store store) {
+        switch (commandArray[1]) {
+            case "new":
+                commandTicketNew(ticket);
+                break;
+            case "add":
+                commandTicketAdd(commandArray, ticket);
+                break;
+            case "remove":
+                commandTicketRemove(commandArray, ticket);
+                break;
+            case "print":
+                commandTicketPrint(ticket);
+                break;
+
+        }
+    }
+
+    private void commandTicketNew(Ticket ticket) {
+        ticket.ticketNew();
+        System.out.println("ticket new: ok");
+    }
+
+    private void commandTicketPrint(Ticket ticket) {
+        System.out.println(ticket.ticketPrint());
+        System.out.println("ticket print: ok");
+    }
+
+    private void commandTicketAdd(String[] commandArray, Ticket ticket) {
+    }
+
+    private void commandTicketRemove(String[] commandArray, Ticket ticket) {
+        int id;
+        boolean correct = true;
+        try {
+            id = Integer.parseInt(commandArray[2]);
+        } catch (NumberFormatException e) {
+            System.out.println(INCORRECT);
+            correct = false;
+            id = -1;
+        }
+        if (correct) {
+            Product product = ticket.ticketRemove(id);
+            if (product == null) {
+                System.out.println(NOTEXIST);
+            } else {
+                System.out.println(product);
+                System.out.println("ticket remove: ok");
+            }
+        }
+    }
+
+    private void commandProd(String[] commandArray, Store store, Ticket ticket) {
+
         switch (commandArray[1]) {
             case "add":
-                double price = -1;
-                boolean correct = true;
-                try {
-                    price = Double.parseDouble(commandArray[5]);
-                    type type = upm.etsisi.poo.es.type.valueOf(commandArray[4]);
-                } catch (NumberFormatException e) {
-                    System.out.println("Introduce los datos correctos");
-                    correct = false;
-                }
-                if (correct) {
-//                            Product product = new Product(commandArray[2],Double.parseDouble(commandArray[5]),commandArray[2],type.valueOf(commandArray[4]),);   falta revisar el constructor.
-                    Product product = new Product(Integer.getInteger(commandArray[2]),commandArray[3],type.valueOf(commandArray[4]),price);
-                    boolean add = store.prodAdd(product);
-                    if (add) {
-                        System.out.println(product.toString());
-                        System.out.println("prod add: ok");
-                    }
-                }
+                commandProdAdd(commandArray, store);
                 break;
             case "list":
-                System.out.println(ticket.prodList());
+                commandProdList(store);
                 break;
             case "update":
-                switch (commandArray[3]) {
-                    case "NOMBRE":
-                        store.updateName(Integer.getInteger(commandArray[4]), commandArray[5]);
-                        break;
-                    case "CATEGORIA":
-                        store.updateType(Integer.getInteger(commandArray[4]), type.valueOf(commandArray[5]));
-                        break;
-                    case "PRECIO":
-                        store.updatePrice(Integer.getInteger(commandArray[4]),Double.parseDouble(commandArray[5]));
-                        break;
-                }
+                commandProUpdate(commandArray, store);
+
             case "remove":
+                commandProdRemove(commandArray, store);
                 break;
+        }
+    }
+
+    private void commandProdList(Store store) {
+        Product[] productList = store.getProducts();
+        int length = productList.length;
+        for (int i = 0; i < productList.length; i++) {
+            System.out.println(productList[i].toString());
+        }
+        System.out.println("prod list: ok");
+    }
+
+    private void commandProdRemove(String[] commandArray, Store store) {
+        boolean correct = true;
+        int id;
+        boolean remove;
+        try {
+            id = Integer.parseInt(commandArray[2]);
+        } catch (NumberFormatException e) {
+            System.out.println(INCORRECT);
+            correct = false;
+            id = -1;
+        }
+        if (correct) {
+            Product product = null;                 // revisar
+            remove = store.prodRemove(id);
+            if (remove) {
+                product.toString();
+
+            }
+        }
+    }
+
+    private void commandProUpdate(String[] commandArray, Store store) {
+        boolean done;
+        boolean format;
+        switch (commandArray[3]) {
+            case "NOMBRE":
+                format = true;
+                done = store.updateName(Integer.getInteger(commandArray[4]), commandArray[5]);
+                break;
+            case "CATEGORIA":
+                format = true;
+                done = store.updateType(Integer.getInteger(commandArray[4]), type.valueOf(commandArray[5]));
+                break;
+            case "PRECIO":
+                format = true;
+                done = store.updatePrice(Integer.getInteger(commandArray[4]), Double.parseDouble(commandArray[5]));
+                break;
+            default:
+                format = false;
+                done = false;
+                break;
+        }
+        if (format) {
+            System.out.println(INCORRECT);
+        }
+        if (format && !done) {
+            System.out.println(NOTEXIST);
+        }
+        if (done && format) {
+            System.out.println("prod update: ok");
+        }
+    }
+
+    private void commandProdAdd(String[] command, Store store) {
+        double price;
+        int id;
+        boolean correct = true;
+        boolean add = false;
+        try {
+            id = Integer.parseInt(command[2]);
+            price = Double.parseDouble(command[5]);
+        } catch (NumberFormatException e) {
+            System.out.println(INCORRECT);
+            correct = false;
+            id = -1;
+            price = -1;
+        }
+        if (correct) {
+            String category = command[4];
+            String name = command[3].replace("\"", "");
+            try {
+                Product product = new Product(id, name, type.valueOf(category), price);
+                add = store.prodAdd(product);
+                if (add) {
+                    System.out.println(product.toString());
+                    System.out.println("pro add: ok");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println(INCORRECT);
+            }
+
         }
     }
 
