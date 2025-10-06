@@ -5,8 +5,10 @@ import java.lang.reflect.Type;
 import java.util.Scanner;
 
 public class App {
-    public final String INCORRECT = "Incorrect Format, please try again.";
-    public final String NOTEXIST = "Product doesn't exist.";
+    private final static String INCORRECT = "Incorrect Format, please try again.";
+    private final static String NOTEXIST = "Product doesn't exist.";
+    private final static String WELCOME_MESSAGE="Welcome to the ticket module APP.";
+    private final static String HELP_MESSAGE= "Ticket module. Type 'help' to see commands.";
 
     public static void main(String[] args) {
         App app = new App();
@@ -243,8 +245,8 @@ public class App {
      * It initializes the App
      */
     private void init() {
-        System.out.println("Welcome to the ticket module APP.");
-        System.out.println("Ticket module. Type 'help' to see commands.");
+        System.out.println(WELCOME_MESSAGE);
+        System.out.println(HELP_MESSAGE);
 
     }
 

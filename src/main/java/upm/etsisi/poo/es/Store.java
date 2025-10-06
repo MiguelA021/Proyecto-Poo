@@ -12,7 +12,12 @@ public class Store {
         return productList;
     }
 
-    public boolean prodAdd(Product product) { // Metodo
+    /**
+     * The method adds a product tho the productList if there is below 100 products
+     * @param product the product which we want to add it
+     * @return returns true if the method added the product if not, it returns false
+     */
+    public boolean prodAdd(Product product) {
         boolean done = true;
         for (int i = 0; i < MAX_PRODUCT && !done; i++) {
             if (productList[i] == null) {
@@ -23,7 +28,12 @@ public class Store {
         return done;
     }
 
-    public boolean prodRemove(int id) {
+    /**
+     * The method removes the product with the id given
+     * @param id the id of the product we want to remove
+     * @return it returns true if the product with the id given was removed, if not it returns false
+     */
+    public boolean prodRemove(int id) {//Se puede mejorar la eficiencia con un while
         boolean found = false;
         for (int i = 0; i < MAX_PRODUCT; i++) {
             if (productList[i].getId() == id) {
@@ -34,6 +44,9 @@ public class Store {
         return found;
     }
 
+    /**
+     * The method lists the products in the prodList
+     */
     public void prodList() {
         System.out.println("Catalog:");
         for (Product p : productList) {
@@ -44,6 +57,12 @@ public class Store {
         System.out.println("prod list: ok");
     }
 
+    /**
+     * The method changes the category of the product with the id given
+     * @param id the id of the product
+     * @param category the new category we want to save
+     * @return if the product has been updated the method returns true, if not it returns false
+     */
     public boolean updateType(int id, type category) {
         boolean done = false;
         for (int i = 0; i < MAX_PRODUCT; i++) {
@@ -55,6 +74,12 @@ public class Store {
         return done;
     }
 
+    /**
+     * The method changes the name of the product with the id given
+     * @param id the id of the product
+     * @param name the new name we want to save
+     * @return if the product has been updated the method returns true, if not it returns false
+     */
     public boolean updateName(int id, String name) {
         boolean done = false;
         for (int i = 0; i < MAX_PRODUCT; i++) {
@@ -66,6 +91,12 @@ public class Store {
         return done;
     }
 
+    /**
+     * The method changes the price of the product with the id given
+     * @param id the id of the product
+     * @param price the new price we want to save
+     * @return if the price has been updated the method returns true, if not it returns false
+     */
     public boolean updatePrice(int id, double price) {
         boolean done = false;
         for (int i = 0; i < MAX_PRODUCT; i++) {

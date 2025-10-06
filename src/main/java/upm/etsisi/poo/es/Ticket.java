@@ -123,6 +123,9 @@ public class Ticket {
         return sc.toString();
     }
 
+    /**
+     * The method sorts the names alphabetically
+     */
     public void sort() {
         Arrays.sort(productList, nameComp);
     }
