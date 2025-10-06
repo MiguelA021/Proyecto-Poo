@@ -34,10 +34,35 @@ public class Ticket {
      * set the
      * ticket amount to new amount.
      */
-    public boolean ticketAdd(int prodId, int amount) { // Agrega al ticket la cantidad del producto
-        boolean found = false;
-        return found;
-        // TODO
+    public boolean ticketAdd(int prodId, int amount) {
+        Product productoEncontrado = null;
+
+        for (int i = 0; i < storeProducts.length; i++) {
+            if (storeProducts[i] != null && storeProducts[i].getId() == prodId) {
+                productoEncontrado = storeProducts[i];
+                break;
+            }
+        }
+
+        if (productoEncontrado == null) {
+            System.out.println("ERROR: Product ID not found " + prodId);
+            return false;
+        }
+
+        for (int i = 0; i < amount; i++) {
+            if (this.amount < MAX_PRODUCT) {
+                productList[this.amount] = productoEncontrado;
+                this.amount++;
+            } else {
+                System.out.println("ERROR: Full Ticket (100 products max)");
+                break;
+            }
+        }
+
+        System.out.println(ticketPrint());
+
+        System.out.println("ticket add: ok");
+        return true;
     }
 
     /**

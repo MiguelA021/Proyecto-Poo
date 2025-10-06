@@ -35,7 +35,13 @@ public class Store {
     }
 
     public void prodList() {
-        // TODO
+        System.out.println("Catalog:");
+        for (Product p : productList) {
+            if (p != null) {
+                System.out.println("{class:Product, id:" + p.getId() + ", name:'" + p.getName() + "', category:" + p.getCategory() + ", price:" + p.getPrice() + "}");
+            }
+        }
+        System.out.println("prod list: ok");
     }
 
     public boolean updateType(int id, type category) {
