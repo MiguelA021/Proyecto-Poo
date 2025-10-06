@@ -1,5 +1,11 @@
 @startuml
 class App{
+--   Attributes  --
+ -{static} String INCORRECT
+ -{static} String NOTEXISTS
+ -{static} String WELCOME_MESSAGE
+ -{static} String HELP_MESSAGE
+ 
 --  Methods --
  +main(String[] args)
  -void end()
@@ -7,8 +13,17 @@ class App{
  -void commandProd(String[] commandArray, Store store, Ticket ticket)
  -void printHelp()
  -void init()
+ -void commandEcho(String command)
+ -void commandTicket(String[] commandArray, Ticket ticket, Store store)
+ -void commandTicketNew(Ticket ticket)
+ -void commandTicketPrint(Ticket ticket)
+ -void commandTicketAdd(Ticket ticket, String[] commandArray)
+ -void commandTicketRemove(Ticket ticket, String[] commandArray)
+ -void commandProdList(Store store)
+ -void commandProdRemove(Store store, String[] commandArray)
+ -void commandProdUpdate(Store store, String[] commandArray)
+ -void commandProdAdd(Store store, String[] commandArray)
 }
-
 
 class Ticket{
 --   Attributes  --
@@ -20,19 +35,11 @@ class Ticket{
  -Comparator <Product> nameComp
 
 --  Methods --
- +boolean prodAdd (int id, String name, type category, double price)
- +String prodList()
- +boolean prodRemove(int id)
  +Product[] ticketNew()
  +boolean ticketAdd(int ProdId, int amount)
  +boolean ticketRemove(int prodId)
  +String ticketPrint()
  +void sort()
- 
- +updateCategory(int id, type category)
- +updateName(int id, String name)
- +updateAmount(int id, int amount)
- 
 }
 
 class Product{
@@ -42,7 +49,10 @@ class Product{
  -int price
  -int cuantity
  -type category
-
+ -{static} String NAME_LENGTH_ERROR
+ -{static} String NAME_NULL_ERROR
+ -{static} String PRICE_POSITIVE_ERROR
+ 
  --  Methods --
  +getId()
  +getName()
@@ -68,10 +78,13 @@ class Store{
  +boolean updateType(int id, type category)
  +boolean updateName(int id, String name)
  +booelan updatePrice(int id, double price)
+ +void prodList()
 }
 
 App-->Ticket
+App-->Store
 Ticket-->Product
 Ticket-->Store
 Store-->Product
 @enduml
+
