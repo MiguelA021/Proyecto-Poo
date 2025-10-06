@@ -59,7 +59,14 @@ public class Ticket {
             }
         }
 
-        System.out.println(ticketPrint());
+        //No se si hace falta aqui un sort
+
+        for (int i = 0; i < this.amount; i++) {
+            Product p = productList[i];
+            if (p != null) {
+                System.out.println(p.toString());
+            }
+        }
 
         System.out.println("ticket add: ok");
         return true;
@@ -70,30 +77,37 @@ public class Ticket {
      *               This method remove all occurrences of the product
      * @return it's a boolean that checks if the product is removed
      */
-    public Product ticketRemove(int prodId) { // (elimina todas las apariciones del producto, revisa si existe el id )
-        boolean encontrado = false;
-        Product resul = null;
-        int i = 0;
-        while (productList[i].getId() != prodId) { // encuentra la primera aparición del obejeto que buscamos
-            i++;
-            encontrado = true;
+    public Product ticketRemove(int prodId) {
+        if (this.amount == 0) {
+            System.out.println("ERROR: No products in the ticket");
+            return null;
         }
-        if (encontrado) {
-            resul = productList[i];
-            int first = i;
-            while (productList[first].getId() == prodId) {
-                productList[first] = null;
-                first++;
-            }
-            for (int a = i; i < productList.length; a++) {
-                if (first < productList.length && productList[first] != null) {
-                    productList[a] = productList[first];
-                    first++;
+
+        Product removed = null;
+
+        for (int i = 0; i < this.amount; i++) {
+            Product p = productList[i];
+            if (p != null && p.getId() == prodId) {
+                if (removed == null) {
+                    removed = p;
                 }
+                for (int j = i; j < this.amount - 1; j++) {
+                    productList[j] = productList[j + 1];
+                }
+                productList[this.amount - 1] = null;
+                this.amount--;
+                i--;
             }
         }
+
+        if (removed == null) {
+            System.out.println("ERROR: No product with that ID " + prodId + " in the ticket");
+            return null;
+        }
+
         sort();
-        return resul;
+        System.out.println("ticket remove: ok");
+        return removed;
     }
 
     /**
