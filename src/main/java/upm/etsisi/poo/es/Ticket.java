@@ -19,43 +19,6 @@ public class Ticket {
     }
 
     /**
-     * Method that add the product to the list just when the amount
-     * is below 100.
-     *
-     * @return boolean
-     */
-    public boolean prodAdd(int id, String name, type category, double price) { // Metodo
-        boolean done = true;
-        Product product = new Product(id, name, category, price);
-        for (int i = 0; i < MAX_PRODUCT && !done; i++) {
-            if (productList[i] == null) {
-                productList[i] = product;
-                done = true;
-            }
-        }
-        return done;
-    }
-
-    public String prodList() {
-        StringBuilder list = new StringBuilder();
-        for (int i = 0; i < MAX_PRODUCT; i++) {
-            list.append(productList[i].toString()).append("\n");
-        }
-        return list.toString();
-    }
-
-    public boolean prodRemove(int id) {
-        boolean found = false;
-        for (int i = 0; i < MAX_PRODUCT; i++) {
-            if (productList[i].getId() == id) {
-                found = true;
-                productList[i] = null;
-            }
-        }
-        return found;
-    }
-
-    /**
      * @return a new ticket, which has been reset
      */
     public Product[] ticketNew() {
@@ -73,20 +36,8 @@ public class Ticket {
      */
     public boolean ticketAdd(int prodId, int amount) { // Agrega al ticket la cantidad del producto
         boolean found = false;
-        for (int i = 0; i < MAX_PRODUCT; i++) {
-            if (productList[i].getId() == prodId) {
-                found = true;
-            }
-            Product product = productList[i];
-            boolean added = true;
-            for (int j = 0; j < amount && added; j++) {
-            }
-        }
-        if (found) {
-            this.amount += amount;
-        }
-
         return found;
+        // TODO
     }
 
     /**
@@ -100,18 +51,18 @@ public class Ticket {
         int i = 0;
         while (productList[i].getId() != prodId) { // encuentra la primera aparición del obejeto que buscamos
             i++;
-            encontrado= true;
+            encontrado = true;
         }
-        if (encontrado){
+        if (encontrado) {
             resul = productList[i];
             int first = i;
             while (productList[first].getId() == prodId) {
                 productList[first] = null;
                 first++;
             }
-            for (int a = i ; i<productList.length;a++){
-                if (first<productList.length && productList[first] != null){
-                    productList[a]= productList[first];
+            for (int a = i; i < productList.length; a++) {
+                if (first < productList.length && productList[first] != null) {
+                    productList[a] = productList[first];
                     first++;
                 }
             }
@@ -120,52 +71,12 @@ public class Ticket {
         return resul;
     }
 
-    public boolean updateAmount(int id, int amount) {
-        boolean done = false;
-        int contador = 0;
-        Product product = null;
-        for (int i = 0; i < MAX_PRODUCT; i++) {
-            if (productList[i].getId() == id) {
-                product = productList[i];
-                contador++;
-            }
-        }
-        if (contador < amount) {
-            boolean equals = false; // boolean that sees if we reached the needed cuantity of profuct
-            for (int i = contador; i < amount && !equals; i++) {
-                boolean added = false;
-                for (int j = 0; j < MAX_PRODUCT && !added; j++) {
-                    if (productList[j] == null) {
-                        productList[j] = product;
-                    }
-                }
-                if (i == amount) {
-                    equals = true;
-                }
-                done = equals;
-            }
-        } else {
-            for (int i = contador; i > MAX_PRODUCT; i++) {
-                boolean found = false;
-                for (int j = MAX_PRODUCT; j > 0 && !found; j++) {
-                    if (productList[j] == product) {
-                        found = true;
-                        productList[j] = null;
-                    }
-                }
-            }
-            done = true;
-        }
-        return done;
-    }
-
     /**
      * @return the ticket printed
      */
     public String ticketPrint() {
         StringBuilder sc = new StringBuilder();
         int i = 0;
-        int amount = 0;
         double totalPrice = 0, totalDiscount = 0;
         double finalPrice = 0;
         sort();

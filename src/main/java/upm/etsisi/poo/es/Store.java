@@ -4,7 +4,6 @@ public class Store {
     int MAX_PRODUCT = 100;
     Product[] productList;
 
-
     public Store() {
         this.productList = new Product[MAX_PRODUCT];
     }
@@ -35,6 +34,10 @@ public class Store {
         return found;
     }
 
+    public void prodList() {
+        // TODO
+    }
+
     public boolean updateType(int id, type category) {
         boolean done = false;
         for (int i = 0; i < MAX_PRODUCT; i++) {
@@ -56,6 +59,7 @@ public class Store {
         }
         return done;
     }
+
     public boolean updatePrice(int id, double price) {
         boolean done = false;
         for (int i = 0; i < MAX_PRODUCT; i++) {
@@ -67,4 +71,3 @@ public class Store {
         return done;
     }
 }
-
