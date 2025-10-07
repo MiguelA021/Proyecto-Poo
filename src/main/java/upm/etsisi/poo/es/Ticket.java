@@ -59,7 +59,7 @@ public class Ticket {
             }
         }
 
-        //No se si hace falta aqui un sort
+        // No se si hace falta aqui un sort
 
         for (int i = 0; i < this.amount; i++) {
             Product p = productList[i];
@@ -77,37 +77,33 @@ public class Ticket {
      *               This method remove all occurrences of the product
      * @return it's a boolean that checks if the product is removed
      */
-    public Product ticketRemove(int prodId) {
+    public boolean ticketRemove(int prodId) {
+        boolean removed = false;
         if (this.amount == 0) {
             System.out.println("ERROR: No products in the ticket");
-            return null;
-        }
 
-        Product removed = null;
-
-        for (int i = 0; i < this.amount; i++) {
-            Product p = productList[i];
-            if (p != null && p.getId() == prodId) {
-                if (removed == null) {
-                    removed = p;
+        } else {
+            for (int i = 0; i < this.amount; i++) {
+                if (productList[i] != null && productList[i].getId() == prodId) {
+                    productList[i] = null;
+                    this.amount--;
                 }
-                for (int j = i; j < this.amount - 1; j++) {
-                    productList[j] = productList[j + 1];
-                }
-                productList[this.amount - 1] = null;
-                this.amount--;
-                i--;
             }
-        }
 
-        if (removed == null) {
-            System.out.println("ERROR: No product with that ID " + prodId + " in the ticket");
-            return null;
-        }
+            boolean comprobation = true;
+            for (int i = 0; i < this.amount; i++) {
+                if (productList[i].getId() == prodId) {
+                    comprobation = false;
+                }
+            }
+            removed = comprobation;
 
-        sort();
-        System.out.println("ticket remove: ok");
+            sort();
+            if (removed)
+                System.out.println("ticket remove: ok");
+        }
         return removed;
+
     }
 
     /**
