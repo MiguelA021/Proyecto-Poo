@@ -58,16 +58,13 @@ public class Ticket {
                 break;
             }
         }
-
-        // No se si hace falta aqui un sort
-
         for (int i = 0; i < this.amount; i++) {
             Product p = productList[i];
             if (p != null) {
                 System.out.println(p.toString());
             }
         }
-
+        System.out.println(productoEncontrado.toString());
         System.out.println("ticket add: ok");
         return true;
     }
@@ -77,7 +74,8 @@ public class Ticket {
      *               This method remove all occurrences of the product
      * @return it's a boolean that checks if the product is removed
      */
-    public boolean ticketRemove(int prodId) {
+    public Product ticketRemove(int prodId) {
+        Product product = null;
         boolean removed = false;
         if (this.amount == 0) {
             System.out.println("ERROR: No products in the ticket");
@@ -85,7 +83,9 @@ public class Ticket {
         } else {
             for (int i = 0; i < this.amount; i++) {
                 if (productList[i] != null && productList[i].getId() == prodId) {
-                    productList[i] = null;
+                    product = productList[i];
+                    productList[i] = productList[amount - 1];
+                    productList[amount - 1] = null;
                     this.amount--;
                 }
             }
@@ -99,10 +99,9 @@ public class Ticket {
             removed = comprobation;
 
             sort();
-            if (removed)
-                System.out.println("ticket remove: ok");
+            if (removed) System.out.println("ticket remove: ok");
         }
-        return removed;
+        return product;
 
     }
 
@@ -137,7 +136,7 @@ public class Ticket {
      * The method sorts the names alphabetically
      */
     public void sort() {
-        Arrays.sort(productList, nameComp);
+        Arrays.sort(productList, 0, amount, nameComp);
     }
 
 }
