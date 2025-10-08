@@ -36,11 +36,11 @@ public class Ticket {
      */
     public boolean ticketAdd(int prodId, int amount) {
         Product productoEncontrado = null;
-
-        for (int i = 0; i < storeProducts.length; i++) {
+        boolean found = false;
+        for (int i = 0; i < storeProducts.length && !found; i++) {
             if (storeProducts[i] != null && storeProducts[i].getId() == prodId) {
                 productoEncontrado = storeProducts[i];
-                break;
+                found = true;
             }
         }
 
@@ -48,25 +48,21 @@ public class Ticket {
             System.out.println("ERROR: Product ID not found " + prodId);
             return false;
         }
-
-        for (int i = 0; i < amount; i++) {
+        boolean done = false;
+        for (int i = 0; i < amount && !done; i++) {
             if (this.amount < MAX_PRODUCT) {
                 productList[this.amount] = productoEncontrado;
                 this.amount++;
+                System.out.println(productoEncontrado.toString());
+                if(this.amount == amount){
+                    done = true;
+                }
             } else {
                 System.out.println("ERROR: Full Ticket (100 products max)");
-                break;
             }
         }
-        for (int i = 0; i < this.amount; i++) {
-            Product p = productList[i];
-            if (p != null) {
-                System.out.println(p.toString());
-            }
-        }
-        System.out.println(productoEncontrado.toString());
         System.out.println("ticket add: ok");
-        return true;
+        return done;
     }
 
     /**
@@ -77,29 +73,36 @@ public class Ticket {
     public Product ticketRemove(int prodId) {
         Product product = null;
         boolean removed = false;
+        int iterations = this.amount;
         if (this.amount == 0) {
             System.out.println("ERROR: No products in the ticket");
 
         } else {
-            for (int i = 0; i < this.amount; i++) {
+            for (int i = 0; i < iterations; i++) {
                 if (productList[i] != null && productList[i].getId() == prodId) {
-                    product = productList[i];
-                    productList[i] = productList[amount - 1];
-                    productList[amount - 1] = null;
-                    this.amount--;
+                    if(this.amount == 1){
+                        productList[0] = null;
+                    }else {
+                        product = productList[i];
+                        productList[i] = productList[amount - 1];
+                        productList[amount - 1] = null;
+                        this.amount--;
+                        i--;
+                    }
                 }
             }
 
             boolean comprobation = true;
-            for (int i = 0; i < this.amount; i++) {
-                if (productList[i].getId() == prodId) {
-                    comprobation = false;
+            for (int i = 0; i <this.amount; i++) {
+                if(productList[i] != null) {
+                    if (productList[i].getId() == prodId) {
+                        comprobation = false;
+                    }
                 }
             }
             removed = comprobation;
 
             sort();
-            if (removed) System.out.println("ticket remove: ok");
         }
         return product;
 

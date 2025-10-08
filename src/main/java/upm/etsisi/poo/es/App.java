@@ -11,7 +11,8 @@ public class App {
     private final static String NOTEXIST = "Product doesn't exist.";
     private final static String WELCOME_MESSAGE = "Welcome to the ticket module APP.";
     private final static String HELP_MESSAGE = "Ticket module. Type 'help' to see commands.";
-    private final static String FILE_ERROR = "Error while reading the file, please try again";
+    private final static String FILE_ERROR = "Error while reading the file, please try again.";
+    private final static String COMMAND_ERROR = "command not found, please try again.";
 
     public static void main(String[] args) {
         App app = new App();
@@ -70,23 +71,21 @@ public class App {
         switch (commandArray[0]) {
             case "prod":
                 commandProd(commandArray, store, ticket, command);
-                end = false;
                 break;
             case "ticket":
                 commandTicket(commandArray, ticket);
-                end = false;
                 break;
             case "help":
                 printHelp();
-                end = false;
                 break;
             case "echo":
                 commandEcho(command);
-                end = false;
                 break;
             case "exit":
                 end = true;
                 break;
+            default:
+
 
         }
         return end;
