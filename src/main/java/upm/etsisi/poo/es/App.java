@@ -195,21 +195,25 @@ public class App {
     int id;
     boolean correct = true;
     boolean add = false;
+    String productName;
+    String category;
     try {
+        String [] cat_Price= name[2].split(" ");
       id = Integer.parseInt(command[2]);
-
-      price = Double.parseDouble;
-      String productName = name[1];
-      String[] cat_price = name[2].split(" ");
-    } catch (IOException e) {
+      price = Double.parseDouble(cat_Price[1]);
+      productName = name[1];
+      category = cat_Price[0];
+    } catch (NumberFormatException e) {
       System.out.println(INCORRECT);
       correct = false;
+      productName = "ERROR";
+      category = "ERROR";
       id = -1;
       price = -1;
     }
     if (correct) {
       try {
-        Product product = new Product(id, name1, type.valueOf(category), price);
+        Product product = new Product(id, productName, type.valueOf(category), price);
         add = store.prodAdd(product);
         if (add) {
           System.out.println(product.toString());
