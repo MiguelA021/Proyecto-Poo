@@ -117,7 +117,7 @@ public class Ticket {
         while (productList[i] != null) {
             sc.append(productList[i].toString());
             totalPrice += productList[i].getPrice();
-            totalDiscount += productList[i].getDiscountedPrice();
+            totalDiscount +=productList[i].getPrice() - productList[i].getDiscountedPrice();
             i++;
             sc.append("\n");
         }
@@ -128,7 +128,6 @@ public class Ticket {
         sc.append(totalDiscount + "\n");
         sc.append("\nFinal price: ");
         sc.append(finalPrice + "\n");
-        sc.append("\nticket print: ok");
         return sc.toString();
     }
 

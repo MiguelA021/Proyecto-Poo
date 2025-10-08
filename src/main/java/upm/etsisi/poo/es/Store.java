@@ -19,7 +19,7 @@ public class Store {
    * @return returns true if the method added the product if not, it returns false
    */
   public boolean prodAdd(Product product) {
-    boolean done = true;
+    boolean done = false;
     for (int i = 0; i < MAX_PRODUCT && !done; i++) {
       if (productList[i] == null) {
         productList[i] = product;
@@ -39,10 +39,10 @@ public class Store {
   public boolean prodRemove(int id) {// Se puede mejorar la eficiencia con un while
     boolean found = false;
     Product product = null;
-    for (int i = 0; i < MAX_PRODUCT; i++) {
+    for (int i = 0; i < MAX_PRODUCT && !found; i++) {
       if (productList[i].getId() == id) {
         found = true;
-        product = productList[1];
+        product = productList[i];
         productList[i] = null;
       }
     }
