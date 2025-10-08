@@ -1,8 +1,9 @@
 package upm.etsisi.poo.es;
 //BORAR ESTE COMENTARIO
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Scanner;
 
 public class App {
@@ -10,11 +11,12 @@ public class App {
   private final static String NOTEXIST = "Product doesn't exist.";
   private final static String WELCOME_MESSAGE = "Welcome to the ticket module APP.";
   private final static String HELP_MESSAGE = "Ticket module. Type 'help' to see commands.";
+  private final static String FILE_ERROR = "Error while reading the file, please try again";
 
   public static void main(String[] args) {
     App app = new App();
     app.init();
-    app.start();
+    app.start(args);
     app.end();
 
   }
@@ -22,13 +24,49 @@ public class App {
   private void end() {
   }
 
-  private void start() {
-    Scanner scan = new Scanner(System.in);
+  public void start(String[] args) {
+    if (args.length == 0) {
+      userCommand();
+    } else {
+      readFile(args);
+    }
+
+  }
+
+  public void userCommand() {
     boolean end = false;
+    Scanner scan = new Scanner(System.in);
     Store store = new Store();
     Ticket ticket = new Ticket(store);
     while (!end) {
       String command = scan.nextLine();
+      end = readCommand(command, store, ticket);
+    }
+    scan.close();
+  }
+
+  private void readFile(String[] args) {
+    String command;
+    Store store = new Store();
+    Ticket ticket = new Ticket(store);
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader(args[0]));
+      boolean end = false;
+      while (!end) {
+        command = reader.readLine();
+        if (command != null) {
+          end = readCommand(command, store, ticket);
+        }
+        reader.close();
+      }
+    } catch (IOException e) {
+      System.out.println(FILE_ERROR);
+    }
+  }
+
+  private boolean readCommand(String command, Store store, Ticket ticket) {
+    boolean end = false;
+    while (!end) {
       String[] commandArray = command.split(" ");
       switch (commandArray[0]) {
         case "prod":
@@ -49,7 +87,7 @@ public class App {
 
       }
     }
-
+    return end;
   }
 
   private void commandEcho(String command) {
@@ -198,7 +236,7 @@ public class App {
     String productName;
     String category;
     try {
-        String [] cat_Price= name[2].split(" ");
+      String[] cat_Price = name[2].split(" ");
       id = Integer.parseInt(command[2]);
       price = Double.parseDouble(cat_Price[1]);
       productName = name[1];
