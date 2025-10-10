@@ -51,6 +51,10 @@ public class App {
         scan.close();
     }
 
+    /**
+     * the method reads the file which path is given by the args
+     * @param args contains the path of the file we want to read
+     */
     private void readFile(String[] args) {
         String command;
         Store store = new Store();
@@ -64,6 +68,9 @@ public class App {
                 if (command != null) {
                     System.out.println(command);
                     end = readCommand(command, store, ticket);
+                } else{//el fichero no tiene el comando exit, por tanto no termina la ejecucion del programa
+                    end=true;
+                    userCommand();
                 }
             }
             reader.close();
