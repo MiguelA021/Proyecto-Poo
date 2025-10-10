@@ -62,6 +62,7 @@ public class App {
                 System.out.print(UPM);
                 command = reader.readLine();
                 if (command != null) {
+                    System.out.println(command);
                     end = readCommand(command, store, ticket);
                 }
             }
