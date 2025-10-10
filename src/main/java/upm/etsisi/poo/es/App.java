@@ -15,12 +15,7 @@ public class App {
     private final static String FILE_ERROR = "Error while reading the file, please try again.";
     private final static String EMPTY_TICKET = "Empty ticket, try adding some products.";
     private final static String COMMAND_ERROR = "command not found, please try again.";
-    private final static String INCORRECT = "Incorrect Format, please try again.";
-    private final static String NOTEXIST = "Product doesn't exist.";
-    private final static String WELCOME_MESSAGE = "Welcome to the ticket module APP.";
-    private final static String HELP_MESSAGE = "Ticket module. Type 'help' to see commands.";
-    private final static String FILE_ERROR = "Error while reading the file, please try again.";
-    private final static String COMMAND_ERROR = "command not found, please try again.";
+
     public static final String UPM = "tUPM>";
 
     public static void main(String[] args) {
