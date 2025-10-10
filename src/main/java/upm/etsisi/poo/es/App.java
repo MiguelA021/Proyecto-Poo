@@ -293,6 +293,9 @@ public class App {
         while (i < length) {
             if (commandArray[i].contains("\"")) {
                 boolean fin = false;
+                if(commandArray[i].endsWith("\"")){
+                    fin = true;
+                }
                 name.append(commandArray[i]).append(" ");
                 while (!fin && i<length) {
                     i++;
