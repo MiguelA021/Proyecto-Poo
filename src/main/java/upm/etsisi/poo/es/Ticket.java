@@ -23,6 +23,7 @@ public class Ticket {
      */
     public Product[] ticketNew() {
         productList = new Product[MAX_PRODUCT];
+        this.amount = 0;
         return productList;
     }
 
@@ -48,25 +49,53 @@ public class Ticket {
             System.out.println("ERROR: Product ID not found " + prodId);
             return false;
         }
-        boolean done = false;
+
+        if (amount <= 0) {
+            System.out.println("ERROR: Amount must be positive");
+            return false;
+        }
+
         boolean complete = this.amount == MAX_PRODUCT;
-        for (int i = 0; i < amount && !done && !complete; i++) {
+        int agregadas = 0;
+
+        for (int i = 0; i < amount && !complete; i++) {
             if (this.amount < MAX_PRODUCT) {
                 productList[this.amount] = productoEncontrado;
                 this.amount++;
-                System.out.println(productoEncontrado.toString());
-                if (this.amount == amount) {
-                    done = true;
-                }
+
+                double discount = productoEncontrado.getPrice() - productoEncontrado.getDiscountedPrice();
+                double shownDiscount = -discount;
+                System.out.println(formatoProductoConDescuento(productoEncontrado, shownDiscount));
+
+                agregadas++;
             } else {
                 System.out.println("ERROR: Full Ticket (100 products max)");
+                complete = true;
             }
         }
-        if (complete) {
+
+        if (complete && agregadas < amount) {
             System.out.println("ERROR: Full Ticket (100 products max)");
         }
-        System.out.println("ticket add: ok");
-        return done;
+
+        if (agregadas > 0) {
+            double totalPrice = 0.0;
+            double totalDiscount = 0.0;
+            for (int i = 0; i < this.amount; i++) {
+                Product p = productList[i];
+                if (p == null) break;
+                totalPrice += p.getPrice();
+                totalDiscount += p.getPrice() - p.getDiscountedPrice();
+            }
+            double finalPrice = totalPrice - totalDiscount;
+
+            System.out.println("Total price: " + totalPrice);
+            System.out.println("Total discount: " + totalDiscount);
+            System.out.println("Final price: " + finalPrice);
+            System.out.println("ticket print: ok");
+        }
+
+        return agregadas > 0;
     }
 
     /**
@@ -110,7 +139,6 @@ public class Ticket {
             sort();
         }
         return product;
-
     }
 
     /**
@@ -123,20 +151,25 @@ public class Ticket {
             double totalPrice = 0, totalDiscount = 0;
             double finalPrice = 0;
             sort();
-            while (productList[i] != null) {
-                sc.append(productList[i].toString());
-                totalPrice += productList[i].getPrice();
-                totalDiscount += productList[i].getPrice() - productList[i].getDiscountedPrice();
-                i++;
+            while (i < amount && productList[i] != null) {
+                Product p = productList[i];
+                double discount = p.getPrice() - p.getDiscountedPrice();
+                double shownDiscount = -discount;
+
+                sc.append(formatoProductoConDescuento(p, shownDiscount));
                 sc.append("\n");
+
+                totalPrice += p.getPrice();
+                totalDiscount += discount;
+                i++;
             }
             finalPrice = totalPrice - totalDiscount;
             sc.append("Total price: ");
-            sc.append(totalPrice );
+            sc.append(totalPrice);
             sc.append("\nTotal discount: ");
-            sc.append(totalDiscount );
+            sc.append(totalDiscount);
             sc.append("\nFinal price: ");
-            sc.append(finalPrice + "\n");
+            sc.append(finalPrice); // ← sin salto de línea al final
         }
         return sc.toString();
     }
@@ -148,4 +181,11 @@ public class Ticket {
         Arrays.sort(productList, 0, amount, nameComp);
     }
 
+    private String formatoProductoConDescuento(Product p, double shownDiscount) {
+        return "{class:Product, id:" + p.getId()
+                + ", name:'" + p.getName() + "'"
+                + ", category:" + p.getCategory()
+                + ", price:" + p.getPrice() + "}"
+                + " **discount:" + shownDiscount;
+    }
 }

@@ -27,7 +27,7 @@ public class App {
 
     private void end() {
         System.out.println("Closing application");
-        System.out.println("Goodbye");
+        System.out.println("Goodbye!");
     }
 
     public void start(String[] args) {
