@@ -1,15 +1,20 @@
 @startuml
+package src.main.java.upm.etsisi.poo.es{
 class App{
 --   Attributes  --
  -{static} String INCORRECT
  -{static} String NOTEXISTS
  -{static} String WELCOME_MESSAGE
  -{static} String HELP_MESSAGE
+ -{static} String FILE_ERROR
+ -{static} String COMMAND_ERROR
  
 --  Methods --
  +main(String[] args)
  -void end()
  -void start()
+ -void userCommand()
+ -void readFile()
  -void commandProd(String[] commandArray, Store store, Ticket ticket)
  -void printHelp()
  -void init()
@@ -47,7 +52,6 @@ class Product{
  -int id
  -String name
  -int price
- -int cuantity
  -type category
  -{static} String NAME_LENGTH_ERROR
  -{static} String NAME_NULL_ERROR
@@ -81,10 +85,21 @@ class Store{
  +void prodList()
 }
 
-App-->Ticket
-App-->Store
-Ticket-->Product
-Ticket-->Store
-Store-->Product
+enum type{
+--   Attributes  --
+ -MERCH
+ -STATIONARY
+ -CLOTHES
+ -BOOK
+ -ELECTRONICS
+}
+
+App-->Ticket : has
+App-->Store : creates
+Ticket-->Product : contains
+Ticket-->Store : gets_from
+Store-->Product : has_on_stock
+}
 @enduml
+
 
