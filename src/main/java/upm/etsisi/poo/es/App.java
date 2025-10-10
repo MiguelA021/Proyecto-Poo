@@ -64,8 +64,8 @@ public class App {
                 if (command != null) {
                     end = readCommand(command, store, ticket);
                 }
-                reader.close();
             }
+            reader.close();
         } catch (IOException e) {
             System.out.println(FILE_ERROR);
         }
