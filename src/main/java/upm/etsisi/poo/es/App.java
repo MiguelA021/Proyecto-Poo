@@ -15,7 +15,6 @@ public class App {
     private final static String FILE_ERROR = "Error while reading the file, please try again.";
     private final static String EMPTY_TICKET = "Empty ticket, try adding some products.";
     private final static String COMMAND_ERROR = "command not found, please try again.";
-
     public static final String UPM = "tUPM>";
 
     public static void main(String[] args) {
@@ -27,6 +26,8 @@ public class App {
     }
 
     private void end() {
+        System.out.println("Closing application");
+        System.out.println("Goodbye");
     }
 
     public void start(String[] args) {
