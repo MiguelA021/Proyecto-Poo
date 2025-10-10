@@ -197,7 +197,7 @@ public class App {
     }
   }
 
-  private void commandProUpdate(String[] commandArray, Store store) {
+  private void commandProdUpdate(String[] commandArray, Store store) {
     boolean done;
     boolean format;
     switch (commandArray[3]) {
