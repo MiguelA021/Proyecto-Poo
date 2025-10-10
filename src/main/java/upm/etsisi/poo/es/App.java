@@ -70,7 +70,6 @@ public class App {
                     System.out.println(command);
                     end = readCommand(command, store, ticket);
                 } else {// el fichero no tiene el comando exit, por tanto no termina la ejecucion del
-                    // programa
                     end = true;
                     userCommand();
                 }
