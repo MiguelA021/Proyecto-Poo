@@ -193,8 +193,7 @@ public class App {
                 store.prodList();
                 break;
             case "update":
-                commandProdUpdate(commandArray, store);
-
+                commandProdUpdate(editSplit(commandArray), store);
             case "remove":
                 commandProdRemove(commandArray, store);
                 break;
