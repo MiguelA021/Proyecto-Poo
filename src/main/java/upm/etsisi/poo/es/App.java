@@ -1,13 +1,4 @@
 package upm.etsisi.poo.es;
-//BORAR ESTE COMENTARIO
-/*
-Mejorar en:
-· Salida de echo "Agrego libro" de que salga tambien el 'echo' y las comillas y la cursiva (---)
-· prod add en la salida sale pro add (LISTO)
-· El TOTAL DISCOUNT en ticket print no existe(LISTO)
-· Revisar los descuentos (LISTO)
-· Que sucede cuando ticket print esta limpio como nuevo y queremos imprimirlo¿?
- */
 
 import java.io.BufferedReader;
 import java.io.FileReader;
