@@ -126,7 +126,7 @@ public class Ticket {
             double finalPrice = 0;
             sort();
             while (productList[i] != null) {
-                sc.append(productList[i].toString());
+                sc.append(productList[i].toStringTicket());
                 totalPrice += productList[i].getPrice();
                 totalDiscount += productList[i].getPrice() - productList[i].getDiscountedPrice();
                 i++;
