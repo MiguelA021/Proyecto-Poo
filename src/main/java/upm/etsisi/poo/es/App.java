@@ -1,5 +1,13 @@
 package upm.etsisi.poo.es;
 //BORAR ESTE COMENTARIO
+/*
+Mejorar en:
+· Salida de echo "Agrego libro" de que salga tambien el 'echo' y las comillas y la cursiva (---)
+· prod add en la salida sale pro add (LISTO)
+· El TOTAL DISCOUNT en ticket print no existe(LISTO)
+· Revisar los descuentos (LISTO)
+· Que sucede cuando ticket print esta limpio como nuevo y queremos imprimirlo¿?
+ */
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -112,7 +120,7 @@ public class App {
     private void commandEcho(String command) {
         try {
             String[] commandMarks = command.split("\"");
-            System.out.println(commandMarks[1]);
+            System.out.println(commandMarks[1]); //Esto provoca que solo salga echo "Agrego Libro" y no 'echo "Agrego Libro"'
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println(INCORRECT);
         }
@@ -294,7 +302,7 @@ public class App {
                 add = store.prodAdd(product);
                 if (add) {
                     System.out.println(product.toString());
-                    System.out.println("pro add: ok");
+                    System.out.println("prod add: ok");
                 } else {
                     System.out.println(ID_REPEAT);
                 }
