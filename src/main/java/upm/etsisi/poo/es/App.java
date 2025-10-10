@@ -248,20 +248,36 @@ public class App {
         }
     }
 
-    private void commandProdAdd(String[] command, String[] name, Store store) {// TODO
+    private void commandProdAdd(String[] command, String[] name, Store store) {
         double price;
         int id;
         boolean correct = true;
-        boolean add = false;
+        boolean added = false;
         String productName;
         String category;
-        String [] commandArrayedit= editSplit(command);
+
+        String[] commandArrayedit = editSplit(command);
+
         try {
             id = Integer.parseInt(commandArrayedit[2]);
-            price = Integer.parseInt(commandArrayedit[5]);
+            // Usar double para el precio
+            price = Double.parseDouble(commandArrayedit[5]);
+
+            // Limpiar el nombre: quitar comillas exteriores y espacios/tabs extra
             productName = commandArrayedit[3];
-            category = commandArrayedit[4];
-        } catch (NumberFormatException e) {
+            if (productName != null) {
+                productName = productName.trim();
+                // Quitar comillas dobles exteriores si las hay
+                if (productName.startsWith("\"") && productName.endsWith("\"") && productName.length() >= 2) {
+                    productName = productName.substring(1, productName.length() - 1);
+                }
+                productName = productName.replace("\t", "").trim();
+            } else {
+                productName = "";
+            }
+
+            category = commandArrayedit[4].trim();
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
             System.out.println(INCORRECT);
             correct = false;
             productName = "ERROR";
@@ -269,18 +285,25 @@ public class App {
             id = -1;
             price = -1;
         }
+
         if (correct) {
             try {
                 Product product = new Product(id, productName, type.valueOf(category), price);
-                add = store.prodAdd(product);
-                if (add) {
-                    System.out.println(product.toString());
-                    System.out.println("pro add: ok");
+                added = store.prodAdd(product);
+                if (added) {
+                    // Imprimir con el formato deseado exactamente:
+                    // {class:Product, id:1, name:'Libro POO', category:BOOK, price:25.0}
+                    System.out.println(
+                            "{class:Product, id:" + product.getId()
+                                    + ", name:'" + product.getName() + "'"
+                                    + ", category:" + product.getCategory()
+                                    + ", price:" + product.getPrice() + "}"
+                    );
+                    System.out.println("prod add: ok");
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(INCORRECT);
             }
-
         }
     }
 
@@ -329,7 +352,10 @@ private void printHelp() {
     System.out.println("ticket print");
     System.out.println("echo\"<texto>\"");
     System.out.println("help");
-    System.out.println("exit");
+    System.out.println("exit\n");
+
+    System.out.println("Categories: MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS");
+    System.out.println("Discounts if there are ≥2 units in the category: MERCH 0%, STATIONERY 5%, CLOTHES 7%, BOOK 10%,\n" + "ELECTRONICS 3%.");
 }
 
     /**
