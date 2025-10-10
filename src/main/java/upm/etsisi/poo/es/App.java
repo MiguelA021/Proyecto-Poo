@@ -4,7 +4,6 @@ package upm.etsisi.poo.es;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
@@ -54,6 +53,7 @@ public class App {
 
     /**
      * the method reads the file which path is given by the args
+     *
      * @param args contains the path of the file we want to read
      */
     private void readFile(String[] args) {
@@ -69,8 +69,9 @@ public class App {
                 if (command != null) {
                     System.out.println(command);
                     end = readCommand(command, store, ticket);
-                } else{//el fichero no tiene el comando exit, por tanto no termina la ejecucion del programa
-                    end=true;
+                } else {// el fichero no tiene el comando exit, por tanto no termina la ejecucion del
+                    // programa
+                    end = true;
                     userCommand();
                 }
             }
@@ -130,6 +131,9 @@ public class App {
             case "print":
                 commandTicketPrint(ticket);
                 break;
+            default:
+                System.out.println(INCORRECT);
+                break;
 
         }
     }
@@ -154,7 +158,7 @@ public class App {
 
     private void commandTicketPrint(Ticket ticket) {
         String printed = ticket.ticketPrint();
-        if (printed.length() == 0) {
+        if (printed.isEmpty()) {
             System.out.println(EMPTY_TICKET);
         } else {
             System.out.println(printed);
@@ -194,7 +198,8 @@ public class App {
                 store.prodList();
                 break;
             case "update":
-                commandProdUpdate(editSplit(commandArray), store);
+                commandProdUpdate(commandArray, store, editSplit(commandArray), ticket);
+                break;
             case "remove":
                 commandProdRemove(commandArray, store);
                 break;
@@ -216,28 +221,39 @@ public class App {
         }
     }
 
-    private void commandProdUpdate(String[] commandArray, Store store) {
-        boolean done;
+    private void commandProdUpdate(String[] commandArray, Store store, String[] name, Ticket ticket) {
+        boolean done = false;
         boolean format;
+        Product product;
         switch (commandArray[3]) {
             case "NAME":
                 format = true;
-                done = store.updateName(Integer.getInteger(commandArray[4]), commandArray[5]);
+                product = store.updateName(Integer.parseInt(commandArray[2]), name[4]);
+                if (product != null) {
+                    done = true;
+                }
                 break;
             case "CATEGORY":
                 format = true;
-                done = store.updateType(Integer.getInteger(commandArray[4]), type.valueOf(commandArray[5]));
+                product = store.updateType(Integer.parseInt(commandArray[2]), type.valueOf(commandArray[4]));
+                if (product != null) {
+                    done = true;
+                }
                 break;
             case "PRICE":
                 format = true;
-                done = store.updatePrice(Integer.getInteger(commandArray[4]), Double.parseDouble(commandArray[5]));
+                product = store.updatePrice(Integer.parseInt(commandArray[2]), Double.parseDouble(commandArray[4]));
+                if (product != null) {
+                    done = true;
+                }
                 break;
             default:
                 format = false;
                 done = false;
+                product = null;
                 break;
         }
-        if (format) {
+        if (!format) {
             System.out.println(INCORRECT);
         }
         if (format && !done) {
@@ -248,6 +264,7 @@ public class App {
         }
     }
 
+
     private void commandProdAdd(String[] command, String[] name, Store store) {// TODO
         double price;
         int id;
@@ -255,7 +272,7 @@ public class App {
         boolean add = false;
         String productName;
         String category;
-        String [] commandArrayedit= editSplit(command);
+        String[] commandArrayedit = editSplit(command);
         try {
             id = Integer.parseInt(commandArrayedit[2]);
             price = Integer.parseInt(commandArrayedit[5]);
@@ -276,6 +293,8 @@ public class App {
                 if (add) {
                     System.out.println(product.toString());
                     System.out.println("pro add: ok");
+                } else {
+                    System.out.println(INCORRECT);
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(INCORRECT);
@@ -287,50 +306,50 @@ public class App {
     private String[] editSplit(String[] commandArray) {
         int length = commandArray.length;
         String[] resul = new String[length];
-        int i = 0;  //contador de commandArray
-        int pos = 0; //contador de resul
+        int i = 0; // contador de commandArray
+        int pos = 0; // contador de resul
         StringBuilder name = new StringBuilder();
         while (i < length) {
             if (commandArray[i].contains("\"")) {
                 boolean fin = false;
-                if(commandArray[i].endsWith("\"")){
+                if (commandArray[i].endsWith("\"")) {
                     fin = true;
                 }
-                name.append(commandArray[i]).append(" ");
-                while (!fin && i<length) {
+                name.append(commandArray[i].replace("\"", "")).append(" ");
+                while (!fin && i < length) {
                     i++;
-                    name.append(commandArray[i]).append("\t");
+                    name.append(commandArray[i].replace("\"", "")).append(" ");
                     if (commandArray[i].contains("\"")) fin = true;
                 }
                 resul[pos] = name.toString();
                 pos++;
                 i++;
-            }else{
-                resul[pos]= commandArray[i];
+            } else {
+                resul[pos] = commandArray[i];
                 pos++;
                 i++;
+            }
         }
-    }
         return resul;
-}
+    }
 
-/**
- * The method prints all the commands allowed and their format
- */
-private void printHelp() {
-    System.out.println("Commands:");
-    System.out.println("pro add <id> \"<name>\"<category><price>");
-    System.out.println("prod list");
-    System.out.println("prod update <id>NAME|CATEGORY|PRICE<value>");
-    System.out.println("prod remove<id>");
-    System.out.println("ticket new");
-    System.out.println("ticket add<prodid>>quantity>");
-    System.out.println("ticket remove<prodid>");
-    System.out.println("ticket print");
-    System.out.println("echo\"<texto>\"");
-    System.out.println("help");
-    System.out.println("exit");
-}
+    /**
+     * The method prints all the commands allowed and their format
+     */
+    private void printHelp() {
+        System.out.println("Commands:");
+        System.out.println("pro add <id> \"<name>\"<category><price>");
+        System.out.println("prod list");
+        System.out.println("prod update <id>NAME|CATEGORY|PRICE<value>");
+        System.out.println("prod remove<id>");
+        System.out.println("ticket new");
+        System.out.println("ticket add<prodid>>quantity>");
+        System.out.println("ticket remove<prodid>");
+        System.out.println("ticket print");
+        System.out.println("echo\"<texto>\"");
+        System.out.println("help");
+        System.out.println("exit");
+    }
 
     /**
      * It initializes the App
@@ -340,5 +359,6 @@ private void printHelp() {
         System.out.println(HELP_MESSAGE);
 
     }
+
 
 }

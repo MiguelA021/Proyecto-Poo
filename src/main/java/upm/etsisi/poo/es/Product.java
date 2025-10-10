@@ -106,7 +106,7 @@ public class Product {
     @Override
     public String toString() {
         double discountValue = this.price - this.getDiscountedPrice();
-        return "{class:Product, id: " + this.id + ", name: '" + this.name + "', category: " + this.category + ", price: " + this.price + "} **discount -" + discountValue;
+        return "{class:Product, id: " + this.id + ", name: '" + this.name + "', category: " + this.category + ", price: " + this.price + "}";
     }
 
 
