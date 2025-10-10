@@ -174,7 +174,7 @@ public class App {
         store.prodList();
         break;
       case "update":
-        commandProUpdate(commandArray, store);
+        commandProdUpdate(commandArray, store);
 
       case "remove":
         commandProdRemove(commandArray, store);
