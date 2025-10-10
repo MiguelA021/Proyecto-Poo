@@ -4,141 +4,148 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 public class Ticket {
-  final static int MAX_PRODUCT = 100;
-  Store store;
-  Product[] productList;
-  Product[] storeProducts;
-  int amount;
-  Comparator<Product> nameComp = Comparator.comparing(Product::getName);
+    final static int MAX_PRODUCT = 100;
+    Store store;
+    Product[] productList;
+    Product[] storeProducts;
+    int amount;
+    Comparator<Product> nameComp = Comparator.comparing(Product::getName);
 
-  public Ticket(Store store) {
-    this.productList = new Product[MAX_PRODUCT];
-    this.store = store;
-    this.storeProducts = this.store.getProducts();
-    this.amount = 0;
-  }
-
-  /**
-   * @return a new ticket, which has been reset
-   */
-  public Product[] ticketNew() {
-    productList = new Product[MAX_PRODUCT];
-    return productList;
-  }
-
-  /**
-   * @param prodId is the iD from the product that we want to add to the ticket.
-   * @param amount is the product amount
-   *               This method adds the product amount to the ticket
-   * @return a boolean if the product was found,and in the case 'true', the method
-   *         set the
-   *         ticket amount to new amount.
-   */
-  public boolean ticketAdd(int prodId, int amount) {
-    Product productoEncontrado = null;
-    boolean found = false;
-    for (int i = 0; i < storeProducts.length && !found; i++) {
-      if (storeProducts[i] != null && storeProducts[i].getId() == prodId) {
-        productoEncontrado = storeProducts[i];
-        found = true;
-      }
+    public Ticket(Store store) {
+        this.productList = new Product[MAX_PRODUCT];
+        this.store = store;
+        this.storeProducts = this.store.getProducts();
+        this.amount = 0;
     }
 
-    if (productoEncontrado == null) {
-      System.out.println("ERROR: Product ID not found " + prodId);
-      return false;
+    /**
+     * @return a new ticket, which has been reset
+     */
+    public Product[] ticketNew() {
+        productList = new Product[MAX_PRODUCT];
+        return productList;
     }
-    boolean done = false;
-    for (int i = 0; i < amount && !done; i++) {
-      if (this.amount < MAX_PRODUCT) {
-        productList[this.amount] = productoEncontrado;
-        this.amount++;
-        System.out.println(productoEncontrado.toString());
-        if (this.amount == amount) {
-          done = true;
+
+    /**
+     * @param prodId is the iD from the product that we want to add to the ticket.
+     * @param amount is the product amount
+     *               This method adds the product amount to the ticket
+     * @return a boolean if the product was found,and in the case 'true', the method
+     * set the
+     * ticket amount to new amount.
+     */
+    public boolean ticketAdd(int prodId, int amount) {
+        Product productoEncontrado = null;
+        boolean found = false;
+        for (int i = 0; i < storeProducts.length && !found; i++) {
+            if (storeProducts[i] != null && storeProducts[i].getId() == prodId) {
+                productoEncontrado = storeProducts[i];
+                found = true;
+            }
         }
-      } else {
-        System.out.println("ERROR: Full Ticket (100 products max)");
-      }
-    }
-    System.out.println("ticket add: ok");
-    return done;
-  }
 
-  /**
-   * @param prodId This is Id from the product that sending us to remove
-   *               This method remove all occurrences of the product
-   * @return it's a boolean that checks if the product is removed
-   */
-  public Product ticketRemove(int prodId) {
-    Product product = null;
-    boolean removed = false;
-    int iterations = this.amount;
-    if (this.amount == 0) {
-      System.out.println("ERROR: No products in the ticket");
-
-    } else {
-      for (int i = 0; i < iterations; i++) {
-        if (productList[i] != null && productList[i].getId() == prodId) {
-          if (this.amount == 1) {
-            productList[0] = null;
-          } else {
-            product = productList[i];
-            productList[i] = productList[amount - 1];
-            productList[amount - 1] = null;
-            this.amount--;
-            i--;
-          }
+        if (productoEncontrado == null) {
+            System.out.println("ERROR: Product ID not found " + prodId);
+            return false;
         }
-      }
-
-      boolean comprobation = true;
-      for (int i = 0; i < this.amount; i++) {
-        if (productList[i] != null) {
-          if (productList[i].getId() == prodId) {
-            comprobation = false;
-          }
+        boolean done = false;
+        boolean complete = this.amount == MAX_PRODUCT;
+        for (int i = 0; i < amount && !done && !complete; i++) {
+            if (this.amount < MAX_PRODUCT) {
+                productList[this.amount] = productoEncontrado;
+                this.amount++;
+                System.out.println(productoEncontrado.toString());
+                if (this.amount == amount) {
+                    done = true;
+                }
+            } else {
+                System.out.println("ERROR: Full Ticket (100 products max)");
+            }
         }
-      }
-      removed = comprobation;
-
-      sort();
+        if (complete) {
+            System.out.println("ERROR: Full Ticket (100 products max)");
+        }
+        System.out.println("ticket add: ok");
+        return done;
     }
-    return product;
 
-  }
+    /**
+     * @param prodId This is Id from the product that sending us to remove
+     *               This method remove all occurrences of the product
+     * @return it's a boolean that checks if the product is removed
+     */
+    public Product ticketRemove(int prodId) {
+        Product product = null;
+        boolean removed = false;
+        int iterations = this.amount;
+        if (this.amount == 0) {
+            System.out.println("ERROR: No products in the ticket");
 
-  /**
-   * @return the ticket printed
-   */
-  public String ticketPrint() {
-    StringBuilder sc = new StringBuilder();
-    int i = 0;
-    double totalPrice = 0, totalDiscount = 0;
-    double finalPrice = 0;
-    sort();
-    while (productList[i] != null) {
-      sc.append(productList[i].toString());
-      totalPrice += productList[i].getPrice();
-      totalDiscount += productList[i].getPrice() - productList[i].getDiscountedPrice();
-      i++;
-      sc.append("\n");
+        } else {
+            for (int i = 0; i < iterations; i++) {
+                if (productList[i] != null && productList[i].getId() == prodId) {
+                    if (this.amount == 1) {
+                        productList[0] = null;
+                        this.amount--;
+                    } else {
+                        product = productList[i];
+                        productList[i] = productList[amount - 1];
+                        productList[amount - 1] = null;
+                        this.amount--;
+                        i--;
+                    }
+                }
+            }
+
+            boolean comprobation = true;
+            for (int i = 0; i < this.amount; i++) {
+                if (productList[i] != null) {
+                    if (productList[i].getId() == prodId) {
+                        comprobation = false;
+                    }
+                }
+            }
+            removed = comprobation;
+
+            sort();
+        }
+        return product;
+
     }
-    finalPrice = totalPrice - totalDiscount;
-    sc.append("Total price: ");
-    sc.append(totalPrice + "\n");
-    sc.append("\nTotal discount: ");
-    sc.append(totalDiscount + "\n");
-    sc.append("\nFinal price: ");
-    sc.append(finalPrice + "\n");
-    return sc.toString();
-  }
 
-  /**
-   * The method sorts the names alphabetically
-   */
-  public void sort() {
-    Arrays.sort(productList, 0, amount, nameComp);
-  }
+    /**
+     * @return the ticket printed
+     */
+    public String ticketPrint() {
+        StringBuilder sc = new StringBuilder();
+        if (this.productList[0] != null) {
+            int i = 0;
+            double totalPrice = 0, totalDiscount = 0;
+            double finalPrice = 0;
+            sort();
+            while (productList[i] != null) {
+                sc.append(productList[i].toString());
+                totalPrice += productList[i].getPrice();
+                totalDiscount += productList[i].getPrice() - productList[i].getDiscountedPrice();
+                i++;
+                sc.append("\n");
+            }
+            finalPrice = totalPrice - totalDiscount;
+            sc.append("Total price: ");
+            sc.append(totalPrice );
+            sc.append("\nTotal discount: ");
+            sc.append(totalDiscount );
+            sc.append("\nFinal price: ");
+            sc.append(finalPrice + "\n");
+        }
+        return sc.toString();
+    }
+
+    /**
+     * The method sorts the names alphabetically
+     */
+    public void sort() {
+        Arrays.sort(productList, 0, amount, nameComp);
+    }
 
 }

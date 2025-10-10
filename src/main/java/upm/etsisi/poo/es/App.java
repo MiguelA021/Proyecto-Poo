@@ -13,7 +13,9 @@ public class App {
     private final static String WELCOME_MESSAGE = "Welcome to the ticket module APP.";
     private final static String HELP_MESSAGE = "Ticket module. Type 'help' to see commands.";
     private final static String FILE_ERROR = "Error while reading the file, please try again.";
+    private final static String EMPTY_TICKET = "Empty ticket, try adding some products.";
     private final static String COMMAND_ERROR = "command not found, please try again.";
+
     public static final String UPM = "tUPM>";
 
     public static void main(String[] args) {
@@ -60,10 +62,11 @@ public class App {
                 System.out.print(UPM);
                 command = reader.readLine();
                 if (command != null) {
+                    System.out.println(command);
                     end = readCommand(command, store, ticket);
                 }
-                reader.close();
             }
+            reader.close();
         } catch (IOException e) {
             System.out.println(FILE_ERROR);
         }
@@ -142,8 +145,13 @@ public class App {
     }
 
     private void commandTicketPrint(Ticket ticket) {
-        System.out.println(ticket.ticketPrint());
-        System.out.println("ticket print: ok");
+        String printed = ticket.ticketPrint();
+        if (printed.length() == 0) {
+            System.out.println(EMPTY_TICKET);
+        } else {
+            System.out.println(printed);
+            System.out.println("ticket print: ok");
+        }
     }
 
     private void commandTicketRemove(String[] commandArray, Ticket ticket) {
@@ -314,13 +322,13 @@ private void printHelp() {
     System.out.println("exit");
 }
 
-/**
- * It initializes the App
- */
-private void init() {
-    System.out.println(WELCOME_MESSAGE);
-    System.out.println(HELP_MESSAGE);
+    /**
+     * It initializes the App
+     */
+    private void init() {
+        System.out.println(WELCOME_MESSAGE);
+        System.out.println(HELP_MESSAGE);
 
-}
+    }
 
 }
