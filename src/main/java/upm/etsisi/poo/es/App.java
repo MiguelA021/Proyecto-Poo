@@ -287,19 +287,21 @@ public class App {
     private String[] editSplit(String[] commandArray) {
         int length = commandArray.length;
         String[] resul = new String[length];
-        int i = 0;
-        int pos = 0;
+        int i = 0;  //contador de commandArray
+        int pos = 0; //contador de resul
         StringBuilder name = new StringBuilder();
         while (i < length) {
             if (commandArray[i].contains("\"")) {
                 boolean fin = false;
-                while (!fin) {
-                    name.append("\t").append(commandArray[i]);
-                    resul[pos] = name.toString();
-                    pos++;
-                    if (commandArray[i].contains("\"")) fin = true;
+                name.append(commandArray[i]).append(" ");
+                while (!fin && i<length) {
                     i++;
+                    name.append(commandArray[i]).append("\t");
+                    if (commandArray[i].contains("\"")) fin = true;
                 }
+                resul[pos] = name.toString();
+                pos++;
+                i++;
             }else{
                 resul[pos]= commandArray[i];
                 pos++;
