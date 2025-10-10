@@ -136,7 +136,7 @@ public class Ticket {
             sc.append("Total price: ");
             sc.append(totalPrice );
             sc.append("\nTotal discount: ");
-            sc.append(String.format("%.2f", finalPrice) );
+            sc.append(String.format("%.2f", totalDiscount));
             sc.append("\nFinal price: ");
             sc.append(finalPrice);
         }
