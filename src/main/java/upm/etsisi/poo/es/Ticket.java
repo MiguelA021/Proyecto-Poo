@@ -23,6 +23,7 @@ public class Ticket {
      */
     public Product[] ticketNew() {
         productList = new Product[MAX_PRODUCT];
+        amount = 0;
         return productList;
     }
 
@@ -54,7 +55,7 @@ public class Ticket {
             if (this.amount < MAX_PRODUCT) {
                 productList[this.amount] = productoEncontrado;
                 this.amount++;
-                System.out.println(productoEncontrado.toString());
+             //   System.out.println(productoEncontrado.toString());
                 if (this.amount == amount) {
                     done = true;
                 }
@@ -65,6 +66,7 @@ public class Ticket {
         if (complete) {
             System.out.println("ERROR: Full Ticket (100 products max)");
         }
+        System.out.println(ticketPrint());
         System.out.println("ticket add: ok");
         return done;
     }
@@ -134,9 +136,9 @@ public class Ticket {
             sc.append("Total price: ");
             sc.append(totalPrice );
             sc.append("\nTotal discount: ");
-            sc.append(totalDiscount );
+            sc.append(String.format("%.2f", finalPrice) );
             sc.append("\nFinal price: ");
-            sc.append(finalPrice + "\n");
+            sc.append(finalPrice);
         }
         return sc.toString();
     }

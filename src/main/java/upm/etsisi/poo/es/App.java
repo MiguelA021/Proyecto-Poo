@@ -9,12 +9,13 @@ import java.util.Scanner;
 public class App {
     private final static String INCORRECT = "Incorrect Format, please try again.";
     private final static String NOTEXIST = "Product doesn't exist.";
-    private final static String WELCOME_MESSAGE = "Welcome to the ticket module APP.";
+    private final static String WELCOME_MESSAGE = "Welcome to the ticket module App.";
     private final static String HELP_MESSAGE = "Ticket module. Type 'help' to see commands.";
     private final static String FILE_ERROR = "Error while reading the file, please try again.";
     private final static String EMPTY_TICKET = "Empty ticket, try adding some products.";
     private final static String COMMAND_ERROR = "command not found, please try again.";
     public static final String UPM = "tUPM>";
+    public static final String ID_REPEAT = "This ID is used, try to use another.";
 
     public static void main(String[] args) {
         App app = new App();
@@ -47,6 +48,7 @@ public class App {
             System.out.print(UPM);
             String command = scan.nextLine();
             end = readCommand(command, store, ticket);
+            System.out.println();
         }
         scan.close();
     }
@@ -73,6 +75,7 @@ public class App {
                     end = true;
                     userCommand();
                 }
+                System.out.println();
             }
             reader.close();
         } catch (IOException e) {
@@ -293,7 +296,7 @@ public class App {
                     System.out.println(product.toString());
                     System.out.println("pro add: ok");
                 } else {
-                    System.out.println(INCORRECT);
+                    System.out.println(ID_REPEAT);
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(INCORRECT);
@@ -347,7 +350,9 @@ public class App {
         System.out.println("ticket print");
         System.out.println("echo\"<texto>\"");
         System.out.println("help");
-        System.out.println("exit");
+        System.out.println("exit\n");
+        System.out.println("Categories: MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS");
+        System.out.println("Discounts if there are ≥2 units in the category: MERCH 0%, STATIONERY 5%, CLOTHES 7%, BOOK 10%, ELECTRONICS 3%.");
     }
 
     /**
