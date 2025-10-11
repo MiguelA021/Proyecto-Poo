@@ -235,6 +235,7 @@ public class App {
                     done = true;
                 }
                 break;
+
             case "CATEGORY":
                 format = true;
                 product = store.updateType(Integer.parseInt(commandArray[2]), type.valueOf(commandArray[4]));
