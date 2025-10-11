@@ -85,25 +85,29 @@ public class App {
     private boolean readCommand(String command, Store store, Ticket ticket) {
         boolean end = false;
         String[] commandArray = command.split(" ");
-        switch (commandArray[0]) {
-            case "prod":
-                commandProd(commandArray, store, ticket, command);
-                break;
-            case "ticket":
-                commandTicket(commandArray, ticket);
-                break;
-            case "help":
-                printHelp();
-                break;
-            case "echo":
-                commandEcho(command);
-                break;
-            case "exit":
-                end = true;
-                break;
-            default:
-                System.out.println(INCORRECT);
+        try {
+            switch (commandArray[0]) {
+                case "prod":
+                    commandProd(commandArray, store, ticket, command);
+                    break;
+                case "ticket":
+                    commandTicket(commandArray, ticket);
+                    break;
+                case "help":
+                    printHelp();
+                    break;
+                case "echo":
+                    commandEcho(command);
+                    break;
+                case "exit":
+                    end = true;
+                    break;
+                default:
+                    System.out.println(INCORRECT);
 
+            }
+        }catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println(INCORRECT);
         }
         return end;
     }
@@ -204,6 +208,8 @@ public class App {
             case "remove":
                 commandProdRemove(commandArray, store);
                 break;
+            default:
+                System.out.println(INCORRECT);
         }
     }
 
