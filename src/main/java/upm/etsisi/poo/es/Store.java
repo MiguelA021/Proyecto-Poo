@@ -1,5 +1,9 @@
 package upm.etsisi.poo.es;
 
+import jdk.internal.org.jline.terminal.TerminalBuilder;
+
+import java.sql.SQLOutput;
+
 public class Store {
     int MAX_PRODUCT = 100;
     Product[] productList;
@@ -54,6 +58,7 @@ public class Store {
         if (found) {
             System.out.println(product.toString());
             System.out.println("prod remove: ok");
+
         }
         return found;
     }
