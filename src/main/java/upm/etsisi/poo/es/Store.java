@@ -1,8 +1,6 @@
 package upm.etsisi.poo.es;
 
-import jdk.internal.org.jline.terminal.TerminalBuilder;
 
-import java.sql.SQLOutput;
 
 public class Store {
     int MAX_PRODUCT = 100;

@@ -109,9 +109,9 @@ public class App {
     }
 
     private void commandEcho(String command) {
-        try {
-            String[] commandMarks = command.split("\"");
-            System.out.println(commandMarks[1]); //Esto provoca que solo salga echo "Agrego Libro" y no 'echo "Agrego Libro"'
+        try{
+            String[] parts = command.split("\"");
+            System.out.println(parts[0].trim() + " \"" + parts[1].trim() + "\"");
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println(INCORRECT);
         }
