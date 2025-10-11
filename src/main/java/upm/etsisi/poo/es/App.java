@@ -230,6 +230,7 @@ public class App {
             case "NAME":
                 format = true;
                 product = store.updateName(Integer.parseInt(commandArray[2]), name[4]);
+                System.out.println(product.toString());
                 if (product != null) {
                     done = true;
                 }
@@ -237,6 +238,7 @@ public class App {
             case "CATEGORY":
                 format = true;
                 product = store.updateType(Integer.parseInt(commandArray[2]), type.valueOf(commandArray[4]));
+                System.out.println(product.toString());
                 if (product != null) {
                     done = true;
                 }
@@ -244,6 +246,7 @@ public class App {
             case "PRICE":
                 format = true;
                 product = store.updatePrice(Integer.parseInt(commandArray[2]), Double.parseDouble(commandArray[4]));
+                System.out.println(product.toString());
                 if (product != null) {
                     done = true;
                 }
