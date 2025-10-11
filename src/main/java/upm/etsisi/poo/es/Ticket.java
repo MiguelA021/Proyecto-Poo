@@ -55,7 +55,7 @@ public class Ticket {
             if (this.amount < MAX_PRODUCT) {
                 productList[this.amount] = productoEncontrado;
                 this.amount++;
-             //   System.out.println(productoEncontrado.toString());
+                //   System.out.println(productoEncontrado.toString());
                 if (this.amount == amount) {
                     done = true;
                 }

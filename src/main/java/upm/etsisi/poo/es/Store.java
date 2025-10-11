@@ -53,6 +53,7 @@ public class Store {
         }
         if (found) {
             System.out.println(product.toString());
+            System.out.println("prod remove: ok");
         }
         return found;
     }

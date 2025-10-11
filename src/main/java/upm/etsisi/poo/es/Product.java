@@ -16,7 +16,7 @@ public class Product {
     private final static String PRICE_POSITIVE_ERROR="WARNING: The price should be a positive number";
 
     public Product(int id, String name, type category, double price) {
-        this.name = name;
+        this.name = name.trim();
         this.price = price;
         this.id = id;
         this.category = category;
@@ -51,7 +51,7 @@ public class Product {
      */
     public void setName(String name) {
         if (name.length() < 100 && !name.isEmpty()) {
-            this.name = name;
+            this.name = name.trim();
         } else {
             if (name.length() >= 100) {
                 System.out.println(NAME_LENGTH_ERROR);
