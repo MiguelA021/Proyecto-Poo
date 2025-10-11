@@ -108,8 +108,5 @@ public class Product {
         return "{class:Product, id: " + this.id + ", name: '" + this.name + "', category: " + this.category + ", price: " + this.price + "}";
 
     }
-    public String toStringTicket(){
-        double discountValue = this.price - this.getDiscountedPrice();
-        return String.format("{class:Product, id: %d, name: '%s', category: %s, price: %.2f} **discount -%.2f", this.id, this.name, this.category, this.price, discountValue);
-    }
+
 }

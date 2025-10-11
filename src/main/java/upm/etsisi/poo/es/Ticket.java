@@ -120,26 +120,53 @@ public class Ticket {
      */
     public String ticketPrint() {
         StringBuilder sc = new StringBuilder();
-        if (this.productList[0] != null) {
-            int i = 0;
-            double totalPrice = 0, totalDiscount = 0;
-            double finalPrice = 0;
+
+        if (this.amount > 0 && this.productList[0] != null) {
             sort();
-            while (productList[i] != null) {
-                sc.append(productList[i].toStringTicket());
-                totalPrice += productList[i].getPrice();
-                totalDiscount += productList[i].getPrice() - productList[i].getDiscountedPrice();
-                i++;
-                sc.append("\n");
+            int n = this.amount;
+
+            int[] categoryCount = new int[type.values().length];
+            for (int i = 0; i < n; i++) {
+                Product p = productList[i];
+                if (p != null) {
+                    categoryCount[p.getCategory().ordinal()]++;
+                }
             }
-            finalPrice = totalPrice - totalDiscount;
-            sc.append("Total price: ");
-            sc.append(totalPrice );
-            sc.append("\nTotal discount: ");
-            sc.append(String.format("%.2f", totalDiscount));
-            sc.append("\nFinal price: ");
-            sc.append(finalPrice);
+
+            double totalPrice = 0.0;
+            double totalDiscount = 0.0;
+
+            for (int i = 0; i < n; i++) {
+                Product p = productList[i];
+
+                if (p != null) {
+                    double price = p.getPrice();
+                    double discountValue = 0.0;
+
+                    if (categoryCount[p.getCategory().ordinal()] >= 2) {
+                        discountValue = price - p.getDiscountedPrice();
+                    }
+
+                    totalPrice += price;
+                    totalDiscount += discountValue;
+
+                    if (discountValue > 0.0) {
+                        sc.append(String.format(
+                                "{class:Product, id: %d, name: '%s', category: %s, price: %.2f} **discount -%.2f", p.getId(), p.getName(), p.getCategory(), price, discountValue));
+                    } else {
+                        sc.append(String.format(
+                                "{class:Product, id: %d, name: '%s', category: %s, price: %.2f}", p.getId(), p.getName(), p.getCategory(), price));
+                    }
+                    sc.append("\n");
+                }
+            }
+
+            double finalPrice = totalPrice - totalDiscount;
+            sc.append("Total price: ").append(String.format("%.2f", totalPrice));
+            sc.append("\nTotal discount: ").append(String.format("%.2f", totalDiscount));
+            sc.append("\nFinal price: ").append(String.format("%.2f", finalPrice));
         }
+
         return sc.toString();
     }
 
