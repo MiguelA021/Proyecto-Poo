@@ -18,17 +18,17 @@ class App{
  -void end()
  -void start()
  -void userCommand()
- -void readFile()
- -void readCommand(String command, Store store, Ticket ticket)
- -void commandProd(String[] commandArray, Store store, Ticket ticket)
+ -void readFile(String[] args)
+ -boolean readCommand(String command, Ticket ticket)
+ -void commandProd(String[] commandArray, Store store, Ticket ticket, String command)
  -void commandEcho(String command)
  -void commandTicket(String[] commandArray, Ticket ticket, Store store)
  -void commandTicketPrint(Ticket ticket)
  -void commandTicketAdd(Ticket ticket, String[] commandArray)
  -void commandTicketRemove(Ticket ticket, String[] commandArray)
  -void commandProdRemove(Store store, String[] commandArray)
- -void commandProdUpdate(Store store, String[] commandArray)
- -void commandProdAdd(Store store, String[] commandArray)
+ -void commandProdUpdate(Store store, String[] commandArray, Ticket ticket)
+ -void commandProdAdd(Store store, String[] commandArray, Ticket ticket)
  -String[] editSplit(String[] commandArray)
  -void printHelp()
  -void init()
@@ -46,7 +46,7 @@ class Ticket{
 --  Methods --
  +Product[] ticketNew()
  +boolean ticketAdd(int ProdId, int amount)
- +boolean ticketRemove(int prodId)
+ +Product ticketRemove(int prodId)
  +String ticketPrint()
  +void sort()
 }
@@ -55,7 +55,7 @@ class Product{
  --   Attributes  --
  -int id
  -String name
- -int price
+ -double price
  -type category
  -{static} String NAME_LENGTH_ERROR
  -{static} String NAME_NULL_ERROR
@@ -84,7 +84,7 @@ class Store{
  +boolean prodAdd(Product product)
  +boolean prodRemove(int id)
  +void prodList()
- +boolean updateType(int id, type category)
+ +Product updateType(int id, type category)
  +boolean updateName(int id, String name)
  +booelan updatePrice(int id, double price)
 }
@@ -105,6 +105,3 @@ Ticket-->Store : gets_from
 Store-->Product : has_on_stock
 }
 @enduml
-
-
-
