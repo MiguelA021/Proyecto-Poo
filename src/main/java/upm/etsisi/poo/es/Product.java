@@ -104,6 +104,9 @@ public class Product {
     }
 
     @Override
+    /**
+     * the method turns the object into a String with the format required
+     */
     public String toString() {
         return "{class:Product, id: " + this.id + ", name: '" + this.name + "', category: " + this.category + ", price: " + this.price + "}";
 

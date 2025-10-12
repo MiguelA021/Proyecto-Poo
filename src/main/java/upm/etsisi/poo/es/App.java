@@ -38,6 +38,9 @@ public class App {
 
     }
 
+    /**
+     * the method reads the commands given by the user
+     */
     public void userCommand() {
         boolean end = false;
         Scanner scan = new Scanner(System.in);
@@ -54,7 +57,6 @@ public class App {
 
     /**
      * the method reads the file which path is given by the args
-     *
      * @param args contains the path of the file we want to read
      */
     private void readFile(String[] args) {
@@ -82,6 +84,13 @@ public class App {
         }
     }
 
+    /**
+     * the method distinguishes from the 5 main commands: prod, ticket, help, echo and exit
+     * @param command the command given
+     * @param store the store where the command is executed
+     * @param ticket the ticket where the command is executed
+     * @return it returns true if the command given is end, letting the previous method to stop the program
+     */
     private boolean readCommand(String command, Store store, Ticket ticket) {
         boolean end = false;
         String[] commandArray = command.split(" ");
@@ -112,6 +121,10 @@ public class App {
         return end;
     }
 
+    /**
+     * the method prints (if the format is legal) through the screen the appendix of the echo
+     * @param command the command given by the user
+     */
     private void commandEcho(String command) {
         try{
             String[] parts = command.split("\"");
@@ -121,6 +134,11 @@ public class App {
         }
     }
 
+    /**
+     * the method distinguishes the subtype of commands from ticket: new, add, remove and print
+     * @param commandArray the command given by the user and sliced
+     * @param ticket the ticket where the command executes
+     */
     private void commandTicket(String[] commandArray, Ticket ticket) {
         switch (commandArray[1]) {
             case "new":
@@ -143,6 +161,11 @@ public class App {
         }
     }
 
+    /**
+     * the method adds the product given by the user through the command
+     * @param commandArray the command sliced
+     * @param ticket the ticket where we are going to add the product
+     */
     private void commandTicketAdd(String[] commandArray, Ticket ticket) {
         int id;
         int amount;
@@ -161,6 +184,10 @@ public class App {
         }
     }
 
+    /**
+     * the method prints the ticket
+     * @param ticket the ticket we want to print
+     */
     private void commandTicketPrint(Ticket ticket) {
         String printed = ticket.ticketPrint();
         if (printed.isEmpty()) {
@@ -171,6 +198,11 @@ public class App {
         }
     }
 
+    /**
+     * the method removes the product from the ticket
+     * @param commandArray the command given by the user which holds the product
+     * @param ticket the ticket where we want to remove the product
+     */
     private void commandTicketRemove(String[] commandArray, Ticket ticket) {
         int id;
         boolean correct = true;
@@ -192,6 +224,13 @@ public class App {
         }
     }
 
+    /**
+     * the method distinguishes the subtype of commands from prod: add, list, update and remove
+     * @param commandArray the command given by the user and sliced
+     * @param store the store where we want to add the product
+     * @param ticket the ticket given
+     * @param command the command without the sliced
+     */
     private void commandProd(String[] commandArray, Store store, Ticket ticket, String command) {
 
         switch (commandArray[1]) {
@@ -213,6 +252,11 @@ public class App {
         }
     }
 
+    /**
+     * the method removes the product given from the store
+     * @param commandArray the command given by the user and sliced
+     * @param store the store where we want to remove the product
+     */
     private void commandProdRemove(String[] commandArray, Store store) {
         boolean correct = true;
         int id;
@@ -228,6 +272,13 @@ public class App {
         }
     }
 
+    /**
+     * the method updates the product from the store
+     * @param commandArray the command given by the user and sliced
+     * @param store the store where we want to update the product
+     * @param name the new name if the option NAME has been selected
+     * @param ticket the ticket given
+     */
     private void commandProdUpdate(String[] commandArray, Store store, String[] name, Ticket ticket) {
         boolean done = false;
         boolean format;
@@ -275,7 +326,12 @@ public class App {
         }
     }
 
-
+    /**
+     * the method adds a product into the store
+     * @param command the command given by the user and sliced
+     * @param name the name of the product given
+     * @param store the store where we want to add a product
+     */
     private void commandProdAdd(String[] command, String[] name, Store store) {// TODO
         double price;
         int id;
@@ -314,6 +370,12 @@ public class App {
         }
     }
 
+    /**
+     * the method prevents the names, given by the user through commands, to occupy more than 1 space
+     * on the sliced array of the command.
+     * @param commandArray the command given by the user and sliced
+     * @return it returns the name as an array of Strings
+     */
     private String[] editSplit(String[] commandArray) {
         int length = commandArray.length;
         String[] resul = new String[length];
