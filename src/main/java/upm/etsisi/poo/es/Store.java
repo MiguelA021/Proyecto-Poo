@@ -137,4 +137,14 @@ public class Store {
         return resul;
     }
 
+    public Product getProduct(int prodId) {
+        Product result ;
+        int i = 0;
+        boolean done = false;
+        while ( productList[i] != null && productList[i].getId() != prodId){
+            i++;
+        }
+
+        return null;
+    }
 }

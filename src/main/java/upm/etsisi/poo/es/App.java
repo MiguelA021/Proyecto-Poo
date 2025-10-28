@@ -45,7 +45,8 @@ public class App {
         boolean end = false;
         Scanner scan = new Scanner(System.in);
         Store store = new Store();
-        Ticket ticket = new Ticket(store);
+        int id = (int) ((Math.random()*100000) -1);
+        Ticket ticket = new Ticket(id);
         while (!end) {
             System.out.print(UPM);
             String command = scan.nextLine();
@@ -62,7 +63,7 @@ public class App {
     private void readFile(String[] args) {
         String command;
         Store store = new Store();
-        Ticket ticket = new Ticket(store);
+        Ticket ticket = new Ticket();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(args[0]));
             boolean end = false;
@@ -71,7 +72,7 @@ public class App {
                 command = reader.readLine();
                 if (command != null) {
                     System.out.println(command);
-                    end = readCommand(command, store, ticket);
+                    end = readCommand(command, store,ticket);
                 } else {// el fichero no tiene el comando exit, por tanto no termina la ejecucion del
                     end = true;
                     userCommand();
@@ -100,7 +101,7 @@ public class App {
                     commandProd(commandArray, store, ticket, command);
                     break;
                 case "ticket":
-                    commandTicket(commandArray, ticket);
+                    commandTicket(commandArray,store, ticket);
                     break;
                 case "help":
                     printHelp();
@@ -139,14 +140,14 @@ public class App {
      * @param commandArray the command given by the user and sliced
      * @param ticket the ticket where the command executes
      */
-    private void commandTicket(String[] commandArray, Ticket ticket) {
+    private void commandTicket(String[] commandArray,Store store, Ticket ticket) {
         switch (commandArray[1]) {
             case "new":
-                ticket.ticketNew();
+             //   ticket.ticketNew();
                 System.out.println("ticket new: ok");
                 break;
             case "add":
-                commandTicketAdd(commandArray, ticket);
+                commandTicketAdd(commandArray, store, ticket);
                 break;
             case "remove":
                 commandTicketRemove(commandArray, ticket);
@@ -166,7 +167,7 @@ public class App {
      * @param commandArray the command sliced
      * @param ticket the ticket where we are going to add the product
      */
-    private void commandTicketAdd(String[] commandArray, Ticket ticket) {
+    private void commandTicketAdd(String[] commandArray, Store store, Ticket ticket) {
         int id;
         int amount;
         boolean correct = true;
@@ -180,7 +181,7 @@ public class App {
             correct = false;
         }
         if (correct) {
-            boolean add = ticket.ticketAdd(id, amount);
+            boolean add = ticket.ticketAdd(id, store, amount);
         }
     }
 

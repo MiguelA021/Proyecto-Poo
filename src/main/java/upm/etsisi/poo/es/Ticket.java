@@ -2,73 +2,75 @@ package upm.etsisi.poo.es;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.time.LocalTime;
+
+enum status {
+    EMPTY, ACTIVE, CLOSED
+}
 
 public class Ticket {
+
     final static int MAX_PRODUCT = 100;
-    Store store;
-    Product[] productList;
-    Product[] storeProducts;
-    int amount;
-    Comparator<Product> nameComp = Comparator.comparing(Product::getName);
-
-    public Ticket(Store store) {
-        this.productList = new Product[MAX_PRODUCT];
-        this.store = store;
-        this.storeProducts = this.store.getProducts();
-        this.amount = 0;
-    }
+    private Product[] productList;
+    private int amount;
+    private StringBuilder id;
+    private final Comparator<Product> nameComp = Comparator.comparing(Product::getName);
+    private status status;
 
     /**
-     * @return a new ticket, which has been reset
+     * @param id the ticket`s  id
      */
-    public Product[] ticketNew() {
-        productList = new Product[MAX_PRODUCT];
-        amount = 0;
-        return productList;
+    public Ticket(int id) {
+        this.productList = new Product[MAX_PRODUCT];
+        this.amount = 0;
+        LocalTime now = LocalTime.now();
+        this.id = new StringBuilder(now.toString()).append(String.format("%05d", id));
+        this.status = upm.etsisi.poo.es.status.EMPTY;
     }
 
     /**
-     * @param prodId is the iD from the product that we want to add to the ticket.
+     * @param proId  is the iD from the product that we want to add to the ticket.
      * @param amount is the product amount
      *               This method adds the product amount to the ticket
      * @return a boolean if the product was found,and in the case 'true', the method
      * set the
      * ticket amount to new amount.
      */
-    public boolean ticketAdd(int prodId, int amount) {
-        Product productoEncontrado = null;
-        boolean found = false;
-        for (int i = 0; i < storeProducts.length && !found; i++) {
-            if (storeProducts[i] != null && storeProducts[i].getId() == prodId) {
-                productoEncontrado = storeProducts[i];
-                found = true;
-            }
-        }
+    public boolean ticketAdd(int proId, Store store, int amount) {
+        boolean resul;
 
-        if (productoEncontrado == null) {
-            System.out.println("ERROR: Product ID not found " + prodId);
-            return false;
-        }
-        boolean done = false;
-        boolean complete = this.amount == MAX_PRODUCT;
-        for (int i = 0; i < amount && !done && !complete; i++) {
-            if (this.amount < MAX_PRODUCT) {
-                productList[this.amount] = productoEncontrado;
-                this.amount++;
-                //   System.out.println(productoEncontrado.toString());
-                if (this.amount == amount) {
-                    done = true;
-                }
+        if (this.status != upm.etsisi.poo.es.status.CLOSED) {
+            Product productoEncontrado = store.getProduct(proId);
+            int before = this.amount;
+            if (productoEncontrado == null) {
+                resul = false;
+                System.out.println("ERROR: Product ID not found " + proId);
+
             } else {
-                System.out.println("ERROR: Full Ticket (100 products max)");
+                if (this.amount == 0) {
+                    this.status = upm.etsisi.poo.es.status.ACTIVE;
+                }
+                int i = 0;
+                while (i < amount && this.amount < MAX_PRODUCT) {
+                    productList[this.amount] = productoEncontrado;
+                    this.amount++;
+                    i++;
+                }
+                System.out.println(ticketPrint());
+                if ((this.amount - before) == amount) {
+                    resul = true;
+                    System.out.println("ticket add: ok");
+                } else {
+                    resul = false;
+                    System.out.println("ERROR: Full Ticket (100 products max)");
+                }
+
             }
+        } else {
+            resul = false;
+            System.out.println("ERROR: the ticket is closed. It can't be modified");
         }
-        if (complete) {
-            System.out.println("ERROR: Full Ticket (100 products max)");
-        }
-        System.out.println(ticketPrint());
-        System.out.println("ticket add: ok");
-        return done;
+        return resul;
     }
 
     /**
@@ -120,7 +122,9 @@ public class Ticket {
      */
     public String ticketPrint() {
         StringBuilder sc = new StringBuilder();
-
+        LocalTime now = LocalTime.now();
+        this.id.append(now.toString());
+        this.status = upm.etsisi.poo.es.status.CLOSED;
         if (this.amount > 0 && this.productList[0] != null) {
             sort();
             int n = this.amount;
