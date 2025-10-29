@@ -1,7 +1,9 @@
 package upm.etsisi.poo.es;
 
+
+
 public class Store {
-    int MAX_PRODUCT = 100;
+    int MAX_PRODUCT = 200;
     Product[] productList;
 
     public Store() {
@@ -53,6 +55,8 @@ public class Store {
         }
         if (found) {
             System.out.println(product.toString());
+            System.out.println("prod remove: ok");
+
         }
         return found;
     }
@@ -133,4 +137,14 @@ public class Store {
         return resul;
     }
 
+    public Product getProduct(int prodId) {
+        Product result ;
+        int i = 0;
+        boolean done = false;
+        while ( productList[i] != null && productList[i].getId() != prodId){
+            i++;
+        }
+
+        return null;
+    }
 }

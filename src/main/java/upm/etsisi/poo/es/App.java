@@ -38,11 +38,15 @@ public class App {
 
     }
 
+    /**
+     * the method reads the commands given by the user
+     */
     public void userCommand() {
         boolean end = false;
         Scanner scan = new Scanner(System.in);
         Store store = new Store();
-        Ticket ticket = new Ticket(store);
+        int id = (int) ((Math.random()*100000) -1);
+        Ticket ticket = new Ticket(id);
         while (!end) {
             System.out.print(UPM);
             String command = scan.nextLine();
@@ -54,13 +58,12 @@ public class App {
 
     /**
      * the method reads the file which path is given by the args
-     *
      * @param args contains the path of the file we want to read
      */
     private void readFile(String[] args) {
         String command;
         Store store = new Store();
-        Ticket ticket = new Ticket(store);
+        Ticket ticket = new Ticket();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(args[0]));
             boolean end = false;
@@ -69,7 +72,7 @@ public class App {
                 command = reader.readLine();
                 if (command != null) {
                     System.out.println(command);
-                    end = readCommand(command, store, ticket);
+                    end = readCommand(command, store,ticket);
                 } else {// el fichero no tiene el comando exit, por tanto no termina la ejecucion del
                     end = true;
                     userCommand();
@@ -82,49 +85,69 @@ public class App {
         }
     }
 
+    /**
+     * the method distinguishes from the 5 main commands: prod, ticket, help, echo and exit
+     * @param command the command given
+     * @param store the store where the command is executed
+     * @param ticket the ticket where the command is executed
+     * @return it returns true if the command given is end, letting the previous method to stop the program
+     */
     private boolean readCommand(String command, Store store, Ticket ticket) {
         boolean end = false;
         String[] commandArray = command.split(" ");
-        switch (commandArray[0]) {
-            case "prod":
-                commandProd(commandArray, store, ticket, command);
-                break;
-            case "ticket":
-                commandTicket(commandArray, ticket);
-                break;
-            case "help":
-                printHelp();
-                break;
-            case "echo":
-                commandEcho(command);
-                break;
-            case "exit":
-                end = true;
-                break;
-            default:
-                System.out.println(INCORRECT);
+        try {
+            switch (commandArray[0]) {
+                case "prod":
+                    commandProd(commandArray, store, ticket, command);
+                    break;
+                case "ticket":
+                    commandTicket(commandArray,store, ticket);
+                    break;
+                case "help":
+                    printHelp();
+                    break;
+                case "echo":
+                    commandEcho(command);
+                    break;
+                case "exit":
+                    end = true;
+                    break;
+                default:
+                    System.out.println(INCORRECT);
 
+            }
+        }catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println(INCORRECT);
         }
         return end;
     }
 
+    /**
+     * the method prints (if the format is legal) through the screen the appendix of the echo
+     * @param command the command given by the user
+     */
     private void commandEcho(String command) {
-        try {
-            String[] commandMarks = command.split("\"");
-            System.out.println(commandMarks[1]); //Esto provoca que solo salga echo "Agrego Libro" y no 'echo "Agrego Libro"'
+        try{
+            String[] parts = command.split("\"");
+            System.out.println(parts[0].trim() + " \"" + parts[1].trim() + "\"");
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println(INCORRECT);
         }
     }
 
-    private void commandTicket(String[] commandArray, Ticket ticket) {
+    /**
+     * the method distinguishes the subtype of commands from ticket: new, add, remove and print
+     * @param commandArray the command given by the user and sliced
+     * @param ticket the ticket where the command executes
+     */
+    private void commandTicket(String[] commandArray,Store store, Ticket ticket) {
         switch (commandArray[1]) {
             case "new":
-                ticket.ticketNew();
+             //   ticket.ticketNew();
                 System.out.println("ticket new: ok");
                 break;
             case "add":
-                commandTicketAdd(commandArray, ticket);
+                commandTicketAdd(commandArray, store, ticket);
                 break;
             case "remove":
                 commandTicketRemove(commandArray, ticket);
@@ -139,7 +162,12 @@ public class App {
         }
     }
 
-    private void commandTicketAdd(String[] commandArray, Ticket ticket) {
+    /**
+     * the method adds the product given by the user through the command
+     * @param commandArray the command sliced
+     * @param ticket the ticket where we are going to add the product
+     */
+    private void commandTicketAdd(String[] commandArray, Store store, Ticket ticket) {
         int id;
         int amount;
         boolean correct = true;
@@ -153,10 +181,14 @@ public class App {
             correct = false;
         }
         if (correct) {
-            boolean add = ticket.ticketAdd(id, amount);
+            boolean add = ticket.ticketAdd(id, store, amount);
         }
     }
 
+    /**
+     * the method prints the ticket
+     * @param ticket the ticket we want to print
+     */
     private void commandTicketPrint(Ticket ticket) {
         String printed = ticket.ticketPrint();
         if (printed.isEmpty()) {
@@ -167,6 +199,11 @@ public class App {
         }
     }
 
+    /**
+     * the method removes the product from the ticket
+     * @param commandArray the command given by the user which holds the product
+     * @param ticket the ticket where we want to remove the product
+     */
     private void commandTicketRemove(String[] commandArray, Ticket ticket) {
         int id;
         boolean correct = true;
@@ -188,6 +225,13 @@ public class App {
         }
     }
 
+    /**
+     * the method distinguishes the subtype of commands from prod: add, list, update and remove
+     * @param commandArray the command given by the user and sliced
+     * @param store the store where we want to add the product
+     * @param ticket the ticket given
+     * @param command the command without the sliced
+     */
     private void commandProd(String[] commandArray, Store store, Ticket ticket, String command) {
 
         switch (commandArray[1]) {
@@ -204,9 +248,16 @@ public class App {
             case "remove":
                 commandProdRemove(commandArray, store);
                 break;
+            default:
+                System.out.println(INCORRECT);
         }
     }
 
+    /**
+     * the method removes the product given from the store
+     * @param commandArray the command given by the user and sliced
+     * @param store the store where we want to remove the product
+     */
     private void commandProdRemove(String[] commandArray, Store store) {
         boolean correct = true;
         int id;
@@ -222,6 +273,13 @@ public class App {
         }
     }
 
+    /**
+     * the method updates the product from the store
+     * @param commandArray the command given by the user and sliced
+     * @param store the store where we want to update the product
+     * @param name the new name if the option NAME has been selected
+     * @param ticket the ticket given
+     */
     private void commandProdUpdate(String[] commandArray, Store store, String[] name, Ticket ticket) {
         boolean done = false;
         boolean format;
@@ -230,13 +288,16 @@ public class App {
             case "NAME":
                 format = true;
                 product = store.updateName(Integer.parseInt(commandArray[2]), name[4]);
+                System.out.println(product.toString());
                 if (product != null) {
                     done = true;
                 }
                 break;
+
             case "CATEGORY":
                 format = true;
                 product = store.updateType(Integer.parseInt(commandArray[2]), type.valueOf(commandArray[4]));
+                System.out.println(product.toString());
                 if (product != null) {
                     done = true;
                 }
@@ -244,6 +305,7 @@ public class App {
             case "PRICE":
                 format = true;
                 product = store.updatePrice(Integer.parseInt(commandArray[2]), Double.parseDouble(commandArray[4]));
+                System.out.println(product.toString());
                 if (product != null) {
                     done = true;
                 }
@@ -265,7 +327,12 @@ public class App {
         }
     }
 
-
+    /**
+     * the method adds a product into the store
+     * @param command the command given by the user and sliced
+     * @param name the name of the product given
+     * @param store the store where we want to add a product
+     */
     private void commandProdAdd(String[] command, String[] name, Store store) {// TODO
         double price;
         int id;
@@ -304,6 +371,12 @@ public class App {
         }
     }
 
+    /**
+     * the method prevents the names, given by the user through commands, to occupy more than 1 space
+     * on the sliced array of the command.
+     * @param commandArray the command given by the user and sliced
+     * @return it returns the name as an array of Strings
+     */
     private String[] editSplit(String[] commandArray) {
         int length = commandArray.length;
         String[] resul = new String[length];

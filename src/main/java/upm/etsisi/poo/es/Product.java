@@ -16,7 +16,7 @@ public class Product {
     private final static String PRICE_POSITIVE_ERROR="WARNING: The price should be a positive number";
 
     public Product(int id, String name, type category, double price) {
-        this.name = name;
+        this.name = name.trim();
         this.price = price;
         this.id = id;
         this.category = category;
@@ -51,7 +51,7 @@ public class Product {
      */
     public void setName(String name) {
         if (name.length() < 100 && !name.isEmpty()) {
-            this.name = name;
+            this.name = name.trim();
         } else {
             if (name.length() >= 100) {
                 System.out.println(NAME_LENGTH_ERROR);
@@ -104,12 +104,12 @@ public class Product {
     }
 
     @Override
+    /**
+     * the method turns the object into a String with the format required
+     */
     public String toString() {
         return "{class:Product, id: " + this.id + ", name: '" + this.name + "', category: " + this.category + ", price: " + this.price + "}";
 
     }
-    public String toStringTicket(){
-        double discountValue = this.price - this.getDiscountedPrice();
-        return String.format("{class:Product, id: %d, name: '%s', category: %s, price: %.2f} **discount -%.2f", this.id, this.name, this.category, this.price, discountValue);
-    }
+
 }
