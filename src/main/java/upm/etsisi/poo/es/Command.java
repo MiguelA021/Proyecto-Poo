@@ -27,7 +27,7 @@ public class Command {
               commandProdAdd(commandArray, this.command.split("\""), store);
               break;
             case "ticket":
-              commandTicketAdd(commandArray, ticket);
+              commandTicketAdd(commandArray, ticket, store);
               break;
           }
           break;
@@ -143,7 +143,7 @@ public class Command {
     return resul;
   }
 
-  private void commandTicketAdd(String[] commandArray, Ticket ticket) {
+  private void commandTicketAdd(String[] commandArray, Ticket ticket, Store store) {
     int id;
     int amount;
     boolean correct = true;
@@ -157,7 +157,7 @@ public class Command {
       correct = false;
     }
     if (correct) {
-      boolean add = ticket.ticketAdd(id, amount);
+      boolean add = ticket.ticketAdd(id, store, amount );
     }
   }
 
