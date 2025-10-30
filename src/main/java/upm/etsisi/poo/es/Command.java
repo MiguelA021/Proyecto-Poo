@@ -50,9 +50,7 @@ public class Command {
         case "print":
           commandTicketPrint(ticket);
           break;
-        case "new":
-          ticket.ticketNew();
-          break;
+
         default:
           switch (commandArray[0]) {
             case "help":
