@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
-import javax.sql.CommonDataSource;
 
 public class App {
   private final static String INCORRECT = "Incorrect Format, please try again.";
