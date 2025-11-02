@@ -19,18 +19,6 @@ class App{
  -void start()
  -void userCommand()
  -void readFile(String[] args)
- -boolean readCommand(String command, Ticket ticket)
- -void commandProd(String[] commandArray, Store store, Ticket ticket, String command)
- -void commandEcho(String command)
- -void commandTicket(String[] commandArray, Ticket ticket, Store store)
- -void commandTicketPrint(Ticket ticket)
- -void commandTicketAdd(Ticket ticket, String[] commandArray)
- -void commandTicketRemove(Ticket ticket, String[] commandArray)
- -void commandProdRemove(Store store, String[] commandArray)
- -void commandProdUpdate(Store store, String[] commandArray, Ticket ticket)
- -void commandProdAdd(Store store, String[] commandArray, Ticket ticket)
- -String[] editSplit(String[] commandArray)
- -void printHelp()
  -void init()
 }
 
@@ -42,6 +30,7 @@ class Ticket{
  -Product[] storeProducts
  -int amount
  -Comparator <Product> nameComp
+ - status status
 
 --  Methods --
  +Product[] ticketNew()
@@ -89,6 +78,22 @@ class Store{
  +booelan updatePrice(int id, double price)
 }
 
+class Command{
+--   Attributes  --
+ - String command
+--  Methods --
+ -boolean readCommand(String command, Ticket ticket)
+ -void commandProdAdd(Store store, String[] commandArray, Ticket ticket)
+ -String[] editSplit(String[] commandArray)
+ -void commandTicketAdd(Ticket ticket, String[] commandArray)
+ -void commandProdRemove(Store store, String[] commandArray)
+ -void commandTicketRemove(Ticket ticket, String[] commandArray)
+ -void commandProdUpdate(Store store, String[] commandArray, Ticket ticket)
+ -void commandTicketPrint(Ticket ticket)
+ -void commandEcho(String command)
+ -void printHelp()
+}
+
 enum type{
 --   Attributes  --
  -MERCH
@@ -97,11 +102,18 @@ enum type{
  -BOOK
  -ELECTRONICS
 }
+enum status{
+--   Attributes  --
+ - EMPTY
+ - ACTIVE 
+ - CLOSED
+}
 
-App-->Ticket : has
-App-->Store : creates
-Ticket-->Product : contains
-Ticket-->Store : gets_from
-Store-->Product : has_on_stock
+App--> Ticket : has
+App--> Store : creates
+Ticket--> Product : contains
+Ticket--> Store : gets_from
+Store "1" --o "200" Product : has_on_stock
 }
 @enduml
+
