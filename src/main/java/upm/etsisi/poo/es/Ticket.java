@@ -1,41 +1,31 @@
 package upm.etsisi.poo.es;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.time.LocalTime;
+import java.util.Locale;
 
 enum status {
     EMPTY, ACTIVE, CLOSED
 }
 
 public class Ticket {
-
     final static int MAX_PRODUCT = 100;
-    private Product[] productList;
-    private int amount;
+    Product[] productList;
+    int amount;
     private StringBuilder id;
-    private final Comparator<Product> nameComp = Comparator.comparing(Product::getName);
+    Comparator<Product> nameComp = Comparator.comparing(Product::getName);
     private status status;
 
-    /**
-     * @param id the ticket`s  id
-     */
-    public Ticket(int id) {
+    public Ticket(Store store) { //Aaron lo ha implementado con un int id en vez de una Store, ver cual es mejor
         this.productList = new Product[MAX_PRODUCT];
-        this.amount = 0;
         LocalTime now = LocalTime.now();
         this.id = new StringBuilder(now.toString()).append(String.format("%05d", id));
+        this.amount = 0;
         this.status = upm.etsisi.poo.es.status.EMPTY;
     }
 
-    /**
-     * @param proId  is the iD from the product that we want to add to the ticket.
-     * @param amount is the product amount
-     *               This method adds the product amount to the ticket
-     * @return a boolean if the product was found,and in the case 'true', the method
-     * set the
-     * ticket amount to new amount.
-     */
+
     public boolean ticketAdd(int proId, Store store, int amount) {
         boolean resul;
 
@@ -72,6 +62,7 @@ public class Ticket {
         }
         return resul;
     }
+
 
     /**
      * @param prodId This is Id from the product that sending us to remove
@@ -125,6 +116,7 @@ public class Ticket {
         LocalTime now = LocalTime.now();
         this.id.append(now.toString());
         this.status = upm.etsisi.poo.es.status.CLOSED;
+
         if (this.amount > 0 && this.productList[0] != null) {
             sort();
             int n = this.amount;
