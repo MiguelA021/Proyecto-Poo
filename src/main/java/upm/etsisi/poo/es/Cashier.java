@@ -1,6 +1,6 @@
 package upm.etsisi.poo.es;
 
-public class ATM extends User {
+public class Cashier extends User {
     private Ticket ticket;
 
 
