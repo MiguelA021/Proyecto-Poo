@@ -1,10 +1,11 @@
 package upm.etsisi.poo.es;
-
-
+import java.util.TreeMap;
 
 public class Store {
     int MAX_PRODUCT = 200;
     Product[] productList;
+    TreeMap<Integer,ATM> atms;
+    TreeMap<Integer, Customer> customers;
 
     public Store() {
         this.productList = new Product[MAX_PRODUCT];
