@@ -9,8 +9,9 @@ public class Customer extends User {
         this.atm=atm;
     }
     public String toString(){
-        return "Nombre del cliente"+nombre+". Email: "+email+" Dado de alta en el cajero{"+atm.toString()+"}\n";
+        return "Nombre del cliente: "+nombre+". Email: "+email+" Dado de alta en el cajero: {"+atm.toString()+"}\n";
     }
+
 
 
 }
