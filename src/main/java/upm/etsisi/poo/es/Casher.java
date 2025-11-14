@@ -2,10 +2,10 @@ package upm.etsisi.poo.es;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class ATM extends User {
+public class Casher extends User {
     private TreeMap<Integer, Ticket> tickets;
 
-    public ATM (String email, String nombre){
+    public Casher(String email, String nombre){
         this.email=email;
         this.nombre=nombre;
         tickets=new TreeMap<>();

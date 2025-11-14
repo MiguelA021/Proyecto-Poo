@@ -1,15 +1,15 @@
 package upm.etsisi.poo.es;
 
 public class Customer extends User {
-    private ATM atm;
+    private Casher casher;
 
-    public Customer (String email, String nombre,ATM atm){
+    public Customer (String email, String nombre, Casher casher){
         this.email=email;
         this.nombre=nombre;
-        this.atm=atm;
+        this.casher = casher;
     }
     public String toString(){
-        return "Nombre del cliente: "+nombre+". Email: "+email+" Dado de alta en el cajero: {"+atm.toString()+"}\n";
+        return "Nombre del cliente: "+nombre+". Email: "+email+" Dado de alta en el cajero: {"+ casher.toString()+"}\n";
     }
 
 
