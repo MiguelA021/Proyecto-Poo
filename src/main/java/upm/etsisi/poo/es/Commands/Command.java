@@ -10,7 +10,7 @@ public abstract class Command {
   public final static String NOTEXIST = "Product doesn't exist.";
   public final static String EMPTY_TICKET = "Empty ticket, try adding some products.";
   public static final String ID_REPEAT = "This ID is used, try to use another.";
-  private String command;
+  public String command;
 
   public Command(String command) {
     this.command = command;
