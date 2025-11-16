@@ -8,7 +8,8 @@ public class Store {
     Product[] productList;
     TreeMap<Integer, Casher> cashers;
     TreeMap<Integer, Customer> customers;
-    public static  String CASHER_NOT_FOUND = "The casher given was not found";
+    public static final  String CASHER_NOT_FOUND = "The casher given was not found";
+    public static final String ID_ERROR= "The id given has been already used";
 
     public Store() {
         this.productList = new Product[MAX_PRODUCT];
@@ -25,7 +26,7 @@ public class Store {
      * @param email the eamail of the new client
      * @param cashId the id of the casher given
      */
-    public void addClient(String name, String dni, String email, int cashId){
+    public void addCustomer(String name, String dni, String email, int cashId){
         Casher casher= searchCasherById(cashId);
         if (casher!=null){
             int id=dniToId(dni);
@@ -72,10 +73,42 @@ public class Store {
     /**
      * The method list the clients added on the Store
      */
-    public void listCustmoers(){
+    public void listCustoers(){//testear si hace bien la ordenacion
         customers.forEach((id,customer)->{
             System.out.println("Id del cliente: "+id+" "+customer.toString());
         });
+    }
+
+    /**
+     * The method adds the casher if the id (if not given, the method itself generates a random id) given hasn't been already used
+     * @param id the id (if not given it generates automatically)
+     * @param name the name of the casher
+     * @param email the email of the casher
+     * @return it returns true if the casher has been successfully added
+     */
+    public boolean addCasher(Integer id, String name, String email ){
+        boolean resul=true;
+        if (id == null){
+            do {
+                id=(int)(Math.random()*10000000);
+            } while (cashers.containsKey(id));
+        }
+        if (!cashers.containsKey(id)){
+            cashers.put(id,new Casher(email, name));
+        } else {
+            System.out.println(ID_ERROR);
+            resul=false;
+        }
+        return resul;
+    }
+
+    /**
+     * The method removes the casher given by its id
+     * @param id the id given
+     * @return it returns true if the casher has been removed successfully
+     */
+    public boolean removeCasher(int id){
+        return (cashers.remove(id)!=null);
     }
 
     /**

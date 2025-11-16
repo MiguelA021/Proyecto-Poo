@@ -5,9 +5,9 @@ import java.util.TreeMap;
 public class Casher extends User {
     private TreeMap<Integer, Ticket> tickets;
 
-    public Casher(String email, String nombre){
+    public Casher(String email, String name){
         this.email=email;
-        this.nombre=nombre;
+        this.name =name;
         tickets=new TreeMap<>();
     }
 
@@ -26,7 +26,7 @@ public class Casher extends User {
         return str.toString();
     }
     public String toString(){
-        return "Nombre del Cajero: "+nombre+". Email: "+email+"\n";
+        return "Nombre del Cajero: "+ name +". Email: "+email+"\n";
     }
     /**
      * The method removes the ticket given by the id
