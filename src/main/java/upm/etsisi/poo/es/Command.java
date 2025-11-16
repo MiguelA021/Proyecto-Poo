@@ -78,6 +78,8 @@ public class Command {
   private void commandProdAdd(String[] command, String[] name, Store store) {// TODO
     double price;
     int id;
+    Integer maxPers = null;
+    boolean maxPersOnProduct=false;
     boolean correct = true;
     boolean add = false;
     String productName;
@@ -88,6 +90,10 @@ public class Command {
       productName = commandArrayedit[3]; //product name: Libro POO, en vez de Libro POO
       category = commandArrayedit[4];
       price = Integer.parseInt(commandArrayedit[5]);
+      if(commandArrayedit[6]!=null){
+        maxPersOnProduct=true;
+        maxPers = Integer.valueOf(commandArrayedit[6]);
+      }
     } catch (NumberFormatException e) {
       System.out.println(INCORRECT);
       correct = false;
@@ -98,7 +104,13 @@ public class Command {
     }
     if (correct) {
       try {
-        Product product = new Product(id, productName, type.valueOf(category), price);
+        Product product = null;
+        if(maxPersOnProduct){
+          product = new Product(id, productName, type.valueOf(category), price, maxPers);
+        }else{
+          product = new Product(id, productName, type.valueOf(category), price);
+        }
+
         add = store.prodAdd(product);
         if (add) {
           System.out.println(product.toString());
@@ -115,7 +127,7 @@ public class Command {
 
   private String[] editSplit(String[] commandArray) {  //[prod, add, 1, "Libro, POO", BOOK, 25]
     int length = commandArray.length; //7
-    String[] resul = new String[length]; //[prod, add, 1, Libro POO, BOOK, 25, null]
+    String[] resul = new String[length]; //[prod, add, 1, Libro POO, BOOK, 25, null, null]
     int i = 0; // contador de commandArray
     int pos = 0; // contador de resulArray
     StringBuilder name = new StringBuilder();
