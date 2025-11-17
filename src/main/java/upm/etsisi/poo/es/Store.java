@@ -1,7 +1,8 @@
 package upm.etsisi.poo.es;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.Comparator;
+import java.util.LinkedList;
 
 public class Store {
     int MAX_PRODUCT = 200;
@@ -71,12 +72,19 @@ public class Store {
         return customer != null;
     }
     /**
-     * The method list the clients added on the Store
+     * The method list the clients alphabetically, those who had been added on the Store
      */
-    public void listCustoers(){//testear si hace bien la ordenacion
-        customers.forEach((id,customer)->{
-            System.out.println("Id del cliente: "+id+" "+customer.toString());
-        });
+    public void listCustomers(){
+        ArrayList<Customer> listSort= customersToList();
+        for (Customer customer: listSort){
+            System.out.println(customer.toString());
+        }
+    }
+
+    private ArrayList<Customer> customersToList(){
+        ArrayList<Customer> resul = new ArrayList<>(customers.values());
+        resul.sort(Comparator.comparing(Customer::getName));
+        return resul;
     }
 
     /**
@@ -109,6 +117,22 @@ public class Store {
      */
     public boolean removeCasher(int id){
         return (cashers.remove(id)!=null);
+    }
+
+    /**
+     * The method list the cashers alphabetically, those who had been added on the Store
+     */
+    public void listCashers(){
+        ArrayList<Casher> listSort= cashersToList();
+        for (Casher casher: listSort){
+            System.out.println(casher.toString());
+        }
+    }
+
+    private ArrayList<Casher> cashersToList(){
+        ArrayList<Casher> resul = new ArrayList<>(cashers.values());
+        resul.sort(Comparator.comparing(Casher::getName));
+        return resul;
     }
 
     /**
