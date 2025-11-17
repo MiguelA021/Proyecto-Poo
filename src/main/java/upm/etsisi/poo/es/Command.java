@@ -14,17 +14,17 @@ public class Command {
 
   public Command(String command) {
     this.command = command;
-  }   //prod add 1 "Libro POO" BOOK 25
+  }
 
   public boolean readCommand(Store store, Ticket ticket) {
     boolean end = false;
-    String[] commandArray = this.command.split(" "); //prod, add, 1, "Libro, POO", BOOK, 25
+    String[] commandArray = this.command.split(" ");
     try {
       switch (commandArray[1]) {
         case "add":
           switch (commandArray[0]) {
             case "prod":
-              commandProdAdd(commandArray, this.command.split("\""), store);//prod, add, 1, "Libro, POO", BOOK, 25 y prod add 1, Libro POO, BOOK 25
+              commandProdAdd(commandArray, this.command.split("\""), store);
               break;
             case "ticket":
               commandTicketAdd(commandArray, ticket, store);
@@ -74,7 +74,7 @@ public class Command {
     return end;
   }
 
-  //prod, add, 1, "Libro, POO", BOOK, 25 y prod add 1, Libro POO, BOOK 25
+
   private void commandProdAdd(String[] command, String[] name, Store store) {// TODO
     double price;
     int id;
@@ -84,10 +84,10 @@ public class Command {
     boolean add = false;
     String productName;
     String category;
-    String[] commandArrayedit = editSplit(command); //[prod, add, 1, Libro POO, BOOK, 25, null]
+    String[] commandArrayedit = editSplit(command);
     try {
       id = Integer.parseInt(commandArrayedit[2]);
-      productName = commandArrayedit[3]; //product name: Libro POO, en vez de Libro POO
+      productName = commandArrayedit[3];
       category = commandArrayedit[4];
       price = Integer.parseInt(commandArrayedit[5]);
       if(commandArrayedit[6]!=null){
@@ -125,23 +125,23 @@ public class Command {
     }
   }
 
-  private String[] editSplit(String[] commandArray) {  //[prod, add, 1, "Libro, POO", BOOK, 25]
-    int length = commandArray.length; //7
-    String[] resul = new String[length]; //[prod, add, 1, Libro POO, BOOK, 25, null, null]
-    int i = 0; // contador de commandArray
-    int pos = 0; // contador de resulArray
+  private String[] editSplit(String[] commandArray) {
+    int length = commandArray.length;
+    String[] resul = new String[length];
+    int i = 0;
+    int pos = 0;
     StringBuilder name = new StringBuilder();
     name.append("\"");
     while (i < length) {
-      if (commandArray[i].contains("\"")) { //Solo llega aqui cuando esta en ("Libro)
+      if (commandArray[i].contains("\"")){
         boolean fin = false;
         if (commandArray[i].endsWith("\"")) {
           fin = true;
         }
         name.append(commandArray[i].replace("\"", "")).append(" "); //name: "Libro
-        while (!fin && i < length) { //sale en (POO")
+        while (!fin && i < length) {
           i++;
-          name.append(commandArray[i].replace("\"", "")).append("\"").append(" "); //name: "Libro POO"
+          name.append(commandArray[i].replace("\"", "")).append("\"").append(" ");
           if (commandArray[i].contains("\""))
             fin = true;
         }
