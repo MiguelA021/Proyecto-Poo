@@ -2,10 +2,6 @@ package upm.etsisi.poo.es;
 
 //BORRAR ESTE COMENTARIO
 
-enum type {
-    MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS
-}
-
 public class Product {
     private int id;
     private String name;
