@@ -1,8 +1,5 @@
 package upm.etsisi.poo.es;
 
-
-
-
 public class Store {
     int MAX_PRODUCT = 200;
     Product[] productList;
