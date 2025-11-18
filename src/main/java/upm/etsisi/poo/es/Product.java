@@ -1,67 +1,37 @@
 package upm.etsisi.poo.es;
-
-
+import java.time.LocalDateTime; //Importing for the methods of getStatusFood and getStatusMeeting
 
 enum type {
     MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS
 }
 
-//#Se hace la comprobacion desde prodAddFood o Meeting desde el getStateFood(...), pero como llevarlo a store¿?
-/*
-ATRIBUTOS/METODOS
-- fecha de caducidad, sin categoría y con número máximo de participantes (máximo 100) y cuyo precio es
-calculado por persona. Enumerado independiente, que no forme parte de type¿?
-
- */
-
 public class Product {
     private int id;
     private String name;
     private double price;
+    private int maxPers;
     private type category;
     private final static String NAME_LENGTH_ERROR="The name should be less than 100 characters";
     private final static String NAME_NULL_ERROR="The name shouldn't be empty";
     private final static String PRICE_POSITIVE_ERROR="WARNING: The price should be a positive number";
-
-    public enum AdvanceProducts{
-        FOOD(72),
-        MEETING(12);
-
-        private final int advanceMinHours;
-        private final int MAXPARTICIPANTES=100;
-        private String fechaCaducidad;
-        //precio de FOOD y MEETING es calculado por persona, metodo que calcula el precio/persona
-
-        AdvanceProducts(int advanceMinHours){
-            this.advanceMinHours = advanceMinHours;
-        }
-
-        public int getAdvanceMinHours() { //Se encarga del minimo timepo para que se pueda planificar tanto FOOD como MEETING
-            return advanceMinHours;
-        }
-        public int getMaxParticipantes(){
-            return MAXPARTICIPANTES;
-        }
-        public String getFechaCaducidad(){
-            int dia = (int)(Math.random()*(31-1+1))+1;
-            int mes = (int)(Math.random()*(12-1+1))+1;
-            int anho = (int)(Math.random()*(2030-2025+1))+2025;
-            this.fechaCaducidad = String.format("%02d/%02d/%d",dia, mes, anho);
-            return fechaCaducidad;
-        }
-        //public int getPrecio(){}
-
-        //Debe ser un metodo necesario a la hora de crear el producto y cerrar el ticket
-        public boolean getStateFood(int plannedHours){ //Devuelve un booleano para que se vea que este o no disponible para usarlo
-            return advanceMinHours>=plannedHours;
-        }
-    }
 
     public Product(int id, String name, type category, double price) {
         this.name = name.trim();
         this.price = price;
         this.id = id;
         this.category = category;
+    }
+    public Product(int id, String name, type category, double price, int maxPers) {
+        this.name = name.trim();
+        this.price = price;
+        this.id = id;
+        this.category = category;
+        this.maxPers = maxPers;
+    }
+
+    //Create a new constructor for doing the static class FOOD and MEETING for being called by other classes
+    public Product(int id, String name, double price){
+
     }
 
     public int getId() {
@@ -144,6 +114,104 @@ public class Product {
 
         return price * (1 - discountRate);
     }
+
+    //It's the operation of the price for customizable products
+    public double pricePerCustomizedText(){
+        return 0.1*price;
+    }
+
+    //The three methods under that sentence are using to referencing the Food and Meeting methods
+    public boolean getStateFood(int numberParticipant){
+        return true;
+    }
+    public boolean getStateMeeting(int numberParticipant){
+        return true;
+    }
+    public String toStringFoodOrMeeting(){
+        return "";
+    }
+
+    //This Food class can have its abstracted methods
+    public static class Food extends Product {
+        private final int advanceMinHours = 72;//It's in hours
+        private static final int MAXPARTICIPANTS=100;
+        private final String expiryDate;
+
+        public Food (int id, String name, double price, String expiryDate) {
+            super(id, name, price);
+            this.expiryDate = expiryDate;
+        }
+
+        public int getAdvanceMinHours() { //Se encarga del minimo timepo para que se pueda planificar tanto FOOD como MEETING
+            return advanceMinHours;
+        }
+        public int getMaxParticipants(){
+            return MAXPARTICIPANTS;
+        }
+
+        public String getExpiryDate(){
+            return expiryDate; //yyyy-MM-dd
+        }
+
+        //This method is necessary to create a product and closing the ticket
+        public boolean getStateFood(int numberParticipant){
+            int numMaxParticipant = getMaxParticipants();
+            String[] time = expiryDate.split("-"); //[yyyy, MM, dd]
+            int yearOfExpire = Integer.parseInt(time[0]);
+            int monthOfExpire = Integer.parseInt(time[1]);
+            int daysOfExpire = Integer.parseInt(time[2]);
+            LocalDateTime rightNow = LocalDateTime.now();
+            int yearOfNow = rightNow.getYear();       // 2025
+            int monthOfNow = rightNow.getMonthValue(); // 11 (Noviembre)
+            int dayOfNow = rightNow.getDayOfMonth();
+            double plannedHours = ((yearOfExpire-yearOfNow)*12*31*24) + ((monthOfExpire-monthOfNow)*31*24) + ((daysOfExpire-dayOfNow)*24);
+            return advanceMinHours>=plannedHours && numberParticipant<=numMaxParticipant;
+        }
+        public String toString() {
+            return super.toStringFoodOrMeeting() + "{class:Product, id: " + getId() + ", name: '" + getName() + ", price: " + getPrice() + ", expiry date: "+ expiryDate+" }";
+        }
+    }
+
+    //This Meeting class can have its abstracted methods
+    public static class Meeting extends Product {
+        private final int advanceMinHours = 12;//It's in hours
+        private static final int MAXPARTICIPANTS=100;
+        private final String expiryDate;
+
+        public Meeting (int id, String name, double price, String expiryDate) {
+            super(id, name, price);
+            this.expiryDate = expiryDate;
+        }
+
+        public int getAdvanceMinHours() { //Se encarga del minimo timepo para que se pueda planificar tanto FOOD como MEETING
+            return advanceMinHours;
+        }
+        public int getMaxParticipants(){
+            return MAXPARTICIPANTS;
+        }
+        public String getExpiryDate(){
+            return expiryDate;
+        }
+
+        //This method is necessary to create a product and closing the ticket
+        public boolean getStateMeeting(int numberParticipant){
+            int numMaxParticipant = getMaxParticipants();
+            String[] time = expiryDate.split("-");
+            int yearOfExpire = Integer.parseInt(time[0]);
+            int monthOfExpire = Integer.parseInt(time[1]);
+            int daysOfExpire = Integer.parseInt(time[2]);
+            LocalDateTime rightNow = LocalDateTime.now();
+            int yearOfNow = rightNow.getYear();
+            int monthOfNow = rightNow.getMonthValue();
+            int dayOfNow = rightNow.getDayOfMonth();
+            double plannedHours = ((yearOfExpire-yearOfNow)*12*31*24) + ((monthOfExpire-monthOfNow)*31*24) + ((daysOfExpire-dayOfNow)*24);
+            return advanceMinHours>=plannedHours && numberParticipant<=numMaxParticipant;
+        }
+        public String toString() {
+            return super.toStringFoodOrMeeting() + "{class:Product, id: " + getId() + ", name: '" + getName() + ", price: " + getPrice() + ", expiry date: "+ expiryDate+" }";
+        }
+    }
+
 
     @Override
     /**

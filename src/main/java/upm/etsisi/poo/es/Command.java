@@ -74,20 +74,26 @@ public class Command {
     return end;
   }
 
-  //prod, add, 1, "Libro, POO", BOOK, 25 y prod add 1, Libro POO, BOOK 25
+
   private void commandProdAdd(String[] command, String[] name, Store store) {// TODO
     double price;
     int id;
+    boolean maxPersOnProduct=false;
+    int maxPers=0;
     boolean correct = true;
     boolean add = false;
     String productName;
     String category;
-    String[] commandArrayedit = editSplit(command); //[prod, add, 1, Libro POO, BOOK, 25, null]
+    String[] commandArrayedit = editSplit(command);
     try {
       id = Integer.parseInt(commandArrayedit[2]);
-      productName = commandArrayedit[3]; //product name: Libro POO, en vez de Libro POO
+      productName = commandArrayedit[3];
       category = commandArrayedit[4];
       price = Integer.parseInt(commandArrayedit[5]);
+      if(commandArrayedit[6]!=null){
+        maxPersOnProduct=true;
+        maxPers = Integer.valueOf(commandArrayedit[6]);
+      }
     } catch (NumberFormatException e) {
       System.out.println(INCORRECT);
       correct = false;
@@ -98,7 +104,12 @@ public class Command {
     }
     if (correct) {
       try {
-        Product product = new Product(id, productName, type.valueOf(category), price);
+        Product product = null;
+        if(maxPersOnProduct){
+          product = new Product(id, productName, type.valueOf(category), price, maxPers);
+        }else{
+          product = new Product(id, productName, type.valueOf(category), price);
+        }
         add = store.prodAdd(product);
         if (add) {
           System.out.println(product.toString());
@@ -113,23 +124,23 @@ public class Command {
     }
   }
 
-  private String[] editSplit(String[] commandArray) {  //[prod, add, 1, "Libro, POO", BOOK, 25]
-    int length = commandArray.length; //7
-    String[] resul = new String[length]; //[prod, add, 1, Libro POO, BOOK, 25, null]
+  private String[] editSplit(String[] commandArray) {
+    int length = commandArray.length;
+    String[] resul = new String[length];
     int i = 0; // contador de commandArray
     int pos = 0; // contador de resulArray
     StringBuilder name = new StringBuilder();
     name.append("\"");
     while (i < length) {
-      if (commandArray[i].contains("\"")) { //Solo llega aqui cuando esta en ("Libro)
+      if (commandArray[i].contains("\"")) {
         boolean fin = false;
         if (commandArray[i].endsWith("\"")) {
           fin = true;
         }
-        name.append(commandArray[i].replace("\"", "")).append(" "); //name: "Libro
-        while (!fin && i < length) { //sale en (POO")
+        name.append(commandArray[i].replace("\"", "")).append(" ");
+        while (!fin && i < length) {
           i++;
-          name.append(commandArray[i].replace("\"", "")).append("\"").append(" "); //name: "Libro POO"
+          name.append(commandArray[i].replace("\"", "")).append("\"").append(" ");
           if (commandArray[i].contains("\""))
             fin = true;
         }
