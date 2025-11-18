@@ -14,17 +14,17 @@ public class Command {
 
   public Command(String command) {
     this.command = command;
-  }   //prod add 1 "Libro POO" BOOK 25
+  }
 
   public boolean readCommand(Store store, Ticket ticket) {
     boolean end = false;
-    String[] commandArray = this.command.split(" "); //prod, add, 1, "Libro, POO", BOOK, 25
+    String[] commandArray = this.command.split(" ");
     try {
       switch (commandArray[1]) {
         case "add":
           switch (commandArray[0]) {
             case "prod":
-              commandProdAdd(commandArray, this.command.split("\""), store);//prod, add, 1, "Libro, POO", BOOK, 25 y prod add 1, Libro POO, BOOK 25
+              commandProdAdd(commandArray, this.command.split("\""), store);
               break;
             case "ticket":
               commandTicketAdd(commandArray, ticket, store);
@@ -78,8 +78,8 @@ public class Command {
   private void commandProdAdd(String[] command, String[] name, Store store) {// TODO
     double price;
     int id;
+    Integer maxPers = null;
     boolean maxPersOnProduct=false;
-    int maxPers=0;
     boolean correct = true;
     boolean add = false;
     String productName;
@@ -127,8 +127,8 @@ public class Command {
   private String[] editSplit(String[] commandArray) {
     int length = commandArray.length;
     String[] resul = new String[length];
-    int i = 0; // contador de commandArray
-    int pos = 0; // contador de resulArray
+    int i = 0;
+    int pos = 0;
     StringBuilder name = new StringBuilder();
     name.append("\"");
     while (i < length) {
