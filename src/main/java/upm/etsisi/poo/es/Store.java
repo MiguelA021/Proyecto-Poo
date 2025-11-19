@@ -1,10 +1,16 @@
 package upm.etsisi.poo.es;
-
-
+import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.Comparator;
+import java.util.LinkedList;
 
 public class Store {
     int MAX_PRODUCT = 200;
     Product[] productList;
+    TreeMap<Integer, Casher> cashers;
+    TreeMap<Integer, Customer> customers;
+    public static final  String CASHER_NOT_FOUND = "The casher given was not found";
+    public static final String ID_ERROR= "The id given has been already used";
 
     public Store() {
         this.productList = new Product[MAX_PRODUCT];
@@ -15,8 +21,122 @@ public class Store {
     }
 
     /**
+     * The method adds the client if the casher given was found
+     * @param name the name of the new client
+     * @param dni the ID number of the new client
+     * @param email the eamail of the new client
+     * @param cashId the id of the casher given
+     */
+    public void addCustomer(String name, String dni, String email, int cashId){
+        Casher casher= searchCasherById(cashId);
+        if (casher!=null){
+            int id=dniToId(dni);
+            customers.put(id,new Customer(email,name, casher));
+        } else{
+            System.out.println(CASHER_NOT_FOUND);
+        }
+    }
+
+    /**
+     * The method searches by id the casher
+     * @param id the ID of the casher
+     * @return the method returns the casher if it has been  found
+     */
+    private Casher searchCasherById(int id){
+        return  cashers.get(id);
+    }
+
+    /**
+     * The method turns the ID card number into the id without letters
+     * @param dni the ID cad number given
+     * @return the method returns the id without letters
+     */
+    private int dniToId (String dni){
+        int id=0;
+        String[] dniToArray= dni.split("");
+        for(int i=0; i< dniToArray.length-1; i++){
+            id=id*10;
+            id+=Integer.parseInt(dniToArray[i]);
+        }
+        return id;
+    }
+
+    /**
+     * The method removes the customer
+     * @param dni the ID of the customer given
+     * @return the methods returns true if the object was found and removed
+     */
+    public  boolean removeCustomer(String dni){
+        int id = dniToId(dni);
+        Customer customer = customers.remove(id);
+        return customer != null;
+    }
+    /**
+     * The method list the clients alphabetically, those who had been added on the Store
+     */
+    public void listCustomers(){
+        ArrayList<Customer> listSort= customersToList();
+        for (Customer customer: listSort){
+            System.out.println(customer.toString());
+        }
+    }
+
+    private ArrayList<Customer> customersToList(){
+        ArrayList<Customer> resul = new ArrayList<>(customers.values());
+        resul.sort(Comparator.comparing(Customer::getName));
+        return resul;
+    }
+
+    /**
+     * The method adds the casher if the id (if not given, the method itself generates a random id) given hasn't been already used
+     * @param id the id (if not given it generates automatically)
+     * @param name the name of the casher
+     * @param email the email of the casher
+     * @return it returns true if the casher has been successfully added
+     */
+    public boolean addCasher(Integer id, String name, String email ){
+        boolean resul=true;
+        if (id == null){
+            do {
+                id=(int)(Math.random()*10000000);
+            } while (cashers.containsKey(id));
+        }
+        if (!cashers.containsKey(id)){
+            cashers.put(id,new Casher(email, name));
+        } else {
+            System.out.println(ID_ERROR);
+            resul=false;
+        }
+        return resul;
+    }
+
+    /**
+     * The method removes the casher given by its id
+     * @param id the id given
+     * @return it returns true if the casher has been removed successfully
+     */
+    public boolean removeCasher(int id){
+        return (cashers.remove(id)!=null);
+    }
+
+    /**
+     * The method list the cashers alphabetically, those who had been added on the Store
+     */
+    public void listCashers(){
+        ArrayList<Casher> listSort= cashersToList();
+        for (Casher casher: listSort){
+            System.out.println(casher.toString());
+        }
+    }
+
+    private ArrayList<Casher> cashersToList(){
+        ArrayList<Casher> resul = new ArrayList<>(cashers.values());
+        resul.sort(Comparator.comparing(Casher::getName));
+        return resul;
+    }
+
+    /**
      * The method adds a product tho the productList if there is below 100 products
-     *
      * @param product the product which we want to add it
      * @return returns true if the method added the product if not, it returns false
      */
