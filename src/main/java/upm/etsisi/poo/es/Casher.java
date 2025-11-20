@@ -4,10 +4,12 @@ import java.util.TreeMap;
 
 public class Casher extends User {
     private TreeMap<Integer, Ticket> tickets;
+    private static final String UPM_WORKER= "UW";
 
-    public Casher(String email, String name){
+    public Casher(String email, String name, int id){
         this.email=email;
         this.name =name;
+        this.id=id;
         tickets=new TreeMap<>();
     }
 
@@ -21,12 +23,12 @@ public class Casher extends User {
         for(Map.Entry<Integer, Ticket> it : tickets.entrySet()){//saca para cada nodo del arbol (K,V) ordenado por la clave
             Integer id = it.getKey();
             Ticket ticket = it.getValue();
-            str.append("Id del ticket: "+id+". Estado del ticket: "+ticket.getStatus()+"\n");
+            str.append("Id of the ticket: "+id+". Status of the ticket: "+ticket.getStatus()+"\n");
         }
         return str.toString();
     }
     public String toString(){
-        return "Nombre del Cajero: "+ name +". Email: "+email+"\n";
+        return "Name of the cahser: "+ name +"Id: "+id+" Email: "+email+"\n";
     }
     /**
      * The method removes the ticket given by the id

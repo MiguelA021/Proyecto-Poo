@@ -85,7 +85,7 @@ public class Store {
         Casher casher = searchCasherById(cashId);
         if (casher != null) {
             int id = dniToId(dni);
-            customers.put(id, new Customer(email, name, casher));
+            customers.put(id, new Customer(email, name,id, casher));
         } else {
             System.out.println(CASHER_NOT_FOUND);
         }
@@ -161,7 +161,7 @@ public class Store {
             } while (cashers.containsKey(id));
         }
         if (!cashers.containsKey(id)) {
-            cashers.put(id, new Casher(email, name));
+            cashers.put(id, new Casher(email, name, id));
         } else {
             System.out.println(ID_ERROR);
             resul = false;
