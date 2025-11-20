@@ -20,6 +20,47 @@ public class Store {
         return productList;
     }
 
+    //We're going to do ckecking of maxPeople using the right now date and the expiry date for knowing
+    //if we can create the Food or Meeting object
+    public boolean addFood(int id, String name, int price, String expiryDate, int maxPeople){
+        boolean done=false;
+        boolean found = false;
+        Product food = new Product.Food(id, name, price, expiryDate);
+        if(food.getStateFood(maxPeople)){
+            for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
+                if (productList[i] != null && productList[i].getId() == food.getId()) {
+                    found = true;
+                } else {
+                    if (productList[i] == null) {
+                        productList[i] =food;
+                        done = true;
+                    }
+                }
+            }
+        }
+        return done;
+    }
+
+    public boolean addMeeting(int id, String name, int price, String expiryDate, int maxPeople){
+        boolean done=false;
+        boolean found = false;
+        Product meeting = new Product.Meeting(id, name, price, expiryDate);
+        if(meeting.getStateMeeting(maxPeople)){
+            for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
+                if (productList[i] != null && productList[i].getId() == meeting.getId()) {
+                    found = true;
+                } else {
+                    if (productList[i] == null) {
+                        productList[i] = meeting;
+                        done = true;
+                    }
+                }
+            }
+        }
+        return done;
+    }
+
+
     /**
      * The method adds the client if the casher given was found
      * @param name the name of the new client
