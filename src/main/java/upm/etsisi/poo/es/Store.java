@@ -17,10 +17,21 @@ public class Store {
         this.productList = new Product[MAX_PRODUCT];
     }
 
-    public Product[] getProducts() {
-        return productList;
+    public Product getProduct(int prodId) {
+        Product result = null;
+        boolean found = false;
+        int i = 0;
+        while (i < MAX_PRODUCT && !found) {
+            Product p = productList[i];
+            if (p != null && p.getId() == prodId) {
+                result = p;
+                found = true;
+            } else {
+                i++;
+            }
+        }
+        return result;
     }
-
     //We're going to do ckecking of maxPeople using the right now date and the expiry date for knowing
     //if we can create the Food or Meeting object
     public boolean addFood(int id, String name, int price, String expiryDate, int maxPeople) {

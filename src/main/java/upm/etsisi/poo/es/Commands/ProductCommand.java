@@ -2,158 +2,151 @@ package upm.etsisi.poo.es.Commands;
 
 import upm.etsisi.poo.es.Product;
 import upm.etsisi.poo.es.Store;
+import upm.etsisi.poo.es.Ticket;
 import upm.etsisi.poo.es.type;
 
-public class ProductCommand extends Command {
-    private final String[] arrayCommand;
+public class ProductCommand implements Command {
 
-    public ProductCommand(String command) {
-        super(command);
-        arrayCommand = command.split(" "); // Aquí debe usarse el slpit modificado.
+    @Override
+    public String getName() {
+        return "prod";
     }
 
-    public void apply(Store store) {
-        CommandProdAdd.prodAdd(arrayCommand, store);
-        CommandProdRemove.prodRemove(arrayCommand, store);
-        CommandProdUpdate.commandProdUpdate(arrayCommand, store);
-    }
-}
-
-class CommandProdAdd extends ProductCommand {
-
-    public CommandProdAdd(String command) {
-        super(command);
+    @Override
+    public String getDescription() {
+        return "prod add|list|update|remove ...  - product management";
     }
 
-    protected static void prodAdd(String[] commandArray, Store store) {
-        if (commandArray[1].equals("add")) {
-            Product product = convert(commandArray);
-            if (product != null) {
-                try {
-                    boolean allCorrect = store.prodAdd(product);
-                    if (allCorrect) {
-                        System.out.println(product.toString());
-                        System.out.println("prod add: ok");
-                    } else {
-                        System.out.println(ID_REPEAT);
-                    }
-                } catch (IllegalArgumentException e) {
-                    System.out.println(INCORRECT);
-                }
-
-            }
-        }
-    }
-
-    private static Product convert(String[] commandArray) {
-        int id;
-        String productName;
-        String category;
-        double price;
-        int maxPersons;
-        Product product = null;
-        try {
-            id = Integer.parseInt(commandArray[2]);
-
-            productName = commandArray[3];
-            category = commandArray[4];
-            price = Double.parseDouble(commandArray[5]);
-            if (commandArray[6] != null) maxPersons = Integer.parseInt(commandArray[6]);
-            else maxPersons = -1;
-        } catch (NumberFormatException e) {
+    @Override
+    public boolean execute(String fullLine, String[] args, Store store, Ticket ticket) {
+        if (args.length < 2) {
             System.out.println(INCORRECT);
-            productName = null;
-            category = null;
-            price = -1;
-            maxPersons = -1;
-            id = -999;
-
+            return false;
         }
-        if (productName != null) {
-            if (maxPersons == -1) product = new Product(id, productName, type.valueOf(category), price);
-            //  else  product = new Product(id, productName, type.valueOf(category), price, maxPersons);
-        }
-        return product;
-    }
-}
 
+        String sub = args[1];
 
-class CommandProdRemove extends ProductCommand {
-
-    public CommandProdRemove(String command) {
-        super(command);
-    }
-
-    protected static void prodRemove(String[] commandArray, Store store) {
-        if (commandArray[1].equals("remove")) {
-            boolean correct = true;
-            int id;
-            try {
-                id = Integer.parseInt(commandArray[2]);
-            } catch (NumberFormatException e) {
+        switch (sub) {
+            case "add":
+                prodAdd(fullLine, args, store);
+                break;
+            case "list":
+                store.prodList();
+                break;
+            case "update":
+                prodUpdate(fullLine, args, store);
+                break;
+            case "remove":
+                prodRemove(args, store);
+                break;
+            default:
                 System.out.println(INCORRECT);
-                correct = false;
-                id = -1;
+        }
+        return false;
+    }
+
+    private void prodAdd(String fullLine, String[] args, Store store) {
+        try {
+            // fullLine: prod add <id> "<name>" <category> <price>
+            int firstQuote = fullLine.indexOf('"');
+            int secondQuote = fullLine.indexOf('"', firstQuote + 1);
+            if (firstQuote < 0 || secondQuote < 0) {
+                System.out.println(INCORRECT);
+                return;
             }
-            if (correct) {
-                store.prodRemove(id);
+
+            String beforeName = fullLine.substring(0, firstQuote).trim(); // prod add <id>
+            String name = fullLine.substring(firstQuote + 1, secondQuote).trim();
+            String afterName = fullLine.substring(secondQuote + 1).trim(); // <category> <price>
+
+            String[] beforeTokens = beforeName.split("\\s+"); // [prod, add, id]
+            String[] afterTokens = afterName.split("\\s+");   // [category, price]
+
+            if (beforeTokens.length != 3 || afterTokens.length != 2) {
+                System.out.println(INCORRECT);
+                return;
             }
+
+            int id = Integer.parseInt(beforeTokens[2]);
+            type category = type.valueOf(afterTokens[0]);
+            double price = Double.parseDouble(afterTokens[1]);
+
+            Product p = new Product(id, name, category, price);
+            boolean done = store.prodAdd(p);
+            if (!done) {
+                System.out.println(ID_REPEAT);
+            } else {
+                System.out.println(p.toString());
+                System.out.println("prod add: ok");
+            }
+        } catch (Exception e) {
+            System.out.println(INCORRECT);
         }
     }
-}
 
-class CommandProdUpdate extends ProductCommand {
-
-    public CommandProdUpdate(String command) {
-        super(command);
-    }
-
-    protected static void commandProdUpdate(String[] commandArray, Store store) {
-        if (commandArray[1].equals("update")) {
-            boolean done = false;
-            boolean format;
-            Product product;
-            switch (commandArray[3]) {
-                case "NAME":
-                    format = true;
-                    product = store.updateName(Integer.parseInt(commandArray[2]), commandArray[3]);
-                    System.out.println(product.toString());
-                    if (product != null) {
-                        done = true;
-                    }
-                    break;
-
-                case "CATEGORY":
-                    format = true;
-                    product = store.updateType(Integer.parseInt(commandArray[2]), type.valueOf(commandArray[4]));
-                    System.out.println(product.toString());
-                    if (product != null) {
-                        done = true;
-                    }
-                    break;
-                case "PRICE":
-                    format = true;
-                    product = store.updatePrice(Integer.parseInt(commandArray[2]), Double.parseDouble(commandArray[4]));
-                    System.out.println(product.toString());
-                    if (product != null) {
-                        done = true;
-                    }
-                    break;
-                default:
-                    format = false;
-                    break;
-            }
-            if (!format) {
-                System.out.println(INCORRECT);
-            }
-            if (format && !done) {
+    private void prodRemove(String[] args, Store store) {
+        if (args.length != 3) {
+            System.out.println(INCORRECT);
+            return;
+        }
+        try {
+            int id = Integer.parseInt(args[2]);
+            boolean removed = store.prodRemove(id);
+            if (!removed) {
                 System.out.println(NOTEXIST);
             }
-            if (done && format) {
-                System.out.println("prod update: ok");
-            }
+        } catch (NumberFormatException e) {
+            System.out.println(INCORRECT);
         }
-
     }
 
+    private void prodUpdate(String fullLine, String[] args, Store store) {
+        if (args.length < 4) {
+            System.out.println(INCORRECT);
+            return;
+        }
+        try {
+            int id = Integer.parseInt(args[2]);
+            String field = args[3].toUpperCase();
+
+            Product updated = null;
+
+            switch (field) {
+                case "NAME":
+                    // el resto de la línea tras NAME es el nuevo nombre
+                    int idx = fullLine.toUpperCase().indexOf("NAME");
+                    String newName = fullLine.substring(idx + "NAME".length()).trim();
+                    updated = store.updateName(id, newName);
+                    break;
+                case "CATEGORY":
+                    if (args.length < 5) {
+                        System.out.println(INCORRECT);
+                        return;
+                    }
+                    type newType = type.valueOf(args[4]);
+                    updated = store.updateType(id, newType);
+                    break;
+                case "PRICE":
+                    if (args.length < 5) {
+                        System.out.println(INCORRECT);
+                        return;
+                    }
+                    double newPrice = Double.parseDouble(args[4]);
+                    updated = store.updatePrice(id, newPrice);
+                    break;
+                default:
+                    System.out.println(INCORRECT);
+                    return;
+            }
+
+            if (updated == null) {
+                System.out.println(NOTEXIST);
+            } else {
+                System.out.println(updated.toString());
+                System.out.println("prod update: ok");
+            }
+        } catch (Exception e) {
+            System.out.println(INCORRECT);
+        }
+    }
 }
