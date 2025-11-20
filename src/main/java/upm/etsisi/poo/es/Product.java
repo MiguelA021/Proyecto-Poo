@@ -1,10 +1,6 @@
 package upm.etsisi.poo.es;
 import java.time.LocalDateTime; //Importing for the methods of getStatusFood and getStatusMeeting
 
-enum type {
-    MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS
-}
-
 public class Product {
     private int id;
     private String name;
