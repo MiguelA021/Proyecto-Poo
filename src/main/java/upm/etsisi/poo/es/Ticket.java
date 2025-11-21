@@ -1,5 +1,6 @@
 package upm.etsisi.poo.es;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -17,7 +18,7 @@ public class Ticket {
     Comparator<Product> nameComp = Comparator.comparing(Product::getName);
     private status status;
 
-    public Ticket(Store store) { //Aaron lo ha implementado con un int id en vez de una Store, ver cual es mejor
+    public Ticket(int id) { //Aaron lo ha implementado con un int id en vez de una Store, ver cual es mejor
         this.productList = new Product[MAX_PRODUCT];
         LocalTime now = LocalTime.now();
         this.id = new StringBuilder(now.toString()).append(String.format("%05d", id));
@@ -46,7 +47,7 @@ public class Ticket {
                     this.amount++;
                     i++;
                 }
-                System.out.println(ticketPrint());
+                System.out.println(ticketPrint(false));
                 if ((this.amount - before) == amount) {
                     resul = true;
                     System.out.println("ticket add: ok");
@@ -71,56 +72,65 @@ public class Ticket {
      */
     public Product ticketRemove(int prodId) {
         Product product = null;
-        boolean removed = false;
         int iterations = this.amount;
-        if (this.amount == 0) {
-            System.out.println("ERROR: No products in the ticket");
+        if (this.status != upm.etsisi.poo.es.status.CLOSED) {
+            boolean removed = false;
+            if (this.amount == 0) {
+                System.out.println("ERROR: No products in the ticket");
 
-        } else {
-            for (int i = 0; i < iterations; i++) {
-                if (productList[i] != null && productList[i].getId() == prodId) {
-                    if (this.amount == 1) {
-                        productList[0] = null;
-                        this.amount--;
-                    } else {
-                        product = productList[i];
-                        productList[i] = productList[amount - 1];
-                        productList[amount - 1] = null;
-                        this.amount--;
-                        i--;
+            } else {
+                for (int i = 0; i < iterations; i++) {
+                    if (productList[i] != null && productList[i].getId() == prodId) {
+                        if (this.amount == 1) {
+                            productList[0] = null;
+                            this.amount--;
+                        } else {
+                            product = productList[i];
+                            productList[i] = productList[amount - 1];
+                            productList[amount - 1] = null;
+                            this.amount--;
+                            i--;
+                        }
                     }
                 }
-            }
 
-            boolean comprobation = true;
-            for (int i = 0; i < this.amount; i++) {
-                if (productList[i] != null) {
-                    if (productList[i].getId() == prodId) {
-                        comprobation = false;
+                boolean comprobation = true;
+                int i = 0;
+                while (comprobation && i < this.amount){
+                    if (productList[i] != null) {
+                        if (productList[i].getId() == prodId) {
+                            comprobation = false;
+                        }
                     }
                 }
+                removed = comprobation;
+                sort();
+                if (iterations == this.amount){
+                    System.out.println("ERROR: this product does not exist.");
+                }
             }
-            removed = comprobation;
-
-            sort();
+        }else{
+            System.out.println("ERROR: the ticket is closed. It can't be modified");
         }
         return product;
+
 
     }
 
     /**
      * @return the ticket printed
      */
-    public String ticketPrint() {
+    public String ticketPrint(boolean close) {
         StringBuilder sc = new StringBuilder();
-        LocalTime now = LocalTime.now();
-        this.id.append(now.toString());
-        this.status = upm.etsisi.poo.es.status.CLOSED;
-
+        if ( close){
+            LocalDateTime now = LocalDateTime.now();
+            id.append(String.format(now.toString()));
+            this.status = upm.etsisi.poo.es.status.CLOSED;
+        }
+        System.out.println(id.toString());
         if (this.amount > 0 && this.productList[0] != null) {
             sort();
             int n = this.amount;
-
             int[] categoryCount = new int[type.values().length];
             for (int i = 0; i < n; i++) {
                 Product p = productList[i];
@@ -164,6 +174,10 @@ public class Ticket {
         }
 
         return sc.toString();
+    }
+
+    public status setStatus(String status) {
+        return this.status = upm.etsisi.poo.es.status.valueOf(status);
     }
 
     /**
