@@ -28,7 +28,7 @@ public class Casher extends User {
         return str.toString();
     }
     public String toString(){
-        return "Name of the cahser: "+ name +"Id: "+id+" Email: "+email+"\n";
+        return "Name of the cahser: "+ name +"Id: "+UPM_WORKER+id+" Email: "+email+"\n";
     }
     /**
      * The method removes the ticket given by the id
