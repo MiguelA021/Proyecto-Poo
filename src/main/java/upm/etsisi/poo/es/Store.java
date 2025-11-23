@@ -200,6 +200,18 @@ public class Store {
   }
 
   /**
+   * The method list the tickets of the casher given by the id
+   * @param id the id of the casher
+   */
+  public void listTicketsOnCasher(int id){
+    if (cashers.containsKey(id)){
+      System.out.print(cashers.get(id).listTickets());
+    } else {
+      System.out.println(ID_ERROR);
+    }
+  }
+
+  /**
    * The method adds a product tho the productList if there is below 100 products
    *
    * @param product the product which we want to add it

@@ -19,7 +19,6 @@ public class Casher extends User {
      */
     public String listTickets(){
         StringBuilder str= new StringBuilder();
-        str.append(toString());
         for(Map.Entry<Integer, Ticket> it : tickets.entrySet()){//saca para cada nodo del arbol (K,V) ordenado por la clave
             Integer id = it.getKey();
             Ticket ticket = it.getValue();
