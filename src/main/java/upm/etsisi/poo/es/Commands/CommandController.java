@@ -21,7 +21,6 @@ public class CommandController {
         this.store = store;
         this.ticket = ticket;
 
-        // Registrar aquí todos los comandos
         register(new CommandEcho());
         register(new CommandHelp(this));
         register(new ProductCommand());
@@ -57,18 +56,18 @@ public class CommandController {
     }
 
     private static String[] tokenize(String line) {
-
         ArrayList<String> tokens = new ArrayList<>();
         Matcher m = Pattern.compile("\"([^\"]*)\"|(\\S+)").matcher(line);
 
         while (m.find()) {
-            if(m.group(1) == null){
-                tokens.add("\"" + m.group(1) + "\"");
+            if (m.group(1) != null) {
+                // texto entre comillas, sin las comillas
+                tokens.add(m.group(1));
             } else {
+                // token normal
                 tokens.add(m.group(2));
             }
         }
-
         return tokens.toArray(new String[0]);
     }
 }

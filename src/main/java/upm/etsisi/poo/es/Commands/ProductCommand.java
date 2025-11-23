@@ -116,9 +116,18 @@ public class ProductCommand implements Command {
 
             switch (field) {
                 case "NAME":
-                    // el resto de la línea tras NAME es el nuevo nombre
-                    int idx = fullLine.toUpperCase().indexOf("NAME");
-                    String newName = fullLine.substring(idx + "NAME".length()).trim();
+                    if (args.length < 5) {
+                        System.out.println(INCORRECT);
+                        return;
+                    }
+
+                    StringBuilder nb = new StringBuilder();
+                    for (int i = 4; i < args.length; i++) {
+                        if (nb.length() > 0) nb.append(' ');
+                        nb.append(args[i]);
+                    }
+                    String newName = nb.toString().trim();
+
                     updated = store.updateName(id, newName);
                     break;
                 case "CATEGORY":
