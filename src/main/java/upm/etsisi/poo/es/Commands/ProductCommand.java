@@ -47,42 +47,45 @@ public class ProductCommand implements Command {
 
     private void prodAdd(String fullLine, String[] args, Store store) {
         try {
-            // fullLine: prod add <id> "<name>" <category> <price>
-            int firstQuote = fullLine.indexOf('"');
-            int secondQuote = fullLine.indexOf('"', firstQuote + 1);
-            if (firstQuote < 0 || secondQuote < 0) {
+
+            if (args.length < 5) {
                 System.out.println(INCORRECT);
                 return;
             }
 
-            String beforeName = fullLine.substring(0, firstQuote).trim(); // prod add <id>
-            String name = fullLine.substring(firstQuote + 1, secondQuote).trim();
-            String afterName = fullLine.substring(secondQuote + 1).trim(); // <category> <price>
+            int id = Integer.parseInt(args[2]);
 
-            String[] beforeTokens = beforeName.split("\\s+"); // [prod, add, id]
-            String[] afterTokens = afterName.split("\\s+");   // [category, price]
+            type category = type.valueOf(args[args.length - 2]);
+            double price = Double.parseDouble(args[args.length - 1]);
 
-            if (beforeTokens.length != 3 || afterTokens.length != 2) {
+            StringBuilder nameBuilder = new StringBuilder();
+            for (int i = 3; i < args.length - 2; i++) {
+                if (args[i].isEmpty()) continue;
+                if (nameBuilder.length() > 0) nameBuilder.append(' ');
+                nameBuilder.append(args[i]);
+            }
+
+            String name = nameBuilder.toString().trim();
+            if (name.isEmpty()) {
                 System.out.println(INCORRECT);
                 return;
             }
-
-            int id = Integer.parseInt(beforeTokens[2]);
-            type category = type.valueOf(afterTokens[0]);
-            double price = Double.parseDouble(afterTokens[1]);
 
             Product p = new Product(id, name, category, price);
             boolean done = store.prodAdd(p);
+
             if (!done) {
                 System.out.println(ID_REPEAT);
             } else {
                 System.out.println(p.toString());
                 System.out.println("prod add: ok");
             }
+
         } catch (Exception e) {
             System.out.println(INCORRECT);
         }
     }
+
 
     private void prodRemove(String[] args, Store store) {
         if (args.length != 3) {

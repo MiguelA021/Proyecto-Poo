@@ -3,8 +3,13 @@ package upm.etsisi.poo.es.Commands;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.Ticket;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class CommandController {
 
@@ -25,21 +30,22 @@ public class CommandController {
     }
 
     private void register(Command command) {
-        commands.put(command.getName(), command);
+        commands.put(command.getName().toLowerCase(), command);
     }
 
     public Map<String, Command> getCommands() {
         return commands;
     }
 
-    /** Punto de entrada: recibe lo que escribe el usuario y ejecuta el comando. */
     public boolean handle(String line) {
         if (line == null) return false;
         String trimmed = line.trim();
         if (trimmed.isEmpty()) return false;
 
-        String[] parts = trimmed.split("\\s+");
-        String name = parts[0];
+        String[] parts = tokenize(trimmed);
+        if (parts.length == 0) return false;
+
+        String name = parts[0].toLowerCase();
 
         Command command = commands.get(name);
         if (command == null) {
@@ -48,5 +54,21 @@ public class CommandController {
         }
 
         return command.execute(trimmed, parts, store, ticket);
+    }
+
+    private static String[] tokenize(String line) {
+
+        ArrayList<String> tokens = new ArrayList<>();
+        Matcher m = Pattern.compile("\"([^\"]*)\"|(\\S+)").matcher(line);
+
+        while (m.find()) {
+            if(m.group(1) == null){
+                tokens.add("\"" + m.group(1) + "\"");
+            } else {
+                tokens.add(m.group(2));
+            }
+        }
+
+        return tokens.toArray(new String[0]);
     }
 }

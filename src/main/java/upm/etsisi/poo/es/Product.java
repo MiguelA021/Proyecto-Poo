@@ -12,7 +12,7 @@ public class Product {
     private final static String PRICE_POSITIVE_ERROR = "WARNING: The price should be a positive number";
 
     public Product(int id, String name, type category, double price) {
-        this.name = name.trim();
+        this.name = name;
         this.price = price;
         this.id = id;
         this.category = category;

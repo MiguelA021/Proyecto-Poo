@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class App {
+public class    App {
     private final static String WELCOME_MESSAGE = "Welcome to the ticket module App.";
     private final static String HELP_MESSAGE = "Ticket module. Type 'help' to see commands.";
     private final static String FILE_ERROR = "Error while reading the file, please try again.";
