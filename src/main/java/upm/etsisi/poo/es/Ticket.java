@@ -4,10 +4,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Locale;
 
-enum status {
-    EMPTY, ACTIVE, CLOSED
+enum Status {
+    EMPTY, ACTIVE, CLOSED;
 }
 
 public class Ticket {
@@ -16,21 +15,21 @@ public class Ticket {
     int amount;
     private StringBuilder id;
     Comparator<Product> nameComp = Comparator.comparing(Product::getName);
-    private status status;
+    private Status status;
 
     public Ticket(int id) { //Aaron lo ha implementado con un int id en vez de una Store, ver cual es mejor
         this.productList = new Product[MAX_PRODUCT];
         LocalTime now = LocalTime.now();
         this.id = new StringBuilder(now.toString()).append(String.format("%05d", id));
         this.amount = 0;
-        this.status = upm.etsisi.poo.es.status.EMPTY;
+        this.status = Status.EMPTY;
     }
 
 
     public boolean ticketAdd(int proId, Store store, int amount) {
         boolean resul;
 
-        if (this.status != upm.etsisi.poo.es.status.CLOSED) {
+        if (this.status != Status.CLOSED) {
             Product productoEncontrado = store.getProduct(proId);
             int before = this.amount;
             if (productoEncontrado == null) {
@@ -39,7 +38,7 @@ public class Ticket {
 
             } else {
                 if (this.amount == 0) {
-                    this.status = upm.etsisi.poo.es.status.ACTIVE;
+                    this.status = Status.ACTIVE;
                 }
                 int i = 0;
                 while (i < amount && this.amount < MAX_PRODUCT) {
@@ -185,6 +184,24 @@ public class Ticket {
      */
     public void sort() {
         Arrays.sort(productList, 0, amount, nameComp);
+    }
+
+    public String getStatus(){
+        String str;
+        switch (this.status){
+            case EMPTY:
+                str="Empty";
+                break;
+            case ACTIVE:
+                str="Active";
+            case CLOSED:
+                str="Closed";
+                break;
+            default:
+                str="Error, status is undefined";
+                break;
+        }
+        return str;
     }
 
 }

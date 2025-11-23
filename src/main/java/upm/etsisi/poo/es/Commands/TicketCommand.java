@@ -1,84 +1,88 @@
 package upm.etsisi.poo.es.Commands;
 
 import upm.etsisi.poo.es.Product;
-import upm.etsisi.poo.es.Ticket;
 import upm.etsisi.poo.es.Store;
-import upm.etsisi.poo.es.type;
+import upm.etsisi.poo.es.Ticket;
 
-public class TicketCommand extends Command {
+public class TicketCommand implements Command {
 
-  public TicketCommand(String command) {
-    super(command);
-  }
-}
-
-class CommandTicketAdd extends TicketCommand {
-
-  public CommandTicketAdd(String command) {
-    super(command);
-  }
-
-  private void commandTicketAdd(String[] commandArray, Ticket ticket, Store store) {
-    int id;
-    int amount;
-    boolean correct = true;
-    try {
-      id = Integer.parseInt(commandArray[2]);
-      amount = Integer.parseInt(commandArray[3]);
-    } catch (NumberFormatException e) {
-      System.out.println(INCORRECT);
-      id = -1;
-      amount = -1;
-      correct = false;
+    @Override
+    public String getName() {
+        return "ticket";
     }
-    if (correct) {
-      boolean add = ticket.ticketAdd(id, store, amount);
+
+    @Override
+    public String getDescription() {
+        return "ticket add|remove|print ...  - ticket management";
     }
-  }
-}
 
-class CommandTicketRemove extends TicketCommand {
-  public CommandTicketRemove(String command) {
-    super(command);
-  }
+    @Override
+    public boolean execute(String fullLine, String[] args, Store store, Ticket ticket) {
+        if (args.length < 2) {
+            System.out.println(INCORRECT);
+            return false;
+        }
 
-  private void commandTicketRemove(String[] commandArray, Ticket ticket) {
-    int id;
-    boolean correct = true;
-    try {
-      id = Integer.parseInt(commandArray[2]);
-    } catch (NumberFormatException e) {
-      System.out.println(INCORRECT);
-      correct = false;
-      id = -1;
+        String sub = args[1];
+
+        switch (sub) {
+            case "add":
+                ticketAdd(args, store, ticket);
+                break;
+            case "remove":
+                ticketRemove(args, ticket);
+                break;
+            case "print":
+                ticketPrint(ticket);
+                break;
+            default:
+                System.out.println(INCORRECT);
+        }
+
+        return false;
     }
-    if (correct) {
-      Product product = ticket.ticketRemove(id);
-      if (product == null) {
-        System.out.println(NOTEXIST);
-      } else {
-        System.out.println(product.toString());
-        System.out.println("ticket remove: ok");
-      }
+
+    private void ticketAdd(String[] args, Store store, Ticket ticket) {
+        if (args.length != 4) {
+            System.out.println(INCORRECT);
+            return;
+        }
+        try {
+            int id = Integer.parseInt(args[2]);
+            int amount = Integer.parseInt(args[3]);
+            ticket.ticketAdd(id, store, amount);
+            // ticketAdd ya imprime y dice "ticket add: ok" o errores
+        } catch (NumberFormatException e) {
+            System.out.println(INCORRECT);
+        }
     }
-  }
 
-}
-
-class CommandTicketPrint extends TicketCommand {
-
-  public CommandTicketPrint(String command) {
-    super(command);
-  }
-
-  private void commandTicketPrint(Ticket ticket) {
-    String printed = ticket.ticketPrint();
-    if (printed.isEmpty()) {
-      System.out.println(EMPTY_TICKET);
-    } else {
-      System.out.println(printed);
-      System.out.println("ticket print: ok");
+    private void ticketRemove(String[] args, Ticket ticket) {
+        if (args.length != 3) {
+            System.out.println(INCORRECT);
+            return;
+        }
+        try {
+            int id = Integer.parseInt(args[2]);
+            Product product = ticket.ticketRemove(id);
+            if (product == null) {
+                System.out.println(NOTEXIST);
+            } else {
+                System.out.println(product.toString());
+                System.out.println("ticket remove: ok");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println(INCORRECT);
+        }
     }
-  }
 
+    private void ticketPrint(Ticket ticket) {
+        String printed = ticket.ticketPrint();
+        if (printed.isEmpty()) {
+            System.out.println(EMPTY_TICKET);
+        } else {
+            System.out.println(printed);
+            System.out.println("ticket print: ok");
+        }
+    }
 }
