@@ -5,6 +5,8 @@ import java.util.TreeMap;
 public class Casher extends User {
     private TreeMap<Integer, Ticket> tickets;
     private static final String UPM_WORKER= "UW";
+    private static final String ID_ERROR="The id given has been already used";
+    private static final String ID_NOT_FOUND="The id given, was not found ";
 
     public Casher(String email, String name, int id){
         this.email=email;
@@ -25,6 +27,38 @@ public class Casher extends User {
             str.append("Id of the ticket: "+id+". Status of the ticket: "+ticket.getStatus()+"\n");
         }
         return str.toString();
+    }
+
+    /**
+     * The method adds the ticket given by id into the cashers tree
+     * @param id the id given by parameter (if it is not given, it generates one automatically)
+     */
+    public void addTicket(Integer id){
+        if (id == null){
+            do {
+                id =(int) (Math.random()*100000);
+            } while (tickets.containsKey(id));
+        }
+        if (tickets.containsKey(id)){
+            System.out.println(ID_ERROR);
+        } else {
+            tickets.put(id, new Ticket(id));
+        }
+    }
+
+    /**
+     * The method returns the ticket given by id
+     * @param id the id of the ticket
+     * @return the ticket (if it has been found)
+     */
+    public Ticket getTicketById(int id){
+        Ticket ticket=null;
+        if (tickets.containsKey(id)){
+            ticket=tickets.get(id);
+        } else {
+            System.out.println(ID_NOT_FOUND);
+        }
+        return ticket;
     }
     public String toString(){
         return "Name of the cahser: "+ name +"Id: "+UPM_WORKER+id+" Email: "+email+"\n";
