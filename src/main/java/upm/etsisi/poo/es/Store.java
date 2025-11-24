@@ -1,9 +1,10 @@
 package upm.etsisi.poo.es;
 
+import upm.etsisi.poo.es.User.Casher;
+import upm.etsisi.poo.es.User.Customer;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Comparator;
-import java.util.LinkedList;
 
 public class Store {
   int MAX_PRODUCT = 200;
@@ -11,6 +12,7 @@ public class Store {
   TreeMap<Integer, Casher> cashers;
   TreeMap<Integer, Customer> customers;
   public static final String CASHER_NOT_FOUND = "The casher given was not found";
+  public static final String CUSTOMER_NOT_FOUND = "The customer given was not found";
   public static final String ID_ERROR = "The id given has already been  used";
 
   public Store() {
@@ -147,11 +149,17 @@ public class Store {
    * @param idTicket the id of the ticket (if it's null, it generates it automatically)
    * @param idCasher the id of the casher
    */
-  public void addTicketOnCasher(Integer idTicket, int idCasher){
-    if (cashers.containsKey(idCasher)){
+  public void addTicketOnCasher(Integer idTicket, int idCasher, int idCustomer){
+    if (cashers.containsKey(idCasher) && customers.containsKey(idCustomer)){
       cashers.get(idCasher).addTicket(idTicket);
+      customers.get(idCustomer).addTicket(idTicket, cashers.get(idCasher).getTicketById(idTicket));
     } else {
-      System.out.println(CASHER_NOT_FOUND);
+      if (cashers.containsKey(idCasher)) {
+        System.out.println(CASHER_NOT_FOUND);
+      }
+      if (customers.containsKey(idCustomer)){
+        System.out.println(CUSTOMER_NOT_FOUND);
+      }
     }
   }
 

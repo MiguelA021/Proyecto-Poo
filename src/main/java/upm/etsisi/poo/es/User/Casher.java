@@ -1,9 +1,9 @@
-package upm.etsisi.poo.es;
+package upm.etsisi.poo.es.User;
+import upm.etsisi.poo.es.Ticket;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class Casher extends User {
-    private TreeMap<Integer, Ticket> tickets;
     private static final String UPM_WORKER= "UW";
     private static final String ID_ERROR="The id given has been already used";
     private static final String ID_NOT_FOUND="The id given, was not found ";
