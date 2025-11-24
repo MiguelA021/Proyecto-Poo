@@ -9,12 +9,11 @@ import java.util.Map;
 public class CommandController {
 
     private final Store store;
-    private final Ticket ticket;
     private final Map<String, Command> commands = new HashMap<>();
 
-    public CommandController(Store store, Ticket ticket) {
+    public CommandController(Store store) {
         this.store = store;
-        this.ticket = ticket;
+        ;
 
         // Registrar aquí todos los comandos
         register(new CommandEcho());
@@ -47,6 +46,6 @@ public class CommandController {
             return false;
         }
 
-        return command.execute(trimmed, parts, store, ticket);
+        return command.execute(trimmed, parts, store);
     }
 }

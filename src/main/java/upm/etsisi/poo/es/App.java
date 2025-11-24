@@ -38,8 +38,7 @@ public class App {
         boolean end = false;
         Scanner scan = new Scanner(System.in);
         Store store = new Store();
-        Ticket ticket = new Ticket(store);
-        CommandController controller = new CommandController(store, ticket);
+        CommandController controller = new CommandController(store);
 
         while (!end) {
             System.out.print(UPM);
@@ -54,8 +53,7 @@ public class App {
     private void readFile(String[] args) {
         String line;
         Store store = new Store();
-        Ticket ticket = new Ticket(store);
-        CommandController controller = new CommandController(store, ticket);
+        CommandController controller = new CommandController(store);
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(args[0]));

@@ -21,8 +21,7 @@ public interface Command {
      * @param fullLine línea completa que ha escrito el usuario
      * @param args     tokens separados por espacios
      * @param store    modelo Store
-     * @param ticket   modelo Ticket
      * @return true si el comando quiere terminar la aplicación (exit), false en otro caso
      */
-    boolean execute(String fullLine, String[] args, Store store, Ticket ticket);
+    boolean execute(String fullLine, String[] args, Store store);
 }

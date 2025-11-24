@@ -22,7 +22,7 @@ public class CommandHelp implements Command {
     }
 
     @Override
-    public boolean execute(String fullLine, String[] args, Store store, Ticket ticket) {
+    public boolean execute(String fullLine, String[] args, Store store) {
         System.out.println("Commands:");
         controller.getCommands().values().forEach(cmd ->
                 System.out.println(" - " + cmd.getDescription())

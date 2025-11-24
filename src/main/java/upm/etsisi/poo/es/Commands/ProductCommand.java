@@ -18,7 +18,7 @@ public class ProductCommand implements Command {
     }
 
     @Override
-    public boolean execute(String fullLine, String[] args, Store store, Ticket ticket) {
+    public boolean execute(String fullLine, String[] args, Store store) {
         if (args.length < 2) {
             System.out.println(INCORRECT);
             return false;

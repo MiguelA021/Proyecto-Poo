@@ -1,5 +1,6 @@
 package upm.etsisi.poo.es.Commands;
 
+import upm.etsisi.poo.es.Casher;
 import upm.etsisi.poo.es.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.Ticket;
@@ -17,7 +18,7 @@ public class TicketCommand implements Command {
   }
 
   @Override
-  public boolean execute(String fullLine, String[] args, Store store, Ticket ticket) {
+  public boolean execute(String fullLine, String[] args, Store store) {
     if (args.length < 2) {
       System.out.println(INCORRECT);
       return false;
@@ -27,13 +28,13 @@ public class TicketCommand implements Command {
 
     switch (sub) {
       case "add":
-        ticketAdd(args, store, ticket);
+        ticketAdd(args, store);
         break;
       case "remove":
-        ticketRemove(args, ticket);
+        ticketRemove(args,store);
         break;
       case "print":
-        ticketPrint(ticket);
+        ticketPrint(args,store);
         break;
       default:
         System.out.println(INCORRECT);
@@ -42,29 +43,45 @@ public class TicketCommand implements Command {
     return false;
   }
 
-  private void ticketAdd(String[] args, Store store, Ticket ticket) {
+  private void ticketAdd(String[] args, Store store) {
     if (args.length != 4) {
       System.out.println(INCORRECT);
       return;
     }
     try {
-      int id = Integer.parseInt(args[2]);
-      int amount = Integer.parseInt(args[3]);
-      ticket.ticketAdd(id, store, amount);
+      int ticketId = Integer.parseInt(args[2]);
+      String casherId = args[3];
+      String casherIdGood = "";
+      int prodId = Integer.parseInt(args[4]);
+      int ammount = Integer.parseInt(args[5]);
+      for(int i = 2; i<casherId.length(); i++){
+        casherIdGood.concat(Character.toString(casherId.charAt(i)));
+      }
+      Casher casher = store.searchCasherById(Integer.parseInt(casherIdGood));
+      Ticket ticket = casher.getTicketById(ticketId);
+      ticket.ticketAdd(prodId, store, ammount);
       // ticketAdd ya imprime y dice "ticket add: ok" o errores
     } catch (NumberFormatException e) {
       System.out.println(INCORRECT);
     }
   }
 
-  private void ticketRemove(String[] args, Ticket ticket) {
+  private void ticketRemove(String[] args, Store store) {
     if (args.length != 3) {
       System.out.println(INCORRECT);
       return;
     }
     try {
-      int id = Integer.parseInt(args[2]);
-      Product product = ticket.ticketRemove(id);
+      int ticketId = Integer.parseInt(args[2]);
+      int prodId = Integer.parseInt(args[4]);
+      String casherId = args[3];
+      String casherIdGood = "";
+      for(int i = 2; i<casherId.length(); i++){
+        casherIdGood.concat(Character.toString(casherId.charAt(i)));
+      }
+      Casher casher = store.searchCasherById(Integer.parseInt(casherIdGood));
+      Ticket ticket = casher.getTicketById(ticketId);
+      Product product = ticket.ticketRemove(prodId);
       if (product == null) {
         System.out.println(NOTEXIST);
       } else {
@@ -76,7 +93,15 @@ public class TicketCommand implements Command {
     }
   }
 
-  private void ticketPrint(Ticket ticket) {
+  private void ticketPrint(String[] args, Store store) {
+    int ticketId = Integer.parseInt(args[2]);
+    String casherId = args[3];
+    String casherIdGood = "";
+    for(int i = 2; i<casherId.length(); i++){
+      casherIdGood.concat(Character.toString(casherId.charAt(i)));
+    }
+    Casher casher = store.searchCasherById(Integer.parseInt(casherIdGood));
+    Ticket ticket = casher.getTicketById(ticketId);
     String printed = ticket.ticketPrint(true);
     if (printed.isEmpty()) {
       System.out.println(EMPTY_TICKET);
