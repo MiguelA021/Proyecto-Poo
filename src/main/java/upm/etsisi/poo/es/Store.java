@@ -1,9 +1,10 @@
 package upm.etsisi.poo.es;
 
+import upm.etsisi.poo.es.User.Casher;
+import upm.etsisi.poo.es.User.Customer;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Comparator;
-import java.util.LinkedList;
 
 public class Store {
   int MAX_PRODUCT = 200;

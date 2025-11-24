@@ -1,4 +1,5 @@
-package upm.etsisi.poo.es;
+package upm.etsisi.poo.es.User;
+import upm.etsisi.poo.es.Ticket;
 import java.util.Map;
 import java.util.TreeMap;
 

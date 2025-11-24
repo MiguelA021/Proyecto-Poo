@@ -1,6 +1,6 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Casher;
+import upm.etsisi.poo.es.User.Casher;
 import upm.etsisi.poo.es.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.Ticket;

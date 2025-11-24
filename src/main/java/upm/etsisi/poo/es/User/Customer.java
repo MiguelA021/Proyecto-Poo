@@ -1,4 +1,6 @@
-package upm.etsisi.poo.es;
+package upm.etsisi.poo.es.User;
+import upm.etsisi.poo.es.Ticket;
+
 import java.util.TreeMap;
 
 public class Customer extends User {
