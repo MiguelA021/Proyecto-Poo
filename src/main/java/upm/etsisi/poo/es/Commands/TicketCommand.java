@@ -126,18 +126,27 @@ public class TicketCommand implements Command {
   }
 
   private void ticketNew(String[] args, Store store){
-    String casherId = args[3];
-    String casherIdGood = "";
-    for(int i = 2; i<casherId.length(); i++){
-      casherIdGood.concat(Character.toString(casherId.charAt(i)));
-    }
-    int userId = Integer.parseInt(args[4]);
     if(args.length == 5){
-
+      String casherId = args[3];
+      String casherIdGood = "";
+      for(int i = 2; i<casherId.length(); i++){
+        casherIdGood.concat(Character.toString(casherId.charAt(i)));
+      }
+      int userId = store.dniToId(args[4]);
+      int id = Integer.parseInt(args[2]);
+      store.addTicketOnCasher(id, Integer.parseInt(casherIdGood), userId);
     }else if(args.length == 4){
-
+      String casherId = args[2];
+      String casherIdGood = "";
+      for(int i = 2; i<casherId.length(); i++){
+        casherIdGood.concat(Character.toString(casherId.charAt(i)));
+      }
+      int userId = store.dniToId(args[3]);
+      store.addTicketOnCasher(null, Integer.parseInt(casherIdGood), userId);
     }else {
       System.out.println(INCORRECT);
     }
+
+
   }
 }

@@ -107,7 +107,7 @@ public class Store {
    * @param dni the ID cad number given
    * @return the method returns the id without letters
    */
-  private int dniToId(String dni) {
+  public int dniToId(String dni) {
     int id = 0;
     String[] dniToArray = dni.split("");
     for (int i = 0; i < dniToArray.length - 1; i++) {
