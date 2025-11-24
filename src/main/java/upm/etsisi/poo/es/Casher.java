@@ -3,7 +3,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Casher extends User {
-    private TreeMap<Integer, Ticket> tickets;
     private static final String UPM_WORKER= "UW";
     private static final String ID_ERROR="The id given has been already used";
     private static final String ID_NOT_FOUND="The id given, was not found ";
