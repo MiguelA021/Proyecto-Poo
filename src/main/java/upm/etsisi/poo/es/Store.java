@@ -96,7 +96,7 @@ public class Store {
    * @param id the ID of the casher
    * @return the method returns the casher if it has been found
    */
-  private Casher searchCasherById(int id) {
+  public Casher searchCasherById(int id) {
     return cashers.get(id);
   }
 
