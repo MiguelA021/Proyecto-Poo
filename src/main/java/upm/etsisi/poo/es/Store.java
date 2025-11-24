@@ -131,8 +131,7 @@ public class Store {
   }
 
   /**
-   * The method list the clients alphabetically, those who had been added on the
-   * Store
+   * The method list the clients alphabetically, those who had been added on the Store
    */
   public void listCustomers() {
     ArrayList<Customer> listSort = customersToList();
@@ -145,6 +144,19 @@ public class Store {
     ArrayList<Customer> resul = new ArrayList<>(customers.values());
     resul.sort(Comparator.comparing(Customer::getName));
     return resul;
+  }
+
+  /**
+   * The method adds the ticket on the casher
+   * @param idTicket the id of the ticket (if it's null, it generates automatically)
+   * @param idCasher the id of the casher
+   */
+  public void addTicketOnCasher(Integer idTicket, int idCasher){
+    if (cashers.containsKey(idCasher)){
+      cashers.get(idCasher).addTicket(idTicket);
+    } else {
+      System.out.println(CASHER_NOT_FOUND);
+    }
   }
 
   /**
