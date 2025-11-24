@@ -10,8 +10,9 @@ enum Status {
 }
 
 public class Ticket {
-  final static int MAX_PRODUCT = 100;
-  Product[] productList;
+    final static int MAX_PRODUCT = 100;
+    public static final String ERROR_FULL = "ERROR: Full Ticket (100 products max)";
+    Product[] productList;
   int amount;
   private StringBuilder id;
   Comparator<Product> nameComp = Comparator.comparing(Product::getName);
@@ -26,16 +27,35 @@ public class Ticket {
   }
 
   public boolean ticketAdd(int proId, Store store, int amount) {
-    boolean resul;
+    boolean resul = false;
 
     if (this.status != Status.CLOSED) {
       Product productoEncontrado = store.getProduct(proId);
       int before = this.amount;
       if (productoEncontrado == null) {
-        resul = false;
         System.out.println("ERROR: Product ID not found " + proId);
 
-      } else {
+      }else if (productoEncontrado.foodOrMetting()){
+          if(amount >1 || inTicket(productoEncontrado) ){
+              System.out.println("ERROR: food or metting can't be duplicated.");
+          }else {
+              if (this.amount == 0) {
+                  this.status = Status.ACTIVE;
+              }
+              if (this.amount < MAX_PRODUCT) {
+                  productList[this.amount] = productoEncontrado;
+                  this.amount++;
+                  System.out.println(ticketPrint(false));
+                  resul = true;
+              } else {
+                  System.out.println(ERROR_FULL);
+              }
+
+          }
+
+
+      }
+      else {
         if (this.amount == 0) {
           this.status = Status.ACTIVE;
         }
@@ -50,16 +70,75 @@ public class Ticket {
           resul = true;
           System.out.println("ticket add: ok");
         } else {
-          resul = false;
-          System.out.println("ERROR: Full Ticket (100 products max)");
+          System.out.println(ERROR_FULL);
         }
-
       }
     } else {
-      resul = false;
       System.out.println("ERROR: the ticket is closed. It can't be modified");
     }
     return resul;
+  }
+
+    private boolean inTicket(Product productoEncontrado) {
+      boolean found = false;
+      int i =0;
+      while (i <amount && !found){
+          found = productList[i].getId() == productoEncontrado.getId();
+      }
+      return found;
+    }
+
+    public boolean ticketAddP(int proId, Store store, int amount, String [] customs) {
+        boolean resul = false;
+
+        if (this.status != Status.CLOSED) {
+            Product productoEncontrado = store.getProduct(proId);
+            int before = this.amount;
+            if (productoEncontrado == null) {
+                System.out.println("ERROR: Product ID not found " + proId);
+
+            } else if (productoEncontrado.foodOrMetting()) {
+                System.out.println("ERROR: Only products is customizable");
+            }
+            else {
+                if(addCustom(customs,productoEncontrado)){
+                    if (this.amount == 0) {
+                        this.status = Status.ACTIVE;
+                    }
+                    int i = 0;
+                    while (i < amount && this.amount < MAX_PRODUCT) {
+                        productList[this.amount] = productoEncontrado;
+                        this.amount++;
+                        i++;
+                    }
+
+                    System.out.println(ticketPrint(false));
+                    if ((this.amount - before) == amount) {
+                        resul = true;
+                        System.out.println("ticket add: ok");
+                    } else {
+                        System.out.println("ERROR: Full Ticket (100 products max)");
+                    }
+                }
+                else{
+                    System.out.println("ERROR: this product can't have this number of personalizations.");
+                }
+            }
+        } else {
+            System.out.println("ERROR: the ticket is closed. It can't be modified");
+        }
+        return resul;
+
+  }
+  private boolean addCustom(String [] personalizations, Product product){
+      int i = 0;
+      boolean maxPers = false;
+      while ( i < personalizations.length && !maxPers){
+          String custom = personalizations[i].substring(3);
+          maxPers = product.addCustom(custom);
+          i++;
+      }
+      return maxPers;
   }
 
   /**

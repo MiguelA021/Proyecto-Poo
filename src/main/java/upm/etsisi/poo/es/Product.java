@@ -7,6 +7,8 @@ public class Product {
     private String name;
     private double price;
     private type category;
+    private  int maxPer;
+    private String [] customs;
     private final static String NAME_LENGTH_ERROR = "The name should be less than 100 characters";
     private final static String NAME_NULL_ERROR = "The name shouldn't be empty";
     private final static String PRICE_POSITIVE_ERROR = "WARNING: The price should be a positive number";
@@ -16,12 +18,22 @@ public class Product {
         this.price = price;
         this.id = id;
         this.category = category;
+        this.maxPer =  0;
+        this.customs = null;
+    }
+    public Product(int id, String name, double price){
+        this.name = name;
+        this.id = id;
+        this.price = price;
     }
 
-
     //Create a new constructor for doing the static class FOOD and MEETING for being called by other classes
-    public Product(int id, String name, double price) {
-
+    public Product(int id, String name, double price, int maxPer) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.maxPer = maxPer;
+        customs = new String[maxPer];
     }
 
     public int getId() {
@@ -77,6 +89,23 @@ public class Product {
 
     }
 
+    public boolean addCustom(String custom){
+        boolean add = false;
+        if(customs != null ) {
+            int i = 0;
+            while (i < this.customs.length && !add) {
+                if (customs[i] == null) {
+                    customs[i] = custom;
+                    add = true;
+                }
+                i++;
+            }
+        }
+        return add;
+    }
+    public String[] getCustoms() {
+        return customs;
+    }
     /**
      * @return the discount that is allowed with the amount of the product
      */
@@ -110,18 +139,6 @@ public class Product {
         return 0.1 * price;
     }
 
-    //The three methods under that sentence are using to referencing the Food and Meeting methods
-    public boolean getStateFood(int numberParticipant) {
-        return true;
-    }
-
-    public boolean getStateMeeting(int numberParticipant) {
-        return true;
-    }
-
-    public String toStringFoodOrMeeting() {
-        return "";
-    }
 
     @Override
 /**
@@ -130,6 +147,9 @@ public class Product {
     public String toString() {
         return "{class:Product, id: " + this.id + ", name: '" + this.name + "', category: " + this.category + ", price: " + this.price + "}";
 
+    }
+    boolean foodOrMetting(){
+        return false;
     }
 
 
@@ -172,7 +192,12 @@ public class Product {
         }
 
         public String toString() {
-            return super.toStringFoodOrMeeting() + "{class:Product, id: " + getId() + ", name: '" + getName() + ", price: " + getPrice() + ", expiry date: " + expiryDate + " }";
+            return "{class:Product, id: " + getId() + ", name: '" + getName() + ", price: " + getPrice() + ", expiry date: " + expiryDate + " }";
+        }
+
+        @Override
+        boolean foodOrMetting() {
+            return true;
         }
     }
 
@@ -215,7 +240,12 @@ public class Product {
         }
 
         public String toString() {
-            return super.toStringFoodOrMeeting() + "{class:Product, id: " + getId() + ", name: '" + getName() + ", price: " + getPrice() + ", expiry date: " + expiryDate + " }";
+            return "{class:Product, id: " + getId() + ", name: '" + getName() + ", price: " + getPrice() + ", expiry date: " + expiryDate + " }";
+        }
+
+        @Override
+        boolean foodOrMetting() {
+            return true;
         }
     }
 }

@@ -3,6 +3,7 @@ package upm.etsisi.poo.es.Commands;
 import upm.etsisi.poo.es.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.Ticket;
+import java.util.Arrays;
 
 public class TicketCommand implements Command {
 
@@ -43,14 +44,20 @@ public class TicketCommand implements Command {
   }
 
   private void ticketAdd(String[] args, Store store, Ticket ticket) {
-    if (args.length != 4) {
+  /*  if (args.length != 4) {
       System.out.println(INCORRECT);
       return;
-    }
+    }*/
     try {
-      int id = Integer.parseInt(args[2]);
-      int amount = Integer.parseInt(args[3]);
-      ticket.ticketAdd(id, store, amount);
+      int id = Integer.parseInt(args[2]); // seria el 4 ?
+      int amount = Integer.parseInt(args[3]);// seria el 5?
+        if(args.length > 4){
+            String [] personalizations = Arrays.copyOfRange(args, 5, args.length);
+            ticket.ticketAddP(id, store, amount,personalizations);
+        }else{
+            ticket.ticketAdd(id, store, amount);
+        }
+
       // ticketAdd ya imprime y dice "ticket add: ok" o errores
     } catch (NumberFormatException e) {
       System.out.println(INCORRECT);
