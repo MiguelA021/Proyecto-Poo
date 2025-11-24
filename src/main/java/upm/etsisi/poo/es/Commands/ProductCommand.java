@@ -70,8 +70,7 @@ public class ProductCommand implements Command {
             int id = Integer.parseInt(beforeTokens[2]);
             type category = type.valueOf(afterTokens[0]);
             double price = Double.parseDouble(afterTokens[1]);
-
-            Product p = new Product(id, name, category, price);
+            Product p = new Product(id, name, category, price, null);
             boolean done = store.prodAdd(p);
             if (!done) {
                 System.out.println(ID_REPEAT);

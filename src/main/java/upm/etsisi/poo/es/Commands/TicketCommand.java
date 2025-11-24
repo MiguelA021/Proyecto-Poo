@@ -5,6 +5,8 @@ import upm.etsisi.poo.es.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.Ticket;
 
+import java.util.ArrayList;
+
 public class TicketCommand implements Command {
 
   @Override
@@ -36,6 +38,8 @@ public class TicketCommand implements Command {
       case "print":
         ticketPrint(args,store);
         break;
+      case "new":
+        ticketNew(args, store);
       default:
         System.out.println(INCORRECT);
     }
@@ -59,7 +63,17 @@ public class TicketCommand implements Command {
       }
       Casher casher = store.searchCasherById(Integer.parseInt(casherIdGood));
       Ticket ticket = casher.getTicketById(ticketId);
-      ticket.ticketAdd(prodId, store, ammount);
+      if(args.length > 5){
+        ArrayList<String> personalizaciones = new ArrayList<String>();
+        for (int i = 5; i< args.length; i++){
+          String personalizacion = args[i].replaceAll("--p", "");
+          personalizaciones.add(personalizacion);
+        }
+        ticket.ticketAdd(prodId, store, ammount, personalizaciones);
+      }
+
+      ticket.ticketAdd(prodId, store, ammount, null);
+
       // ticketAdd ya imprime y dice "ticket add: ok" o errores
     } catch (NumberFormatException e) {
       System.out.println(INCORRECT);
@@ -108,6 +122,22 @@ public class TicketCommand implements Command {
     } else {
       System.out.println(printed);
       System.out.println("ticket print: ok");
+    }
+  }
+
+  private void ticketNew(String[] args, Store store){
+    String casherId = args[3];
+    String casherIdGood = "";
+    for(int i = 2; i<casherId.length(); i++){
+      casherIdGood.concat(Character.toString(casherId.charAt(i)));
+    }
+    int userId = Integer.parseInt(args[4]);
+    if(args.length == 5){
+
+    }else if(args.length == 4){
+
+    }else {
+      System.out.println(INCORRECT);
     }
   }
 }

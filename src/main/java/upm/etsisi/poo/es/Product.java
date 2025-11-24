@@ -1,6 +1,7 @@
 package upm.etsisi.poo.es;
 
 import java.time.LocalDateTime; //Importing for the methods of getStatusFood and getStatusMeeting
+import java.util.ArrayList;
 
 public class Product {
     private int id;
@@ -10,12 +11,33 @@ public class Product {
     private final static String NAME_LENGTH_ERROR = "The name should be less than 100 characters";
     private final static String NAME_NULL_ERROR = "The name shouldn't be empty";
     private final static String PRICE_POSITIVE_ERROR = "WARNING: The price should be a positive number";
+    private ArrayList<String> personalizaciones;
 
     public Product(int id, String name, type category, double price) {
         this.name = name.trim();
         this.price = price;
         this.id = id;
         this.category = category;
+        this.personalizaciones = null;
+    }
+
+    /*
+
+
+
+
+    REVISAR PERSONALIZACIONES
+
+
+
+
+     */
+    public Product(int id, String name, type category, double price, ArrayList<String> personalizaciones) {
+        this.name = name.trim();
+        this.price = price;
+        this.id = id;
+        this.category = category;
+        this.personalizaciones = personalizaciones;
     }
 
 
@@ -128,7 +150,18 @@ public class Product {
  * the method turns the object into a String with the format required
  */
     public String toString() {
-        return "{class:Product, id: " + this.id + ", name: '" + this.name + "', category: " + this.category + ", price: " + this.price + "}";
+        StringBuilder sb = new StringBuilder();
+        if(personalizaciones == null){
+            sb.append("{class:Product, id: " + this.id + ", name: '" + this.name + "', category: " + this.category + ", price: " + this.price + "}");
+            return sb.toString();
+        }else{
+            sb.append("{class:Product, id: " + this.id + ", name: '" + this.name + "', category: " + this.category + ", price: " + this.price + "Personalizaciones: ");
+            for(int i =0; i<personalizaciones.size(); i++){
+                sb.append(personalizaciones.get(i));
+            }
+            sb.append("}");
+            return sb.toString();
+        }
 
     }
 
