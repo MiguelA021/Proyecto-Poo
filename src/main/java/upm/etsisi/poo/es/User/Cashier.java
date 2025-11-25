@@ -3,12 +3,12 @@ import upm.etsisi.poo.es.Ticket;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Casher extends User {
+public class Cashier extends User {
     private static final String UPM_WORKER= "UW";
     private static final String ID_ERROR="The id given has been already used";
     private static final String ID_NOT_FOUND="The id given, was not found ";
 
-    public Casher(String email, String name, int id){
+    public Cashier(String email, String name, int id){
         this.email=email;
         this.name =name;
         this.id=id;

@@ -1,6 +1,6 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.User.Casher;
+import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.Ticket;
@@ -16,7 +16,6 @@ public class TicketCommand implements Command {
 
   @Override
   public String getDescription() {
-      
     return "ticket add|remove|print ...  - ticket management";
   }
 
@@ -34,10 +33,10 @@ public class TicketCommand implements Command {
         ticketAdd(args, store);
         break;
       case "remove":
-        ticketRemove(args, store);
+        ticketRemove(args,store);
         break;
       case "print":
-        ticketPrint(args, store);
+        ticketPrint(args,store);
         break;
       case "new":
         ticketNew(args, store);
@@ -62,9 +61,9 @@ public class TicketCommand implements Command {
       for (int i = 2; i < casherId.length(); i++) {
         casherIdGood.concat(Character.toString(casherId.charAt(i)));
       }
-      Casher casher = store.searchCasherById(Integer.parseInt(casherIdGood));
-      Ticket ticket = casher.getTicketById(ticketId);
-      if (args.length > 5) {
+      Cashier cashier = store.searchCasherById(Integer.parseInt(casherIdGood));
+      Ticket ticket = cashier.getTicketById(ticketId);
+      if(args.length > 5){
         ArrayList<String> personalizaciones = new ArrayList<String>();
         for (int i = 5; i < args.length; i++) {
           String personalizacion = args[i].replaceAll("--p", "");
@@ -94,8 +93,8 @@ public class TicketCommand implements Command {
       for (int i = 2; i < casherId.length(); i++) {
         casherIdGood.concat(Character.toString(casherId.charAt(i)));
       }
-      Casher casher = store.searchCasherById(Integer.parseInt(casherIdGood));
-      Ticket ticket = casher.getTicketById(ticketId);
+      Cashier cashier = store.searchCasherById(Integer.parseInt(casherIdGood));
+      Ticket ticket = cashier.getTicketById(ticketId);
       Product product = ticket.ticketRemove(prodId);
       if (product == null) {
         System.out.println(NOTEXIST);
@@ -115,8 +114,8 @@ public class TicketCommand implements Command {
     for (int i = 2; i < casherId.length(); i++) {
       casherIdGood.concat(Character.toString(casherId.charAt(i)));
     }
-    Casher casher = store.searchCasherById(Integer.parseInt(casherIdGood));
-    Ticket ticket = casher.getTicketById(ticketId);
+    Cashier cashier = store.searchCasherById(Integer.parseInt(casherIdGood));
+    Ticket ticket = cashier.getTicketById(ticketId);
     String printed = ticket.ticketPrint(true);
     if (printed.isEmpty()) {
       System.out.println(EMPTY_TICKET);
