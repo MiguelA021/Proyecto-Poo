@@ -1,6 +1,6 @@
 package upm.etsisi.poo.es;
 
-import upm.etsisi.poo.es.User.Casher;
+import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.User.Customer;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -9,7 +9,7 @@ import java.util.Comparator;
 public class Store {
   int MAX_PRODUCT = 200;
   Product[] productList;
-  TreeMap<Integer, Casher> cashers;
+  TreeMap<Integer, Cashier> cashers;
   TreeMap<Integer, Customer> customers;
   public static final String CASHER_NOT_FOUND = "The casher given was not found";
   public static final String CUSTOMER_NOT_FOUND = "The customer given was not found";
@@ -84,10 +84,10 @@ public class Store {
    * @param cashId the id of the casher given
    */
   public void addCustomer(String name, String dni, String email, int cashId) {
-    Casher casher = searchCasherById(cashId);
-    if (casher != null) {
+    Cashier cashier = searchCasherById(cashId);
+    if (cashier != null) {
       int id = dniToId(dni);
-      customers.put(id, new Customer(email, name, id, casher));
+      customers.put(id, new Customer(email, name, id, cashier));
     } else {
       System.out.println(CASHER_NOT_FOUND);
     }
@@ -98,7 +98,7 @@ public class Store {
    * @param id the ID of the casher
    * @return the method returns the casher if it has been found
    */
-  public Casher searchCasherById(int id) {
+  public Cashier searchCasherById(int id) {
     return cashers.get(id);
   }
 
@@ -179,7 +179,7 @@ public class Store {
       } while (cashers.containsKey(id));
     }
     if (!cashers.containsKey(id)) {
-      cashers.put(id, new Casher(email, name, id));
+      cashers.put(id, new Cashier(email, name, id));
     } else {
       System.out.println(ID_ERROR);
       resul = false;
@@ -200,15 +200,15 @@ public class Store {
    * The method list the cashers alphabetically, those who had been added on the Store
    */
   public void listCashers() {
-    ArrayList<Casher> listSort = cashersToList();
-    for (Casher casher : listSort) {
-      System.out.println(casher.toString());
+    ArrayList<Cashier> listSort = cashersToList();
+    for (Cashier cashier : listSort) {
+      System.out.println(cashier.toString());
     }
   }
 
-  private ArrayList<Casher> cashersToList() {
-    ArrayList<Casher> resul = new ArrayList<>(cashers.values());
-    resul.sort(Comparator.comparing(Casher::getName));
+  private ArrayList<Cashier> cashersToList() {
+    ArrayList<Cashier> resul = new ArrayList<>(cashers.values());
+    resul.sort(Comparator.comparing(Cashier::getName));
     return resul;
   }
 
