@@ -78,6 +78,7 @@ public class Store {
 
   /**
    * The method adds the client if the casher given was found
+   * 
    * @param name   the name of the new client
    * @param dni    the ID number of the new client
    * @param email  the eamail of the new client
@@ -95,6 +96,7 @@ public class Store {
 
   /**
    * The method searches by id the casher
+   * 
    * @param id the ID of the casher
    * @return the method returns the casher if it has been found
    */
@@ -104,6 +106,7 @@ public class Store {
 
   /**
    * The method turns the ID card number into the id without letters
+   * 
    * @param dni the ID cad number given
    * @return the method returns the id without letters
    */
@@ -119,6 +122,7 @@ public class Store {
 
   /**
    * The method removes the customer
+   * 
    * @param dni the ID of the customer given
    * @return the methods returns true if the object was found and removed
    */
@@ -129,12 +133,17 @@ public class Store {
   }
 
   /**
-   * The method list the clients alphabetically, those who had been added on the Store
+   * The method list the clients alphabetically, those who had been added on the
+   * Store
    */
   public void listCustomers() {
     ArrayList<Customer> listSort = customersToList();
-    for (Customer customer : listSort) {
-      System.out.println(customer.toString());
+    if (listSort != null) {
+      for (Customer customer : listSort) {
+        System.out.println(customer.toString());
+      }
+    } else {
+      System.out.println("No customers in the store");
     }
   }
 
@@ -146,18 +155,20 @@ public class Store {
 
   /**
    * The method adds the ticket on the casher
-   * @param idTicket the id of the ticket (if it's null, it generates it automatically)
+   * 
+   * @param idTicket the id of the ticket (if it's null, it generates it
+   *                 automatically)
    * @param idCasher the id of the casher
    */
-  public void addTicketOnCasher(Integer idTicket, int idCasher, int idCustomer){
-    if (cashers.containsKey(idCasher) && customers.containsKey(idCustomer)){
+  public void addTicketOnCasher(Integer idTicket, int idCasher, int idCustomer) {
+    if (cashers.containsKey(idCasher) && customers.containsKey(idCustomer)) {
       cashers.get(idCasher).addTicket(idTicket);
       customers.get(idCustomer).addTicket(idTicket, cashers.get(idCasher).getTicketById(idTicket));
     } else {
       if (cashers.containsKey(idCasher)) {
         System.out.println(CASHER_NOT_FOUND);
       }
-      if (customers.containsKey(idCustomer)){
+      if (customers.containsKey(idCustomer)) {
         System.out.println(CUSTOMER_NOT_FOUND);
       }
     }
@@ -166,6 +177,7 @@ public class Store {
   /**
    * The method adds the casher if the id (if not given, the method itself
    * generates a random id) given hasn't been already used
+   * 
    * @param id    the id (if not given it generates automatically)
    * @param name  the name of the casher
    * @param email the email of the casher
@@ -189,6 +201,7 @@ public class Store {
 
   /**
    * The method removes the casher given by its id
+   * 
    * @param id the id given
    * @return it returns true if the casher has been removed successfully
    */
@@ -197,7 +210,8 @@ public class Store {
   }
 
   /**
-   * The method list the cashers alphabetically, those who had been added on the Store
+   * The method list the cashers alphabetically, those who had been added on the
+   * Store
    */
   public void listCashers() {
     ArrayList<Casher> listSort = cashersToList();
@@ -214,10 +228,11 @@ public class Store {
 
   /**
    * The method list the tickets of the casher given by the id
+   * 
    * @param id the id of the casher
    */
-  public void listTicketsOnCasher(int id){
-    if (cashers.containsKey(id)){
+  public void listTicketsOnCasher(int id) {
+    if (cashers.containsKey(id)) {
       System.out.print(cashers.get(id).listTickets());
     } else {
       System.out.println(ID_ERROR);
@@ -226,6 +241,7 @@ public class Store {
 
   /**
    * The method adds a product tho the productList if there is below 100 products
+   * 
    * @param product the product which we want to add it
    * @return returns true if the method added the product if not, it returns false
    */
@@ -247,6 +263,7 @@ public class Store {
 
   /**
    * The method removes the product with the id given
+   * 
    * @param id the id of the product we want to remove
    * @return it returns true if the product with the id given was removed, if not
    *         it returns false

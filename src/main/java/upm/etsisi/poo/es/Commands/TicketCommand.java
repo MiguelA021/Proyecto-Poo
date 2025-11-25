@@ -33,10 +33,10 @@ public class TicketCommand implements Command {
         ticketAdd(args, store);
         break;
       case "remove":
-        ticketRemove(args,store);
+        ticketRemove(args, store);
         break;
       case "print":
-        ticketPrint(args,store);
+        ticketPrint(args, store);
         break;
       case "new":
         ticketNew(args, store);
@@ -58,14 +58,14 @@ public class TicketCommand implements Command {
       String casherIdGood = "";
       int prodId = Integer.parseInt(args[4]);
       int ammount = Integer.parseInt(args[5]);
-      for(int i = 2; i<casherId.length(); i++){
+      for (int i = 2; i < casherId.length(); i++) {
         casherIdGood.concat(Character.toString(casherId.charAt(i)));
       }
       Casher casher = store.searchCasherById(Integer.parseInt(casherIdGood));
       Ticket ticket = casher.getTicketById(ticketId);
-      if(args.length > 5){
+      if (args.length > 5) {
         ArrayList<String> personalizaciones = new ArrayList<String>();
-        for (int i = 5; i< args.length; i++){
+        for (int i = 5; i < args.length; i++) {
           String personalizacion = args[i].replaceAll("--p", "");
           personalizaciones.add(personalizacion);
         }
@@ -90,7 +90,7 @@ public class TicketCommand implements Command {
       int prodId = Integer.parseInt(args[4]);
       String casherId = args[3];
       String casherIdGood = "";
-      for(int i = 2; i<casherId.length(); i++){
+      for (int i = 2; i < casherId.length(); i++) {
         casherIdGood.concat(Character.toString(casherId.charAt(i)));
       }
       Casher casher = store.searchCasherById(Integer.parseInt(casherIdGood));
@@ -111,7 +111,7 @@ public class TicketCommand implements Command {
     int ticketId = Integer.parseInt(args[2]);
     String casherId = args[3];
     String casherIdGood = "";
-    for(int i = 2; i<casherId.length(); i++){
+    for (int i = 2; i < casherId.length(); i++) {
       casherIdGood.concat(Character.toString(casherId.charAt(i)));
     }
     Casher casher = store.searchCasherById(Integer.parseInt(casherIdGood));
@@ -125,28 +125,27 @@ public class TicketCommand implements Command {
     }
   }
 
-  private void ticketNew(String[] args, Store store){
-    if(args.length == 5){
+  private void ticketNew(String[] args, Store store) {
+    if (args.length == 5) {
       String casherId = args[3];
       String casherIdGood = "";
-      for(int i = 2; i<casherId.length(); i++){
+      for (int i = 2; i < casherId.length(); i++) {
         casherIdGood.concat(Character.toString(casherId.charAt(i)));
       }
       int userId = store.dniToId(args[4]);
       int id = Integer.parseInt(args[2]);
       store.addTicketOnCasher(id, Integer.parseInt(casherIdGood), userId);
-    }else if(args.length == 4){
+    } else if (args.length == 4) {
       String casherId = args[2];
       String casherIdGood = "";
-      for(int i = 2; i<casherId.length(); i++){
+      for (int i = 2; i < casherId.length(); i++) {
         casherIdGood.concat(Character.toString(casherId.charAt(i)));
       }
       int userId = store.dniToId(args[3]);
       store.addTicketOnCasher(null, Integer.parseInt(casherIdGood), userId);
-    }else {
+    } else {
       System.out.println(INCORRECT);
     }
-
 
   }
 }
