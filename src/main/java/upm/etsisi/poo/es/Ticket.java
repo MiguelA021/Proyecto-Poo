@@ -16,12 +16,19 @@ public class Ticket {
     Comparator<Product> nameComp = Comparator.comparing(Product::getName);
     private Status status;
 
-    public Ticket(Store store) { //Aaron lo ha implementado con un int id en vez de una Store, ver cual es mejor
+    public Ticket(Store store) {
+        this(initRandomId()); // delega en el otro constructor
+    }
+
+    public Ticket(int id) {
         this.productList = new Product[MAX_PRODUCT];
-        LocalTime now = LocalTime.now();
-        this.id = new StringBuilder(now.toString()).append(String.format("%05d", id));
         this.amount = 0;
         this.status = Status.EMPTY;
+        this.id = new StringBuilder(String.format("%05d", id));
+    }
+
+    private static int initRandomId() {
+        return (int) (Math.random() * 10000000);
     }
 
 
@@ -172,22 +179,24 @@ public class Ticket {
         Arrays.sort(productList, 0, amount, nameComp);
     }
 
-    public String getStatus(){
+    public String getStatus() {
         String str;
-        switch (this.status){
+        switch (this.status) {
             case EMPTY:
-                str="Empty";
+                str = "Empty";
                 break;
             case ACTIVE:
-                str="Active";
+                str = "Active";
+                break;
             case CLOSED:
-                str="Closed";
+                str = "Closed";
                 break;
             default:
-                str="Error, status is undefined";
+                str = "Error, status is undefined";
                 break;
         }
         return str;
     }
+
 
 }

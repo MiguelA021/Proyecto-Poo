@@ -3,6 +3,7 @@ package upm.etsisi.poo.es.Commands;
 import upm.etsisi.poo.es.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.Ticket;
+import upm.etsisi.poo.es.Casher;
 
 public class TicketCommand implements Command {
 
@@ -13,7 +14,7 @@ public class TicketCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "ticket add|remove|print ...  - ticket management";
+        return "ticket add|remove|print|list|new ...  - ticket management";
     }
 
     @Override
@@ -34,6 +35,12 @@ public class TicketCommand implements Command {
                 break;
             case "print":
                 ticketPrint(ticket);
+                break;
+            case "list":
+                store.ticketList();
+                break;
+            case "new":
+                ticketNew(args, store);
                 break;
             default:
                 System.out.println(INCORRECT);
@@ -84,5 +91,55 @@ public class TicketCommand implements Command {
             System.out.println(printed);
             System.out.println("ticket print: ok");
         }
+    }
+
+    private void ticketNew(String[] args, Store store) {
+        // Formatos válidos:
+        //  ticket new <cashId> <userId>
+        //  ticket new <id> <cashId> <userId>
+        if (args.length != 4 && args.length != 5) {
+            System.out.println(INCORRECT);
+            return;
+        }
+
+        Integer ticketId = null;
+        int cashId;
+        String userId; // de momento solo lo leemos creo
+
+        try {
+            if (args.length == 4) {
+                // ticket new <cashId> <userId>
+                cashId = Integer.parseInt(args[2]);
+                userId = args[3];
+            } else {
+                // ticket new <id> <cashId> <userId>
+                ticketId = Integer.valueOf(args[2]);
+                cashId = Integer.parseInt(args[3]);
+                userId = args[4];
+            }
+        } catch (NumberFormatException e) {
+            System.out.println(INCORRECT);
+            return;
+        }
+
+        Casher casher = store.getCasher(cashId);
+        if (casher == null) {
+            System.out.println(Store.CASHER_NOT_FOUND);
+            return;
+        }
+
+
+        if (ticketId == null) {
+            ticketId = casher.generateTicketId();
+        } else if (casher.hasTicket(ticketId)) {
+            System.out.println(ID_REPEAT);
+            return;
+        }
+
+        Ticket t = new Ticket(ticketId);
+        casher.addTicket(ticketId, t);
+
+        System.out.println("ticket new: ok");
+        System.out.println("Ticket id: " + ticketId + " (cashId: " + cashId + ", userId: " + userId + ")");
     }
 }

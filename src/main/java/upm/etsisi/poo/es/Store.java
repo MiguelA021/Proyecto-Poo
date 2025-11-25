@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class Store {
     int MAX_PRODUCT = 200;
@@ -15,6 +16,8 @@ public class Store {
 
     public Store() {
         this.productList = new Product[MAX_PRODUCT];
+        this.cashers = new TreeMap<>();
+        this.customers = new TreeMap<>();
     }
 
     public Product getProduct(int prodId) {
@@ -72,7 +75,6 @@ public class Store {
         return done;
     }
 
-
     /**
      * The method adds the client if the casher given was found
      *
@@ -97,8 +99,11 @@ public class Store {
      * @param id the ID of the casher
      * @return the method returns the casher if it has been  found
      */
-    private Casher searchCasherById(int id) {
-        return cashers.get(id);
+    private Casher searchCasherById(int id) {return cashers.get(id); }
+
+    public Customer getCustomerByDni(String dni) {
+        int id = dniToId(dni);
+        return customers.get(id);
     }
 
     /**
@@ -318,5 +323,16 @@ public class Store {
         return resul;
     }
 
+    public void ticketList() {
+        for (Map.Entry<Integer, Casher> entry : cashers.entrySet()) {
+            Casher casher = entry.getValue();
+            System.out.print(casher.listTickets());
+        }
+        System.out.println("ticket list: ok");
+    }
+
+    public Casher getCasher(int cashId) {
+        return cashers.get(cashId);
+    }
 
 }
