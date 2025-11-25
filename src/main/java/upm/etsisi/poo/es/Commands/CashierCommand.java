@@ -10,6 +10,7 @@ public class CashierCommand implements Command {
     return "Cashier";
   }
 
+
   @Override
   public String getDescription() {
     return "cashier add|remove|list|tickets ...  - cashier management";

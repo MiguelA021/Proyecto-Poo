@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Comparator;
 
+
 public class Store {
   int MAX_PRODUCT = 200;
   Product[] productList;
