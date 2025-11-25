@@ -1,7 +1,7 @@
 package upm.etsisi.poo.es.Commands;
 
 import upm.etsisi.poo.es.Store;
-import upm.etsisi.poo.es.User.Casher;
+import upm.etsisi.poo.es.User.Cashier;
 
 public class CashierCommand implements Command {
 
@@ -104,7 +104,7 @@ public class CashierCommand implements Command {
       for (int i = 2; i < casherId.length(); i++) {
         casherIdGood.concat(Character.toString(casherId.charAt(i)));
       }
-      Casher casher = store.searchCasherById(Integer.parseInt(casherIdGood));
+      Cashier casher = store.searchCasherById(Integer.parseInt(casherIdGood));
       casher.listTickets();
     } catch (NullPointerException e) {
       System.out.println(INCORRECT);
