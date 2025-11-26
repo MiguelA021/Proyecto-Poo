@@ -71,7 +71,7 @@ public class Cashier extends User {
   }
 
   public String toString() {
-    return "Name of the cahser: " + name + "Id: " + UPM_WORKER + id + " Email: " + email + "\n";
+    return "Cash{identifier='"+UPM_WORKER+id+"', name='"+name+"', email='"+email+"'}\n";
   }
 
   /**
