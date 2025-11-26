@@ -12,34 +12,31 @@ enum Status {
 
 public class Ticket {
   final static int MAX_PRODUCT = 100;
+  public static final String ERROR_FULL = "ERROR: Full Ticket (100 products max)";
   Product[] productList;
   int amount;
   private StringBuilder id;
   Comparator<Product> nameComp = Comparator.comparing(Product::getName);
   private Status status;
 
-  public Ticket(int id) { // Aaron lo ha implementado con un int id en vez de una Store, ver cual es mejor
+  public Ticket(Integer id) {
     this.productList = new Product[MAX_PRODUCT];
     LocalTime now = LocalTime.now();
-    this.id = new StringBuilder(now.toString()).append(String.format("%05d", id));
+    if (id != null) {
+      this.id = new StringBuilder(now.toString()).append(String.format("%05d", id));
+    } else {
+      this.id = new StringBuilder(now.toString()).append(String.format("%05d", initRandomId()));
+    }
     this.amount = 0;
     this.status = Status.EMPTY;
   }
 
+  private static int initRandomId() {
+    return (int) (Math.random() * 10000000);
+  }
+
   public boolean ticketAdd(int proId, Store store, int amount, ArrayList<String> personalizaciones) {
     boolean resul;
-    //
-    //
-    //
-    //
-    //
-    //HACER LAS PERSONALIZACIONES HIJOS DE SU MADRE
-    //
-    //
-    //
-    //
-    //
-    //
 
     if (this.status != Status.CLOSED) {
       Product productoEncontrado = store.getProduct(proId);
@@ -54,13 +51,16 @@ public class Ticket {
         }
         int i = 0;
         while (i < amount && this.amount < MAX_PRODUCT) {
-          if(personalizaciones != null){
-            double newPrice = productoEncontrado.getPrice() + (productoEncontrado.getPrice()*0.1)*personalizaciones.size();
-            Product productoPersonalizado = new Product(proId, productoEncontrado.getName(), productoEncontrado.getCategory(), newPrice, personalizaciones);
+          if (personalizaciones != null) {
+            double newPrice = productoEncontrado.getPrice()
+                + (productoEncontrado.getPrice() * 0.1) * personalizaciones.size();
+            Product productoPersonalizado = new Product(proId, productoEncontrado.getName(),
+                productoEncontrado.getCategory(), newPrice, personalizaciones.size());
             productList[this.amount] = productoPersonalizado;
-          }else{
+          } else {
             productList[this.amount] = productoEncontrado;
           }
+
           this.amount++;
           i++;
         }
@@ -90,7 +90,6 @@ public class Ticket {
     Product product = null;
     int iterations = this.amount;
     if (this.status != Status.CLOSED) {
-      boolean removed = false;
       if (this.amount == 0) {
         System.out.println("ERROR: No products in the ticket");
 
@@ -119,7 +118,6 @@ public class Ticket {
             }
           }
         }
-        removed = comprobation;
         sort();
         if (iterations == this.amount) {
           System.out.println("ERROR: this product does not exist.");

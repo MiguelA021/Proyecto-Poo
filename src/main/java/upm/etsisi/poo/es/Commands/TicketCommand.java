@@ -33,11 +33,13 @@ public class TicketCommand implements Command {
         ticketAdd(args, store);
         break;
       case "remove":
-        ticketRemove(args,store);
+        ticketRemove(args, store);
         break;
       case "print":
-        ticketPrint(args,store);
+        ticketPrint(args, store);
         break;
+      case "list":
+        store.ticketList();
       case "new":
         ticketNew(args, store);
       default:
@@ -63,7 +65,7 @@ public class TicketCommand implements Command {
       }
       Cashier cashier = store.searchCasherById(Integer.parseInt(casherIdGood));
       Ticket ticket = cashier.getTicketById(ticketId);
-      if(args.length > 5){
+      if (args.length > 5) {
         ArrayList<String> personalizaciones = new ArrayList<String>();
         for (int i = 5; i < args.length; i++) {
           String personalizacion = args[i].replaceAll("--p", "");
@@ -126,26 +128,33 @@ public class TicketCommand implements Command {
   }
 
   private void ticketNew(String[] args, Store store) {
-    if (args.length == 5) {
-      String casherId = args[3];
-      String casherIdGood = "";
-      for (int i = 2; i < casherId.length(); i++) {
-        casherIdGood.concat(Character.toString(casherId.charAt(i)));
-      }
-      int userId = store.dniToId(args[4]);
-      int id = Integer.parseInt(args[2]);
-      store.addTicketOnCasher(id, Integer.parseInt(casherIdGood), userId);
-    } else if (args.length == 4) {
-      String casherId = args[2];
-      String casherIdGood = "";
-      for (int i = 2; i < casherId.length(); i++) {
-        casherIdGood.concat(Character.toString(casherId.charAt(i)));
-      }
-      int userId = store.dniToId(args[3]);
-      store.addTicketOnCasher(null, Integer.parseInt(casherIdGood), userId);
-    } else {
+    if (args.length != 4 && args.length != 5) {
       System.out.println(INCORRECT);
+      return;
     }
+
+    Integer ticketId = null;
+    int cashId;
+    int userId; // de momento solo lo leemos creo
+
+    try {
+      if (args.length == 4) {
+        // ticket new <cashId> <userId>
+        ticketId = null;
+        cashId = Integer.parseInt(args[2]);
+        userId = Integer.parseInt(args[3]);
+      } else {
+        // ticket new <id> <cashId> <userId>
+        ticketId = Integer.valueOf(args[2]);
+        cashId = Integer.parseInt(args[3]);
+        userId = Integer.parseInt(args[4]);
+      }
+    } catch (NumberFormatException e) {
+      System.out.println(INCORRECT);
+      return;
+    }
+
+    store.addTicketOnCasher(ticketId, cashId, userId);
 
   }
 }

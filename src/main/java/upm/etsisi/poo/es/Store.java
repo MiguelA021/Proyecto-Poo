@@ -5,7 +5,7 @@ import upm.etsisi.poo.es.User.Customer;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Comparator;
-
+import java.util.Map;
 
 public class Store {
   int MAX_PRODUCT = 200;
@@ -42,16 +42,14 @@ public class Store {
   public boolean addFood(int id, String name, int price, String expiryDate, int maxPeople) {
     boolean done = false;
     boolean found = false;
-    Product food = new Product.Food(id, name, price, expiryDate);
-    if (food.getStateFood(maxPeople)) {
-      for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
-        if (productList[i] != null && productList[i].getId() == food.getId()) {
-          found = true;
-        } else {
-          if (productList[i] == null) {
-            productList[i] = food;
-            done = true;
-          }
+    Product food = new Product.Food(id, name, price, expiryDate, maxPeople);
+    for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
+      if (productList[i] != null && productList[i].getId() == food.getId()) {
+        found = true;
+      } else {
+        if (productList[i] == null) {
+          productList[i] = food;
+          done = true;
         }
       }
     }
@@ -61,16 +59,14 @@ public class Store {
   public boolean addMeeting(int id, String name, int price, String expiryDate, int maxPeople) {
     boolean done = false;
     boolean found = false;
-    Product meeting = new Product.Meeting(id, name, price, expiryDate);
-    if (meeting.getStateMeeting(maxPeople)) {
-      for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
-        if (productList[i] != null && productList[i].getId() == meeting.getId()) {
-          found = true;
-        } else {
-          if (productList[i] == null) {
-            productList[i] = meeting;
-            done = true;
-          }
+    Product meeting = new Product.Meeting(id, name, price, expiryDate, maxPeople);
+    for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
+      if (productList[i] != null && productList[i].getId() == meeting.getId()) {
+        found = true;
+      } else {
+        if (productList[i] == null) {
+          productList[i] = meeting;
+          done = true;
         }
       }
     }
@@ -164,7 +160,9 @@ public class Store {
   public void addTicketOnCasher(Integer idTicket, int idCasher, int idCustomer) {
     if (cashers.containsKey(idCasher) && customers.containsKey(idCustomer)) {
       cashers.get(idCasher).addTicket(idTicket);
-      customers.get(idCustomer).addTicket(idTicket, cashers.get(idCasher).getTicketById(idTicket));
+      customers.get(idCustomer).addTicket(idTicket, cashers.get(idCasher).getTicketById(idTicket));// mirar problemas
+                                                                                                   // con que el ticket
+                                                                                                   // sea null.
     } else {
       if (cashers.containsKey(idCasher)) {
         System.out.println(CASHER_NOT_FOUND);
@@ -216,8 +214,12 @@ public class Store {
    */
   public void listCashers() {
     ArrayList<Cashier> listSort = cashersToList();
-    for (Cashier cashier : listSort) {
-      System.out.println(cashier.toString());
+    if (listSort != null) {
+      for (Cashier cashier : listSort) {
+        System.out.println(cashier.toString());
+      }
+    } else {
+      System.out.println("no cashiers in store");
     }
   }
 
@@ -363,4 +365,18 @@ public class Store {
     return resul;
   }
 
+  public void ticketList() {
+    for (Map.Entry<Integer, Cashier> entry : cashers.entrySet()) {
+      Cashier casher = entry.getValue();
+      System.out.print(casher.listTickets());
+    }
+    System.out.println("ticket list: ok");
+  }
+
+  public Cashier getCasher(int cashId) {
+    return cashers.get(cashId);
+  }
+
 }
+
+// ticketList??
