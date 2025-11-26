@@ -2,6 +2,7 @@ package upm.etsisi.poo.es;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -26,8 +27,20 @@ public class Ticket {
     this.status = Status.EMPTY;
   }
 
-  public boolean ticketAdd(int proId, Store store, int amount) {
-    boolean resul = false;
+  public boolean ticketAdd(int proId, Store store, int amount, ArrayList<String> personalizaciones) {
+    boolean resul;
+    //
+    //
+    //
+    //
+    //
+    //HACER LAS PERSONALIZACIONES HIJOS DE SU MADRE
+    //
+    //
+    //
+    //
+    //
+    //
 
     if (this.status != Status.CLOSED) {
       Product productoEncontrado = store.getProduct(proId);
@@ -61,7 +74,13 @@ public class Ticket {
         }
         int i = 0;
         while (i < amount && this.amount < MAX_PRODUCT) {
-          productList[this.amount] = productoEncontrado;
+          if(personalizaciones != null){
+            double newPrice = productoEncontrado.getPrice() + (productoEncontrado.getPrice()*0.1)*personalizaciones.size();
+            Product productoPersonalizado = new Product(proId, productoEncontrado.getName(), productoEncontrado.getCategory(), newPrice, personalizaciones);
+            productList[this.amount] = productoPersonalizado;
+          }else{
+            productList[this.amount] = productoEncontrado;
+          }
           this.amount++;
           i++;
         }

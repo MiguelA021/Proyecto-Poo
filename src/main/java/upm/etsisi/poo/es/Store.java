@@ -1,17 +1,20 @@
 package upm.etsisi.poo.es;
 
+import upm.etsisi.poo.es.User.Cashier;
+import upm.etsisi.poo.es.User.Customer;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Comparator;
-import java.util.LinkedList;
+
 
 public class Store {
   int MAX_PRODUCT = 200;
   Product[] productList;
-  TreeMap<Integer, Casher> cashers;
+  TreeMap<Integer, Cashier> cashers;
   TreeMap<Integer, Customer> customers;
   public static final String CASHER_NOT_FOUND = "The casher given was not found";
-  public static final String ID_ERROR = "The id given has been already used";
+  public static final String CUSTOMER_NOT_FOUND = "The customer given was not found";
+  public static final String ID_ERROR = "The id given has already been  used";
 
   public Store() {
     this.productList = new Product[MAX_PRODUCT];
@@ -76,17 +79,17 @@ public class Store {
 
   /**
    * The method adds the client if the casher given was found
-   *
+   * 
    * @param name   the name of the new client
    * @param dni    the ID number of the new client
    * @param email  the eamail of the new client
    * @param cashId the id of the casher given
    */
   public void addCustomer(String name, String dni, String email, int cashId) {
-    Casher casher = searchCasherById(cashId);
-    if (casher != null) {
+    Cashier cashier = searchCasherById(cashId);
+    if (cashier != null) {
       int id = dniToId(dni);
-      customers.put(id, new Customer(email, name, id, casher));
+      customers.put(id, new Customer(email, name, id, cashier));
     } else {
       System.out.println(CASHER_NOT_FOUND);
     }
@@ -94,21 +97,21 @@ public class Store {
 
   /**
    * The method searches by id the casher
-   *
+   * 
    * @param id the ID of the casher
    * @return the method returns the casher if it has been found
    */
-  private Casher searchCasherById(int id) {
+  public Cashier searchCasherById(int id) {
     return cashers.get(id);
   }
 
   /**
    * The method turns the ID card number into the id without letters
-   *
+   * 
    * @param dni the ID cad number given
    * @return the method returns the id without letters
    */
-  private int dniToId(String dni) {
+  public int dniToId(String dni) {
     int id = 0;
     String[] dniToArray = dni.split("");
     for (int i = 0; i < dniToArray.length - 1; i++) {
@@ -120,7 +123,7 @@ public class Store {
 
   /**
    * The method removes the customer
-   *
+   * 
    * @param dni the ID of the customer given
    * @return the methods returns true if the object was found and removed
    */
@@ -136,8 +139,12 @@ public class Store {
    */
   public void listCustomers() {
     ArrayList<Customer> listSort = customersToList();
-    for (Customer customer : listSort) {
-      System.out.println(customer.toString());
+    if (listSort != null) {
+      for (Customer customer : listSort) {
+        System.out.println(customer.toString());
+      }
+    } else {
+      System.out.println("No customers in the store");
     }
   }
 
@@ -148,9 +155,30 @@ public class Store {
   }
 
   /**
+   * The method adds the ticket on the casher
+   * 
+   * @param idTicket the id of the ticket (if it's null, it generates it
+   *                 automatically)
+   * @param idCasher the id of the casher
+   */
+  public void addTicketOnCasher(Integer idTicket, int idCasher, int idCustomer) {
+    if (cashers.containsKey(idCasher) && customers.containsKey(idCustomer)) {
+      cashers.get(idCasher).addTicket(idTicket);
+      customers.get(idCustomer).addTicket(idTicket, cashers.get(idCasher).getTicketById(idTicket));
+    } else {
+      if (cashers.containsKey(idCasher)) {
+        System.out.println(CASHER_NOT_FOUND);
+      }
+      if (customers.containsKey(idCustomer)) {
+        System.out.println(CUSTOMER_NOT_FOUND);
+      }
+    }
+  }
+
+  /**
    * The method adds the casher if the id (if not given, the method itself
    * generates a random id) given hasn't been already used
-   *
+   * 
    * @param id    the id (if not given it generates automatically)
    * @param name  the name of the casher
    * @param email the email of the casher
@@ -164,7 +192,7 @@ public class Store {
       } while (cashers.containsKey(id));
     }
     if (!cashers.containsKey(id)) {
-      cashers.put(id, new Casher(email, name, id));
+      cashers.put(id, new Cashier(email, name, id));
     } else {
       System.out.println(ID_ERROR);
       resul = false;
@@ -174,7 +202,7 @@ public class Store {
 
   /**
    * The method removes the casher given by its id
-   *
+   * 
    * @param id the id given
    * @return it returns true if the casher has been removed successfully
    */
@@ -187,24 +215,25 @@ public class Store {
    * Store
    */
   public void listCashers() {
-    ArrayList<Casher> listSort = cashersToList();
-    for (Casher casher : listSort) {
-      System.out.println(casher.toString());
+    ArrayList<Cashier> listSort = cashersToList();
+    for (Cashier cashier : listSort) {
+      System.out.println(cashier.toString());
     }
   }
 
-  private ArrayList<Casher> cashersToList() {
-    ArrayList<Casher> resul = new ArrayList<>(cashers.values());
-    resul.sort(Comparator.comparing(Casher::getName));
+  private ArrayList<Cashier> cashersToList() {
+    ArrayList<Cashier> resul = new ArrayList<>(cashers.values());
+    resul.sort(Comparator.comparing(Cashier::getName));
     return resul;
   }
 
   /**
    * The method list the tickets of the casher given by the id
+   * 
    * @param id the id of the casher
    */
-  public void listTicketsOnCasher(int id){
-    if (cashers.containsKey(id)){
+  public void listTicketsOnCasher(int id) {
+    if (cashers.containsKey(id)) {
       System.out.print(cashers.get(id).listTickets());
     } else {
       System.out.println(ID_ERROR);
@@ -213,7 +242,7 @@ public class Store {
 
   /**
    * The method adds a product tho the productList if there is below 100 products
-   *
+   * 
    * @param product the product which we want to add it
    * @return returns true if the method added the product if not, it returns false
    */
@@ -235,7 +264,7 @@ public class Store {
 
   /**
    * The method removes the product with the id given
-   *
+   * 
    * @param id the id of the product we want to remove
    * @return it returns true if the product with the id given was removed, if not
    *         it returns false
