@@ -4,17 +4,19 @@ import upm.etsisi.poo.es.Ticket;
 import java.util.TreeMap;
 
 public class Customer extends User {
-    private Cashier cashier;
+    private final int cashierId;
+    private final char letterId;
 
-    public Customer (String email, String name, int id, Cashier cashier){
+    public Customer (String email, String name, int id,char letterId, int cashierId){
         this.email=email;
         this.name =name;
-        this.cashier = cashier;
+        this.cashierId = cashierId;
         this.id=id;
+        this.letterId=letterId;
         tickets=new TreeMap<>();
     }
     public String toString(){
-        return "Name of the customer: "+ name +". Email: "+email+"Id: "+id+" Registered by the casher: {"+ cashier.toString()+"}";
+        return "Client{identifier='"+id+letterId+"', name='"+name+"', email='"+email+"', cash=UW"+cashierId+"}\n";
     }
 
     public void addTicket(Integer id, Ticket ticket) {

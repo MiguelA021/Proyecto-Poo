@@ -37,7 +37,6 @@ public class Ticket {
 
   public boolean ticketAdd(int proId, Store store, int amount, ArrayList<String> personalizaciones) {
     boolean resul;
-
     if (this.status != Status.CLOSED) {
       Product productoEncontrado = store.getProduct(proId);
       int before = this.amount;
@@ -70,7 +69,7 @@ public class Ticket {
           System.out.println("ticket add: ok");
         } else {
           resul = false;
-          System.out.println("ERROR: Full Ticket (100 products max)");
+          System.out.println(ERROR_FULL);
         }
 
       }

@@ -82,10 +82,9 @@ public class Store {
    * @param cashId the id of the casher given
    */
   public void addCustomer(String name, String dni, String email, int cashId) {
-    Cashier cashier = searchCasherById(cashId);
-    if (cashier != null) {
+    if (cashers.containsKey(cashId)) {
       int id = dniToId(dni);
-      customers.put(id, new Customer(email, name, id, cashier));
+      customers.put(id, new Customer(email, name, id, dni.charAt(8),cashId));
     } else {
       System.out.println(CASHER_NOT_FOUND);
     }
