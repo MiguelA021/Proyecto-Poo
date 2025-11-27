@@ -1,6 +1,6 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Product;
+import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.type;
 
@@ -13,7 +13,7 @@ public class ProductCommand implements Command {
 
   @Override
   public String getDescription() {
-    return "prod add|list|update|remove ...  - product management";
+    return "prod add|addFood|addMeeting|list|update|remove ...  - product management";
   }
 
   @Override
@@ -28,6 +28,12 @@ public class ProductCommand implements Command {
     switch (sub) {
       case "add":
         prodAdd(fullLine, args, store);
+        break;
+      case "addFood":
+        prodAddFood(args, store);
+        break;
+      case "addMeeting":
+        prodAddMeeting(args, store);
         break;
       case "list":
         store.prodList();
@@ -142,6 +148,62 @@ public class ProductCommand implements Command {
       } else {
         System.out.println(updated.toString());
         System.out.println("prod update: ok");
+      }
+    } catch (Exception e) {
+      System.out.println(INCORRECT);
+    }
+  }
+
+  private void prodAddFood(String[] args, Store store) {
+    // prod addFood <id> "<name>" <price> <expiration> <max_people>
+    if (args.length != 7) {
+      System.out.println(INCORRECT);
+      return;
+    }
+
+    try {
+      int id = Integer.parseInt(args[2]);
+      String name = args[3];
+      int price = Integer.parseInt(args[4]);
+      String expiryDate = args[5];
+      int maxPeople = Integer.parseInt(args[6]);
+
+      boolean done = store.addFood(id, name, price, expiryDate, maxPeople);
+
+      if (!done) {
+        System.out.println(ID_REPEAT);
+      } else {
+        Product p = store.getProduct(id);
+        System.out.println(p.toString());
+        System.out.println("prod addFood: ok");
+      }
+    } catch (Exception e) {
+      System.out.println(INCORRECT);
+    }
+  }
+
+  private void prodAddMeeting(String[] args, Store store) {
+    // prod addFood <id> "<name>" <price> <expiration> <max_people>
+    if (args.length != 7) {
+      System.out.println(INCORRECT);
+      return;
+    }
+
+    try {
+      int id = Integer.parseInt(args[2]);
+      String name = args[3];
+      int price = Integer.parseInt(args[4]);
+      String expiryDate = args[5];
+      int maxPeople = Integer.parseInt(args[6]);
+
+      boolean done = store.addMeeting(id, name, price, expiryDate, maxPeople);
+
+      if (!done) {
+        System.out.println(ID_REPEAT);
+      } else {
+        Product p = store.getProduct(id);
+        System.out.println(p.toString());
+        System.out.println("prod addFood: ok");
       }
     } catch (Exception e) {
       System.out.println(INCORRECT);

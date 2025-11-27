@@ -1,5 +1,7 @@
 package upm.etsisi.poo.es;
 
+import upm.etsisi.poo.es.Product.Product;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -7,7 +9,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 enum Status {
-  EMPTY, ACTIVE, CLOSED;
+  EMPTY, ACTIVE, CLOSED
 }
 
 public class Ticket {
@@ -16,6 +18,7 @@ public class Ticket {
   Product[] productList;
   int amount;
   private StringBuilder id;
+  private int tickId;
   Comparator<Product> nameComp = Comparator.comparing(Product::getName);
   private Status status;
 
@@ -24,16 +27,15 @@ public class Ticket {
     LocalTime now = LocalTime.now();
     if (id != null) {
       this.id = new StringBuilder(now.toString()).append(String.format("%05d", id));
-    } else {
-      this.id = new StringBuilder(now.toString()).append(String.format("%05d", initRandomId()));
+      this.tickId = id;
     }
     this.amount = 0;
     this.status = Status.EMPTY;
   }
 
-  private static int initRandomId() {
-    return (int) (Math.random() * 10000000);
-  }
+ public int getId(){
+      return this.tickId;
+ }
 
   public boolean ticketAdd(int proId, Store store, int amount, ArrayList<String> personalizaciones) {
     boolean resul;
@@ -48,6 +50,15 @@ public class Ticket {
         if (this.amount == 0) {
           this.status = Status.ACTIVE;
         }
+        /*
+         * if (productoEncontrado.foodOrMetting() == 1) {
+         *
+         * productoEncontrado.setPersonasActuales(amount);
+         * productList[this.amount] = productoEncontrado;
+         * this.amount++;
+         * System.out.println("ticket add: ok");
+         * } else {
+         */
         int i = 0;
         while (i < amount && this.amount < MAX_PRODUCT) {
           if (personalizaciones != null) {
@@ -71,6 +82,8 @@ public class Ticket {
           resul = false;
           System.out.println(ERROR_FULL);
         }
+
+        // }
 
       }
     } else {
@@ -190,9 +203,6 @@ public class Ticket {
     return sc.toString();
   }
 
-  public Status setStatus(String status) {
-    return this.status = Status.valueOf(status);
-  }
 
   /**
    * The method sorts the names alphabetically

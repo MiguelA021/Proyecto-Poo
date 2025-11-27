@@ -1,5 +1,7 @@
 package upm.etsisi.poo.es;
 
+import upm.etsisi.poo.es.Product.Event;
+import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.User.Customer;
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ public class Store {
 
   public Store() {
     this.productList = new Product[MAX_PRODUCT];
+    this.cashers = new TreeMap<Integer, Cashier>();
+    this.customers = new TreeMap<Integer, Customer>();
   }
 
   public Product getProduct(int prodId) {
@@ -42,7 +46,7 @@ public class Store {
   public boolean addFood(int id, String name, int price, String expiryDate, int maxPeople) {
     boolean done = false;
     boolean found = false;
-    Product food = new Product.Food(id, name, price, expiryDate, maxPeople);
+    Event food = new Food(id, name, price, expiryDate, maxPeople);
     for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
       if (productList[i] != null && productList[i].getId() == food.getId()) {
         found = true;
@@ -59,7 +63,7 @@ public class Store {
   public boolean addMeeting(int id, String name, int price, String expiryDate, int maxPeople) {
     boolean done = false;
     boolean found = false;
-    Product meeting = new Product.Meeting(id, name, price, expiryDate, maxPeople);
+    Product meeting = new Meeting(id, name, price, expiryDate, maxPeople);
     for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
       if (productList[i] != null && productList[i].getId() == meeting.getId()) {
         found = true;
@@ -158,6 +162,9 @@ public class Store {
    */
   public void addTicketOnCasher(Integer idTicket, int idCasher, int idCustomer) {
     if (cashers.containsKey(idCasher) && customers.containsKey(idCustomer)) {
+        if(idTicket == null){
+                idTicket = initRandomId();
+        }
       cashers.get(idCasher).addTicket(idTicket);
       customers.get(idCustomer).addTicket(idTicket, cashers.get(idCasher).getTicketById(idTicket));// mirar problemas
                                                                                                    // con que el ticket
@@ -172,7 +179,11 @@ public class Store {
     }
   }
 
-  /**
+    private static int initRandomId() {
+        return (int) (Math.random() * 10000000);
+    }
+
+    /**
    * The method adds the casher if the id (if not given, the method itself
    * generates a random id) given hasn't been already used
    * 

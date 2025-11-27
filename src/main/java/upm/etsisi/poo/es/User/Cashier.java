@@ -42,15 +42,11 @@ public class Cashier extends User {
    *           automatically)
    */
   public void addTicket(Integer id) {
-    if (id == null) {
-      do {
-        id = (int) (Math.random() * 100000);
-      } while (tickets.containsKey(id));
-    }
     if (tickets.containsKey(id)) {
       System.out.println(ID_ERROR);
     } else {
-      tickets.put(id, new Ticket(id));
+        Ticket ticket = new Ticket(id);
+      tickets.put(ticket.getId(), ticket);
     }
   }
 

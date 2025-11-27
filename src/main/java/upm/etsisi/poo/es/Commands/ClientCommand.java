@@ -5,7 +5,7 @@ import upm.etsisi.poo.es.Store;
 public class ClientCommand implements Command {
     @Override
     public String getName() {
-        return "User";
+        return "client";
     }
 
     @Override
@@ -49,11 +49,9 @@ public class ClientCommand implements Command {
             String Dni = args[3];
             String email = args[4];
             String casherId = args[5];
-            String casherIdGood = "";
-            for (int i = 2; i < casherId.length(); i++) {
-                casherIdGood.concat(Character.toString(casherId.charAt(i)));
-            }
-            store.addCustomer(name, Dni, email, Integer.parseInt(casherIdGood));
+            int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
+
+            store.addCustomer(name, Dni, email,casherIdGood);
         } catch (NumberFormatException e) {
             System.out.println(INCORRECT);
         }
