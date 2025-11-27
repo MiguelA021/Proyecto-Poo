@@ -1,13 +1,13 @@
 package upm.etsisi.poo.es;
 
-import upm.etsisi.poo.es.Product.Event;
-import upm.etsisi.poo.es.Product.Product;
+import upm.etsisi.poo.es.Product.*;
 import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.User.Customer;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.stream.BaseStream;
 
 public class Store {
   int MAX_PRODUCT = 200;
@@ -325,9 +325,12 @@ public class Store {
     Product resul = null;
     for (int i = 0; i < MAX_PRODUCT && !done; i++) {
       if (productList[i].getId() == id) {
-        productList[i].SetCategory(category);
-        resul = productList[i];
-        done = true;
+          if(productList[i] instanceof BasicProduct) {
+              BasicProduct basic = (BasicProduct) productList[i];
+              basic.SetCategory(category);
+              resul = basic;
+              done = true;
+          }
       }
     }
     return resul;

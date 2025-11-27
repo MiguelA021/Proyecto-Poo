@@ -13,6 +13,13 @@ public abstract class Product {
     protected final static String NAME_NULL_ERROR = "The name shouldn't be empty";
     protected final static String PRICE_POSITIVE_ERROR = "WARNING: The price should be a positive number";
     private ArrayList<String> personalizaciones;
+
+    public abstract int getId();
+    public abstract String getName();
+    public abstract double getPrice();
+    public abstract void setPrice(double price);
+    public abstract void setName(String name);
+
 /*
     public Product(int id, String name, type category, double price, int maxPer) {// maxpers son las maximas
         // personalizaciones

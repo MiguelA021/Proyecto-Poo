@@ -1,5 +1,6 @@
 package upm.etsisi.poo.es.Commands;
 
+import upm.etsisi.poo.es.Product.BasicProduct;
 import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.type;
@@ -75,7 +76,7 @@ public class ProductCommand implements Command {
       int id = Integer.parseInt(beforeTokens[2]);
       type category = type.valueOf(afterTokens[0]);
       double price = Double.parseDouble(afterTokens[1]);
-      Product p = new Product(id, name, category, price, 0);
+      Product p = new BasicProduct(id, name, category, price);//REVISAR
       boolean done = store.prodAdd(p);
       if (!done) {
         System.out.println(ID_REPEAT);
