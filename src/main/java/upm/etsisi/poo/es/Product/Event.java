@@ -7,9 +7,9 @@ import java.time.format.DateTimeParseException;
 
 public class Event extends Product {
 
-    private int maxPersonas;
     private int personasActuales;
     private LocalDateTime expiracyDate;
+    protected int maxPersonas = 100;
 
     public Event(int id, String name, double price, String expiryDate, int maxPersonas) {
         try {
@@ -52,5 +52,10 @@ public class Event extends Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String toString(){
+        return "Class:Food, id:" + this.id + ", name:" + this.name + ", price:" + this.price + ", date of Event:" + this.expiracyDate +
+                ", max people allowed:" + this.maxPersonas;
     }
 }

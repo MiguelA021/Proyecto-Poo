@@ -10,8 +10,7 @@ interface Command{
  +String getDescription()
  +boolean execute(String fullLine, String[] args, Store store)
 }
-
-class CommandControler{
+class CommandController{
 -Store store
 -Map<String, Command> commands
 +CommandController(Store store)
@@ -19,25 +18,21 @@ class CommandControler{
 +Map<String, Command> getCommands()
 +boolean handle(String line)
 }
-
 class CommandEcho{
 +String getName()
 +String getDescription()
 +boolean execute(String fullLine, String[] args, Store store)
 }
-
 class CommandHelp{
 +String getName()
 +String getDescription()
 +boolean execute(String fullLine, String[] args, Store store)
 }
-
 class ExitCommand{
 +String getName()
 +String getDescription()
 +boolean execute(String fullLine, String[] args, Store store)
 }
-
 class ProductCommand{
 +String getName()
 +String getDescription()
@@ -55,8 +50,24 @@ class TicketCommand{
 -void ticketPrint(String[] args, Store store)
 -void ticketNew(String[] args, Store store)
 }
-class UserCommand{
+class CashierCommand{
++String getName()
++String getDescription()
++boolean execute(String fullLine, String[] args, Store store)
+-void cashierAdd(String[] args, Store store)
+-void cashierRemove(String[] args, Store store)
+-void list(Store store)
+-void cashTickets(String[] args, Store store)
 }
+class ClientCommand{
++String getName()
++String getDescription()
++boolean execute(String fullLine, String[] args, Store store)
+-void clientAdd(String[] args, Store store)
+-void remove(String[] args, Store store)
+-void list(Store store)
+}
+
 }
 package user{
 abstract class User{
@@ -144,7 +155,6 @@ class Product{
  +String toStringFoodOrMeeting()
  +toString()
 }
-
 class Store{
  --   Attributes  --
  -{static} int MAX_PRODUCT
@@ -192,11 +202,11 @@ enum Status{
  - ACTIVE 
  - CLOSED
 }
-
-App--> Ticket : has
-App--> Store : creates
+App ..> CommandController : uses
 Ticket--> Product : contains
 Store "1" --o "200" Product : has_on_stock
+Store "0" --o "many" Customer : contains
+Store "0" --o "many" Cashier
 User <|-- Cashier
 User <|-- Customer
 Command <|.. CommandEcho
@@ -204,7 +214,18 @@ Command <|.. CommandHelp
 Command <|.. ExitCommand
 Command <|.. ProductCommand
 Command <|.. TicketCommand
+Command <|.. CashierCommand
+Command <|.. ClientCommand
+CashierCommand ..> Store
+ClientCommand ..> Store
+CommandController "0" --o "many" Command : keeps
+CommandController "0" --> "1" Store : depends
+CommandEcho ..> Store
+CommandHelp ..> Store
+ExitCommand..>Store
+ProductCommand ..> Store
+TicketCommand ..> Store
+User"0" --o "many" Ticket
 }
 @enduml
-
 

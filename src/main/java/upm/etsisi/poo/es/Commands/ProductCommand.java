@@ -71,9 +71,9 @@ public class ProductCommand implements Command {
       if (beforeTokens.length != 3 || afterTokens.length != 2) {
         System.out.println(INCORRECT);
         return;
-      }
-
-      int id = Integer.parseInt(beforeTokens[2]);
+      }                                                 //prod | addMeeting | 23457 | "Graduacion ETSISI" | 40 2025-11-21 | 30
+                                                        //prod | add | 1 | "Libro POO" | BOOK | 25
+      int id = Integer.parseInt(beforeTokens[2]);       //prod | add | 5 | "Libro POO" | BOOK | 15 | 3
       type category = type.valueOf(afterTokens[0]);
       double price = Double.parseDouble(afterTokens[1]);
       Product p = new BasicProduct(id, name, category, price);//REVISAR

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.stream.BaseStream;
 
 public class Store {
   int MAX_PRODUCT = 200;
@@ -43,10 +42,10 @@ public class Store {
   // We're going to do ckecking of maxPeople using the right now date and the
   // expiry date for knowing
   // if we can create the Food or Meeting object
-  public boolean addFood(int id, String name, int price, String expiryDate, int maxPeople) {
+  public boolean addFood(int id, String name, int price, String expiryDate, int assistants) {
     boolean done = false;
     boolean found = false;
-    Event food = new Food(id, name, price, expiryDate, maxPeople);
+    Event food = new Food(id, name, price, expiryDate);
     for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
       if (productList[i] != null && productList[i].getId() == food.getId()) {
         found = true;
@@ -63,7 +62,7 @@ public class Store {
   public boolean addMeeting(int id, String name, int price, String expiryDate, int maxPeople) {
     boolean done = false;
     boolean found = false;
-    Product meeting = new Meeting(id, name, price, expiryDate, maxPeople);
+    Product meeting = new Meeting(id, name, price, expiryDate);
     for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
       if (productList[i] != null && productList[i].getId() == meeting.getId()) {
         found = true;
@@ -88,7 +87,7 @@ public class Store {
   public void addCustomer(String name, String dni, String email, int cashId) {
     if (cashers.containsKey(cashId)) {
       int id = dniToId(dni);
-      customers.put(id, new Customer(email, name, id, dni.charAt(8),cashId));
+      customers.put(id, new Customer(email, name, dni,cashId));
     } else {
       System.out.println(CASHER_NOT_FOUND);
     }
@@ -112,10 +111,11 @@ public class Store {
    */
   public int dniToId(String dni) {
     int id = 0;
-    String[] dniToArray = dni.split("");
-    for (int i = 0; i < dniToArray.length - 1; i++) {
-      id = id * 10;
-      id += Integer.parseInt(dniToArray[i]);
+    for (char c : dni.toCharArray()) {
+        if(Character.isDigit(c)) {
+            id = id * 10;
+            id += c;
+        }
     }
     return id;
   }
@@ -158,19 +158,16 @@ public class Store {
    * 
    * @param idTicket the id of the ticket (if it's null, it generates it
    *                 automatically)
-   * @param idCasher the id of the casher
+   * @param idCashier the id of the casher
    */
-  public void addTicketOnCasher(Integer idTicket, int idCasher, int idCustomer) {
-    if (cashers.containsKey(idCasher) && customers.containsKey(idCustomer)) {
-        if(idTicket == null){
-                idTicket = initRandomId();
-        }
-      cashers.get(idCasher).addTicket(idTicket);
-      customers.get(idCustomer).addTicket(idTicket, cashers.get(idCasher).getTicketById(idTicket));// mirar problemas
-                                                                                                   // con que el ticket
-                                                                                                   // sea null.
+  public void addTicketOnCashier(Integer idTicket, int idCashier, int idCustomer) {
+    if (cashers.containsKey(idCashier) && customers.containsKey(idCustomer)) {
+      Cashier c = cashers.get(idCashier);
+      idTicket= c.addTicket(idTicket);
+      Ticket resul= cashers.get(idCashier).getTicketById(idTicket);
+      customers.get(idCustomer).addTicket(idTicket, resul);
     } else {
-      if (cashers.containsKey(idCasher)) {
+      if (cashers.containsKey(idCashier)) {
         System.out.println(CASHER_NOT_FOUND);
       }
       if (customers.containsKey(idCustomer)) {
@@ -200,7 +197,7 @@ public class Store {
       } while (cashers.containsKey(id));
     }
     if (!cashers.containsKey(id)) {
-      cashers.put(id, new Cashier(email, name, id));
+      cashers.put(id, new Cashier(email, name, id.toString()));
     } else {
       System.out.println(ID_ERROR);
       resul = false;
