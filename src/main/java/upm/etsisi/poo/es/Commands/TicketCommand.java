@@ -39,18 +39,20 @@ public class TicketCommand implements Command {
                 break;
             case "list":
                 store.ticketList();
+                break;
             case "new":
                 ticketNew(args, store);
                 break;
             default:
                 System.out.println(INCORRECT);
+                break;
         }
 
         return false;
     }
 
     private void ticketAdd(String[] args, Store store) {
-        if (args.length != 4) {
+        if (args.length != 6) {
             System.out.println(INCORRECT);
             return;
         }
@@ -112,11 +114,8 @@ public class TicketCommand implements Command {
     private void ticketPrint(String[] args, Store store) {
         int ticketId = Integer.parseInt(args[2]);
         String casherId = args[3];
-        String casherIdGood = "";
-        for (int i = 2; i < casherId.length(); i++) {
-            casherIdGood.concat(Character.toString(casherId.charAt(i)));
-        }
-        Cashier cashier = store.searchCasherById(Integer.parseInt(casherIdGood));
+        int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
+        Cashier cashier = store.searchCasherById(casherIdGood);
         Ticket ticket = cashier.getTicketById(ticketId);
         String printed = ticket.ticketPrint(true);
         if (printed.isEmpty()) {
