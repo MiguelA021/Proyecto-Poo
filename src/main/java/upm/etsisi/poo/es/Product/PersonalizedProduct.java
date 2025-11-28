@@ -4,11 +4,11 @@ import upm.etsisi.poo.es.type;
 
 import java.util.ArrayList;
 
-public class PersonalizadProduct extends BasicProduct {
+public class PersonalizedProduct extends BasicProduct {
     private int maxPers;
     private ArrayList<String> personalizaciones;
 
-    public PersonalizadProduct(int id, String name, type type, double price, int maxPers) {
+    public PersonalizedProduct(int id, String name, type type, double price, int maxPers) {
         super(id, name, type, price);
         this.maxPers = maxPers;
         this.personalizaciones = new ArrayList<String>(maxPers);
@@ -17,7 +17,7 @@ public class PersonalizadProduct extends BasicProduct {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if (this.personalizaciones.get(0) != null) {
+        if (!this.personalizaciones.isEmpty()) {
             sb.append(super.toString());
             sb.append(" maxPerspnalizaciones:" + maxPers);
             int i = 0;

@@ -1,14 +1,10 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Product.BasicProduct;
-import upm.etsisi.poo.es.Product.Event;
-import upm.etsisi.poo.es.Product.PersonalizadProduct;
+import upm.etsisi.poo.es.Product.PersonalizedProduct;
 import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.Ticket;
-
-import java.util.ArrayList;
 
 public class TicketCommand implements Command {
 
@@ -43,18 +39,20 @@ public class TicketCommand implements Command {
                 break;
             case "list":
                 store.ticketList();
+                break;
             case "new":
                 ticketNew(args, store);
                 break;
             default:
                 System.out.println(INCORRECT);
+                break;
         }
 
         return false;
     }
 
     private void ticketAdd(String[] args, Store store) {
-        if (args.length != 4) {
+        if (args.length != 6) {
             System.out.println(INCORRECT);
             return;
         }
@@ -68,8 +66,8 @@ public class TicketCommand implements Command {
             Ticket ticket = cashier.getTicketById(ticketId);
             Product product = store.getProduct(prodId);
 
-            if(product instanceof PersonalizadProduct){
-                PersonalizadProduct personalizadProduct  = ( PersonalizadProduct) product;
+            if(product instanceof PersonalizedProduct){
+                PersonalizedProduct personalizadProduct  = (PersonalizedProduct) product;
                 if(args.length > 5){
                     for (int i = 5; i < args.length; i++) {
                         String personalizacion = args[i].replaceAll("--p", "");
@@ -116,11 +114,8 @@ public class TicketCommand implements Command {
     private void ticketPrint(String[] args, Store store) {
         int ticketId = Integer.parseInt(args[2]);
         String casherId = args[3];
-        String casherIdGood = "";
-        for (int i = 2; i < casherId.length(); i++) {
-            casherIdGood.concat(Character.toString(casherId.charAt(i)));
-        }
-        Cashier cashier = store.searchCasherById(Integer.parseInt(casherIdGood));
+        int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
+        Cashier cashier = store.searchCasherById(casherIdGood);
         Ticket ticket = cashier.getTicketById(ticketId);
         String printed = ticket.ticketPrint(true);
         if (printed.isEmpty()) {

@@ -64,7 +64,7 @@ public class BasicProduct extends Product {
 
     public double getDiscountedPrice() {
         double discountRate;
-        switch (this.category) {//no hace falta MERCH si el descuento es 0.0
+        switch (this.category) {//no hace falta MERCH/ si el descuento es 0.0
             case STATIONERY:
                 discountRate = 0.05;
                 break;
@@ -82,6 +82,10 @@ public class BasicProduct extends Product {
         }
 
         return price * (1 - discountRate);
+    }
+
+    public String toString(){
+        return "{class:Product, id:" + this.id + ", name:" + this.name + ", category: " + this.category + ", price:" + this.price + "}";
     }
 
 }
