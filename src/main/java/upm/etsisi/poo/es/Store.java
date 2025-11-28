@@ -43,10 +43,10 @@ public class Store {
   // We're going to do ckecking of maxPeople using the right now date and the
   // expiry date for knowing
   // if we can create the Food or Meeting object
-  public boolean addFood(int id, String name, int price, String expiryDate, int maxPeople) {
+  public boolean addFood(int id, String name, int price, String expiryDate, int assistants) {
     boolean done = false;
     boolean found = false;
-    Event food = new Food(id, name, price, expiryDate, maxPeople);
+    Event food = new Food(id, name, price, expiryDate);
     for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
       if (productList[i] != null && productList[i].getId() == food.getId()) {
         found = true;
@@ -63,7 +63,7 @@ public class Store {
   public boolean addMeeting(int id, String name, int price, String expiryDate, int maxPeople) {
     boolean done = false;
     boolean found = false;
-    Product meeting = new Meeting(id, name, price, expiryDate, maxPeople);
+    Product meeting = new Meeting(id, name, price, expiryDate);
     for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
       if (productList[i] != null && productList[i].getId() == meeting.getId()) {
         found = true;

@@ -1,20 +1,20 @@
 package upm.etsisi.poo.es.Product;
 
-import upm.etsisi.poo.es.Commands.ProductCommand;
 
 public class Event extends Product {
 
-    protected int maxPersonas;
-    protected  int personasActuales;
+    protected int maxPersonas = 100;
     protected  String expiracyDate;
 
-    public Event(int id, String name, double price, String expiracyDate, int maxPersonas) {
+    public Event(int id, String name, double price, String expiracyDate) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.expiracyDate = expiracyDate;
-        this.maxPersonas = maxPersonas;
-        this.personasActuales = 0;
+    }
+
+    public  int getMaxPersonas(){
+        return maxPersonas;
     }
 
     public String getName() {

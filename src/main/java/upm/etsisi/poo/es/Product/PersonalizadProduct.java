@@ -30,7 +30,17 @@ public class PersonalizadProduct extends BasicProduct {
             sb.append(" maxPerspnalizaciones:" + maxPers);
         }
 
+
         return sb.toString();
     }
 
+    public boolean addPersonalized(String personalize){
+        boolean resul = true;
+        if(personalizaciones.size()<maxPers) {
+            personalizaciones.add(personalize);
+        }else {
+            resul = false;
+        }
+        return resul;
+    }
 }

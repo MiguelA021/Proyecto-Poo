@@ -1,5 +1,8 @@
 package upm.etsisi.poo.es.Commands;
 
+import upm.etsisi.poo.es.Product.BasicProduct;
+import upm.etsisi.poo.es.Product.Event;
+import upm.etsisi.poo.es.Product.PersonalizadProduct;
 import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Store;
@@ -58,26 +61,26 @@ public class TicketCommand implements Command {
         try {
             int ticketId = Integer.parseInt(args[2]);
             String casherId = args[3];
-            String casherIdGood = "";
+            int casherIdGood = Integer.parseInt(casherId.replace("UW", ""));
             int prodId = Integer.parseInt(args[4]);
             int ammount = Integer.parseInt(args[5]);
-            for (int i = 2; i < casherId.length(); i++) {
-                casherIdGood.concat(Character.toString(casherId.charAt(i)));
-            }
-            Cashier cashier = store.searchCasherById(Integer.parseInt(casherIdGood));
+            Cashier cashier = store.searchCasherById(casherIdGood);
             Ticket ticket = cashier.getTicketById(ticketId);
-            if (args.length > 5) {
-                ArrayList<String> personalizaciones = new ArrayList<String>();
-                for (int i = 5; i < args.length; i++) {
-                    String personalizacion = args[i].replaceAll("--p", "");
-                    personalizaciones.add(personalizacion);
+            Product product = store.getProduct(prodId);
+
+            if(product instanceof PersonalizadProduct){
+                PersonalizadProduct personalizadProduct  = ( PersonalizadProduct) product;
+                if(args.length > 5){
+                    for (int i = 5; i < args.length; i++) {
+                        String personalizacion = args[i].replaceAll("--p", "");
+                        personalizadProduct.addPersonalized(personalizacion);
+                    }
                 }
-                ticket.ticketAdd(prodId, store, ammount, personalizaciones);
+                ticket.ticketAdd(personalizadProduct, store, ammount);
+            }else {
+                ticket.ticketAdd(product, store, ammount);
             }
 
-            ticket.ticketAdd(prodId, store, ammount, null);
-
-            // ticketAdd ya imprime y dice "ticket add: ok" o errores
         } catch (NumberFormatException e) {
             System.out.println(INCORRECT);
         }
@@ -144,7 +147,7 @@ public class TicketCommand implements Command {
                 ticketId = null;
                 String cashierId = args[2].replaceAll("UW", "");
                 cashId = Integer.parseInt(cashierId);
-                userId =store.dniToId(args[3]);
+                userId = store.dniToId(args[3]);
             } else {
                 // ticket new <id> <cashId> <userId>
 

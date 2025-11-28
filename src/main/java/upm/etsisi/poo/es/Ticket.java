@@ -1,8 +1,11 @@
 package upm.etsisi.poo.es;
 
 import upm.etsisi.poo.es.Product.BasicProduct;
+import upm.etsisi.poo.es.Product.Event;
+import upm.etsisi.poo.es.Product.Food;
 import upm.etsisi.poo.es.Product.Product;
 
+import java.lang.invoke.LambdaMetafactory;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -38,53 +41,42 @@ public class Ticket {
         return this.tickId;
     }
 
-    public boolean ticketAdd(int proId, Store store, int amount, ArrayList<String> personalizaciones) {
-        boolean resul;
+    public boolean ticketAdd(Product product, Store store, int amount) {
+        boolean resul = true;
         if (this.status != Status.CLOSED) {
-            Product productoEncontrado = store.getProduct(proId);
             int before = this.amount;
-            if (productoEncontrado == null) {
+            if (product == null) {
                 resul = false;
-                System.out.println("ERROR: Product ID not found " + proId);
+                System.out.println("ERROR: Product ID not found ");
 
             } else {
                 if (this.amount == 0) {
                     this.status = Status.ACTIVE;
-                } //USAR INSTANCE OF
-                /*
-                 * if (productoEncontrado.foodOrMetting() == 1) {
-                 *
-                 * productoEncontrado.setPersonasActuales(amount);
-                 * productList[this.amount] = productoEncontrado;
-                 * this.amount++;
-                 * System.out.println("ticket add: ok");
-                 * } else {
-                 */
-                int i = 0;
-                while (i < amount && this.amount < MAX_PRODUCT) {
-                    if (personalizaciones != null) {
-                        double newPrice = productoEncontrado.getPrice()
-                                + (productoEncontrado.getPrice() * 0.1) * personalizaciones.size();
-                        Product productoPersonalizado = new Product(proId, productoEncontrado.getName(),
-                                productoEncontrado.getCategory(), newPrice, personalizaciones.size());
-                        productList[this.amount] = productoPersonalizado;
+                }
+
+                if (product instanceof Event) {
+                    Event event = (Event) product;
+                    if (amount < event.getMaxPersonas()) {
+                        productList[this.amount] = event;
+                        this.amount++;
+                        resul = true;
                     } else {
-                        productList[this.amount] = productoEncontrado;
+                        System.out.println("Too many people");
+                        resul = false;
                     }
-
-                    this.amount++;
-                    i++;
-                }
-                System.out.println(ticketPrint(false));
-                if ((this.amount - before) == amount) {
-                    resul = true;
-                    System.out.println("ticket add: ok");
                 } else {
-                    resul = false;
-                    System.out.println(ERROR_FULL);
+                    productList[this.amount] = product;
+                    this.amount++;
+                    System.out.println(ticketPrint(false));
+                    if ((this.amount - before) == amount) {
+                        resul = true;
+                        System.out.println("ticket add: ok");
+                    } else {
+                        resul = false;
+                        System.out.println(ERROR_FULL);
+                    }
                 }
 
-                // }
 
             }
         } else {
