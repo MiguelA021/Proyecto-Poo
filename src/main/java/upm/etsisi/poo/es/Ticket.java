@@ -65,8 +65,12 @@ public class Ticket {
                         resul = false;
                     }
                 } else {
-                    productList[this.amount] = product;
-                    this.amount++;
+                    int i = 0;
+                    while(this.amount< MAX_PRODUCT && i< amount){
+                        productList[this.amount] = product;
+                        this.amount++;
+                        i++;
+                    }
                     System.out.println(ticketPrint(false));
                     if ((this.amount - before) == amount) {
                         resul = true;
@@ -75,6 +79,7 @@ public class Ticket {
                         resul = false;
                         System.out.println(ERROR_FULL);
                     }
+
                 }
 
 
