@@ -18,16 +18,17 @@ public class Ticket {
     public static final String ERROR_FULL = "ERROR: Full Ticket (100 products max)";
     Product[] productList;
     int amount;
-    private StringBuilder id;
+    private ArrayList<LocalDateTime> dates;
     private int tickId;
     Comparator<Product> nameComp = Comparator.comparing(Product::getName);
     private Status status;
 
     public Ticket(Integer id) {
         this.productList = new Product[MAX_PRODUCT];
-        LocalTime now = LocalTime.now();
+        LocalDateTime now = LocalDateTime.now();
+        this.dates = new ArrayList<LocalDateTime>();
+        dates.add(now);
         if (id != null) {
-            this.id = new StringBuilder(now.toString()).append(String.format("%05d", id));
             this.tickId = id;
         }
         this.amount = 0;
