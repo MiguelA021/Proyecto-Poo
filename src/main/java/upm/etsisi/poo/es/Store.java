@@ -88,7 +88,7 @@ public class Store {
   public void addCustomer(String name, String dni, String email, int cashId) {
     if (cashers.containsKey(cashId)) {
       int id = dniToId(dni);
-      customers.put(id, new Customer(email, name, id, dni.charAt(8),cashId));
+      customers.put(id, new Customer(email, name, dni,cashId));
     } else {
       System.out.println(CASHER_NOT_FOUND);
     }
@@ -201,7 +201,7 @@ public class Store {
       } while (cashers.containsKey(id));
     }
     if (!cashers.containsKey(id)) {
-      cashers.put(id, new Cashier(email, name, id));
+      cashers.put(id, new Cashier(email, name, id.toString()));
     } else {
       System.out.println(ID_ERROR);
       resul = false;

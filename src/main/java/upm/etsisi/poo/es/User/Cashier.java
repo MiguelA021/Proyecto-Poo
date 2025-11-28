@@ -9,7 +9,7 @@ public class Cashier extends User {
   private static final String ID_ERROR = "The id given has been already used";
   private static final String ID_NOT_FOUND = "The id given, was not found ";
 
-  public Cashier(String email, String name, int id) {
+  public Cashier(String email, String name, String id) {
     this.email = email;
     this.name = name;
     this.id = id;
