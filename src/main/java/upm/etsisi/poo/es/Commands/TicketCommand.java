@@ -1,14 +1,10 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Product.BasicProduct;
-import upm.etsisi.poo.es.Product.Event;
-import upm.etsisi.poo.es.Product.PersonalizadProduct;
+import upm.etsisi.poo.es.Product.PersonalizedProduct;
 import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.Ticket;
-
-import java.util.ArrayList;
 
 public class TicketCommand implements Command {
 
@@ -68,8 +64,8 @@ public class TicketCommand implements Command {
             Ticket ticket = cashier.getTicketById(ticketId);
             Product product = store.getProduct(prodId);
 
-            if(product instanceof PersonalizadProduct){
-                PersonalizadProduct personalizadProduct  = ( PersonalizadProduct) product;
+            if(product instanceof PersonalizedProduct){
+                PersonalizedProduct personalizadProduct  = (PersonalizedProduct) product;
                 if(args.length > 5){
                     for (int i = 5; i < args.length; i++) {
                         String personalizacion = args[i].replaceAll("--p", "");

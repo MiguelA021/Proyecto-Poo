@@ -37,8 +37,5 @@ public class Event extends Product {
         this.name = name;
     }
 
-    public String toString(){
-        return "Class:Food, id:" + this.id + ", name:" + this.name + ", price:" + this.price + ", date of Event:" + this.expiracyDate +
-                ", max people allowed:" + this.maxPersonas;
-    }
+
 }

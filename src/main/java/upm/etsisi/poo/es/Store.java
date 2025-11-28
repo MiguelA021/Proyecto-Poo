@@ -59,7 +59,7 @@ public class Store {
     return done;
   }
 
-  public boolean addMeeting(int id, String name, int price, String expiryDate, int maxPeople) {
+  public boolean addMeeting(int id, String name, double price, String expiryDate, int maxPeople) {
     boolean done = false;
     boolean found = false;
     Product meeting = new Meeting(id, name, price, expiryDate);
