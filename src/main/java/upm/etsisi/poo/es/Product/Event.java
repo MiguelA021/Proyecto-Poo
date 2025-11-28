@@ -27,6 +27,9 @@ public class Event extends Product {
     public boolean fechaValida(LocalDateTime time) {
         return false;
     }
+    public int getMaxPersonas() {
+        return maxPersonas;
+    }
     public LocalDateTime getExpiryDate() {
         return expiracyDate;
     }
