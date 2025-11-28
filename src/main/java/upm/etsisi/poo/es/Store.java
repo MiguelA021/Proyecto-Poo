@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.stream.BaseStream;
 
 public class Store {
   int MAX_PRODUCT = 200;
@@ -159,19 +158,16 @@ public class Store {
    * 
    * @param idTicket the id of the ticket (if it's null, it generates it
    *                 automatically)
-   * @param idCasher the id of the casher
+   * @param idCashier the id of the casher
    */
-  public void addTicketOnCasher(Integer idTicket, int idCasher, int idCustomer) {
-    if (cashers.containsKey(idCasher) && customers.containsKey(idCustomer)) {
-        if(idTicket == null){
-                idTicket = initRandomId();
-        }
-      cashers.get(idCasher).addTicket(idTicket);
-      customers.get(idCustomer).addTicket(idTicket, cashers.get(idCasher).getTicketById(idTicket));// mirar problemas
-                                                                                                   // con que el ticket
-                                                                                                   // sea null.
+  public void addTicketOnCashier(Integer idTicket, int idCashier, int idCustomer) {
+    if (cashers.containsKey(idCashier) && customers.containsKey(idCustomer)) {
+      Cashier c = cashers.get(idCashier);
+      idTicket= c.addTicket(idTicket);
+      Ticket resul= cashers.get(idCashier).getTicketById(idTicket);
+      customers.get(idCustomer).addTicket(idTicket, resul);
     } else {
-      if (cashers.containsKey(idCasher)) {
+      if (cashers.containsKey(idCashier)) {
         System.out.println(CASHER_NOT_FOUND);
       }
       if (customers.containsKey(idCustomer)) {

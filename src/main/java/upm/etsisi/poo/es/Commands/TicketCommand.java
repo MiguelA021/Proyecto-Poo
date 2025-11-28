@@ -158,7 +158,7 @@ public class TicketCommand implements Command {
             return;
         }
 
-        store.addTicketOnCasher(ticketId, cashId, userId);
+        store.addTicketOnCashier(ticketId, cashId, userId);
 
     }
 }
