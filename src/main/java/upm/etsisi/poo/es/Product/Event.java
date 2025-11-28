@@ -2,6 +2,8 @@ package upm.etsisi.poo.es.Product;
 
 import jdk.vm.ci.meta.Local;
 import upm.etsisi.poo.es.Commands.ProductCommand;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
@@ -16,7 +18,8 @@ public class Event extends Product {
             this.id = id;
             this.name = name;
             this.price = price;
-            this.expiracyDate = LocalDateTime.parse(expiryDate);
+            LocalDate date = LocalDate.parse(expiryDate);   // Conversión a DataLocalTime debido al formato
+            this.expiracyDate = date.atStartOfDay();        //que nos llega por el comando
             this.maxPersonas = maxPersonas;
             this.personasActuales = 0;
         }catch(DateTimeParseException e) {

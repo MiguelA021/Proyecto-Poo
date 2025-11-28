@@ -57,14 +57,19 @@ public class Ticket {
 
                 if (product instanceof Event) {
                     Event event = (Event) product;
-                    if (amount < event.getMaxPersonas()) {
-                        productList[this.amount] = event;
-                        this.amount++;
-                        resul = true;
-                    } else {
-                        System.out.println("Too many people");
-                        resul = false;
+                    if (event.fechaValida(LocalDateTime.now())) {
+                        if (amount < event.getMaxPersonas()) {
+                            productList[this.amount] = event;
+                            this.amount++;
+                            resul = true;
+                        } else {
+                            System.out.println("Too many people");
+                            resul = false;
+                        }
+                    }else{
+                        System.out.println("The period of time is not valid");
                     }
+
                 } else {
                     productList[this.amount] = product;
                     this.amount++;
@@ -139,14 +144,32 @@ public class Ticket {
     /**
      * @return the ticket printed
      */
+    private boolean comprobarFechasTodosEventos(LocalDateTime now){
+        int i = 0;
+        boolean valido = true;
+
+        while(valido && i < this.amount) {
+            if( (productList[i]!= null) && (productList[i] instanceof Event) && !(((Event) productList[i]).fechaValida(now)) ){
+               valido = false;
+            }
+            i++;
+        }
+        return valido;
+    }
     public String ticketPrint(boolean close) {
         StringBuilder sc = new StringBuilder();
+        sc.append(dates.get(0).toString()).append("-").append(tickId);
         if (close) {
             LocalDateTime now = LocalDateTime.now();
-            id.append(String.format(now.toString()));
-            this.status = Status.CLOSED;
-        }
-        System.out.println(id.toString());
+            dates.add(now);
+            boolean validClose = comprobarFechasTodosEventos(now);
+            if(validClose) {
+                sc.append(tickId).append("-").append(now);
+                this.status = Status.CLOSED;
+            }
+            else System.out.println("The ticket can`t be closed because some event's period of time is invalid.");
+        }else sc.append("\n");
+        System.out.println(sc.toString());
         if (this.amount > 0 && this.productList[0] != null) {
             sort();
             int n = this.amount;
