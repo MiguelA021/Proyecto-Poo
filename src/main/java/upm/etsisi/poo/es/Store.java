@@ -112,10 +112,11 @@ public class Store {
    */
   public int dniToId(String dni) {
     int id = 0;
-    String[] dniToArray = dni.split("");
-    for (int i = 0; i < dniToArray.length - 1; i++) {
-      id = id * 10;
-      id += Integer.parseInt(dniToArray[i]);
+    for (char c : dni.toCharArray()) {
+        if(Character.isDigit(c)) {
+            id = id * 10;
+            id += c;
+        }
     }
     return id;
   }
