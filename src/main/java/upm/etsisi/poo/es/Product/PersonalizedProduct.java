@@ -20,14 +20,14 @@ public class PersonalizedProduct extends BasicProduct {
         if (!this.personalizaciones.isEmpty()) {
             sb.append( "{class:PersonalizedProduct, id:" + this.id + ", name:" + this.name + ", category: " + this.category + ", price:"
         + this.price + "}");
-            sb.append(" maxPerspnalizaciones:" + maxPers + "\n");
+            sb.append(" maxPersonal:" + maxPers + "\n");
             for (String personalizacion : personalizaciones) {
                 sb.append(personalizacion + "\t");
             }
         } else {
             sb.append("{class:PersonalizedProduct, id:" + this.id + ", name:" + this.name + ", category: " + this.category + ", price:"
         + this.price + "}");
-            sb.append(" maxPerspnalizaciones:" + maxPers + " ");
+            sb.append(" maxPersonal:" + maxPers + " ");
         }
 
         return sb.toString();
@@ -53,7 +53,7 @@ public class PersonalizedProduct extends BasicProduct {
         if (!this.personalizaciones.isEmpty()) {
             sb.append( "{class:PersonalizedProduct, id:" + this.id + ", name:" + this.name + ", category: " + this.category + ", price:"
         + this.price + "}");
-            sb.append(" maxPerspnalizaciones:" + maxPers + " ");
+            sb.append(" maxPersonal:" + maxPers + " ");
             sb.append("personalizationList[");
 
             for (String personalizacion : personalizaciones) {
@@ -64,7 +64,7 @@ public class PersonalizedProduct extends BasicProduct {
         }else {
             sb.append("{class:PersonalizedProduct, id:" + this.id + ", name:" + this.name + ", category: " + this.category + ", price:"
         + this.price + "}");
-            sb.append(" maxPerspnalizaciones:" + maxPers + " ");
+            sb.append(" maxPersonal:" + maxPers + " ");
         }
         sb.append("**discount " + discountValue + "}\n");
 
