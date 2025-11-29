@@ -87,7 +87,10 @@ public class Store {
   public void addCustomer(String name, String dni, String email, int cashId) {
     if (cashers.containsKey(cashId)) {
       int id = dniToId(dni);
-      customers.put(id, new Customer(email, name, dni,cashId));
+      Customer customer = new Customer(email, name, dni, cashId);
+      customers.put(id, customer);
+        System.out.println(customer.toString());
+        System.out.println("client add: ok");
     } else {
       System.out.println(CASHER_NOT_FOUND);
     }
@@ -138,10 +141,12 @@ public class Store {
    */
   public void listCustomers() {
     ArrayList<Customer> listSort = customersToList();
-    if (listSort != null) {
+    if (!listSort.isEmpty()) {
+        System.out.println("Client:");
       for (Customer customer : listSort) {
         System.out.println(customer.toString());
       }
+        System.out.println("client list: ok");
     } else {
       System.out.println("No customers in the store");
     }
@@ -165,6 +170,7 @@ public class Store {
       Cashier c = cashers.get(idCashier);
       idTicket= c.addTicket(idTicket);
       Ticket resul= cashers.get(idCashier).getTicketById(idTicket);
+        System.out.println(resul.toStringNew());
       customers.get(idCustomer).addTicket(idTicket, resul);
     } else {
       if (cashers.containsKey(idCashier)) {
@@ -197,7 +203,10 @@ public class Store {
       } while (cashers.containsKey(id));
     }
     if (!cashers.containsKey(id)) {
-      cashers.put(id, new Cashier(email, name, id.toString()));
+        Cashier cashier = new Cashier(email, name, id.toString());
+      cashers.put(id, cashier);
+        System.out.println(cashier.toString());
+        System.out.println("cash add: ok");
     } else {
       System.out.println(ID_ERROR);
       resul = false;
@@ -221,10 +230,12 @@ public class Store {
    */
   public void listCashers() {
     ArrayList<Cashier> listSort = cashersToList();
-    if (listSort != null) {
+    if (!listSort.isEmpty()) {
+        System.out.println("Cash:");
       for (Cashier cashier : listSort) {
         System.out.println(cashier.toString());
       }
+        System.out.println("cash list: ok");
     } else {
       System.out.println("no cashiers in store");
     }

@@ -2,12 +2,8 @@ package upm.etsisi.poo.es;
 
 import upm.etsisi.poo.es.Product.BasicProduct;
 import upm.etsisi.poo.es.Product.Event;
-import upm.etsisi.poo.es.Product.Food;
 import upm.etsisi.poo.es.Product.Product;
-
-import java.lang.invoke.LambdaMetafactory;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -194,16 +190,14 @@ public class Ticket {
 
             for (int i = 0; i < n; i++) {
                 Product p = productList[i];
-
                 if (p != null) {
-                    BasicProduct product = (BasicProduct) p;
                     double price = p.getPrice();
-                    double discountValue = 0.0;
                     if (p instanceof BasicProduct) {
+                        double discountValue = 0.0;
+                        BasicProduct product = (BasicProduct) p;
                         if (categoryCount[product.getCategory().ordinal()] >= 2) {
                             discountValue = price - product.getDiscountedPrice();
                         }
-
 
                         totalPrice += price;
                         totalDiscount += discountValue;
@@ -218,6 +212,8 @@ public class Ticket {
                                     product.getCategory(), price));
                         }
                         sc.append("\n");
+                    }else{
+                        System.out.println(p.toString());
                     }
                 }
             }
@@ -263,6 +259,16 @@ public class Ticket {
             sc.append(dates.get(1).toString());
         }
         sc.append(" - ").append(status.toString());
+        return sc.toString();
+    }
+
+    public String toStringNew(){
+        StringBuilder sc = new StringBuilder();
+        sc.append("Ticket : " + dates.get(0) + "-" + tickId + "\n");
+        sc.append("\t Total price: 0.0 \n" );
+        sc.append("\t Total discount: 0.0 \n");
+        sc.append("\t Final price: 0.0 \n");
+        sc.append("ticket new: ok");
         return sc.toString();
     }
 
