@@ -162,7 +162,8 @@ public class Ticket {
     }
     public String ticketPrint(boolean close) {
         StringBuilder sc = new StringBuilder();
-        sc.append(dates.get(0).toString()).append("-").append(tickId + "\n");
+
+        sc.append(dates.get(0)).append("-").append(tickId + "\n");
         if (close) {
             LocalDateTime now = LocalDateTime.now();
             dates.add(now);
@@ -279,8 +280,9 @@ public class Ticket {
     }
 
     public String toStringNew() {
-        StringBuilder sc = new StringBuilder();
-        sc.append("Ticket : " + dates.get(0) + "-" + tickId + "\n");
+        StringBuilder sc = new StringBuilder(); // Soy Aaron, lo de format() esta puesto para que siga el formato que buscamos de fecha.
+        //te lo pongo para que asi no te comas la cabeza con eso. Por lo demás ya te dejo que sigas con ello
+        sc.append("Ticket : " + dates.get(0).format(DATE_FORMAT) + "-" + tickId + "\n");
         sc.append("\t Total price: 0.0 \n");
         sc.append("\t Total discount: 0.0 \n");
         sc.append("\t Final price: 0.0 \n");
