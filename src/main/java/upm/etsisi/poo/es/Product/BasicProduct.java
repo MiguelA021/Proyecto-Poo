@@ -90,7 +90,7 @@ public class BasicProduct extends Product {
   public String toStringDiscount(double discountValue) {
     StringBuilder sc = new StringBuilder();
     sc.append(String.format(
-        "{class:Product, id: %d, name: '%s', category: %s, price: %.2f} **discount -%.2f", this.id,
+        "{class:Product, id: %d, name: '%s', category: %s, price: %.2f} **discount -%.2f%n", this.id,
         this.name, this.category, this.price, discountValue));
     return sc.toString();
   }
