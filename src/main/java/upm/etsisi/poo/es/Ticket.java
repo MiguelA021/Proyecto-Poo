@@ -57,7 +57,6 @@ public class Ticket {
                         if (amount < event.getMaxPersonas()) {
                             productList[this.amount] = event;
                             this.amount++;
-                            resul = true;
                         } else {
                             System.out.println("Too many people");
                             resul = false;
@@ -159,17 +158,17 @@ public class Ticket {
     }
     public String ticketPrint(boolean close) {
         StringBuilder sc = new StringBuilder();
-        sc.append(dates.get(0).toString()).append("-").append(tickId);
+        sc.append(dates.get(0).toString()).append("-").append(tickId + "\n");
         if (close) {
             LocalDateTime now = LocalDateTime.now();
             dates.add(now);
             boolean validClose = comprobarFechasTodosEventos(now);
             if(validClose) {
-                sc.append(tickId).append("-").append(now);
+                sc.append(tickId).append("-").append(now + "\n");
                 this.status = Status.CLOSED;
             }
-            else System.out.println("The ticket can`t be closed because some event's period of time is invalid.");
-        }else sc.append("\n");
+            else System.out.println("The ticket can`t be closed because some event's period of time is invalid. \n");
+        }
         System.out.println(sc.toString());
         if (this.amount > 0 && this.productList[0] != null) {
             sort();

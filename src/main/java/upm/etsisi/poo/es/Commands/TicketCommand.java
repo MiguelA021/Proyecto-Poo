@@ -61,22 +61,20 @@ public class TicketCommand implements Command {
             String casherId = args[3];
             int casherIdGood = Integer.parseInt(casherId.replace("UW", ""));
             int prodId = Integer.parseInt(args[4]);
-            int ammount = Integer.parseInt(args[5]);
+            int amount = Integer.parseInt(args[5]);
             Cashier cashier = store.searchCasherById(casherIdGood);
             Ticket ticket = cashier.getTicketById(ticketId);
             Product product = store.getProduct(prodId);
 
             if(product instanceof PersonalizedProduct){
-                PersonalizedProduct personalizadProduct  = (PersonalizedProduct) product;
-                if(args.length > 5){
-                    for (int i = 5; i < args.length; i++) {
-                        String personalizacion = args[i].replaceAll("--p", "");
-                        personalizadProduct.addPersonalized(personalizacion);
-                    }
+                PersonalizedProduct personalizedProduct  = (PersonalizedProduct) product;
+                for (int i = 5; i < args.length; i++) {
+                    String personalization = args[i].replaceAll("--p", "");
+                    personalizedProduct.addPersonalized(personalization);
                 }
-                ticket.ticketAdd(personalizadProduct, store, ammount);
+                ticket.ticketAdd(personalizedProduct, store, amount);
             }else {
-                ticket.ticketAdd(product, store, ammount);
+                ticket.ticketAdd(product, store, amount);
             }
 
         } catch (NumberFormatException e) {
