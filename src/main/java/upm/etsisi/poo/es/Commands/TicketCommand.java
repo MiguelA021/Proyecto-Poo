@@ -73,6 +73,7 @@ public class TicketCommand implements Command {
                     String personalization = args[i].replaceAll("--p", "");
                     local.addPersonalized(personalization);
                 }
+                local.newPrice();
                 personalizedProduct.newPrice();
                 ticket.ticketAdd(local, store, amount);
             }else {
