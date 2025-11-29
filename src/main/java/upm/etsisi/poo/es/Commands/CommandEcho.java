@@ -11,7 +11,7 @@ public class CommandEcho implements Command {
 
   @Override
   public String getDescription() {
-    return "echo \"<text>\"  - prints the text";
+    return "\"<text>\"  - prints the text";
   }
 
   @Override

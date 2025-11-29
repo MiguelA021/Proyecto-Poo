@@ -25,13 +25,13 @@ public class Cashier extends User {
    */
   public String listTickets() {
     StringBuilder str = new StringBuilder();
-    str.append(toString());
+    str.append("Tickets: \n");
     for (Map.Entry<Integer, Ticket> it : tickets.entrySet()) {// saca para cada nodo del arbol (K,V) ordenado por la
-                                                              // clave
-      Integer id = it.getKey();
       Ticket ticket = it.getValue();
       str.append(ticket.formatList());
+
     }
+    str.append("cash tickets: ok");
     return str.toString();
   }
 
@@ -56,7 +56,7 @@ public class Cashier extends User {
     return id;
   }
 
-  /**
+  /**.
    * The method returns the ticket given by id
    * 
    * @param id the id of the ticket
@@ -73,7 +73,7 @@ public class Cashier extends User {
   }
 
   public String toString() {
-    return "Cash{identifier='"+UPM_WORKER+id+"', name='"+name+"', email='"+email+"'}\n";
+    return "Cash{identifier='"+UPM_WORKER+id+"', name='"+name+"', email='"+email+"'}";
   }
 
   /**

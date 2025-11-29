@@ -67,6 +67,8 @@ public class ClientCommand implements Command {
             boolean removed = store.removeCustomer(dni);
             if (!removed) {
                 System.out.println("could not find the client");
+            }else {
+                System.out.println("client remove: ok");
             }
         } catch (NumberFormatException e) {
             System.out.println(INCORRECT);

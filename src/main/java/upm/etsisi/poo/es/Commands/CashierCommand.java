@@ -79,7 +79,12 @@ public class CashierCommand implements Command {
         try {
             String casherId = args[2].replaceAll("UW", "");
             int cash = Integer.parseInt(casherId);
-            store.removeCasher(cash);
+            boolean removed = store.removeCasher(cash);
+            if(!removed){
+                System.out.println("Could not find th cashier");
+            }else{
+                System.out.println("cash remove: ok");
+            }
 
         } catch (NumberFormatException e) {
             System.out.println(INCORRECT);
@@ -100,10 +105,9 @@ public class CashierCommand implements Command {
           String casherId = args[2].replaceAll("UW", "");
             int cash = Integer.parseInt(casherId);
             Cashier casher = store.searchCasherById(cash);
-            casher.listTickets();
+            System.out.println(casher.listTickets());
         } catch (NullPointerException e) {
             System.out.println(INCORRECT);
-            return;
         }
     }
 }
