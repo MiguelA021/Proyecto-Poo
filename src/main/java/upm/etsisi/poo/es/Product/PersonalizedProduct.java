@@ -66,7 +66,7 @@ public class PersonalizedProduct extends BasicProduct {
         + this.price + "}");
             sb.append(" maxPersonal:" + maxPers + " ");
         }
-        sb.append("**discount " + discountValue + "}\n");
+        sb.append(String.format("**discount %.3f }\n",discountValue));
 
         return sb.toString();
 
