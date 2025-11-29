@@ -92,7 +92,6 @@ public class Ticket {
             resul = false;
             System.out.println("ERROR: the ticket is closed. It can't be modified");
         }
-        sort();
         return resul;
     }
 
@@ -134,7 +133,6 @@ public class Ticket {
                     }
                     i++;
                 }
-                sort();
                 if (iterations == this.amount) {
                     System.out.println("ERROR: this product does not exist.");
                 }
@@ -251,23 +249,6 @@ public class Ticket {
         Arrays.sort(productList, 0, amount, nameComp);
     }
 
-    public String getStatus() {
-        String str;
-        switch (this.status) {
-            case EMPTY:
-                str = "Empty";
-                break;
-            case ACTIVE:
-                str = "Active";
-            case CLOSED:
-                str = "Closed";
-                break;
-            default:
-                str = "Error, status is undefined";
-                break;
-        }
-        return str;
-    }
 
     public String formatList() {// si esta abierto mostramos solo id. Si esta vacio mostramos fecha de creacion.
         // Si esta cerrado fecha de cierre
