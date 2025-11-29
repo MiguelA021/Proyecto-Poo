@@ -14,22 +14,21 @@ public class PersonalizedProduct extends BasicProduct {
         this.personalizaciones = new ArrayList<String>(maxPers);
     }
 
-    @Override
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (!this.personalizaciones.isEmpty()) {
-            sb.append(super.toString());
+            sb.append( "{class:BasicProduct, id:" + this.id + ", name:" + this.name + ", category: " + this.category + ", price:"
+        + this.price + "}");
             sb.append(" maxPerspnalizaciones:" + maxPers + "\n");
-            int i = 0;
-            while (personalizaciones.get(i) != null && i < maxPers) {
-                sb.append(personalizaciones.get(i));
-                i++;
+            for (String personalizacion : personalizaciones) {
+                sb.append(personalizacion + "\t");
             }
         } else {
-            sb.append(super.toString());
-            sb.append(" maxPerspnalizaciones:" + maxPers + "\n");
+            sb.append("{class:BasicProduct, id:" + this.id + ", name:" + this.name + ", category: " + this.category + ", price:"
+        + this.price + "}");
+            sb.append(" maxPerspnalizaciones:" + maxPers + " ");
         }
-
 
         return sb.toString();
     }
@@ -42,5 +41,33 @@ public class PersonalizedProduct extends BasicProduct {
             resul = false;
         }
         return resul;
+    }
+
+    public void newPrice(){
+        this.price = 0.1*this.price*personalizaciones.size() + this.price;
+    }
+
+    @Override
+    public String toStringDiscount(double discountValue) {
+        StringBuilder sb = new StringBuilder();
+        if (!this.personalizaciones.isEmpty()) {
+            sb.append( "{class:BasicProduct, id:" + this.id + ", name:" + this.name + ", category: " + this.category + ", price:"
+        + this.price + "}");
+            sb.append(" maxPerspnalizaciones:" + maxPers + " ");
+            sb.append("personalizationList[");
+            for (String personalizacion : personalizaciones) {
+                sb.append(personalizacion + ", ");
+
+            }
+            sb.append("]} \n");
+        }else {
+            sb.append("{class:BasicProduct, id:" + this.id + ", name:" + this.name + ", category: " + this.category + ", price:"
+        + this.price + "}");
+            sb.append(" maxPerspnalizaciones:" + maxPers + " ");
+        }
+        sb.append("**discount " + discountValue + "}\n");
+
+        return sb.toString();
+
     }
 }

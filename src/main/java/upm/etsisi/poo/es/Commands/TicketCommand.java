@@ -68,10 +68,11 @@ public class TicketCommand implements Command {
 
             if(product instanceof PersonalizedProduct){
                 PersonalizedProduct personalizedProduct  = (PersonalizedProduct) product;
-                for (int i = 5; i < args.length; i++) {
+                for (int i = 6; i < args.length; i++) {
                     String personalization = args[i].replaceAll("--p", "");
                     personalizedProduct.addPersonalized(personalization);
                 }
+                personalizedProduct.newPrice();
                 ticket.ticketAdd(personalizedProduct, store, amount);
             }else {
                 ticket.ticketAdd(product, store, amount);

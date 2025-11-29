@@ -4,6 +4,7 @@ import upm.etsisi.poo.es.Product.BasicProduct;
 import upm.etsisi.poo.es.Product.Event;
 import upm.etsisi.poo.es.Product.PersonalizedProduct;
 import upm.etsisi.poo.es.Product.Product;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -86,7 +87,6 @@ public class Ticket {
 
                 }
 
-
             }
         } else {
             resul = false;
@@ -154,13 +154,15 @@ public class Ticket {
         boolean valido = true;
 
         while (valido && i < this.amount) {
-            if ((productList[i] != null) && (productList[i] instanceof Event) && !(((Event) productList[i]).fechaValida(now))) {
+            if ((productList[i] != null) && (productList[i] instanceof Event)
+                    && !(((Event) productList[i]).fechaValida(now))) {
                 valido = false;
             }
             i++;
         }
         return valido;
     }
+
     public String ticketPrint(boolean close) {
         StringBuilder sc = new StringBuilder();
 
@@ -170,7 +172,8 @@ public class Ticket {
             boolean validClose = comprobarFechasTodosEventos(now);
             if (validClose) {
                 this.status = Status.CLOSED;
-            } else System.out.println("The ticket can`t be closed because some event's period of time is invalid. \n");
+            } else
+                System.out.println("The ticket can`t be closed because some event's period of time is invalid. \n");
         }
         sc.append("Ticket: ").append(toStringId()).append("\n");
         if (this.amount > 0 && this.productList[0] != null) {
@@ -194,9 +197,9 @@ public class Ticket {
                 Product p = productList[i];
                 if (p != null) {
                     double price = p.getPrice();
-                    if (p instanceof BasicProduct) {
+                    if (p instanceof PersonalizedProduct) {
+                        PersonalizedProduct product = (PersonalizedProduct) p;
                         double discountValue = 0.0;
-                        BasicProduct product = (BasicProduct) p;
                         if (categoryCount[product.getCategory().ordinal()] >= 2) {
                             discountValue = price - product.getDiscountedPrice();
                         }
@@ -205,15 +208,27 @@ public class Ticket {
                         totalDiscount += discountValue;
 
                         if (discountValue > 0.0) {
-                            sc.append(String.format(
-                                    "{class:Product, id: %d, name: '%s', category: %s, price: %.2f} **discount -%.2f", p.getId(),
-                                    p.getName(), product.getCategory(), price, discountValue));
+                            sc.append(product.toStringDiscount(discountValue));
                         } else {
-                            sc.append(String.format(
-                                    "{class:Product, id: %d, name: '%s', category: %s, price: %.2f}", p.getId(), p.getName(),
-                                    product.getCategory(), price));
+                            sc.append(product);
                         }
-                        sc.append("\n");
+                    } else if (p instanceof BasicProduct) {
+                        BasicProduct product = (BasicProduct) p;
+
+                        double discountValue = 0.0;
+                        if (categoryCount[product.getCategory().ordinal()] >= 2) {
+                            discountValue = price - product.getDiscountedPrice();
+                        }
+
+                        totalPrice += price;
+                        totalDiscount += discountValue;
+
+                        if (discountValue > 0.0) {
+                            sc.append(product.toStringDiscount(discountValue));
+                        } else {
+                            sc.append(product);
+                        }
+
                     } else {
                         System.out.println(p);
                     }
@@ -228,7 +243,6 @@ public class Ticket {
 
         return sc.toString();
     }
-
 
     /**
      * The method sorts the names alphabetically
@@ -255,13 +269,15 @@ public class Ticket {
         return str;
     }
 
-    public String formatList() {// si esta abierto mostramos solo id. Si esta vacio mostramos fecha de creacion. Si esta cerrado fecha de cierre
+    public String formatList() {// si esta abierto mostramos solo id. Si esta vacio mostramos fecha de creacion.
+        // Si esta cerrado fecha de cierre
         StringBuilder resul = new StringBuilder();
 
         resul.append(toStringId()).append(" - ").append(this.status.toString().toUpperCase());
         return resul.toString();
     }
-    private String toStringId(){
+
+    private String toStringId() {
         StringBuilder resul = new StringBuilder();
         String status = this.status.toString().toUpperCase();
         switch (status) {
@@ -272,7 +288,7 @@ public class Ticket {
             case "ACTIVE":
                 resul.append(tickId);
                 break;
-            case"CLOSED":
+            case "CLOSED":
                 String fin = dates.get(1).format(DATE_FORMAT);
                 resul.append(tickId).append(fin);
                 break;
@@ -284,8 +300,10 @@ public class Ticket {
     }
 
     public String toStringNew() {
-        StringBuilder sc = new StringBuilder(); // Soy Aaron, lo de format() esta puesto para que siga el formato que buscamos de fecha.
-        //te lo pongo para que asi no te comas la cabeza con eso. Por lo demás ya te dejo que sigas con ello
+        StringBuilder sc = new StringBuilder(); // Soy Aaron, lo de format() esta puesto para que siga el formato que
+        // buscamos de fecha.
+        // te lo pongo para que asi no te comas la cabeza con eso. Por lo demás ya te
+        // dejo que sigas con ello
         sc.append("Ticket : " + dates.get(0).format(DATE_FORMAT) + "-" + tickId + "\n");
         sc.append("\t Total price: 0.0 \n");
         sc.append("\t Total discount: 0.0 \n");
