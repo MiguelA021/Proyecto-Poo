@@ -92,6 +92,7 @@ public class Ticket {
             resul = false;
             System.out.println("ERROR: the ticket is closed. It can't be modified");
         }
+        sort();
         return resul;
     }
 
@@ -141,6 +142,7 @@ public class Ticket {
         } else {
             System.out.println("ERROR: the ticket is closed. It can't be modified");
         }
+        sort();
         return product;
 
     }
