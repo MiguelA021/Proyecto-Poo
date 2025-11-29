@@ -142,7 +142,6 @@ public class Ticket {
         } else {
             System.out.println("ERROR: the ticket is closed. It can't be modified");
         }
-        sort();
         return product;
 
     }
@@ -165,17 +164,15 @@ public class Ticket {
     public String ticketPrint(boolean close) {
         StringBuilder sc = new StringBuilder();
 
-        sc.append(dates.get(0)).append("-").append(tickId + "\n");
         if (close) {
             LocalDateTime now = LocalDateTime.now();
             dates.add(now);
             boolean validClose = comprobarFechasTodosEventos(now);
             if (validClose) {
-                sc.append(tickId).append("-").append(now + "\n");
                 this.status = Status.CLOSED;
             } else System.out.println("The ticket can`t be closed because some event's period of time is invalid. \n");
         }
-        System.out.println(sc.toString());
+        sc.append("Ticket: ").append(toStringId()).append("\n");
         if (this.amount > 0 && this.productList[0] != null) {
             sort();
             int n = this.amount;
@@ -260,6 +257,12 @@ public class Ticket {
 
     public String formatList() {// si esta abierto mostramos solo id. Si esta vacio mostramos fecha de creacion. Si esta cerrado fecha de cierre
         StringBuilder resul = new StringBuilder();
+
+        resul.append(toStringId()).append(" - ").append(this.status.toString().toUpperCase());
+        return resul.toString();
+    }
+    private String toStringId(){
+        StringBuilder resul = new StringBuilder();
         String status = this.status.toString().toUpperCase();
         switch (status) {
             case "EMPTY":
@@ -277,7 +280,6 @@ public class Ticket {
                 resul.append("ERROR, status is undefined");
                 break;
         }
-        resul.append(" - ").append(this.status.toString().toUpperCase());
         return resul.toString();
     }
 

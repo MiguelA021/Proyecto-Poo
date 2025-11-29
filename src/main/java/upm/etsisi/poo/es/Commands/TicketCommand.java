@@ -98,7 +98,7 @@ public class TicketCommand implements Command {
             if (product == null) {
                 System.out.println(NOTEXIST);
             } else {
-                System.out.println(product.toString());
+                System.out.println(ticket.ticketPrint(false));
                 System.out.println("ticket remove: ok");
             }
         } catch (NumberFormatException e) {
