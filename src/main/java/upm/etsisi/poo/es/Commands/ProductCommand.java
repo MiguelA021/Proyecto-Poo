@@ -215,6 +215,8 @@ public class ProductCommand implements Command {
                         System.out.println(food.toString());
                         System.out.println("prod add: ok");
                     }
+                }else {
+                    System.out.println("Error processing ->prod addFood ->Error adding product");
                 }
             } else {
                 System.out.println(INCORRECT);
@@ -264,6 +266,8 @@ public class ProductCommand implements Command {
                         System.out.println(meeting.toString());
                         System.out.println("prod add: ok");
                     }
+                }else{
+                    System.out.println("Error processing ->prod addMeeting ->Error adding meeting");
                 }
             } else {
                 System.out.println(INCORRECT);

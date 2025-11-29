@@ -2,14 +2,13 @@ package upm.etsisi.poo.es;
 
 import upm.etsisi.poo.es.Product.BasicProduct;
 import upm.etsisi.poo.es.Product.Event;
+import upm.etsisi.poo.es.Product.PersonalizedProduct;
 import upm.etsisi.poo.es.Product.Product;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Locale;
 
 enum Status {
     EMPTY, ACTIVE, CLOSED
@@ -132,6 +131,7 @@ public class Ticket {
                             comprobation = false;
                         }
                     }
+                    i++;
                 }
                 sort();
                 if (iterations == this.amount) {
@@ -160,7 +160,6 @@ public class Ticket {
         }
         return valido;
     }
-
     public String ticketPrint(boolean close) {
         StringBuilder sc = new StringBuilder();
         sc.append(dates.get(0).toString()).append("-").append(tickId + "\n");
@@ -216,7 +215,7 @@ public class Ticket {
                         }
                         sc.append("\n");
                     } else {
-                        System.out.println(p.toString());
+                        System.out.println(p);
                     }
                 }
             }
@@ -258,7 +257,7 @@ public class Ticket {
 
     public String formatList() {// si esta abierto mostramos solo id. Si esta vacio mostramos fecha de creacion. Si esta cerrado fecha de cierre
         StringBuilder resul = new StringBuilder();
-        String status = this.status.toString().toUpperCase(Locale.ROOT);
+        String status = this.status.toString().toUpperCase();
         switch (status) {
             case "EMPTY":
                 String inicio = dates.get(0).format(DATE_FORMAT);

@@ -95,15 +95,73 @@ class Customer{
 +void addTicket(Integer id, Ticket ticket)
 }
 }
+package product{
+abstract class Product{
+#int id
+#String name
+#double price
+#{static} String NAME_LENGTH_ERROR
+#{static} String NAME_NULL_ERROR
+#{static} String PRICE_POSITIVE_ERROR
+-ArrayList<String> personalizaciones
++{abstract} int getId()
++{abstract}  String getName()
++{abstract} double getPrice()
++{abstract} void setPrice(double price)
++{abstract} void setName(String name)
+}
+
+class BasicProduct{
+-type category
++int getId()
++String getName()
++double getPrice()
++type getCategory()
++void setId(int id)
++void SetCategory(type category)
++void setName(String name)
++void setPrice(double price)
++double getDiscountedPrice()
++String toString()
+}
+
+class Event{
+#LocalDateTime expiracyDate
+#int maxPersonas
++boolean fechaValida(LocalDateTime time)
++int getMaxPersonas()
++LocalDateTime getExpiryDate()
++String getName()
++int getId()
++double getPrice()
++void setPrice(double price)
++void setName(String name)
+}
+
+class Food{
+-{static} int TIEMPO_MINIMO
++boolean fechaValida(LocalDateTime time)
++String toString()
+}
+
+class Meeting{
+-{static} int TIEMPO_MINIMO
++boolean fechaValida(LocalDateTime time)
++String toString()
+}
+
+class PersonalizedProduct{
+-int maxPers
+-ArrayList<String> personalizaciones
++String toString()
++boolean addPersonalized(String personalize)
+}
+}
 class App{
---   Attributes  --
  -{static} String WELCOME_MESSAGE
  -{static} String HELP_MESSAGE
  -{static} String FILE_ERROR
  -{static} String UPM
-
- 
---  Methods --
  +main(String[] args)
  -void end()
  -void start()
@@ -113,50 +171,19 @@ class App{
 }
 
 class Ticket{
---   Attributes  --
  -{static} int MAX_PRODUCT
  -Product[] productList
  -Product[] storeProducts
  -int amount
  -Comparator <Product> nameComp
  - Status status
-
---  Methods --
  +boolean ticketAdd(int ProdId, int amount)
  +Product ticketRemove(int prodId)
  +String ticketPrint()
  +void sort()
  +String getStatus()
 }
-
-class Product{
- --   Attributes  --
- -int id
- -String name
- -double price
- -type category
- -{static} String NAME_LENGTH_ERROR
- -{static} String NAME_NULL_ERROR
- -{static} String PRICE_POSITIVE_ERROR
- -ArrayList<String> personalizaciones
- 
- --  Methods --
- +getId()
- +getName()
- +getPrice()
- +getCategory()
- +setId()
- +setCategory()
- +setName()
- +setPrice()
- +getDiscountedPrice()
- +getStateFood(int numberParticipant)
- +getStateMeeting(int numberParticipant)
- +String toStringFoodOrMeeting()
- +toString()
-}
 class Store{
- --   Attributes  --
  -{static} int MAX_PRODUCT
  -Product[] productList
  -TreeMap<Integer, Cashier> cashers
@@ -164,8 +191,6 @@ class Store{
  -{static} CASHER_NOT_FOUND
  -{static} CUSTOMER_NOT_FOUND
  -{static} ID_ERROR
-
- --  Methods --
  +getProduct()
  +boolean addFood(int id, String name, int price, String expiryDate, int maxPeople)
  +boolean addMeeting(int id, String name, int price, String expiryDate, int maxPeople)
@@ -189,7 +214,6 @@ class Store{
  +booelan updatePrice(int id, double price)
 }
 enum type{
---   Attributes  --
  -MERCH
  -STATIONARY
  -CLOTHES
@@ -197,16 +221,13 @@ enum type{
  -ELECTRONICS
 }
 enum Status{
---   Attributes  --
  - EMPTY
  - ACTIVE 
  - CLOSED
 }
 App ..> CommandController : uses
-Ticket--> Product : contains
-Store "1" --o "200" Product : has_on_stock
-Store "0" --o "many" Customer : contains
-Store "0" --o "many" Cashier
+Store "0" --o "many" Customer : registers
+Store "0" --o "many" Cashier : hires
 User <|-- Cashier
 User <|-- Customer
 Command <|.. CommandEcho
@@ -226,6 +247,15 @@ ExitCommand..>Store
 ProductCommand ..> Store
 TicketCommand ..> Store
 User"0" --o "many" Ticket
+Product <|.. BasicProduct
+Product <|.. Event
+Event <|.. Food
+Event <|.. Meeting
+BasicProduct <|.. PersonalizedProduct
+ProductCommand ..> Product
+Store "0"--o "200" Product : has_on_stock
+Store ..> Product
+Ticket "0"--o "100" Product : contains
+Ticket ..> Product
 }
 @enduml
-

@@ -52,7 +52,7 @@ public class TicketCommand implements Command {
     }
 
     private void ticketAdd(String[] args, Store store) {
-        if (args.length != 6) {
+        if (args.length < 6) {
             System.out.println(INCORRECT);
             return;
         }
@@ -83,7 +83,7 @@ public class TicketCommand implements Command {
     }
 
     private void ticketRemove(String[] args, Store store) {
-        if (args.length != 3) {
+        if ( args.length != 5) {
             System.out.println(INCORRECT);
             return;
         }
@@ -91,11 +91,8 @@ public class TicketCommand implements Command {
             int ticketId = Integer.parseInt(args[2]);
             int prodId = Integer.parseInt(args[4]);
             String casherId = args[3];
-            String casherIdGood = "";
-            for (int i = 2; i < casherId.length(); i++) {
-                casherIdGood.concat(Character.toString(casherId.charAt(i)));
-            }
-            Cashier cashier = store.searchCasherById(Integer.parseInt(casherIdGood));
+            int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
+            Cashier cashier = store.searchCasherById(casherIdGood);
             Ticket ticket = cashier.getTicketById(ticketId);
             Product product = ticket.ticketRemove(prodId);
             if (product == null) {

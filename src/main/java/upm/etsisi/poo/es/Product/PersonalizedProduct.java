@@ -19,7 +19,7 @@ public class PersonalizedProduct extends BasicProduct {
         StringBuilder sb = new StringBuilder();
         if (!this.personalizaciones.isEmpty()) {
             sb.append(super.toString());
-            sb.append(" maxPerspnalizaciones:" + maxPers);
+            sb.append(" maxPerspnalizaciones:" + maxPers + "\n");
             int i = 0;
             while (personalizaciones.get(i) != null && i < maxPers) {
                 sb.append(personalizaciones.get(i));
@@ -27,18 +27,18 @@ public class PersonalizedProduct extends BasicProduct {
             }
         } else {
             sb.append(super.toString());
-            sb.append(" maxPerspnalizaciones:" + maxPers);
+            sb.append(" maxPerspnalizaciones:" + maxPers + "\n");
         }
 
 
         return sb.toString();
     }
 
-    public boolean addPersonalized(String personalize){
+    public boolean addPersonalized(String personalize) {
         boolean resul = true;
-        if(personalizaciones.size()<maxPers) {
+        if (personalizaciones.size() < maxPers) {
             personalizaciones.add(personalize);
-        }else {
+        } else {
             resul = false;
         }
         return resul;
