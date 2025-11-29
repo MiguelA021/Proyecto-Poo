@@ -256,5 +256,14 @@ public class Ticket {
         }
         return str;
     }
+    public String formatList(){
+        StringBuilder sc = new StringBuilder();
+        sc.append(dates.get(0).toString()).append("-").append(tickId);
+        if(dates.size()>1){
+            sc.append(dates.get(1).toString());
+        }
+        sc.append(" - ").append(status.toString());
+        return sc.toString();
+    }
 
 }

@@ -30,7 +30,7 @@ public class Cashier extends User {
                                                               // clave
       Integer id = it.getKey();
       Ticket ticket = it.getValue();
-      str.append("Id of the ticket: " + id + ". Status of the ticket: " + ticket.getStatus() + "\n");
+      str.append(ticket.formatList());
     }
     return str.toString();
   }
@@ -90,4 +90,5 @@ public class Cashier extends User {
     }
     return resul;
   }
+
 }
