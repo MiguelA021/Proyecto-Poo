@@ -2,7 +2,9 @@ package upm.etsisi.poo.es;
 
 import upm.etsisi.poo.es.Product.BasicProduct;
 import upm.etsisi.poo.es.Product.Event;
+import upm.etsisi.poo.es.Product.PersonalizedProduct;
 import upm.etsisi.poo.es.Product.Product;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,13 +63,13 @@ public class Ticket {
                             System.out.println("Too many people");
                             resul = false;
                         }
-                    }else{
+                    } else {
                         System.out.println("The period of time is not valid");
                     }
 
                 } else {
                     int i = 0;
-                    while(this.amount< MAX_PRODUCT && i< amount){
+                    while (this.amount < MAX_PRODUCT && i < amount) {
                         productList[this.amount] = product;
                         this.amount++;
                         i++;
@@ -128,6 +130,7 @@ public class Ticket {
                             comprobation = false;
                         }
                     }
+                    i++;
                 }
                 sort();
                 if (iterations == this.amount) {
@@ -144,18 +147,19 @@ public class Ticket {
     /**
      * @return the ticket printed
      */
-    private boolean comprobarFechasTodosEventos(LocalDateTime now){
+    private boolean comprobarFechasTodosEventos(LocalDateTime now) {
         int i = 0;
         boolean valido = true;
 
-        while(valido && i < this.amount) {
-            if( (productList[i]!= null) && (productList[i] instanceof Event) && !(((Event) productList[i]).fechaValida(now)) ){
-               valido = false;
+        while (valido && i < this.amount) {
+            if ((productList[i] != null) && (productList[i] instanceof Event) && !(((Event) productList[i]).fechaValida(now))) {
+                valido = false;
             }
             i++;
         }
         return valido;
     }
+
     public String ticketPrint(boolean close) {
         StringBuilder sc = new StringBuilder();
         sc.append(dates.get(0).toString()).append("-").append(tickId + "\n");
@@ -163,11 +167,10 @@ public class Ticket {
             LocalDateTime now = LocalDateTime.now();
             dates.add(now);
             boolean validClose = comprobarFechasTodosEventos(now);
-            if(validClose) {
+            if (validClose) {
                 sc.append(tickId).append("-").append(now + "\n");
                 this.status = Status.CLOSED;
-            }
-            else System.out.println("The ticket can`t be closed because some event's period of time is invalid. \n");
+            } else System.out.println("The ticket can`t be closed because some event's period of time is invalid. \n");
         }
         System.out.println(sc.toString());
         if (this.amount > 0 && this.productList[0] != null) {
@@ -211,8 +214,8 @@ public class Ticket {
                                     product.getCategory(), price));
                         }
                         sc.append("\n");
-                    }else{
-                        System.out.println(p.toString());
+                    } else {
+                        System.out.println(p);
                     }
                 }
             }
@@ -251,20 +254,21 @@ public class Ticket {
         }
         return str;
     }
-    public String formatList(){
+
+    public String formatList() {
         StringBuilder sc = new StringBuilder();
         sc.append(dates.get(0).toString()).append("-").append(tickId);
-        if(dates.size()>1){
+        if (dates.size() > 1) {
             sc.append(dates.get(1).toString());
         }
         sc.append(" - ").append(status.toString());
         return sc.toString();
     }
 
-    public String toStringNew(){
+    public String toStringNew() {
         StringBuilder sc = new StringBuilder();
         sc.append("Ticket : " + dates.get(0) + "-" + tickId + "\n");
-        sc.append("\t Total price: 0.0 \n" );
+        sc.append("\t Total price: 0.0 \n");
         sc.append("\t Total discount: 0.0 \n");
         sc.append("\t Final price: 0.0 \n");
         sc.append("ticket new: ok");
