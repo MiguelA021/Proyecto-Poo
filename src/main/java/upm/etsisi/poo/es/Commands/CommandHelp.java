@@ -37,7 +37,9 @@ public class CommandHelp implements Command {
         "prod remove <id>\n" +
         "help\n" +
         "echo “<text>”\n" +
-        "exit\n");
+        "exit\n\n"+
+            "Categories: MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS\n"+
+            "Discounts if there are ≥2 units in the category: MERCH 0%, STATIONERY 5%, CLOTHES 7%, BOOK 10%, ELECTRONICS 3%.");
     return false;
   }
 }
