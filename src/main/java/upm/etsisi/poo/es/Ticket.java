@@ -266,7 +266,7 @@ public class Ticket {
                 String inicio = dates.get(0).format(DATE_FORMAT);
                 resul.append(inicio).append("-").append(tickId);
                 break;
-            case "ACTIVE":
+            case "OPEN":
                 resul.append(tickId);
                 break;
             case "CLOSED":
