@@ -26,12 +26,13 @@ public class Food extends Event {
 
     @Override
     public String toString() {
-        return "Class:Food" +
+        return "{class:Food" +
                 ", id:" + this.id +
                 ", name:" + this.name +
                 ", price:" + this.price +
                 ", date of Event:" + this.expiracyDate +
-                ", max people allowed:" + this.maxPersonas;
+                ", max people allowed:" + this.maxPersonas +
+                "}";
     }
 }
 

@@ -213,7 +213,7 @@ public class ProductCommand implements Command {
                         System.out.println(ID_REPEAT);
                     } else {
                         System.out.println(food.toString());
-                        System.out.println("prod add: ok");
+                        System.out.println("prod addFood: ok");
                     }
                 }else {
                     System.out.println("Error processing ->prod addFood ->Error adding product");
@@ -264,7 +264,7 @@ public class ProductCommand implements Command {
                         System.out.println(ID_REPEAT);
                     } else {
                         System.out.println(meeting.toString());
-                        System.out.println("prod add: ok");
+                        System.out.println("prod addMeeting: ok");
                     }
                 }else{
                     System.out.println("Error processing ->prod addMeeting ->Error adding meeting");

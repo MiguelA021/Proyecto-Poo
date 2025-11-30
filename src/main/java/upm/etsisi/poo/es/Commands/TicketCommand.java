@@ -58,9 +58,6 @@ public class TicketCommand implements Command {
         }
         try {
 
-            //Prueba para ver si se mete o no
-            System.out.println("DEBUG: entro en ticketAdd");
-
             int ticketId = Integer.parseInt(args[2]);
             String casherId = args[3];
             int casherIdGood = Integer.parseInt(casherId.replace("UW", ""));

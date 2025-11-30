@@ -97,16 +97,32 @@ public class CashierCommand implements Command {
     }
 
     private void cashTickets(String[] args, Store store) {
+        // cash tickets <id>
         if (args.length != 3) {
             System.out.println(INCORRECT);
             return;
         }
         try {
-          String casherId = args[2].replaceAll("UW", "");
+            String casherId = args[2].replaceAll("UW", "");
             int cash = Integer.parseInt(casherId);
             Cashier casher = store.searchCasherById(cash);
-            System.out.println(casher.listTickets());
-        } catch (NullPointerException e) {
+
+            // Siempre imprimimos el encabezado
+            System.out.println("Tickets: ");
+
+            if (casher != null) {
+                String ticketsStr = casher.listTickets(); // lo que ya tengas implementado
+
+                // Si hay algo que imprimir, lo sacamos tal cual
+                if (ticketsStr != null && !ticketsStr.isEmpty()) {
+                    System.out.print(ticketsStr);  // ojo: print, no println, por si ya lleva \n
+                }
+            }
+
+            // Siempre imprimimos el "ok" al final
+            System.out.println("cash tickets: ok");
+
+        } catch (NumberFormatException e) {
             System.out.println(INCORRECT);
         }
     }

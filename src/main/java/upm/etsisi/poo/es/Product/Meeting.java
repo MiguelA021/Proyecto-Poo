@@ -26,11 +26,12 @@ public class Meeting extends Event {
 
     @Override
     public String toString() {
-        return "Class:Meeting" +
+        return "{class:Meeting" +
                 ", id:" + this.id +
                 ", name:" + this.name +
                 ", price:" + this.price +
                 ", date of Event:" + this.expiracyDate +
-                ", max people allowed:" + this.maxPersonas;
+                ", max people allowed:" + this.maxPersonas +
+                "}";
     }
 }
