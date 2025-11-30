@@ -235,9 +235,9 @@ public class Ticket {
             }
 
             double finalPrice = totalPrice - totalDiscount;
-            sc.append("\nTotal price: ").append(String.format("%.2f", totalPrice));
-            sc.append("\nTotal discount: ").append(String.format("%.2f", totalDiscount));
-            sc.append("\nFinal price: ").append(String.format("%.2f", finalPrice));
+            sc.append("\n  Total price: ").append(String.format("%.2f", totalPrice));
+            sc.append("\n  Total discount: ").append(String.format("%.2f", totalDiscount));
+            sc.append("\n  Final price: ").append(String.format("%.2f", finalPrice));
         }
 
         return sc.toString();
