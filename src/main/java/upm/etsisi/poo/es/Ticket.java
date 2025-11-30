@@ -59,9 +59,17 @@ public class Ticket {
                 if (product instanceof Event) {
                     Event event = (Event) product;
                     if (event.fechaValida(LocalDateTime.now())) {
-                        if (amount < event.getMaxPersonas()) {
+                        if (amount <= event.getMaxPersonas()) {
+
+                            double price = event.getPrice() * amount;
+
+                            event.setPrice(price);
+
                             productList[this.amount] = event;
                             this.amount++;
+
+                            System.out.println(ticketPrint(false));
+                            System.out.println("ticket add: ok");
                         } else {
                             System.out.println("Too many people");
                             resul = false;
@@ -212,6 +220,8 @@ public class Ticket {
                         } else {
                             sc.append(product);
                         }
+                        sc.append("\n");  // 👈 salto de línea
+
                     } else if (p instanceof BasicProduct) {
                         BasicProduct product = (BasicProduct) p;
 
@@ -228,9 +238,16 @@ public class Ticket {
                         } else {
                             sc.append(product);
                         }
+                        sc.append("\n");  // 👈 salto de línea
 
-                    } else {
-                        System.out.println(p);
+                    } else if (p instanceof Event) {
+                        // Meeting / Food (u otros eventos): sin descuento por categoría
+                        Event event = (Event) p;
+
+                        totalPrice += price;
+                        // totalDiscount NO cambia (no hay descuento por categoría)
+
+                        sc.append(event.toString()).append("\n");
                     }
                 }
             }
