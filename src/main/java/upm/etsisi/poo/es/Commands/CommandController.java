@@ -12,7 +12,6 @@ public class CommandController {
 
   public CommandController(Store store) {
     this.store = store;
-    ;
 
     // Registrar aquí todos los comandos
     register(new CommandEcho());

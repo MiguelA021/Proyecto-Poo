@@ -19,6 +19,7 @@ public abstract class Product {
     public abstract double getPrice();
     public abstract void setPrice(double price);
     public abstract void setName(String name);
+    public abstract String getNameComp();
 
 
 }

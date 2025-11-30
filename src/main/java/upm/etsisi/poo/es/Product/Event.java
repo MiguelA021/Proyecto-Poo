@@ -26,6 +26,11 @@ public class Event extends Product {
         }
     }
 
+    public String getNameComp(){
+        String[] names = this.name.split(" ");
+        return names[0];
+    }
+
     public boolean fechaValida(LocalDateTime time) {
         if (expiracyDate == null) {
             return false;

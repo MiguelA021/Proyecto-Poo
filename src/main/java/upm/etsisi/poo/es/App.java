@@ -33,7 +33,9 @@ public class App {
         }
     }
 
-    /** Modo interactivo por consola */
+    /**
+     * Modo interactivo por consola
+     */
     public void userCommand() {
         boolean end = false;
         Scanner scan = new Scanner(System.in);
@@ -44,12 +46,16 @@ public class App {
             System.out.print(UPM);
             String line = scan.nextLine();
             end = controller.handle(line);
-            System.out.println();
+            if (!end) {
+                System.out.println();
+            }
         }
         scan.close();
     }
 
-    /** Modo lectura de fichero */
+    /**
+     * Modo lectura de fichero
+     */
     private void readFile(String[] args) {
         String line;
         Store store = new Store();
@@ -77,7 +83,9 @@ public class App {
         }
     }
 
-    /** It initializes the App */
+    /**
+     * It initializes the App
+     */
     private void init() {
         System.out.println(WELCOME_MESSAGE);
         System.out.println(HELP_MESSAGE);

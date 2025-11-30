@@ -23,7 +23,7 @@ public class Ticket {
     int amount;
     private ArrayList<LocalDateTime> dates;
     private int tickId;
-    Comparator<Product> nameComp = Comparator.comparing(Product::getName);
+    Comparator<Product> nameComp = Comparator.comparing(Product::getNameComp);
     private Status status;
     private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
 
@@ -220,7 +220,6 @@ public class Ticket {
                         } else {
                             sc.append(product);
                         }
-                        sc.append("\n");  // 👈 salto de línea
 
                     } else if (p instanceof BasicProduct) {
                         BasicProduct product = (BasicProduct) p;
@@ -236,9 +235,8 @@ public class Ticket {
                         if (discountValue > 0.0) {
                             sc.append(product.toStringDiscount(discountValue));
                         } else {
-                            sc.append(product);
+                            sc.append(product.toString());
                         }
-                        sc.append("\n");  // 👈 salto de línea
 
                     } else if (p instanceof Event) {
                         // Meeting / Food (u otros eventos): sin descuento por categoría
@@ -247,7 +245,7 @@ public class Ticket {
                         totalPrice += price;
                         // totalDiscount NO cambia (no hay descuento por categoría)
 
-                        sc.append(event.toString()).append("\n");
+                        sc.append(event.toString());
                     }
                 }
             }
@@ -265,7 +263,7 @@ public class Ticket {
      * The method sorts the names alphabetically
      */
     public void sort() {
-        Arrays.sort(productList, 0, amount, nameComp);
+        Arrays.sort(this.productList, 0, this.amount, nameComp);
     }
 
 

@@ -30,6 +30,6 @@ public class Meeting extends Event {
                 ", name:'" + this.name + "'" +
                 ", price:" + this.price +
                 ", date of Event:" + this.expiracyDate.toLocalDate() +
-                ", max people allowed:" + this.maxPersonas + "}";
+                ", max people allowed:" + this.maxPersonas + "}\n";
     }
 }
