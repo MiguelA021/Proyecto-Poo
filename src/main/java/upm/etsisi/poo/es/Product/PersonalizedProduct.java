@@ -3,6 +3,7 @@ package upm.etsisi.poo.es.Product;
 import upm.etsisi.poo.es.type;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class PersonalizedProduct extends BasicProduct {
     private int maxPers;
@@ -54,19 +55,19 @@ public class PersonalizedProduct extends BasicProduct {
             sb.append( "{class:PersonalizedProduct, id:" + this.id + ", name:" + this.name + ", category: " + this.category + ", price:"
         + this.price + "}");
             sb.append(" maxPersonal:" + maxPers + " ");
-            sb.append("personalizationList[");
+            sb.append("\npersonalizationList[");
 
             for (String personalizacion : personalizaciones) {
                 sb.append(personalizacion + ", ");
 
             }
-            sb.append("]} \n");
+            sb.append("]} ");
         }else {
             sb.append("{class:PersonalizedProduct, id:" + this.id + ", name:" + this.name + ", category: " + this.category + ", price:"
         + this.price + "}");
             sb.append(" maxPersonal:" + maxPers + " ");
         }
-        sb.append(String.format("**discount %.3f }\n",discountValue));
+        sb.append(String.format(Locale.US, "**discount -%.3f \n",discountValue));
 
         return sb.toString();
 
