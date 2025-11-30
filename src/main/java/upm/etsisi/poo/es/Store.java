@@ -144,7 +144,7 @@ public class Store {
     if (!listSort.isEmpty()) {
         System.out.println("Client:");
       for (Customer customer : listSort) {
-        System.out.println(customer.toString());
+        System.out.println("  "+customer.toString());
       }
         System.out.println("client list: ok");
     } else {
@@ -233,7 +233,7 @@ public class Store {
     if (!listSort.isEmpty()) {
         System.out.println("Cash:");
       for (Cashier cashier : listSort) {
-        System.out.println(cashier.toString());
+        System.out.println("  "+cashier.toString());
       }
         System.out.println("cash list: ok");
     } else {
