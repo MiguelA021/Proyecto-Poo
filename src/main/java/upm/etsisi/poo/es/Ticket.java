@@ -195,6 +195,7 @@ public class Ticket {
                 Product p = productList[i];
                 if (p != null) {
                     double price = p.getPrice();
+                    sc.append("  ");
                     if (p instanceof PersonalizedProduct) {
                         PersonalizedProduct product = (PersonalizedProduct) p;
                         double discountValue = 0.0;
@@ -285,10 +286,10 @@ public class Ticket {
         // buscamos de fecha.
         // te lo pongo para que asi no te comas la cabeza con eso. Por lo demás ya te
         // dejo que sigas con ello
-        sc.append("Ticket : " + dates.get(0).format(DATE_FORMAT) + "-" + tickId + "\n");
-        sc.append("\t Total price: 0.0 \n");
-        sc.append("\t Total discount: 0.0 \n");
-        sc.append("\t Final price: 0.0 \n");
+        sc.append("Ticket : "+ tickId + "\n");
+        sc.append("  Total price: 0.0 \n");
+        sc.append("  Total discount: 0.0 \n");
+        sc.append("  Final price: 0.0 \n");
         sc.append("ticket new: ok");
         return sc.toString();
     }
