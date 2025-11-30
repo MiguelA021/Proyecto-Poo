@@ -30,7 +30,7 @@ public class Food extends Event {
                 ", id:" + this.id +
                 ", name:" + this.name +
                 ", price:" + this.price +
-                ", date of Event:" + this.expiracyDate +
+                ", date of Event:" + this.expiracyDate.toLocalDate() +
                 ", max people allowed:" + this.maxPersonas +
                 "}";
     }

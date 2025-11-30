@@ -205,23 +205,26 @@ public class ProductCommand implements Command {
             if (afterTokens.length == 3) {
                 double precio = Double.parseDouble(afterTokens[0]);
                 String date = afterTokens[1];
+                int maxPeople = Integer.parseInt(afterTokens[2]);
+
                 Food food = new Food(id, name, precio, date);
-                int assistants = Integer.parseInt(afterTokens[2]);
-                if (assistants <= (food.getMaxPersonas())) {
+                if (maxPeople <= food.getMaxPersonas()) {
+                    // guardamos el max_people concreto
+                    food.setMaxPersonas(maxPeople);
+
                     boolean done = store.prodAdd(food);
                     if (!done) {
                         System.out.println(ID_REPEAT);
                     } else {
                         System.out.println(food.toString());
-                        System.out.println("prod addFood: ok");
+                        System.out.println("prod addFood: ok");   // 👈 texto exacto esperado
                     }
-                }else {
+                } else {
                     System.out.println("Error processing ->prod addFood ->Error adding product");
                 }
             } else {
                 System.out.println(INCORRECT);
             }
-
 
         } catch (Exception e) {
             System.out.println(INCORRECT);
@@ -256,9 +259,15 @@ public class ProductCommand implements Command {
             if (afterTokens.length == 3) {
                 double precio = Double.parseDouble(afterTokens[0]);
                 String date = afterTokens[1];
+                int maxPeople = Integer.parseInt(afterTokens[2]);
+
                 Meeting meeting = new Meeting(id, name, precio, date);
-                int assistants = Integer.parseInt(afterTokens[2]);
-                if (assistants <= (meeting.getMaxPersonas())) {
+
+                // Validamos que no supere el límite general (100)
+                if (maxPeople <= meeting.getMaxPersonas()) {
+                    // Guardamos el max_people concreto en el objeto
+                    meeting.setMaxPersonas(maxPeople);
+
                     boolean done = store.prodAdd(meeting);
                     if (!done) {
                         System.out.println(ID_REPEAT);
@@ -266,7 +275,7 @@ public class ProductCommand implements Command {
                         System.out.println(meeting.toString());
                         System.out.println("prod addMeeting: ok");
                     }
-                }else{
+                } else {
                     System.out.println("Error processing ->prod addMeeting ->Error adding meeting");
                 }
             } else {

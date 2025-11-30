@@ -61,8 +61,7 @@ public class Ticket {
                     if (event.fechaValida(LocalDateTime.now())) {
                         if (amount <= event.getMaxPersonas()) {
 
-                            double price = event.getPrice() * amount;
-
+                            double price = event.getPricePerPerson() * amount;
                             event.setPrice(price);
 
                             productList[this.amount] = event;
@@ -70,6 +69,7 @@ public class Ticket {
 
                             System.out.println(ticketPrint(false));
                             System.out.println("ticket add: ok");
+
                         } else {
                             System.out.println("Too many people");
                             resul = false;
