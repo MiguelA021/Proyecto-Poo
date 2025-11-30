@@ -18,7 +18,7 @@ public class CommandEcho implements Command {
   public boolean execute(String fullLine, String[] args, Store store) {
     try {
       String[] parts = fullLine.split("\"");
-      System.out.println(parts[0].trim() + " \"" + parts[1].trim() + "\"");
+      System.out.println("\"" + parts[1].trim() + "\"");
     } catch (ArrayIndexOutOfBoundsException e) {
       System.out.println(INCORRECT);
     }

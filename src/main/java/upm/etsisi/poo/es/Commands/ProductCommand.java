@@ -96,7 +96,7 @@ public class ProductCommand implements Command {
                 if (!done) {
                     System.out.println(ID_REPEAT);
                 } else {
-                    System.out.println(p.toString());
+                    System.out.print(p.toString());
                     System.out.println("prod add: ok");
                 }
 

@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Locale;
 
 enum Status {
     EMPTY, OPEN, CLOSED
@@ -235,9 +236,9 @@ public class Ticket {
             }
 
             double finalPrice = totalPrice - totalDiscount;
-            sc.append("\n  Total price: ").append(String.format("%.2f", totalPrice));
-            sc.append("\n  Total discount: ").append(String.format("%.2f", totalDiscount));
-            sc.append("\n  Final price: ").append(String.format("%.2f", finalPrice));
+            sc.append("  Total price: ").append(String.format(Locale.US,"%.3f", totalPrice));
+            sc.append("\n  Total discount: ").append(String.format(Locale.US,"%.3f", totalDiscount));
+            sc.append("\n  Final price: ").append(String.format(Locale.US,"%.3f", finalPrice));
         }
 
         return sc.toString();
