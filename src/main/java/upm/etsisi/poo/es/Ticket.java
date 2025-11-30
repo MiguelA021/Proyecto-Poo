@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 enum Status {
-    EMPTY, ACTIVE, CLOSED
+    EMPTY, OPEN, CLOSED
 }
 
 public class Ticket {
@@ -52,7 +52,7 @@ public class Ticket {
 
             } else {
                 if (this.amount == 0) {
-                    this.status = Status.ACTIVE;
+                    this.status = Status.OPEN;
                 }
 
                 if (product instanceof Event) {
