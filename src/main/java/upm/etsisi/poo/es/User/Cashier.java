@@ -25,13 +25,10 @@ public class Cashier extends User {
    */
   public String listTickets() {
     StringBuilder str = new StringBuilder();
-    str.append("Tickets: \n");
     for (Map.Entry<Integer, Ticket> it : tickets.entrySet()) {// saca para cada nodo del arbol (K,V) ordenado por la
       Ticket ticket = it.getValue();
       str.append(ticket.formatList()).append( "\n");
-
     }
-    str.append("cash tickets: ok");
     return str.toString();
   }
 

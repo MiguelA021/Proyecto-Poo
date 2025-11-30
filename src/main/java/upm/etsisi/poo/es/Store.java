@@ -387,6 +387,7 @@ public class Store {
   }
 
   public void ticketList() {
+    System.out.println("Ticket list: ");
     for (Map.Entry<Integer, Cashier> entry : cashers.entrySet()) {
       Cashier casher = entry.getValue();
       System.out.print(casher.listTickets());

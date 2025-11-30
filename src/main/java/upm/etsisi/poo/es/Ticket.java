@@ -254,7 +254,7 @@ public class Ticket {
         // Si esta cerrado fecha de cierre
         StringBuilder resul = new StringBuilder();
 
-        resul.append(toStringId()).append(" - ").append(this.status.toString().toUpperCase());
+        resul.append("  "+toStringId()).append(" - ").append(this.status.toString().toUpperCase());
         return resul.toString();
     }
 
