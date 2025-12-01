@@ -14,7 +14,7 @@ class CommandController{
 -Store store
 -Map<String, Command> commands
 +CommandController(Store store)
-+void register(Command command)
+-void register(Command command)
 +Map<String, Command> getCommands()
 +boolean handle(String line)
 }
@@ -123,6 +123,7 @@ class BasicProduct{
 +void setPrice(double price)
 +double getDiscountedPrice()
 +String toString()
++String toStringDiscount()
 }
 
 class Event{
@@ -136,6 +137,8 @@ class Event{
 +double getPrice()
 +void setPrice(double price)
 +void setName(String name)
++void setmaxPersonas(int maxPersonas)
++double getpricePerPerson()
 }
 
 class Food{
@@ -155,6 +158,7 @@ class PersonalizedProduct{
 -ArrayList<String> personalizaciones
 +String toString()
 +boolean addPersonalized(String personalize)
++ String toStringDiscount(double discountValue)
 }
 }
 class App{
@@ -191,7 +195,7 @@ class Store{
  -{static} CASHER_NOT_FOUND
  -{static} CUSTOMER_NOT_FOUND
  -{static} ID_ERROR
- +getProduct()
+ +Product getProduct(int prodId)
  +boolean addFood(int id, String name, int price, String expiryDate, int maxPeople)
  +boolean addMeeting(int id, String name, int price, String expiryDate, int maxPeople)
  +void addCustomer(String name, String dni, String email, int cashId)
@@ -212,6 +216,8 @@ class Store{
  +Product updateType(int id, type category)
  +boolean updateName(int id, String name)
  +booelan updatePrice(int id, double price)
+ +void ticketList()
+ +Cashier getCasher(int cashId)
 }
 enum type{
  -MERCH
@@ -259,3 +265,4 @@ Ticket "0"--o "100" Product : contains
 Ticket ..> Product
 }
 @enduml
+
