@@ -75,7 +75,9 @@ public class App {
                     end = true;
                     userCommand();
                 }
-                System.out.println();
+                if (!end) {
+                    System.out.println();
+                }
             }
             reader.close();
         } catch (IOException e) {
