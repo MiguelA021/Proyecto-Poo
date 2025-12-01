@@ -6,76 +6,71 @@ import java.time.format.DateTimeParseException;
 
 public class Event extends Product {
 
-    protected LocalDateTime expiracyDate;
-    protected int maxPersonas = 100;
-    protected double pricePerPerson;
+  protected LocalDateTime expiracyDate;
+  protected int maxPersonas = 100;
+  protected double pricePerPerson;
 
-    public Event(int id, String name, double price, String expiryDate) {
-        try {
-            this.id = id;
-            this.name = name;
+  public Event(int id, String name, double price, String expiryDate) {
+    try {
+      this.id = id;
+      this.name = name;
 
-            this.pricePerPerson = price;
+      this.pricePerPerson = price;
 
-            this.price = 0.0;
+      this.price = 0.0;
 
-            LocalDate date = LocalDate.parse(expiryDate);
-            this.expiracyDate = date.atStartOfDay();
-        } catch (DateTimeParseException e) {
-            System.out.println("ERROR: DATE FORMAT NOT VALID");
-        }
+      LocalDate date = LocalDate.parse(expiryDate);
+      this.expiracyDate = date.atStartOfDay();
+    } catch (DateTimeParseException e) {
+      System.out.println("ERROR: DATE FORMAT NOT VALID");
+    }
+  }
+
+  public boolean fechaValida(LocalDateTime time) {
+    if (expiracyDate == null) {
+      return false;
     }
 
-    public String getNameComp(){
-        String[] names = this.name.split(" ");
-        return names[0];
-    }
+    LocalDate today = time.toLocalDate();
+    LocalDate eventDay = expiracyDate.toLocalDate();
 
-    public boolean fechaValida(LocalDateTime time) {
-        if (expiracyDate == null) {
-            return false;
-        }
+    // válido si el día del evento es hoy o posterior
+    return !eventDay.isBefore(today);
+  }
 
-        LocalDate today = time.toLocalDate();
-        LocalDate eventDay = expiracyDate.toLocalDate();
+  public int getMaxPersonas() {
+    return maxPersonas;
+  }
 
-        // válido si el día del evento es hoy o posterior
-        return !eventDay.isBefore(today);
-    }
+  public LocalDateTime getExpiryDate() {
+    return expiracyDate;
+  }
 
-    public int getMaxPersonas() {
-        return maxPersonas;
-    }
+  public String getName() {
+    return this.name;
+  }
 
-    public LocalDateTime getExpiryDate() {
-        return expiracyDate;
-    }
+  public int getId() {
+    return this.id;
+  }
 
-    public String getName() {
-        return this.name;
-    }
+  public double getPrice() {
+    return this.price;
+  }
 
-    public int getId() {
-        return this.id;
-    }
+  public void setPrice(double price) {
+    this.price = price;
+  }
 
-    public double getPrice() {
-        return this.price;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+  public void setMaxPersonas(int maxPersonas) {
+    this.maxPersonas = maxPersonas;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setMaxPersonas(int maxPersonas) {
-        this.maxPersonas = maxPersonas;
-    }
-
-    public double getPricePerPerson() {
-        return pricePerPerson;
-    }
+  public double getPricePerPerson() {
+    return pricePerPerson;
+  }
 }
