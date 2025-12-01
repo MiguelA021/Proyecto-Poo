@@ -17,6 +17,11 @@ public class Customer extends User {
         return "Client{identifier='"+id+"', name='"+name+"', email='"+email+"', cash=UW"+cashierId+"}";
     }
 
+    /**
+     * The method adds the ticket into the tickets associated with the customer
+     * @param id the id of the ticket
+     * @param ticket the ticket given
+     */
     public void addTicket(Integer id, Ticket ticket) {
         tickets.put(id,ticket);
     }
