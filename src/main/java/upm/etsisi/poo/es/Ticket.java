@@ -43,6 +43,19 @@ public class Ticket {
     return this.tickId;
   }
 
+  /**
+   * The method adds the product given, and it also prints it. The ticket status must be
+   * OPEN or EMPTY. The ticket must have less than 100 products, if not, the product
+   * won't be added.
+   * @param product The product given, it cannot be null (if it is, the method won't add it).
+   *                Also, if the product given is a Meeting or a Food, then it cannot be an
+   *                invalid date.
+   * @param store   The store given
+   * @param amount  The amount when the product is a Food or Meeting, it shows the amount of
+   *                people that are expected on that Food/Meeting. If not, it shows how much times
+   *                are we going to add the product into the ticket.
+   * @return It returns true if the product has been added successfully.
+   */
   public boolean ticketAdd(Product product, Store store, int amount) {
     boolean resul = true;
     if (this.status != Status.CLOSED) {
@@ -170,6 +183,11 @@ public class Ticket {
     return valido;
   }
 
+  /**
+   * The method closes the ticket (if the Events are on date) and turns it into a String.
+   * @param close it shows if the ticket has been already closed
+   * @return the String of the ticket
+   */
   public String ticketPrint(boolean close) {
     StringBuilder sc = new StringBuilder();
 
@@ -296,6 +314,10 @@ public class Ticket {
     return resul.toString();
   }
 
+    /**
+     * The method turns the ticket into a String with the new format
+     * @return the ticket turned into a String
+     */
   public String toStringNew() {
     StringBuilder sc = new StringBuilder(); // Soy Aaron, lo de format() esta puesto para que siga el formato que
     // buscamos de fecha.
