@@ -23,11 +23,12 @@ public class Store {
     this.prodAmount = 0;
   }
 
-    /**
-     * The method returns the product if it has been found
-     * @param prodId the id of the product given
-     * @return it returns the product if it was found. If not, it returns null
-     */
+  /**
+   * The method returns the product if it has been found
+   * 
+   * @param prodId the id of the product given
+   * @return it returns the product if it was found. If not, it returns null
+   */
   public Product getProduct(int prodId) {
     Product result = null;
     boolean found = false;
@@ -64,7 +65,7 @@ public class Store {
     return done;
   }
 
-  public boolean addMeeting(int id, String name, double price, String expiryDate, int maxPeople) {
+  public boolean addMeeting(int id, String name, double price, String expiryDate, int assistants) {
     boolean done = false;
     boolean found = false;
     Product meeting = new Meeting(id, name, price, expiryDate);
@@ -83,6 +84,7 @@ public class Store {
 
   /**
    * The method adds the client if the casher given was found
+   * 
    * @param name   the name of the new client
    * @param dni    the ID number of the new client
    * @param email  the eamail of the new client
@@ -102,6 +104,7 @@ public class Store {
 
   /**
    * The method searches by id the cashier
+   * 
    * @param id the ID of the cashier
    * @return the method returns the cashier if it has been found
    */
@@ -111,6 +114,7 @@ public class Store {
 
   /**
    * The method turns the ID card number into the id without letters
+   * 
    * @param dni the ID cad number given
    * @return the method returns the id without letters
    */
@@ -127,6 +131,7 @@ public class Store {
 
   /**
    * The method removes the customer
+   * 
    * @param dni the ID of the customer given
    * @return the methods returns true if the object was found and removed
    */
@@ -137,7 +142,8 @@ public class Store {
   }
 
   /**
-   * The method list the clients alphabetically, those who had been added on the Store
+   * The method list the clients alphabetically, those who had been added on the
+   * Store
    */
   public void listCustomers() {
     ArrayList<Customer> listSort = customersToList();
@@ -160,7 +166,9 @@ public class Store {
 
   /**
    * The method adds the ticket on the cashier
-   * @param idTicket  the id of the ticket (if it's null, it generates it automatically)
+   * 
+   * @param idTicket  the id of the ticket (if it's null, it generates it
+   *                  automatically)
    * @param idCashier the id of the cashier
    */
   public void addTicketOnCashier(Integer idTicket, int idCashier, int idCustomer) {
@@ -180,13 +188,10 @@ public class Store {
     }
   }
 
-  private static int initRandomId() {
-    return (int) (Math.random() * 10000000);
-  }
-
   /**
    * The method adds the cashier if the id (if not given, the method itself
    * generates a random id) given hasn't been already used
+   * 
    * @param id    the id (if not given it generates automatically)
    * @param name  the name of the cashier
    * @param email the email of the cashier
@@ -213,6 +218,7 @@ public class Store {
 
   /**
    * The method removes the cashier given by its id
+   * 
    * @param id the id given
    * @return it returns true if the cashier has been removed successfully
    */
@@ -221,7 +227,8 @@ public class Store {
   }
 
   /**
-   * The method list the cashiers alphabetically, those who had been added on the Store
+   * The method list the cashiers alphabetically, those who had been added on the
+   * Store
    */
   public void listCashers() {
     ArrayList<Cashier> listSort = cashersToList();
@@ -236,10 +243,12 @@ public class Store {
     }
   }
 
-    /**
-     * The method turns the TreeMap into an ArrayList ordered by the name of the Cashiers
-     * @return It returns the ArrayList already sorted
-     */
+  /**
+   * The method turns the TreeMap into an ArrayList ordered by the name of the
+   * Cashiers
+   * 
+   * @return It returns the ArrayList already sorted
+   */
   private ArrayList<Cashier> cashersToList() {
     ArrayList<Cashier> resul = new ArrayList<>(cashers.values());
     resul.sort(Comparator.comparing(Cashier::getName));
@@ -261,6 +270,7 @@ public class Store {
 
   /**
    * The method adds a product tho the productList if there is below 100 products
+   * 
    * @param product the product which we want to add it
    * @return returns true if the method added the product if not, it returns false
    */
@@ -283,6 +293,7 @@ public class Store {
 
   /**
    * The method removes the product with the id given
+   * 
    * @param id the id of the product we want to remove
    * @return it returns true if the product with the id given was removed, if not
    *         it returns false
@@ -322,6 +333,7 @@ public class Store {
 
   /**
    * The method changes the category of the product with the id given
+   * 
    * @param id       the id of the product
    * @param category the new category we want to save
    * @return if the product has been updated the method returns true, if not it
@@ -345,6 +357,7 @@ public class Store {
 
   /**
    * The method changes the name of the product with the id given
+   * 
    * @param id   the id of the product
    * @param name the new name we want to save
    * @return if the product has been updated the method returns true, if not it
@@ -365,6 +378,7 @@ public class Store {
 
   /**
    * The method changes the price of the product with the id given
+   * 
    * @param id    the id of the product
    * @param price the new price we want to save
    * @return if the price has been updated the method returns true, if not it
@@ -383,9 +397,10 @@ public class Store {
     return resul;
   }
 
-    /**
-     * The method runs through the Map, getting all cashiers and showing their tickets
-     */
+  /**
+   * The method runs through the Map, getting all cashiers and showing their
+   * tickets
+   */
   public void ticketList() {
     System.out.println("Ticket list: ");
     for (Map.Entry<Integer, Cashier> entry : cashers.entrySet()) {

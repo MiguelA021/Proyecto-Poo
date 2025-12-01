@@ -178,14 +178,20 @@ class Ticket{
  -{static} int MAX_PRODUCT
  -Product[] productList
  -Product[] storeProducts
+ -int ticketId 
  -int amount
  -Comparator <Product> nameComp
- - Status status
- +boolean ticketAdd(int ProdId, int amount)
+ -Status status
+ -LocalDateTime now
+ -ArrayList<LocalDateTime> dates  
+
+ +boolean ticketAdd(Product product, int amount)
  +Product ticketRemove(int prodId)
- +String ticketPrint()
+ +boolean comprobarFechasTodosEventos(LocalDateTime now) 
+ +String ticketPrint(boolean close)
  +void sort()
- +String getStatus()
+ +String toStringId() 
+ +String toStringNew()
 }
 class Store{
  -{static} int MAX_PRODUCT
@@ -195,9 +201,11 @@ class Store{
  -{static} CASHER_NOT_FOUND
  -{static} CUSTOMER_NOT_FOUND
  -{static} ID_ERROR
+ -int prodAmount
+ 
  +Product getProduct(int prodId)
- +boolean addFood(int id, String name, int price, String expiryDate, int maxPeople)
- +boolean addMeeting(int id, String name, int price, String expiryDate, int maxPeople)
+ +boolean addFood(int id, String name, int price, String expiryDate, int assistants)
+ +boolean addMeeting(int id, String name, int price, String expiryDate, int assistants)
  +void addCustomer(String name, String dni, String email, int cashId)
  +Cashier searchCasherById(int id)
  +int dniToId(String dni)
