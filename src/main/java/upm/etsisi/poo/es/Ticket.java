@@ -19,7 +19,20 @@ enum Status {
 public class Ticket {
   final static int MAX_PRODUCT = 100;
   public static final String ERROR_FULL = "ERROR: Full Ticket (100 products max)";
-  Product[] productList;
+    private static final String ERROR_PRODUCT_ID_NOT_FOUND = "ERROR: Product ID not found";
+    private static final String ADD_OK = "ticket add: ok";
+    private static final String MANY_PEOPLE = "Too many people";
+    private static final String PERIOD_NOT_VALID = "The period of time is not valid";
+    private static final String NO_PRODUCTS_IN_THE_TICKET = "ERROR: No products in the ticket";
+    private static final String PRODUCT_DOES_NOT_EXIST = "ERROR: this product does not exist.";
+    private static final String ERROR_TICKET_CLOSE = "ERROR: the ticket is closed. It can't be modified";
+    private static final String DONT_CLOSE_NOT_VALID_TIME = "The ticket can`t be closed because some event's period of time is invalid. \n";
+    private static final String TOTAL_PRICE = "Total price:";
+    private static final String TOTAL_DISCOUNT = "Total discount:";
+    private static final String FINAL_PRICE = "Final price:";
+    private static final String TICKET = "Ticket :";
+    private static final String TICKET_NEW_OK = "ticket new: ok";
+    Product[] productList;
   int amount;
   private ArrayList<LocalDateTime> dates;
   private int tickId;
@@ -68,7 +81,7 @@ public class Ticket {
       int before = this.amount;
       if (product == null) {
         resul = false;
-        System.out.println("ERROR: Product ID not found ");
+        System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
 
       } else {
         if (this.amount == 0) {
@@ -87,14 +100,14 @@ public class Ticket {
               this.amount++;
 
               System.out.println(ticketPrint(false));
-              System.out.println("ticket add: ok");
+              System.out.println(ADD_OK);
 
             } else {
-              System.out.println("Too many people");
+              System.out.println(MANY_PEOPLE);
               resul = false;
             }
           } else {
-            System.out.println("The period of time is not valid");
+            System.out.println(PERIOD_NOT_VALID);
           }
 
         } else {
@@ -107,7 +120,7 @@ public class Ticket {
           System.out.println(ticketPrint(false));
           if ((this.amount - before) == amount) {
             resul = true;
-            System.out.println("ticket add: ok");
+            System.out.println(ADD_OK);
           } else {
             resul = false;
             System.out.println(ERROR_FULL);
@@ -133,7 +146,7 @@ public class Ticket {
     int iterations = this.amount;
     if (this.status != Status.CLOSED) {
       if (this.amount == 0) {
-        System.out.println("ERROR: No products in the ticket");
+        System.out.println(NO_PRODUCTS_IN_THE_TICKET);
 
       } else {
         for (int i = 0; i < iterations; i++) {
@@ -162,11 +175,11 @@ public class Ticket {
           i++;
         }
         if (iterations == this.amount) {
-          System.out.println("ERROR: this product does not exist.");
+          System.out.println(PRODUCT_DOES_NOT_EXIST);
         }
       }
     } else {
-      System.out.println("ERROR: the ticket is closed. It can't be modified");
+      System.out.println(ERROR_TICKET_CLOSE);
     }
     return product;
 
@@ -206,9 +219,9 @@ public class Ticket {
       if (validClose) {
         this.status = Status.CLOSED;
       } else
-        System.out.println("The ticket can`t be closed because some event's period of time is invalid. \n");
+        System.out.println(DONT_CLOSE_NOT_VALID_TIME);
     }
-    sc.append("Ticket: ").append(toStringId()).append("\n");
+    sc.append(TICKET + " ").append(toStringId()).append("\n");
     if (this.amount > 0 && this.productList[0] != null) {
       sort();
       int n = this.amount;
@@ -277,9 +290,9 @@ public class Ticket {
       }
 
       double finalPrice = totalPrice - totalDiscount;
-      sc.append("  Total price: ").append(String.format(Locale.US, "%.3f", totalPrice));
-      sc.append("\n  Total discount: ").append(String.format(Locale.US, "%.3f", totalDiscount));
-      sc.append("\n  Final price: ").append(String.format(Locale.US, "%.3f", finalPrice));
+      sc.append("  " + TOTAL_PRICE + " ").append(String.format(Locale.US, "%.3f", totalPrice));
+      sc.append("\n  " + TOTAL_DISCOUNT + " ").append(String.format(Locale.US, "%.3f", totalDiscount));
+      sc.append("\n  " + FINAL_PRICE + " ").append(String.format(Locale.US, "%.3f", finalPrice));
     }
 
     return sc.toString();
@@ -332,11 +345,11 @@ public class Ticket {
     // buscamos de fecha.
     // te lo pongo para que asi no te comas la cabeza con eso. Por lo demás ya te
     // dejo que sigas con ello
-    sc.append("Ticket : " + tickId + "\n");
-    sc.append("  Total price: 0.0 \n");
-    sc.append("  Total discount: 0.0 \n");
-    sc.append("  Final price: 0.0 \n");
-    sc.append("ticket new: ok");
+    sc.append(TICKET + " " + tickId + "\n");
+    sc.append("  " + TOTAL_PRICE + " 0.0 \n");
+    sc.append("  " + TOTAL_DISCOUNT + " 0.0 \n");
+    sc.append("  " + FINAL_PRICE + " 0.0 \n");
+    sc.append(TICKET_NEW_OK);
     return sc.toString();
   }
 
