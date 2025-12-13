@@ -260,8 +260,7 @@ class TicketData {
   +void ticketList()
 }
 class TicketController {
-        +TicketController getTicketController()
-        - TicketController ()
+         + TicketController ()
          +boolean addFood(int id, String name, int price, String expiryDate, int assistants)
          +boolean addMeeting(int id, String name, int price, String expiryDate, int assistants)
          +boolean prodAdd(Product product)
