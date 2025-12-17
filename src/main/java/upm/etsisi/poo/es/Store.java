@@ -93,7 +93,7 @@ public class Store {
   public void addCustomer(String name, String dni, String email, int cashId) {
     if (cashers.containsKey(cashId)) {
       int id = dniToId(dni);
-      Customer customer = new Customer(email, name, dni, cashId);
+      Customer customer = new Customer(email, name, dni, cashId, !Character.isDigit(dni.toCharArray()[dni.length()-1]));
       customers.put(id, customer);
       System.out.println(customer.toString());
       System.out.println("client add: ok");
