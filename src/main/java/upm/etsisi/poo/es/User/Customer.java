@@ -5,14 +5,12 @@ import java.util.TreeMap;
 
 public class Customer extends User {
     private final int cashierId;
-    private final boolean isEnterprise;
 
-    public Customer (String email, String name, String id, int cashierId, boolean isEnterprise){
+    public Customer (String email, String name, String id, int cashierId){
         this.email=email;
         this.name =name;
         this.cashierId = cashierId;
         this.id=id;
-        this.isEnterprise=isEnterprise;
         tickets=new TreeMap<>();
     }
     public String toString(){
@@ -28,11 +26,4 @@ public class Customer extends User {
         tickets.put(id,ticket);
     }
 
-    /**
-     * The method checks if the user is an enterprise
-     * @return returns true if the user is an enterprise
-     */
-    public boolean isEnterprise() {
-        return isEnterprise;
-    }
 }

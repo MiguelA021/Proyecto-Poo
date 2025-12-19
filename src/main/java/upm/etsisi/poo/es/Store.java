@@ -3,6 +3,7 @@ package upm.etsisi.poo.es;
 import upm.etsisi.poo.es.Product.*;
 import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.User.Customer;
+import upm.etsisi.poo.es.User.CustomerEnterprise;
 
 import java.util.*;
 
@@ -91,15 +92,33 @@ public class Store {
    * @param cashId the id of the casher given
    */
   public void addCustomer(String name, String dni, String email, int cashId) {
+    Customer customer;
     if (cashers.containsKey(cashId)) {
       int id = dniToId(dni);
-      Customer customer = new Customer(email, name, dni, cashId, !Character.isDigit(dni.toCharArray()[dni.length()-1]));
+      if (!isEnterprise(dni)) {
+        customer = new Customer(email, name, dni, cashId);
+      }else {
+        customer = new CustomerEnterprise(email, name, dni, cashId);
+      }
       customers.put(id, customer);
       System.out.println(customer.toString());
       System.out.println("client add: ok");
     } else {
       System.out.println(CASHIER_NOT_FOUND);
     }
+  }
+
+  /**
+   * The method checks if the id given is from a DNI/NIE or a NIF
+   * @param id the id given by parameter
+   * @return it returns true if the id is a NIF, else returns false
+   */
+  private boolean isEnterprise(String id){
+    boolean resul=true;
+    if (Character.isDigit(id.charAt(id.length()-1))){
+      resul=false;
+    }
+    return resul;
   }
 
   /**
