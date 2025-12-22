@@ -7,11 +7,9 @@ import java.util.Map;
 
 public class CommandController {
 
-  private final Store store;
   private final Map<String, Command> commands = new HashMap<>();
 
-  public CommandController(Store store) {
-    this.store = store;
+  public CommandController() {
 
     // Registrar aquí todos los comandos
     register(new CommandEcho());
@@ -48,6 +46,6 @@ public class CommandController {
       return false;
     }
 
-    return command.execute(trimmed, parts, store);
+    return command.execute(trimmed, parts);
   }
 }
