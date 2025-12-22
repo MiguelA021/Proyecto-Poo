@@ -15,7 +15,7 @@ public class CommandEcho implements Command {
   }
 
   @Override
-  public boolean execute(String fullLine, String[] args, Store store) {
+  public boolean execute(String fullLine, String[] args) {
     try {
       String[] parts = fullLine.split("\"");
       System.out.println("\"" + parts[1].trim() + "\"");

@@ -323,6 +323,8 @@ TicketController ..|> TicketData
 CashierController <|. CustomerController
 CashierController *-- Cashier
 CustomerController +-- Customer
+TicketController --> Store
+
 }
 @enduml
 @enduml

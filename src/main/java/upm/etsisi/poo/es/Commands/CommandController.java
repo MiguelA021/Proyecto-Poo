@@ -48,6 +48,6 @@ public class CommandController {
       return false;
     }
 
-    return command.execute(trimmed, parts, store);
+    return command.execute(trimmed, parts);
   }
 }

@@ -14,7 +14,7 @@ public class ClientCommand implements Command {
     }
 
     @Override
-    public boolean execute(String fullLine, String[] args, Store store) {
+    public boolean execute(String fullLine, String[] args) {
         if (args.length < 2) {
             System.out.println(INCORRECT);
             return false;

@@ -15,7 +15,7 @@ public class CommandHelp implements Command {
   }
 
   @Override
-  public boolean execute(String fullLine, String[] args, Store store) {
+  public boolean execute(String fullLine, String[] args) {
     System.out.println("Commands:");
     System.out.println("client add \"<nombre>\" <DNI> <email> <cashId>\n" +
         "client remove <DNI>\n" +

@@ -15,12 +15,20 @@ public class Store {
   public static final String CUSTOMER_NOT_FOUND = "The customer given was not found";
   public static final String ID_ERROR = "The id given has already been  used";
   private int prodAmount;
+  private static Store instance;
 
   public Store() {
     this.productList = new Product[MAX_PRODUCT];
     this.cashers = new TreeMap<Integer, Cashier>();
     this.customers = new TreeMap<Integer, Customer>();
     this.prodAmount = 0;
+  }
+
+  public static Store getInstance() {
+    if(instance == null){
+      instance = new Store();
+    }
+    return instance;
   }
 
   /**
@@ -43,6 +51,19 @@ public class Store {
       }
     }
     return result;
+  }
+  public boolean productExits(int prodId) {
+    boolean found = false;
+    int i = 0;
+    while (i < MAX_PRODUCT && !found) {
+      Product p = productList[i];
+      if (p != null && p.getId() == prodId) {
+        found = true;
+      } else {
+        i++;
+      }
+    }
+    return found;
   }
 
   // We're going to do ckecking of maxPeople using the right now date and the
