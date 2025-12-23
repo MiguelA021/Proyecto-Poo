@@ -24,6 +24,14 @@ public class Store {
     this.prodAmount = 0;
   }
 
+  public int getMAX_PRODUCT() {
+    return MAX_PRODUCT;
+  }
+
+  public int getProdAmount(){
+    return prodAmount;
+  }
+
   /**
    * The method returns the product if it has been found
    * 
@@ -435,4 +443,3 @@ public class Store {
 
 }
 
-// ticketList??
