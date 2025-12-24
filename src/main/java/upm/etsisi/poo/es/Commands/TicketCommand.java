@@ -1,7 +1,7 @@
 package upm.etsisi.poo.es.Commands;
 
 import upm.etsisi.poo.es.Product.PersonalizedProduct;
-import upm.etsisi.poo.es.User.Cashier;
+import upm.etsisi.poo.es.User.ICashier;
 import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.Ticket;
@@ -63,7 +63,7 @@ public class TicketCommand implements Command {
       int casherIdGood = Integer.parseInt(casherId.replace("UW", ""));
       int prodId = Integer.parseInt(args[4]);
       int amount = Integer.parseInt(args[5]);
-      Cashier cashier = store.searchCasherById(casherIdGood);
+      ICashier cashier = store.searchCasherById(casherIdGood);
       Ticket ticket = cashier.getTicketById(ticketId);
       Product product = store.getProduct(prodId);
 
@@ -97,7 +97,7 @@ public class TicketCommand implements Command {
       int prodId = Integer.parseInt(args[4]);
       String casherId = args[3];
       int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
-      Cashier cashier = store.searchCasherById(casherIdGood);
+      ICashier cashier = store.searchCasherById(casherIdGood);
       Ticket ticket = cashier.getTicketById(ticketId);
       Product product = ticket.ticketRemove(prodId);
       if (product == null) {
@@ -115,7 +115,7 @@ public class TicketCommand implements Command {
     int ticketId = Integer.parseInt(args[2]);
     String casherId = args[3];
     int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
-    Cashier cashier = store.searchCasherById(casherIdGood);
+    ICashier cashier = store.searchCasherById(casherIdGood);
     Ticket ticket = cashier.getTicketById(ticketId);
     String printed = ticket.ticketPrint(true);
     if (printed.isEmpty()) {

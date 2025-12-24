@@ -4,10 +4,7 @@ import upm.etsisi.poo.es.Ticket;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Cashier extends User {
-  private static final String UPM_WORKER = "UW";
-  private static final String ID_ERROR = "The id given has been already used";
-  private static final String ID_NOT_FOUND = "The id given, was not found ";
+public class Cashier extends User implements ICashier {
 
   public Cashier(String email, String name, String id) {
     this.email = email;
@@ -15,14 +12,7 @@ public class Cashier extends User {
     this.id = id;
     tickets = new TreeMap<>();
   }
-
-  /**
-   * The method runs through the tree and gives back the pair [K,V] ordered by the
-   * key
-   * 
-   * @return The string returned is the list of tickets that belongs to the atm
-   *         ordered by their id
-   */
+  @Override
   public String listTickets() {
     StringBuilder str = new StringBuilder();
     for (Map.Entry<Integer, Ticket> it : tickets.entrySet()) {// saca para cada nodo del arbol (K,V) ordenado por la
@@ -31,13 +21,7 @@ public class Cashier extends User {
     }
     return str.toString();
   }
-
-  /**
-   * The method adds the ticket given by id into the cashers tree
-   * 
-   * @param id the id given by parameter (if it is not given, it generates one
-   *           automatically)
-   */
+  @Override
   public int addTicket(Integer id) {
     if (id==null) {
       do {
@@ -53,12 +37,7 @@ public class Cashier extends User {
     return id;
   }
 
-  /**.
-   * The method returns the ticket given by id
-   * 
-   * @param id the id of the ticket
-   * @return the ticket (if it has been found)
-   */
+  @Override
   public Ticket getTicketById(int id) {
     Ticket ticket = null;
     if (tickets.containsKey(id)) {
@@ -68,17 +47,12 @@ public class Cashier extends User {
     }
     return ticket;
   }
-
+  @Override
   public String toString() {
     return "Cash{identifier='"+UPM_WORKER+id+"', name='"+name+"', email='"+email+"'}";
   }
 
-  /**
-   * The method removes the ticket given by the id
-   * 
-   * @param id the id of the ticket
-   * @return returns true if the ticket has been removed
-   */
+  @Override
   public boolean removeTicket(int id) {
     boolean resul = false;
     if (tickets.containsKey(id)) {
@@ -87,5 +61,4 @@ public class Cashier extends User {
     }
     return resul;
   }
-
 }

@@ -8,13 +8,10 @@ public abstract class User {
       protected String email;
       protected String id;
       protected TreeMap<Integer, Ticket> tickets;
-
       public  String getName(){
             return name;
       }
-
       public String getId(){return id;}
-
       public String getEmail(){
             return email;
       }

@@ -3,7 +3,7 @@ import upm.etsisi.poo.es.Ticket;
 
 import java.util.TreeMap;
 
-public class Customer extends User {
+public class Customer extends User implements ICustomer {
     private final int cashierId;
 
     public Customer (String email, String name, String id, int cashierId){
@@ -13,17 +13,12 @@ public class Customer extends User {
         this.id=id;
         tickets=new TreeMap<>();
     }
+    @Override
     public String toString(){
         return "Client{identifier='"+id+"', name='"+name+"', email='"+email+"', cash=UW"+cashierId+"}";
     }
-
-    /**
-     * The method adds the ticket into the tickets associated with the customer
-     * @param id the id of the ticket
-     * @param ticket the ticket given
-     */
+    @Override
     public void addTicket(Integer id, Ticket ticket) {
         tickets.put(id,ticket);
     }
-
 }

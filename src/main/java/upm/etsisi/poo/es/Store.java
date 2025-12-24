@@ -1,17 +1,15 @@
 package upm.etsisi.poo.es;
 
 import upm.etsisi.poo.es.Product.*;
-import upm.etsisi.poo.es.User.Cashier;
-import upm.etsisi.poo.es.User.Customer;
-import upm.etsisi.poo.es.User.CustomerEnterprise;
+import upm.etsisi.poo.es.User.*;
 
 import java.util.*;
 
 public class Store {
   int MAX_PRODUCT = 200;
   Product[] productList;
-  TreeMap<Integer, Cashier> cashers;
-  TreeMap<Integer, Customer> customers;
+  TreeMap<Integer, ICashier> cashers;
+  TreeMap<Integer, ICustomer> customers;
   public static final String CASHIER_NOT_FOUND = "The cashier given was not found";
   public static final String CUSTOMER_NOT_FOUND = "The customer given was not found";
   public static final String ID_ERROR = "The id given has already been  used";
@@ -19,8 +17,8 @@ public class Store {
 
   public Store() {
     this.productList = new Product[MAX_PRODUCT];
-    this.cashers = new TreeMap<Integer, Cashier>();
-    this.customers = new TreeMap<Integer, Customer>();
+    this.cashers = new TreeMap<Integer, ICashier>();
+    this.customers = new TreeMap<Integer, ICustomer>();
     this.prodAmount = 0;
   }
 
@@ -127,7 +125,7 @@ public class Store {
    * @param id the ID of the cashier
    * @return the method returns the cashier if it has been found
    */
-  public Cashier searchCasherById(int id) {
+  public ICashier searchCasherById(int id) {
     return cashers.get(id);
   }
 
@@ -156,7 +154,7 @@ public class Store {
    */
   public boolean removeCustomer(String dni) {
     int id = dniToId(dni);
-    Customer customer = customers.remove(id);
+    ICustomer customer = customers.remove(id);
     return customer != null;
   }
 
@@ -165,10 +163,10 @@ public class Store {
    * Store
    */
   public void listCustomers() {
-    ArrayList<Customer> listSort = customersToList();
+    ArrayList<ICustomer> listSort = customersToList();
     if (!listSort.isEmpty()) {
       System.out.println("Client:");
-      for (Customer customer : listSort) {
+      for (ICustomer customer : listSort) {
         System.out.println("  " + customer.toString());
       }
       System.out.println("client list: ok");
@@ -177,9 +175,9 @@ public class Store {
     }
   }
 
-  private ArrayList<Customer> customersToList() {
-    ArrayList<Customer> resul = new ArrayList<>(customers.values());
-    resul.sort(Comparator.comparing(Customer::getName));
+  private ArrayList<ICustomer> customersToList() {
+    ArrayList<ICustomer> resul = new ArrayList<>(customers.values());
+    resul.sort(Comparator.comparing(ICustomer::getName));
     return resul;
   }
 
@@ -192,7 +190,7 @@ public class Store {
    */
   public void addTicketOnCashier(Integer idTicket, int idCashier, int idCustomer) {
     if (cashers.containsKey(idCashier) && customers.containsKey(idCustomer)) {
-      Cashier c = cashers.get(idCashier);
+      ICashier c = cashers.get(idCashier);
       idTicket = c.addTicket(idTicket);
       Ticket resul = cashers.get(idCashier).getTicketById(idTicket);
       System.out.println(resul.toStringNew());
@@ -250,10 +248,10 @@ public class Store {
    * Store
    */
   public void listCashers() {
-    ArrayList<Cashier> listSort = cashersToList();
+    ArrayList<ICashier> listSort = cashersToList();
     if (!listSort.isEmpty()) {
       System.out.println("Cash:");
-      for (Cashier cashier : listSort) {
+      for (ICashier cashier : listSort) {
         System.out.println("  " + cashier.toString());
       }
       System.out.println("cash list: ok");
@@ -268,9 +266,9 @@ public class Store {
    * 
    * @return It returns the ArrayList already sorted
    */
-  private ArrayList<Cashier> cashersToList() {
-    ArrayList<Cashier> resul = new ArrayList<>(cashers.values());
-    resul.sort(Comparator.comparing(Cashier::getName));
+  private ArrayList<ICashier> cashersToList() {
+    ArrayList<ICashier> resul = new ArrayList<>(cashers.values());
+    resul.sort(Comparator.comparing(ICashier::getName));
     return resul;
   }
 
@@ -422,14 +420,14 @@ public class Store {
    */
   public void ticketList() {
     System.out.println("Ticket list: ");
-    for (Map.Entry<Integer, Cashier> entry : cashers.entrySet()) {
-      Cashier casher = entry.getValue();
+    for (Map.Entry<Integer, ICashier> entry : cashers.entrySet()) {
+      ICashier casher = entry.getValue();
       System.out.print(casher.listTickets());
     }
     System.out.println("ticket list: ok");
   }
 
-  public Cashier getCasher(int cashId) {
+  public ICashier getCasher(int cashId) {
     return cashers.get(cashId);
   }
 
