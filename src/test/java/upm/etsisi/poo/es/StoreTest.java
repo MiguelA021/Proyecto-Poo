@@ -132,29 +132,23 @@ public class StoreTest {
     //FALLO: Debe ser USER en vez de CLIENT
     @Test
     public void listCustomersTest(){
-        PrintStream originalOut = new PrintStream(System.out);
-        ByteArrayOutputStream capturador = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(capturador));
         Store objectTest = new Store();
 
         objectTest.addCasher(1234567, "AndresCurro5", "andresCurr@upm.es");
         objectTest.addCustomer("Pepe3", "55630667S", "pepe1@upm.es", 1234567);
         objectTest.addCustomer("Marco", "55630668J", "marcoo@upm.es", 1234567);
         objectTest.addCustomer("Darkiel", "34670161A", "darkiel2@upm.es", 1234567);
+
+        PrintStream originalOut = new PrintStream(System.out);
+        ByteArrayOutputStream capturador = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(capturador));
+
         objectTest.listCustomers();
 
         String resultFunction = capturador.toString();
 
         StringBuilder sc = new StringBuilder();
-        sc.append("Cash{identifier='UW1234567', name='AndresCurro5', email='andresCurr@upm.es'}").append(System.lineSeparator());
-        sc.append("cash add: ok").append(System.lineSeparator());
-        sc.append("Client{identifier='55630667S', name='Pepe3', email='pepe1@upm.es', cash=UW1234567}").append(System.lineSeparator());
-        sc.append("client add: ok").append(System.lineSeparator());
-        sc.append("Client{identifier='55630668J', name='Marco', email='marcoo@upm.es', cash=UW1234567}").append(System.lineSeparator());
-        sc.append("client add: ok").append(System.lineSeparator());
-        sc.append("Client{identifier='34670161A', name='Darkiel', email='darkiel2@upm.es', cash=UW1234567}").append(System.lineSeparator());
-        sc.append("client add: ok").append(System.lineSeparator());
-        sc.append("Client: ").append(System.lineSeparator());
+        sc.append("Client:").append(System.lineSeparator());
         sc.append("  USER{identifier='34670161A', name='Darkiel', email='darkiel2@upm.es', cash=UW1234567}").append(System.lineSeparator());
         sc.append("  USER{identifier='55630668J', name='Marco', email='marcoo@upm.es', cash=UW1234567}").append(System.lineSeparator());
         sc.append("  USER{identifier='55630667S', name='Pepe3', email='pepe1@upm.es', cash=UW1234567}").append(System.lineSeparator());
@@ -168,14 +162,160 @@ public class StoreTest {
    // public void addTicketOnCashier(Integer idTicket, int idCashier, int idCustomer)
     // TEST QUE ME COMPRUEBA SI UN TICKET PERTENECE A UN CAJERO CON EL DICCIONARIO DE STORE A PARTIR DEL ID DEL CAJERO Y ID DEL CLIENTE
 
+    //FALLO: Mejor que el metodo "addTicketOnCashier" permita que el ID del Customer contenga el DNI con o sin letra. Luego en el metodo
+    //se hace la conversion con el dniToId de Store
+
     @Test
     public void addTicketOnCashierTest(){
+        Store objectTest = new Store();
+        int idCasher = 1234567;
+        Integer idTicket = 212123;
+        objectTest.addCasher(idCasher, "AndresCurro5", "andresCurr@upm.es");
+        objectTest.addCustomer("Pepe3", "55630667S", "pepe1@upm.es", idCasher);
+        Ticket expected = new Ticket(idTicket);
+        objectTest.addTicketOnCashier(idTicket, idCasher, 55630667);
+        Ticket result = objectTest.cashers.get(idCasher).getTicketById(idTicket);
+        assertEquals(expected.getId(), result.getId());
+    }
 
+
+    //SI no nos dan ID, llamar al metodo y que solo se permita la adicion si el id generado
+    //NO EXISTE EN CASHERS
+
+    //public boolean addCasher(Integer id, String name, String email)
+    //TEST que me comprueba que SI el id del nuevo cajero ya existe en cashers. NO PERMITE LA ADICION
+    @Test
+    public void addCashierWithIdExistentTest(){
+        Store objectTest = new Store();
+        objectTest.addCasher(1234567, "AndresCurro", "andresCurr@upm.es");
+        objectTest.addCasher(7654321, "PepeCurro", "pepeCurr@upm.es");
+        objectTest.addCasher(1726354, "SergioCurro", "sergioCurr@upm.es");
+
+        boolean result = objectTest.addCasher(1726354, "MiguelCurro", "miguelCurr@upm.es");
+        assertFalse("It mustn't exist an Cashier with same id that other cashier", result);
+    }
+
+    //public boolean removeCasher(int id)
+    //TEST QUE ME COMPRUEBA QUE ESTAN TODOS LOS CAJEROS MENOS EL ELIMINADO COMPARANDO el tamaño de CASHIERS
+    @Test
+    public void removeCashierTest(){
+        Store objectTest = new Store();
+        objectTest.addCasher(1234567, "AndresCurro", "andresCurr@upm.es");
+        objectTest.addCasher(7654321, "PepeCurro", "pepeCurr@upm.es");
+        objectTest.addCasher(1726354, "SergioCurro", "sergioCurr@upm.es");
+        objectTest.removeCasher(1234567);
+        assertEquals(2, objectTest.cashers.size());
+    }
+
+
+    //public void listCashers()
+    //TEST QUE ME COMPRUEBA CON  EL ASSERT DE STRING EL MISMO STRING DE UNO CON LOS CAJEROS AÑADIDOS RESULTADO DE LA FUNCION Y OTRO PROPIO NUESTRO, USAMOS UN LIST CASHERS DE 3
+    @Test
+    public void listCashiersTest(){
+        Store objectTest = new Store();
+        objectTest.addCasher(1234567, "AndresCurro", "andresCurr@upm.es");
+        objectTest.addCasher(7654321, "PepeCurro", "pepeCurr@upm.es");
+        objectTest.addCasher(1726354, "SergioCurro", "sergioCurr@upm.es");
+
+        PrintStream originalOut = new PrintStream(System.out);
+        ByteArrayOutputStream capturador = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(capturador));
+        objectTest.listCashers();
+
+        String actual = capturador.toString();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Cash:").append(System.lineSeparator());
+        sb.append("  Cash{identifier='UW1234567', name='AndresCurro', email='andresCurr@upm.es'}").append(System.lineSeparator());
+        sb.append("  Cash{identifier='UW7654321', name='PepeCurro', email='pepeCurr@upm.es'}").append(System.lineSeparator());
+        sb.append("  Cash{identifier='UW1726354', name='SergioCurro', email='sergioCurr@upm.es'}").append(System.lineSeparator());
+        sb.append("cash list: ok").append(System.lineSeparator());
+
+        String expected = sb.toString();
+        assertEquals(expected, actual);
+        System.setOut(originalOut);
     }
 
 
 
+    //public void listTicketsOnCasher(int id)
+    //	TEST PARECIDO AL LIST CASHERS Y LIST CUSTOMERS
 
+
+
+
+
+
+
+
+
+    //public boolean prodRemove(int id)
+    //	TEST QUE ME COMPRUEBA LA ELIMINACION DE UN PRODUCTO TRAS 3 QUE HABIAN
+
+
+
+
+
+
+
+
+    //public void prodList()
+    //	TEST QUE ME COMPRUEBA FORMATO, TANTO EL QUE USA ESTA FUNCION COMO EL STRINGBUILDER PROPIO
+
+
+
+
+
+
+
+
+
+
+    //public Product updateType(int id, type category)
+    //	TEST QUE ME COMRUEBA EL CAMBIO DE TIPO
+
+
+
+
+
+
+
+
+
+    //public Product updateName(int id, String name)
+    //	TEST QUE ME COMRUEBA EL CAMBIO DE NOMBRE
+
+
+
+
+
+
+
+
+
+
+    //public Product updatePrice(int id, double price)
+    //	TEST QUE ME COMRUEBA EL CAMBIO DE PRECIO
+
+
+
+
+
+
+
+
+    //public void ticketList()
+    //	LO MISMO QUE CON LAS OTRAS COMPARACIONES DE FORMATO
+
+
+
+
+
+
+
+
+    //public Cashier getCasher(int cashId)
+    //	PARA COMPROBAR EL CAJERO COMO EN GET PRODUCT CON 5 CAJEROS
 
 
 
@@ -210,45 +350,3 @@ public class StoreTest {
     }
 
 }
-
-/*
-public boolean addCasher(Integer id, String name, String email)
-	SE USA CON REMOVE/LIST DE CASHIER PERO TIENE SU TEST SIMPLE
-
-public boolean removeCasher(int id)
-	TEST QUE ME COMPRUEBA QUE ESTAN TODOS LOS CAJEROS MENOS EL ELIMINADO COMPARANDO LOS ARRAY LIST DE CAJEROS ESPERADOS CON EL ASSERT STRING DEL LISTCASHIER
-
-public void listCashers()
-	TEST QUE ME COMPRUEBA CON  EL ASSERT DE STRING EL MISMO STRING DE UNO CON LOS CAJEROS AÑADIDOS RESULTADO DE LA FUNCION Y OTRO PROPIO NUESTRO, USAMOS UN LIST CASHERS DE 3
-
-private ArrayList<Cashier> cashersToList()
-	SE USA PARA LIST CASHERS/ REMOVE CASHERS Y ADD CASHERS
-
-
-
-
-public void listTicketsOnCasher(int id)
-	TEST PARECIDO AL LIST CASHERS Y LIST CUSTOMERS
-
-public boolean prodRemove(int id)
-	TEST QUE ME COMPRUEBA LA ELIMINACION DE UN PRODUCTO TRAS 3 QUE HABIAN
-
-public void prodList()
-	TEST QUE ME COMPRUEBA FORMATO, TANTO EL QUE USA ESTA FUNCION COMO EL STRINGBUILDER PROPIO
-
-public Product updateType(int id, type category)
-	TEST QUE ME COMRUEBA EL CAMBIO DE TIPO
-
-public Product updateName(int id, String name)
-	TEST QUE ME COMRUEBA EL CAMBIO DE NOMBRE
-
-public Product updatePrice(int id, double price)
-	TEST QUE ME COMRUEBA EL CAMBIO DE PRECIO
-
-public void ticketList()
-	LO MISMO QUE CON LAS OTRAS COMPARACIONES DE FORMATO
-
-public Cashier getCasher(int cashId)
-	PARA COMPROBAR EL CAJERO COMO EN GET PRODUCT CON 5 CAJEROS
-
- */

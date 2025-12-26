@@ -150,7 +150,7 @@ public class Store {
     for (char c : dni.toCharArray()) {
       if (Character.isDigit(c)) {
         id = id * 10;
-        id += c;
+        id += c - '0';
       }
     }
     return id;
@@ -206,10 +206,10 @@ public class Store {
       System.out.println(resul.toStringNew());
       customers.get(idCustomer).addTicket(idTicket, resul);
     } else {
-      if (cashers.containsKey(idCashier)) {
+      if (!cashers.containsKey(idCashier)) {
         System.out.println(CASHIER_NOT_FOUND);
       }
-      if (customers.containsKey(idCustomer)) {
+      if (!customers.containsKey(idCustomer)) {
         System.out.println(CUSTOMER_NOT_FOUND);
       }
     }
