@@ -93,7 +93,7 @@ public class Ticket {
           if (event.fechaValida(LocalDateTime.now())) {
             if (amount <= event.getMaxPersonas()) {
 
-              double price = event.getPricePerPerson() * amount;
+              double price = event.getPrice() * amount;
               event.setPrice(price);
 
               productList[this.amount] = event;
@@ -280,7 +280,7 @@ public class Ticket {
           } else if (p instanceof Event) {
             // Meeting / Food (u otros eventos): sin descuento por categoría
             Event event = (Event) p;
-
+            //**
             totalPrice += price;
             // totalDiscount NO cambia (no hay descuento por categoría)
 

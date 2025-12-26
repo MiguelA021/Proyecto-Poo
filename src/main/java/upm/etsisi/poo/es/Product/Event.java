@@ -8,16 +8,13 @@ public class Event extends Product {
 
   protected LocalDateTime expiracyDate;
   protected int maxPersonas = 100;
-  protected double pricePerPerson;
 
   public Event(int id, String name, double price, String expiryDate) {
     try {
       this.id = id;
       this.name = name;
 
-      this.pricePerPerson = price;
-
-      this.price = 0.0;
+      this.price = price;
 
       LocalDate date = LocalDate.parse(expiryDate);
       this.expiracyDate = date.atStartOfDay();
@@ -68,9 +65,5 @@ public class Event extends Product {
 
   public void setMaxPersonas(int maxPersonas) {
     this.maxPersonas = maxPersonas;
-  }
-
-  public double getPricePerPerson() {
-    return pricePerPerson;
   }
 }

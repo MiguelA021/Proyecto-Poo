@@ -54,43 +54,6 @@ public class Store {
     return result;
   }
 
-  // We're going to do ckecking of maxPeople using the right now date and the
-  // expiry date for knowing
-  // if we can create the Food or Meeting object
-  public boolean addFood(int id, String name, int price, String expiryDate, int assistants) {
-    boolean done = false;
-    boolean found = false;
-    Event food = new Food(id, name, price, expiryDate);
-    for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
-      if (productList[i] != null && productList[i].getId() == food.getId()) {
-        found = true;
-      } else {
-        if (productList[i] == null) {
-          productList[i] = food;
-          done = true;
-        }
-      }
-    }
-    return done;
-  }
-
-  public boolean addMeeting(int id, String name, double price, String expiryDate, int assistants) {
-    boolean done = false;
-    boolean found = false;
-    Product meeting = new Meeting(id, name, price, expiryDate);
-    for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
-      if (productList[i] != null && productList[i].getId() == meeting.getId()) {
-        found = true;
-      } else {
-        if (productList[i] == null) {
-          productList[i] = meeting;
-          done = true;
-        }
-      }
-    }
-    return done;
-  }
-
   /**
    * The method adds the client if the casher given was found
    * 

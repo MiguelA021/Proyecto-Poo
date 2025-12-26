@@ -7,6 +7,9 @@ import upm.etsisi.poo.es.User.*;
 import upm.etsisi.poo.es.Store.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.logging.SocketHandler;
 
 public class StoreTest {
 
@@ -29,7 +32,6 @@ public class StoreTest {
     //public boolean addFood(int id, String name, int price, String expiryDate, int assistants)
     //SE USA CON GET PRODUCT PERO TIENE SU TEST SIMPLE de aumento de size 23458 "Cafeteria ETSISI" 5 2025-12-21 300
 
-    //FALLO: NO ADMITE EL MAX PERSONAS EN CONSTRUCTOR DE FOOD
     @Test
     public void addFoodTest(){
         Store objectTest = new Store();
@@ -41,7 +43,6 @@ public class StoreTest {
     //public boolean addMeeting(int id, String name, double price, String expiryDate, int assistants)
     //SE USA CON GET PRODUCT PERO TIENE SU TEST SIMPLE 23457 "Graduacion ETSISI" 40 2025-12-21 30
 
-    //FALLO: NO ADMITE EL MAX PERSONAS EN CONSTRUCTOR DE MEETING
     @Test
     public void addMeetingTest(){
         Store objectTest = new Store();
@@ -241,40 +242,119 @@ public class StoreTest {
     //public void listTicketsOnCasher(int id)
     //	TEST PARECIDO AL LIST CASHERS Y LIST CUSTOMERS
 
+    /*
+    Ticket List:
+      25-12-07-22:32-47570 - EMPTY //SIN ID EN LA ENTRADA
+      212123 - OPEN //CON ID EN LA ENTRADA
+      212121-25-12-07-22:32 - CLOSE //CON ID EN LA ENTRADA
+    ticket list: ok
+     */
+    @Test
+    public void listTicketsOnCashierTest(){
+        Store objectTest = new Store();
+        int idCasher = 1234567;
+        Integer idTicket1 = 212123;
+        Integer idTicket2 = 111139;
+        Integer idTicket3 = 222222;
+        Ticket ticket1 = new Ticket(idTicket1);
+        Ticket ticket2 = new Ticket(idTicket2);
+        Ticket ticket3 = new Ticket(idTicket3);
+        objectTest.addCasher(idCasher, "AndresCurro5", "andresCurr@upm.es");
+        objectTest.addCustomer("Pepe3", "55630667S", "pepe1@upm.es", idCasher);
+        objectTest.addCustomer("Manin", "11111111D", "darkiel@upm.es", idCasher);
+        objectTest.addCustomer("Ludo", "22222222E", "ludot@upm.es", idCasher);
+        objectTest.addTicketOnCashier(idTicket1, idCasher, 55630667);
+        objectTest.addTicketOnCashier(idTicket2, idCasher, 11111111);
+        objectTest.addTicketOnCashier(idTicket3, idCasher, 22222222);
+
+        PrintStream originalOut = new PrintStream(System.out);
+        ByteArrayOutputStream capturador = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(capturador));
+        objectTest.listTicketsOnCasher(idCasher);
+        String actual = capturador.toString();
+
+        StringBuilder sd = new StringBuilder();
+        sd.append("  25-12-26-12:58-").append(idTicket2).append(" - EMPTY").append(System.lineSeparator());
+        sd.append("  25-12-26-12:58-").append(idTicket1).append(" - EMPTY").append(System.lineSeparator());
+        sd.append("  25-12-26-12:58-").append(idTicket3).append(" - EMPTY").append(System.lineSeparator());
 
 
+        String expected = sd.toString();
 
-
-
+        assertEquals(expected, actual);
+        System.setOut(originalOut);
+    }
 
 
 
     //public boolean prodRemove(int id)
     //	TEST QUE ME COMPRUEBA LA ELIMINACION DE UN PRODUCTO TRAS 3 QUE HABIAN
 
+    //prod add 1 "Libro POO" BOOK 25 //BASIC PRODUCT
+    //prod addMeeting 23457 "Graduacion ETSISI" 40 2025-12-21 30
 
-
-
-
-
+    @Test
+    public void prodRemoveTest(){
+        Store objectTest = new Store();
+        Product product1 = new BasicProduct(1, "Libro SQL", type.BOOK, 25);
+        Product product2 = new BasicProduct(2, "Calcetines UPM", type.CLOTHES, 10);
+        Product product3 = new Meeting(23457, "Graduacion ETSISI", 40, "2025-12-21");
+        Product product4 = new Meeting(33316, "Fiesta ETSISI", 80, "2026-09-02");
+        objectTest.prodAdd(product1);
+        objectTest.prodAdd(product2);
+        objectTest.prodAdd(product3);
+        objectTest.prodAdd(product4);
+        objectTest.prodRemove(23457);
+        assertEquals(3, objectTest.getProdAmount());
+    }
 
 
     //public void prodList()
     //	TEST QUE ME COMPRUEBA FORMATO, TANTO EL QUE USA ESTA FUNCION COMO EL STRINGBUILDER PROPIO
 
+    //FALLO: Las salidas tanto esperadas como actuales son identicas, es fallo de IntelliJ¿?
 
-
-
-
-
-
-
+    @Test
+    public void prodListTest(){
+        Store objectTest = new Store();
+        Product product1 = new BasicProduct(1, "Libro SQL", type.BOOK, 25);
+        Product product2 = new BasicProduct(2, "Calcetines UPM", type.CLOTHES, 10);
+        Product product3 = new Meeting(23457, "Graduacion ETSISI", 40.0, "2025-12-21");
+        Product product4 = new Meeting(33316, "Fiesta ETSISI", 80.0, "2026-09-02");
+        objectTest.prodAdd(product1);
+        objectTest.prodAdd(product2);
+        objectTest.prodAdd(product3);
+        objectTest.prodAdd(product4);
+        PrintStream originalOut = new PrintStream(System.out);
+        ByteArrayOutputStream cazador = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(cazador));
+        objectTest.prodList();
+        String actual = cazador.toString();
+        StringBuilder tec = new StringBuilder();
+        tec.append("Catalog:").append(System.lineSeparator());
+        tec.append("  {class:Product, id:2, name:'Calcetines UPM', category:CLOTHES, price:10.0}").append(System.lineSeparator());
+        tec.append("  {class:Meeting, id:33316, name:'Fiesta ETSISI', price:80.0, date of Event:2026-09-02, max people allowed:100}").append(System.lineSeparator());
+        tec.append("  {class:Meeting, id:23457, name:'Graduacion ETSISI', price:40.0, date of Event:2025-12-21, max people allowed:100}").append(System.lineSeparator());
+        tec.append("  {class:Product, id:1, name:'Libro SQL', category:BOOK, price:25.0}").append(System.lineSeparator());
+        tec.append("prod list: ok").append(System.lineSeparator());
+        String expected = tec.toString();
+        assertEquals(expected, actual);
+        System.setOut(originalOut);
+    }
 
 
     //public Product updateType(int id, type category)
     //	TEST QUE ME COMRUEBA EL CAMBIO DE TIPO
 
-
+    @Test
+    public void updateTypeTest(){
+        Store objectTest = new Store();
+        Product productTest = new BasicProduct(1, "Libro POO", type.MERCH, 15);
+        objectTest.prodAdd(productTest);
+        Product productUpdate = objectTest.updateType(productTest.getId(), type.CLOTHES);
+        BasicProduct productUpdateBasic = (BasicProduct) productUpdate;
+        assertEquals(type.CLOTHES, productUpdateBasic.getCategory());
+    }
 
 
 

@@ -83,13 +83,13 @@ public class BasicProduct extends Product {
   }
 
   public String toString() {
-    return "{class:Product, id: " + this.id + ", name: '" + this.name + "', category: " + this.category + ", price:"
+    return "{class:Product, id:" + this.id + ", name:'" + this.name + "', category:" + this.category + ", price:"
         + this.price + "}\n";
   }
 
   public String toStringDiscount(double discountValue) {
     StringBuilder sc = new StringBuilder();
-    sc.append(String.format("{class:Product, id: %d, name: '%s', category: %s, price: %.2f} **discount -%.2f%n",
+    sc.append(String.format("{class:Product, id:%d, name:'%s', category:%s, price:%.2f} **discount -%.2f%n",
         this.id, this.name, this.category, this.price, discountValue));
     return sc.toString();
   }
