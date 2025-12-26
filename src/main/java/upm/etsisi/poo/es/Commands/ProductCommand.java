@@ -1,8 +1,7 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Product;
+import upm.etsisi.poo.es.Product.*;
 import upm.etsisi.poo.es.Store;
-import upm.etsisi.poo.es.Ticket;
 import upm.etsisi.poo.es.type;
 
 public class ProductCommand implements Command {
@@ -14,11 +13,12 @@ public class ProductCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "prod add|list|update|remove ...  - product management";
+        return "prod add|addFood|addMeeting|list|update|remove ...  - product management";
     }
 
     @Override
-    public boolean execute(String fullLine, String[] args, Store store, Ticket ticket) {
+    public boolean execute(String fullLine, String[] args) {
+        Store store = Store.getInstance();
         if (args.length < 2) {
             System.out.println(INCORRECT);
             return false;
@@ -31,10 +31,10 @@ public class ProductCommand implements Command {
                 prodAdd(fullLine, args, store);
                 break;
             case "addFood":
-                prodAddFood(args, store);
+                prodAddFood(fullLine, args, store);
                 break;
             case "addMeeting":
-                prodAddMeeting(args, store);
+                prodAddMeeting(fullLine, args, store);
                 break;
             case "list":
                 store.prodList();
@@ -53,45 +53,63 @@ public class ProductCommand implements Command {
 
     private void prodAdd(String fullLine, String[] args, Store store) {
         try {
-
-            if (args.length < 5) {
+            // fullLine: prod add <id> "<name>" <category> <price>
+            int firstQuote = fullLine.indexOf('"');
+            int secondQuote = fullLine.indexOf('"', firstQuote + 1);
+            if (firstQuote < 0 || secondQuote < 0) {
                 System.out.println(INCORRECT);
                 return;
             }
 
-            int id = Integer.parseInt(args[2]);
+            String beforeName = fullLine.substring(0, firstQuote).trim(); // prod add <id>
+            String name = fullLine.substring(firstQuote + 1, secondQuote).trim();
+            String afterName = fullLine.substring(secondQuote + 1).trim(); // <category> <price>
 
-            type category = type.valueOf(args[args.length - 2]);
-            double price = Double.parseDouble(args[args.length - 1]);
+            String[] beforeTokens = beforeName.split("\\s+"); // [prod, add, id]
+            String[] afterTokens = afterName.split("\\s+"); // [category, price]
 
-            StringBuilder nameBuilder = new StringBuilder();
-            for (int i = 3; i < args.length - 2; i++) {
-                if (args[i].isEmpty()) continue;
-                if (nameBuilder.length() > 0) nameBuilder.append(' ');
-                nameBuilder.append(args[i]);
-            }
-
-            String name = nameBuilder.toString().trim();
-            if (name.isEmpty()) {
+            if (beforeTokens.length != 3) {
                 System.out.println(INCORRECT);
                 return;
             }
+            //prod | addMeeting | 23457 | "Graduacion ETSISI" | 40             |2025-11-21  | 30
+            //prod | add        | 5     | "Libro POO"         | BOOK           | 15         | 3 done 👌 DT es un 🐒
+            //prod | add        | 1     | "Libro POO"         | BOOK           | 25 done 👌
+            int id = Integer.parseInt(beforeTokens[2]);
+            if (afterTokens.length == 2) {
+                type category = type.valueOf(afterTokens[0]);
+                double price = Double.parseDouble(afterTokens[1]);
+                BasicProduct p = new BasicProduct(id, name, category, price);//REVISAR
+                boolean done = store.prodAdd(p);
+                if (!done) {
+                    System.out.println(ID_REPEAT);
+                } else {
+                    System.out.println(p.toString());
+                    System.out.println("prod add: ok");
+                }
+            } else if (afterTokens.length == 3) {
 
-            Product p = new Product(id, name, category, price);
-            boolean done = store.prodAdd(p);
+                type category = type.valueOf(afterTokens[0]);
+                double price = Double.parseDouble(afterTokens[1]);
+                int maxPersonalizaciones = Integer.parseInt(afterTokens[2]);
+                PersonalizedProduct p = new PersonalizedProduct(id, name, category, price, maxPersonalizaciones);
+                boolean done = store.prodAdd(p);
+                if (!done) {
+                    System.out.println(ID_REPEAT);
+                } else {
+                    System.out.print(p.toString());
+                    System.out.println("prod add: ok");
+                }
 
-            if (!done) {
-                System.out.println(ID_REPEAT);
             } else {
-                System.out.println(p.toString());
-                System.out.println("prod add: ok");
+                System.out.println(INCORRECT);
             }
+
 
         } catch (Exception e) {
             System.out.println(INCORRECT);
         }
     }
-
 
     private void prodRemove(String[] args, Store store) {
         if (args.length != 3) {
@@ -122,18 +140,9 @@ public class ProductCommand implements Command {
 
             switch (field) {
                 case "NAME":
-                    if (args.length < 5) {
-                        System.out.println(INCORRECT);
-                        return;
-                    }
-
-                    StringBuilder nb = new StringBuilder();
-                    for (int i = 4; i < args.length; i++) {
-                        if (nb.length() > 0) nb.append(' ');
-                        nb.append(args[i]);
-                    }
-                    String newName = nb.toString().trim();
-
+                    // el resto de la línea tras NAME es el nuevo nombre
+                    int idx = fullLine.toUpperCase().indexOf("NAME");
+                    String newName = fullLine.substring(idx + "NAME".length()).trim();
                     updated = store.updateName(id, newName);
                     break;
                 case "CATEGORY":
@@ -167,61 +176,116 @@ public class ProductCommand implements Command {
             System.out.println(INCORRECT);
         }
     }
-    private void prodAddFood(String[] args, Store store) {
+
+    private void prodAddFood(String fullLine, String[] args, Store store) {
         // prod addFood <id> "<name>" <price> <expiration> <max_people>
-        if (args.length != 7) {
-            System.out.println(INCORRECT);
-            return;
-        }
-
         try {
-            int id = Integer.parseInt(args[2]);
-            String name = args[3];
-            int price = Integer.parseInt(args[4]);
-            String expiryDate = args[5];
-            int maxPeople = Integer.parseInt(args[6]);
-
-            boolean done = store.addFood(id, name, price, expiryDate, maxPeople);
-
-            if (!done) {
-                System.out.println(ID_REPEAT);
-            } else {
-                Product p = store.getProduct(id);
-                System.out.println(p.toString());
-                System.out.println("prod addFood: ok");
+            // fullLine: prod add <id> "<name>" <category> <price>
+            int firstQuote = fullLine.indexOf('"');
+            int secondQuote = fullLine.indexOf('"', firstQuote + 1);
+            if (firstQuote < 0 || secondQuote < 0) {
+                System.out.println(INCORRECT);
+                return;
             }
+
+            String beforeName = fullLine.substring(0, firstQuote).trim(); // prod add <id>
+            String name = fullLine.substring(firstQuote + 1, secondQuote).trim();
+            String afterName = fullLine.substring(secondQuote + 1).trim(); // <category> <price>
+
+            String[] beforeTokens = beforeName.split("\\s+"); // [prod, add, id]
+            String[] afterTokens = afterName.split("\\s+"); // [category, price]
+
+            if (beforeTokens.length != 3) {
+                System.out.println(INCORRECT);
+                return;
+            }
+            //prod | addMeeting | 23457 | "Graduacion ETSISI" | 40             |2025-11-21  | 30
+            //prod | add        | 5     | "Libro POO"         | BOOK           | 15         | 3 done 👌 DT es un 🐒
+            //prod | add        | 1     | "Libro POO"         | BOOK           | 25 done 👌
+            int id = Integer.parseInt(beforeTokens[2]);
+            if (afterTokens.length == 3) {
+                double precio = Double.parseDouble(afterTokens[0]);
+                String date = afterTokens[1];
+                int maxPeople = Integer.parseInt(afterTokens[2]);
+
+                Food food = new Food(id, name, precio, date);
+                if (maxPeople <= food.getMaxPersonas()) {
+                    // guardamos el max_people concreto
+                    food.setMaxPersonas(maxPeople);
+
+                    boolean done = store.prodAdd(food);
+                    if (!done) {
+                        System.out.println(ID_REPEAT);
+                    } else {
+                        System.out.println(food.toString());
+                        System.out.println("prod addFood: ok");   // 👈 texto exacto esperado
+                    }
+                } else {
+                    System.out.println("Error processing ->prod addFood ->Error adding product");
+                }
+            } else {
+                System.out.println(INCORRECT);
+            }
+
         } catch (Exception e) {
             System.out.println(INCORRECT);
         }
     }
 
-    private void prodAddMeeting(String[] args, Store store) {
-        // prod addFood <id> "<name>" <price> <expiration> <max_people>
-        if (args.length != 7) {
-            System.out.println(INCORRECT);
-            return;
-        }
-
+    private void prodAddMeeting(String fullLine, String[] args, Store store) {
         try {
-            int id = Integer.parseInt(args[2]);
-            String name = args[3];
-            int price = Integer.parseInt(args[4]);
-            String expiryDate = args[5];
-            int maxPeople = Integer.parseInt(args[6]);
-
-            boolean done = store.addMeeting(id, name, price, expiryDate, maxPeople);
-
-            if (!done) {
-                System.out.println(ID_REPEAT);
-            } else {
-                Product p = store.getProduct(id);
-                System.out.println(p.toString());
-                System.out.println("prod addFood: ok");
+            // fullLine: prod add <id> "<name>" <category> <price>
+            int firstQuote = fullLine.indexOf('"');
+            int secondQuote = fullLine.indexOf('"', firstQuote + 1);
+            if (firstQuote < 0 || secondQuote < 0) {
+                System.out.println(INCORRECT);
+                return;
             }
+
+            String beforeName = fullLine.substring(0, firstQuote).trim(); // prod add <id>
+            String name = fullLine.substring(firstQuote + 1, secondQuote).trim();
+            String afterName = fullLine.substring(secondQuote + 1).trim(); // <category> <price>
+
+            String[] beforeTokens = beforeName.split("\\s+"); // [prod, add, id]
+            String[] afterTokens = afterName.split("\\s+"); // [category, price]
+
+            if (beforeTokens.length != 3) {
+                System.out.println(INCORRECT);
+                return;
+            }
+            //prod | addMeeting | 23457 | "Graduacion ETSISI" | 40             |2025-11-21  | 30
+            //prod | add        | 5     | "Libro POO"         | BOOK           | 15         | 3 done 👌 DT es un 🐒
+            //prod | add        | 1     | "Libro POO"         | BOOK           | 25 done 👌
+            int id = Integer.parseInt(beforeTokens[2]);
+            if (afterTokens.length == 3) {
+                double precio = Double.parseDouble(afterTokens[0]);
+                String date = afterTokens[1];
+                int maxPeople = Integer.parseInt(afterTokens[2]);
+
+                Meeting meeting = new Meeting(id, name, precio, date);
+
+                // Validamos que no supere el límite general (100)
+                if (maxPeople <= meeting.getMaxPersonas()) {
+                    // Guardamos el max_people concreto en el objeto
+                    meeting.setMaxPersonas(maxPeople);
+
+                    boolean done = store.prodAdd(meeting);
+                    if (!done) {
+                        System.out.println(ID_REPEAT);
+                    } else {
+                        System.out.println(meeting.toString());
+                        System.out.println("prod addMeeting: ok");
+                    }
+                } else {
+                    System.out.println("Error processing ->prod addMeeting ->Error adding meeting");
+                }
+            } else {
+                System.out.println(INCORRECT);
+            }
+
+
         } catch (Exception e) {
             System.out.println(INCORRECT);
         }
     }
-
-
 }

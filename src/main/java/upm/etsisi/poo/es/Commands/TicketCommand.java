@@ -1,145 +1,163 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Product;
+import upm.etsisi.poo.es.Product.PersonalizedProduct;
+import upm.etsisi.poo.es.User.Cashier;
+import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.Ticket;
-import upm.etsisi.poo.es.Casher;
 
 public class TicketCommand implements Command {
 
-    @Override
-    public String getName() {
-        return "ticket";
+  @Override
+  public String getName() {
+    return "ticket";
+  }
+
+  @Override
+  public String getDescription() {
+    return "ticket add|remove|print ...  - ticket management";
+  }
+
+  @Override
+  public boolean execute(String fullLine, String[] args) {
+      Store store = Store.getInstance();
+    if (args.length < 2) {
+      System.out.println(INCORRECT);
+      return false;
     }
 
-    @Override
-    public String getDescription() {
-        return "ticket add|remove|print|list|new ...  - ticket management";
+    String sub = args[1];
+
+    switch (sub) {
+      case "add":
+        ticketAdd(args, store);
+        break;
+      case "remove":
+        ticketRemove(args, store);
+        break;
+      case "print":
+        ticketPrint(args, store);
+        break;
+      case "list":
+        store.ticketList();
+        break;
+      case "new":
+        ticketNew(args, store);
+        break;
+      default:
+        System.out.println(INCORRECT);
+        break;
     }
 
-    @Override
-    public boolean execute(String fullLine, String[] args, Store store, Ticket ticket) {
-        if (args.length < 2) {
-            System.out.println(INCORRECT);
-            return false;
+    return false;
+  }
+
+  private void ticketAdd(String[] args, Store store) {
+    if (args.length < 6) {
+      System.out.println(INCORRECT);
+      return;
+    }
+    try {
+
+      int ticketId = Integer.parseInt(args[2]);
+      String casherId = args[3];
+      int casherIdGood = Integer.parseInt(casherId.replace("UW", ""));
+      int prodId = Integer.parseInt(args[4]);
+      int amount = Integer.parseInt(args[5]);
+      Cashier cashier = store.searchCasherById(casherIdGood);
+      Ticket ticket = cashier.getTicketById(ticketId);
+      Product product = store.getProduct(prodId);
+
+      if (product instanceof PersonalizedProduct) {
+        PersonalizedProduct personalizedProduct = (PersonalizedProduct) product;
+        PersonalizedProduct local = new PersonalizedProduct(prodId, product.getName(),
+            ((PersonalizedProduct) product).getCategory(), product.getPrice(), amount);
+        for (int i = 6; i < args.length; i++) {
+          String personalization = args[i].replaceAll("--p", "");
+          local.addPersonalized(personalization);
         }
+        local.newPrice();
+        personalizedProduct.newPrice();
+        ticket.ticketAdd(local, amount);
+      } else {
+        ticket.ticketAdd(product, amount);
+      }
 
-        String sub = args[1];
+    } catch (NumberFormatException e) {
+      System.out.println(INCORRECT);
+    }
+  }
 
-        switch (sub) {
-            case "add":
-                ticketAdd(args, store, ticket);
-                break;
-            case "remove":
-                ticketRemove(args, ticket);
-                break;
-            case "print":
-                ticketPrint(ticket);
-                break;
-            case "list":
-                store.ticketList();
-                break;
-            case "new":
-                ticketNew(args, store);
-                break;
-            default:
-                System.out.println(INCORRECT);
-        }
+  private void ticketRemove(String[] args, Store store) {
+    if (args.length != 5) {
+      System.out.println(INCORRECT);
+      return;
+    }
+    try {
+      int ticketId = Integer.parseInt(args[2]);
+      int prodId = Integer.parseInt(args[4]);
+      String casherId = args[3];
+      int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
+      Cashier cashier = store.searchCasherById(casherIdGood);
+      Ticket ticket = cashier.getTicketById(ticketId);
+      Product product = ticket.ticketRemove(prodId);
+      if (product == null) {
+        System.out.println(NOTEXIST);
+      } else {
+        System.out.println(ticket.ticketPrint(false));
+        System.out.println("ticket remove: ok");
+      }
+    } catch (NumberFormatException e) {
+      System.out.println(INCORRECT);
+    }
+  }
 
-        return false;
+  private void ticketPrint(String[] args, Store store) {
+    int ticketId = Integer.parseInt(args[2]);
+    String casherId = args[3];
+    int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
+    Cashier cashier = store.searchCasherById(casherIdGood);
+    Ticket ticket = cashier.getTicketById(ticketId);
+    String printed = ticket.ticketPrint(true);
+    if (printed.isEmpty()) {
+      System.out.println(EMPTY_TICKET);
+    } else {
+      System.out.println(printed);
+      System.out.println("ticket print: ok");
+    }
+  }
+
+  private void ticketNew(String[] args, Store store) {
+    if (args.length != 4 && args.length != 5) {
+      System.out.println(INCORRECT);
+      return;
     }
 
-    private void ticketAdd(String[] args, Store store, Ticket ticket) {
-        if (args.length != 4) {
-            System.out.println(INCORRECT);
-            return;
-        }
-        try {
-            int id = Integer.parseInt(args[2]);
-            int amount = Integer.parseInt(args[3]);
-            ticket.ticketAdd(id, store, amount);
-            // ticketAdd ya imprime y dice "ticket add: ok" o errores
-        } catch (NumberFormatException e) {
-            System.out.println(INCORRECT);
-        }
+    Integer ticketId = null;
+    int cashId;
+    int userId; // de momento solo lo leemos creo
+
+    try {
+      if (args.length == 4) {
+        // ticket new <cashId> <userId>
+        ticketId = null;
+        String cashierId = args[2].replaceAll("UW", "");
+        cashId = Integer.parseInt(cashierId);
+        userId = store.dniToId(args[3]);
+      } else {
+        // ticket new <id> <cashId> <userId>
+
+        String cashierId = args[3].replaceAll("UW", "");
+        ticketId = Integer.valueOf(args[2]);
+        cashId = Integer.parseInt(cashierId);
+        userId = store.dniToId(args[4]);
+      }
+    } catch (NumberFormatException e) {
+      System.out.println(INCORRECT);
+      return;
     }
 
-    private void ticketRemove(String[] args, Ticket ticket) {
-        if (args.length != 3) {
-            System.out.println(INCORRECT);
-            return;
-        }
-        try {
-            int id = Integer.parseInt(args[2]);
-            Product product = ticket.ticketRemove(id);
-            if (product == null) {
-                System.out.println(NOTEXIST);
-            } else {
-                System.out.println(product.toString());
-                System.out.println("ticket remove: ok");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println(INCORRECT);
-        }
-    }
+    store.addTicketOnCashier(ticketId, cashId, userId);
 
-    private void ticketPrint(Ticket ticket) {
-        String printed = ticket.ticketPrint();
-        if (printed.isEmpty()) {
-            System.out.println(EMPTY_TICKET);
-        } else {
-            System.out.println(printed);
-            System.out.println("ticket print: ok");
-        }
-    }
-
-    private void ticketNew(String[] args, Store store) {
-        // Formatos válidos:
-        //  ticket new <cashId> <userId>
-        //  ticket new <id> <cashId> <userId>
-        if (args.length != 4 && args.length != 5) {
-            System.out.println(INCORRECT);
-            return;
-        }
-
-        Integer ticketId = null;
-        int cashId;
-        String userId; // de momento solo lo leemos creo
-
-        try {
-            if (args.length == 4) {
-                // ticket new <cashId> <userId>
-                cashId = Integer.parseInt(args[2]);
-                userId = args[3];
-            } else {
-                // ticket new <id> <cashId> <userId>
-                ticketId = Integer.valueOf(args[2]);
-                cashId = Integer.parseInt(args[3]);
-                userId = args[4];
-            }
-        } catch (NumberFormatException e) {
-            System.out.println(INCORRECT);
-            return;
-        }
-
-        Casher casher = store.getCasher(cashId);
-        if (casher == null) {
-            System.out.println(Store.CASHER_NOT_FOUND);
-            return;
-        }
-
-
-        if (ticketId == null) {
-            ticketId = casher.generateTicketId();
-        } else if (casher.hasTicket(ticketId)) {
-            System.out.println(ID_REPEAT);
-            return;
-        }
-
-        Ticket t = new Ticket(ticketId);
-        casher.addTicket(ticketId, t);
-
-        System.out.println("ticket new: ok");
-        System.out.println("Ticket id: " + ticketId + " (cashId: " + cashId + ", userId: " + userId + ")");
-    }
+  }
 }
