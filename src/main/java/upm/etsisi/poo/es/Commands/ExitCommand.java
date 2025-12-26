@@ -15,7 +15,7 @@ public class ExitCommand implements Command {
   }
 
   @Override
-  public boolean execute(String fullLine, String[] args, Store store) {
+  public boolean execute(String fullLine, String[] args) {
     return true; // indica al controlador que se termine el bucle
   }
 }

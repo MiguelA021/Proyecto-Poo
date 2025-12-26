@@ -2,6 +2,7 @@ package upm.etsisi.poo.es.Commands;
 
 import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.User.Cashier;
+import upm.etsisi.poo.es.User.CashierController;
 
 public class CashierCommand implements Command {
 
@@ -16,7 +17,8 @@ public class CashierCommand implements Command {
   }
 
   @Override
-  public boolean execute(String fullLine, String[] args, Store store) {
+  public boolean execute(String fullLine, String[] args) {
+      CashierController cashierController = CashierController.getInstance();
     if (args.length < 2) {
       System.out.println(INCORRECT);
       return false;
@@ -26,16 +28,16 @@ public class CashierCommand implements Command {
 
     switch (sub) {
       case "add":
-        cashierAdd(args, store);
+        cashierAdd(args, cashierController);
         break;
       case "remove":
-        cashierRemove(args, store);
+        cashierRemove(args, cashierController);
         break;
       case "list":
-        list(store);
+        list(cashierController);
         break;
       case "tickets":
-        cashTickets(args, store);
+        cashTickets(args, cashierController);
         break;
       default:
         System.out.println(INCORRECT);
@@ -44,7 +46,7 @@ public class CashierCommand implements Command {
     return false;
   }
 
-  private void cashierAdd(String[] args, Store store) {
+  private void cashierAdd(String[] args, CashierController cashierController) {
     if (args.length != 5 && args.length != 4) {
       System.out.println(INCORRECT);
     }
@@ -54,13 +56,13 @@ public class CashierCommand implements Command {
       if (args.length == 4) {
         name = args[2];
         email = args[3];
-        store.addCasher(null, name, email);
+        cashierController.addCasher(null, name, email);
       } else {
         String casherId = args[2].replaceAll("UW", "");
         int cash = Integer.parseInt(casherId);
         name = args[3];
         email = args[4];
-        store.addCasher(cash, name, email);
+        cashierController.addCasher(cash, name, email);
       }
     } catch (NumberFormatException e) {
       System.out.println(INCORRECT);
@@ -69,7 +71,7 @@ public class CashierCommand implements Command {
 
   }
 
-  private void cashierRemove(String[] args, Store store) {
+  private void cashierRemove(String[] args, CashierController cashierController) {
     if (args.length != 3) {
       System.out.println(INCORRECT);
       return;
@@ -77,7 +79,7 @@ public class CashierCommand implements Command {
     try {
       String casherId = args[2].replaceAll("UW", "");
       int cash = Integer.parseInt(casherId);
-      boolean removed = store.removeCasher(cash);
+      boolean removed = cashierController.removeCasher(cash);
       if (!removed) {
         System.out.println("Could not find th cashier");
       } else {
@@ -90,11 +92,11 @@ public class CashierCommand implements Command {
     }
   }
 
-  private void list(Store store) {
-    store.listCashers();
+  private void list(CashierController cashierController) {
+    cashierController.listCashers();
   }
 
-  private void cashTickets(String[] args, Store store) {
+  private void cashTickets(String[] args, CashierController cashierController) {
     // cash tickets <id>
     if (args.length != 3) {
       System.out.println(INCORRECT);
@@ -103,7 +105,7 @@ public class CashierCommand implements Command {
     try {
       String casherId = args[2].replaceAll("UW", "");
       int cash = Integer.parseInt(casherId);
-      Cashier casher = store.searchCasherById(cash);
+      Cashier casher = cashierController.searchCasherById(cash);
 
       // Siempre imprimimos el encabezado
       System.out.println("Tickets: ");
