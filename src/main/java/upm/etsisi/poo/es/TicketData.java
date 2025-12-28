@@ -27,7 +27,7 @@ public class TicketData {
         if(resul == null){
             System.out.println(ID_ERROR);
         }
-        return null;
+        return resul;
     }
 
     public int addTicket() {
@@ -37,6 +37,7 @@ public class TicketData {
         } while (tickets.containsKey(id));
         Ticket ticket = new Ticket(id);
         tickets.put(ticket.getId(), ticket);
+        System.out.println(ticket.toStringNew());
         return id;
     }
 
@@ -45,8 +46,9 @@ public class TicketData {
         if(tickets.containsKey(idTicket)) System.out.println(ID_ERROR);
         else{
             Ticket ticket = new Ticket(idTicket);
-            tickets.put(ticket.getId(),ticket);
+            tickets.put(idTicket,ticket);
             resul = true;
+            System.out.println(ticket.toStringNew());
         }
         return resul;
     }

@@ -59,7 +59,7 @@ public class TicketController {
     public void ticketPrint(int idTicket){
         Ticket ticket = ticketData.getTicket(idTicket);
         if(ticket != null) {
-            String data = ticket.ticketPrint(false);
+            String data = ticket.ticketPrint(true);
             if (data.isEmpty()) {
                 System.out.println(EMPTY_TICKET);
             } else {

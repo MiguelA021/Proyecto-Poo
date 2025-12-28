@@ -130,19 +130,23 @@ public class TicketCommand implements Command {
 
     try {
 
-      String cashierId = args[2].replaceAll("UW", "");
-      cashId = Integer.parseInt(cashierId);
+
       userId = CustomerController.getInstance().dniToId(args[3]);
       if (args.length == 4) {
         // ticket new <cashId> <userId>
+        String cashierId = args[2].replaceAll("UW", "");
+        cashId = Integer.parseInt(cashierId);
         ticketId = ticketData.addTicket();
         cashC.addTicket( ticketId,cashId);
         CustomerController.getInstance().addTicket(ticketId,userId);
       } else {
         // ticket new <id> <cashId> <userId>
+        String cashierId = args[3].replaceAll("UW", "");
+        cashId = Integer.parseInt(cashierId);
         ticketId = Integer.valueOf(args[2]);
         if( !ticketData.addTicket(ticketId)) System.out.println(ID_REPEAT);
         else{
+          cashC.addTicket( ticketId,cashId);
           CustomerController.getInstance().addTicket(ticketId,userId);
         }
       }
