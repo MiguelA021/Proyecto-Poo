@@ -26,15 +26,17 @@ public class Event extends Product {
     }
   }
 
+  /**
+   * The method checks if the event is on a permitted date (must be today or later)
+   * @param time the time given by parameter (usually the actual time)
+   * @return it returns true if the date is valid
+   */
   public boolean fechaValida(LocalDateTime time) {
     if (expiracyDate == null) {
       return false;
     }
-
     LocalDate today = time.toLocalDate();
     LocalDate eventDay = expiracyDate.toLocalDate();
-
-    // válido si el día del evento es hoy o posterior
     return !eventDay.isBefore(today);
   }
 

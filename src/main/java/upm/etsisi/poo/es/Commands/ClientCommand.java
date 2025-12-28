@@ -1,6 +1,8 @@
 package upm.etsisi.poo.es.Commands;
 
 import upm.etsisi.poo.es.Store;
+import upm.etsisi.poo.es.User.Customer;
+import upm.etsisi.poo.es.User.CustomerController;
 
 public class ClientCommand implements Command {
     @Override
@@ -15,6 +17,7 @@ public class ClientCommand implements Command {
 
     @Override
     public boolean execute(String fullLine, String[] args) {
+      CustomerController customerController = CustomerController.getInstance();
         if (args.length < 2) {
             System.out.println(INCORRECT);
             return false;
@@ -24,13 +27,13 @@ public class ClientCommand implements Command {
 
         switch (sub) {
             case "add":
-                clientAdd(args, store);
+                clientAdd(args, customerController);
                 break;
             case "remove":
-                remove(args, store);
+                remove(args,customerController);
                 break;
             case "list":
-                list(store);
+                list(customerController);
                 break;
             default:
                 System.out.println(INCORRECT);
@@ -39,7 +42,7 @@ public class ClientCommand implements Command {
         return false;
     }
 
-    private void clientAdd(String[] args, Store store) {
+    private void clientAdd(String[] args, CustomerController customerController) {
         if (args.length != 6) {
             System.out.println(INCORRECT);
             return;
@@ -51,20 +54,20 @@ public class ClientCommand implements Command {
             String casherId = args[5];
             int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
 
-            store.addCustomer(name, Dni, email,casherIdGood);
+            customerController.addCustomer(name, Dni, email,casherIdGood);
         } catch (NumberFormatException e) {
             System.out.println(INCORRECT);
         }
     }
 
-    private void remove(String[] args, Store store) {
+    private void remove(String[] args,CustomerController customerController) {
         if (args.length != 3) {
             System.out.println(INCORRECT);
             return;
         }
         try {
             String dni = args[2];
-            boolean removed = store.removeCustomer(dni);
+            boolean removed = customerController.removeCustomer(dni);
             if (!removed) {
                 System.out.println("could not find the client");
             }else {
@@ -75,7 +78,7 @@ public class ClientCommand implements Command {
         }
     }
 
-    private void list(Store store) {
-        store.listCustomers();
+    private void list(CustomerController customerController) {
+        customerController.listCustomers();
     }
 }

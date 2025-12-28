@@ -60,6 +60,10 @@ public class BasicProduct extends Product {
 
   }
 
+  /**
+   * The method returns the price already with the discount applied
+   * @return it returns the price discounted
+   */
   public double getDiscountedPrice() {
     double discountRate;
     switch (this.category) {// no hace falta MERCH/ si el descuento es 0.0
@@ -87,6 +91,11 @@ public class BasicProduct extends Product {
         + this.price + "}\n";
   }
 
+  /**
+   * The method returns the String according to the format and with the discounted price
+   * @param discountValue
+   * @return
+   */
   public String toStringDiscount(double discountValue) {
     StringBuilder sc = new StringBuilder();
     sc.append(String.format("{class:Product, id: %d, name: '%s', category: %s, price: %.2f} **discount -%.2f%n",

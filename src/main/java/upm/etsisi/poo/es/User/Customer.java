@@ -25,4 +25,5 @@ public class Customer extends User {
     public void addTicket(Integer id, Ticket ticket) {
         tickets.put(id,ticket);
     }
+
 }

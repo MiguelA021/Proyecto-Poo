@@ -7,11 +7,9 @@ import java.util.Map;
 
 public class CommandController {
 
-  private final Store store;
   private final Map<String, Command> commands = new HashMap<>();
 
-  public CommandController(Store store) {
-    this.store = store;
+  public CommandController() {
 
     // Registrar aquí todos los comandos
     register(new CommandEcho());
