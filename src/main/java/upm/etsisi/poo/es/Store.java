@@ -62,6 +62,10 @@ public class Store {
    * @param email  the eamail of the new client
    * @param cashId the id of the casher given
    */
+
+  //NOT ENTERPRISE: 9 difgitos
+  //ENTERPRISE: 8 digitos
+
   public void addCustomer(String name, String dni, String email, int cashId) {
     Customer customer;
     if (cashers.containsKey(cashId)) {

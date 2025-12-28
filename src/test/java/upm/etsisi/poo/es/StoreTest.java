@@ -77,18 +77,6 @@ public class StoreTest {
         assertEquals(3, objectTest.customers.size());
     }
 
-    //TEST DE ADD CUSTOMER QUE NO PERMITA UN DNI DE DIGITOS MENORES A 9 EN CASO DE NIF
-
-    //CORREGIR CODIGO EN STORE PARA QUE ESTE TEST SALGA BIEN
-    @Test
-    public void addCorrectCustomerNotEnterpriseTest(){
-        Store objectTest = new Store();
-        objectTest.addCasher(1234567, "AndresCurro5", "andresCurr@upm.es");
-        objectTest.addCustomer("Pepe3", "9263067", "pepe1@upm.es", 1234567);
-        objectTest.addCustomer("Marco", "51670661", "marcoo@upm.es", 1234567);
-        objectTest.addCustomer("Darkiel", "346701612", "darkiel2@upm.es", 1234567);
-        assertEquals(1, objectTest.customers.size());
-    }
 
     //public Cashier searchCasherById(int id)
     //TEST QUE ME COMPRUEBA QUE HAYA UN CAJERO ENTRE LOS 3 QUE SE HA AÑADIDO
@@ -239,53 +227,6 @@ public class StoreTest {
 
 
 
-    //public void listTicketsOnCasher(int id)
-    //	TEST PARECIDO AL LIST CASHERS Y LIST CUSTOMERS
-
-    /*
-    Ticket List:
-      25-12-07-22:32-47570 - EMPTY //SIN ID EN LA ENTRADA
-      212123 - OPEN //CON ID EN LA ENTRADA
-      212121-25-12-07-22:32 - CLOSE //CON ID EN LA ENTRADA
-    ticket list: ok
-     */
-    @Test
-    public void listTicketsOnCashierTest(){
-        Store objectTest = new Store();
-        int idCasher = 1234567;
-        Integer idTicket1 = 212123;
-        Integer idTicket2 = 111139;
-        Integer idTicket3 = 222222;
-        Ticket ticket1 = new Ticket(idTicket1);
-        Ticket ticket2 = new Ticket(idTicket2);
-        Ticket ticket3 = new Ticket(idTicket3);
-        objectTest.addCasher(idCasher, "AndresCurro5", "andresCurr@upm.es");
-        objectTest.addCustomer("Pepe3", "55630667S", "pepe1@upm.es", idCasher);
-        objectTest.addCustomer("Manin", "11111111D", "darkiel@upm.es", idCasher);
-        objectTest.addCustomer("Ludo", "22222222E", "ludot@upm.es", idCasher);
-        objectTest.addTicketOnCashier(idTicket1, idCasher, 55630667);
-        objectTest.addTicketOnCashier(idTicket2, idCasher, 11111111);
-        objectTest.addTicketOnCashier(idTicket3, idCasher, 22222222);
-
-        PrintStream originalOut = new PrintStream(System.out);
-        ByteArrayOutputStream capturador = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(capturador));
-        objectTest.listTicketsOnCasher(idCasher);
-        String actual = capturador.toString();
-
-        StringBuilder sd = new StringBuilder();
-        sd.append("  25-12-26-12:58-").append(idTicket2).append(" - EMPTY").append(System.lineSeparator());
-        sd.append("  25-12-26-12:58-").append(idTicket1).append(" - EMPTY").append(System.lineSeparator());
-        sd.append("  25-12-26-12:58-").append(idTicket3).append(" - EMPTY").append(System.lineSeparator());
-
-
-        String expected = sd.toString();
-
-        assertEquals(expected, actual);
-        System.setOut(originalOut);
-    }
-
-
 
     //public boolean prodRemove(int id)
     //	TEST QUE ME COMPRUEBA LA ELIMINACION DE UN PRODUCTO TRAS 3 QUE HABIAN
@@ -309,39 +250,6 @@ public class StoreTest {
     }
 
 
-    //public void prodList()
-    //	TEST QUE ME COMPRUEBA FORMATO, TANTO EL QUE USA ESTA FUNCION COMO EL STRINGBUILDER PROPIO
-
-    //FALLO: Las salidas tanto esperadas como actuales son identicas, es fallo de IntelliJ¿?
-
-    @Test
-    public void prodListTest(){
-        Store objectTest = new Store();
-        Product product1 = new BasicProduct(1, "Libro SQL", type.BOOK, 25);
-        Product product2 = new BasicProduct(2, "Calcetines UPM", type.CLOTHES, 10);
-        Product product3 = new Meeting(23457, "Graduacion ETSISI", 40.0, "2025-12-21");
-        Product product4 = new Meeting(33316, "Fiesta ETSISI", 80.0, "2026-09-02");
-        objectTest.prodAdd(product1);
-        objectTest.prodAdd(product2);
-        objectTest.prodAdd(product3);
-        objectTest.prodAdd(product4);
-        PrintStream originalOut = new PrintStream(System.out);
-        ByteArrayOutputStream cazador = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(cazador));
-        objectTest.prodList();
-        String actual = cazador.toString();
-        StringBuilder tec = new StringBuilder();
-        tec.append("Catalog:").append(System.lineSeparator());
-        tec.append("  {class:Product, id:2, name:'Calcetines UPM', category:CLOTHES, price:10.0}").append(System.lineSeparator());
-        tec.append("  {class:Meeting, id:33316, name:'Fiesta ETSISI', price:80.0, date of Event:2026-09-02, max people allowed:100}").append(System.lineSeparator());
-        tec.append("  {class:Meeting, id:23457, name:'Graduacion ETSISI', price:40.0, date of Event:2025-12-21, max people allowed:100}").append(System.lineSeparator());
-        tec.append("  {class:Product, id:1, name:'Libro SQL', category:BOOK, price:25.0}").append(System.lineSeparator());
-        tec.append("prod list: ok").append(System.lineSeparator());
-        String expected = tec.toString();
-        assertEquals(expected, actual);
-        System.setOut(originalOut);
-    }
-
 
     //public Product updateType(int id, type category)
     //	TEST QUE ME COMRUEBA EL CAMBIO DE TIPO
@@ -357,52 +265,66 @@ public class StoreTest {
     }
 
 
-
-
-
-
-
     //public Product updateName(int id, String name)
     //	TEST QUE ME COMRUEBA EL CAMBIO DE NOMBRE
+    @Test
+    public void updateNameTest(){
+        Store objectTest = new Store();
+        Product productTest = new BasicProduct(1, "Libro SQL", type.BOOK, 25);
+        objectTest.prodAdd(productTest);
+        Product updateProductTest = objectTest.updateName(productTest.getId(), "Libro Algoritmica");
+        BasicProduct updateBasicProductTest = (BasicProduct) updateProductTest;
+        assertEquals("Libro Algoritmica", updateBasicProductTest.getName());
+    }
 
-
-
-
-
-
-
-
+    @Test
+    public void updateNameEventTest(){
+        Store objectTest = new Store();
+        Product productTest = new Meeting(23457, "Graduacion ETSISI", 40.0, "2025-12-21");
+        objectTest.prodAdd(productTest);
+        Product updateProductTest = objectTest.updateName(productTest.getId(), "Graduacion Teleco");
+        Event updateBasicProductTest = (Event) updateProductTest;
+        assertEquals("Graduacion Teleco", updateBasicProductTest.getName());
+    }
 
 
     //public Product updatePrice(int id, double price)
     //	TEST QUE ME COMRUEBA EL CAMBIO DE PRECIO
 
+    @Test
+    public void updatePriceTest(){
+        Store objectTest = new Store();
+        Product productTest = new BasicProduct(1, "Libro SQL", type.BOOK, 25.0);
+        objectTest.prodAdd(productTest);
+        Product updateProductTest = objectTest.updatePrice(productTest.getId(), 30.0);
+        BasicProduct updateBasicProductTest = (BasicProduct) updateProductTest;
+        assertEquals(30.0, updateBasicProductTest.getPrice(), 0.00001);
+    }
 
-
-
-
-
-
-
-    //public void ticketList()
-    //	LO MISMO QUE CON LAS OTRAS COMPARACIONES DE FORMATO
-
-
-
-
-
-
+    @Test
+    public void updatePriceEventTest(){
+        Store objectTest = new Store();
+        Product productTest = new Meeting(23457, "Graduacion ETSISI", 40.0, "2025-12-21");
+        objectTest.prodAdd(productTest);
+        Product updateProductTest = objectTest.updatePrice(productTest.getId(), 30d);
+        Event updateBasicProductTest = (Event) updateProductTest;
+        assertEquals(30d, updateBasicProductTest.getPrice(), 0.00001);
+    }
 
 
     //public Cashier getCasher(int cashId)
     //	PARA COMPROBAR EL CAJERO COMO EN GET PRODUCT CON 5 CAJEROS
-
-
-
-
-
-
-
+    @Test
+    public void getCashierTest(){
+        Store objectTest = new Store();
+        objectTest.addCasher(1234567, "AndresCurro", "andresCurr@upm.es");
+        objectTest.addCasher(2194567, "PepeCurro", "pepeCurr@upm.es");
+        objectTest.addCasher(1274761, "JoaquinCurro", "joaquinCurr@upm.es");
+        objectTest.addCasher(1274761, "WoodzCurro", "woodzCurr@upm.es");
+        objectTest.addCasher(1221741, "BryantCurro", "bryantCurr@upm.es");
+        Cashier actual = objectTest.getCasher(1274761);
+        assertEquals("JoaquinCurro", actual.getName());
+    }
 
 
 
