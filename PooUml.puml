@@ -1,0 +1,331 @@
+@startuml
+package src.main.java.upm.etsisi.poo.es{
+package command{
+interface Command{
+ +String INCORRECT
+ +String NOTEXIST
+ +String EMPTY_TICKET
+ +String ID_REPEAT
+ +String getName()
+ +String getDescription()
+ +boolean execute(String fullLine, String[] args)
+}
+class CommandController{
+-Map<String, Command> commands
+- Store store
++CommandController()
+-void register(Command command)
++Map<String, Command> getCommands()
++boolean handle(String line)
+}
+class CommandEcho{
++String getName()
++String getDescription()
++boolean execute(String fullLine, String[] args)
+}
+class CommandHelp{
++String getName()
++String getDescription()
++boolean execute(String fullLine, String[] args)
+}
+class ExitCommand{
++String getName()
++String getDescription()
++boolean execute(String fullLine, String[] args)
+}
+class ProductCommand{
+- Store store
+--
++String getName()
++String getDescription()
++boolean execute(String fullLine, String[] args)
++void prodAdd(String fullLine, String[] args)
++void prodRemove(String[] args)
+}
+
+class TicketCommand{
+- TicketData almacen
+- TicketController controller
+--
++String getName()
++String getDescription()
++boolean execute(String fullLine, String[] args)
+-void ticketAdd(String[] args)
+-void ticketRemove(String[] args)
+-void ticketPrint(String[] args)
+-void ticketNew(String[] args)
+}
+
+class CashierCommand{
+- CashierController controller
+--
++String getName()
++String getDescription()
++boolean execute(String fullLine, String[] args)
+-void cashierAdd(String[] args)
+-void cashierRemove(String[] args)
+-void list()
+-void cashTickets(String[] args)
+-boolean exits(int id)
+}
+class ClientCommand{
+- CustomerController controller
+--
++String getName()
++String getDescription()
++boolean execute(String fullLine, String[] args)
+-void clientAdd(String[] args)
+-void remove(String[] args)
+-void list()
+}
+
+}
+package user{
+abstract class User{
+    #String name
+    #String email
+    #int id
+    #TreeMap<Integer, Ticket> tickets
+    +String getName()
+    +int getId()
+    +String getEmail()
+}
+class Cashier{
+    -{static} String UPM_WORKER
+    -{static} String ID_ERROR
+    -{static} String ID_NOT_FOUND
+    +String listTickets()
+    +void addTicket(Integer id)
+    +Ticket getTicketById(int id)
+    +String toString()
+    +boolean removeTicket(int id)
+}
+class Customer{
+-Cashier cashier
++String toString()
++void addTicket(Integer id, Ticket ticket)
+}
+}
+package product{
+abstract class Product{
+#int id
+#String name
+#double price
+#{static} String NAME_LENGTH_ERROR
+#{static} String NAME_NULL_ERROR
+#{static} String PRICE_POSITIVE_ERROR
+-ArrayList<String> personalizaciones
++{abstract} int getId()
++{abstract}  String getName()
++{abstract} double getPrice()
++{abstract} void setPrice(double price)
++{abstract} void setName(String name)
+}
+
+class BasicProduct{
+-type category
++int getId()
++String getName()
++double getPrice()
++type getCategory()
++void setId(int id)
++void SetCategory(type category)
++void setName(String name)
++void setPrice(double price)
++double getDiscountedPrice()
++String toString()
++String toStringDiscount()
+}
+
+class Event{
+#LocalDateTime expiracyDate
+#int maxPersonas
++boolean fechaValida(LocalDateTime time)
++int getMaxPersonas()
++LocalDateTime getExpiryDate()
++String getName()
++int getId()
++double getPrice()
++void setPrice(double price)
++void setName(String name)
++void setmaxPersonas(int maxPersonas)
++double getpricePerPerson()
+}
+
+class Food{
+-{static} int TIEMPO_MINIMO
++boolean fechaValida(LocalDateTime time)
++String toString()
+}
+
+class Meeting{
+-{static} int TIEMPO_MINIMO
++boolean fechaValida(LocalDateTime time)
++String toString()
+}
+
+class PersonalizedProduct{
+-int maxPers
+-ArrayList<String> personalizaciones
++String toString()
++boolean addPersonalized(String personalize)
++ String toStringDiscount(double discountValue)
+}
+}
+class App{
+ -{static} String WELCOME_MESSAGE
+ -{static} String HELP_MESSAGE
+ -{static} String FILE_ERROR
+ -{static} String UPM
+ +main(String[] args)
+ -void end()
+ -void start()
+ -void userCommand()
+ -void readFile(String[] args)
+ -void init()
+}
+
+class Ticket{
+ -{static} int MAX_PRODUCT
+ -Product[] productList
+ -int ticketId
+ -int amount
+ -Comparator <Product> nameComp
+ -Status status
+ -LocalDateTime now
+ -ArrayList<LocalDateTime> dates
+--
+ +boolean ticketAdd(Product product, int amount)
+ +Product ticketRemove(int prodId)
+ +boolean comprobarFechasTodosEventos(LocalDateTime now)
+ +String ticketPrint(boolean close)
+ +void sort()
+ +String toStringId()
+ +String toStringNew()
+}
+class CashierController{
+ -{static} CASHER_NOT_FOUND
+TreeMap <Integer,Cashier> cashers
+---
++CashierController()
+ +boolean addCashier(Integer id, String name, String email)
++void listCashiers()
++void listTicketsOnCashier(int id)
++Cashier getCashier(int cashId)
++boolean removeCashier(int id)
+-ArrayList<Cashier> cashiersToList()
++void addTicket(int idTicket,int idCashier)
+ +Cashier searchCasherById(int id)
+
+}
+
+class CustomerController{
+ -{static} CUSTOMER_NOT_FOUND
+TreeMap <Integer,Customer> customers
+--
++void addCustomer(String name, String dni, String email, int cashId)
+-ArrayList<Customer> customersToList()
++boolean removeCustomer(String dni)
+ +int dniToId(String dni)
++ void listCustomers()
++void addTicket(int idTicket, int idCustomer)
+
+}
+
+
+class Store{
+ -{static} int MAX_PRODUCT
+ -Product[] productList
+-{static} ID_ERROR
+-int prodAmount
+ --
+ - Store()
+ + Store getIterationStore()
+ +boolean prodRemove(int id)
+ +boolean prodAdd(Product product)
+ +Product getProduct(int prodId)
+ +void prodList()
+ +Product updateType(int id, type category)
+ +boolean updateName(int id, String name)
+ +booelan updatePrice(int id, double price)
+ }
+class TicketData {
+    TreeMap<id,Ticket> tickets
+
+  - TicketData ()
+  + TicketData getTicketController()
+  +boolean addTicket (int id)
+  + Ticket getTicket( int id)
+  + boolean ticketRemove(int id)
+  +void ticketList()
+}
+class TicketController {
+         + TicketController ()
+         +boolean addFood(int id, String name, int price, String expiryDate, int assistants)
+         +boolean addMeeting(int id, String name, int price, String expiryDate, int assistants)
+         +boolean prodAdd(Product product)
+         +boolean ticketRemove(int id)
+         +String ticketPrint(int id)
+         +String ticketList()
+}
+
+enum type{
+ -MERCH
+ -STATIONARY
+ -CLOTHES
+ -BOOK
+ -ELECTRONICS
+}
+enum Status{
+ - EMPTY
+ - ACTIVE
+ - CLOSED
+}
+App ..> CommandController : uses
+
+User <|- Cashier
+User <|-- Customer
+Command <|.. CommandEcho
+Command <|.. CommandHelp
+Command <|.. ExitCommand
+Command <|.. ProductCommand
+Command <|.. TicketCommand
+Command <|.. CashierCommand
+Command <|.. ClientCommand
+
+
+CommandController "0" --o "many" Command : keeps
+CommandController "0" --> "1" Store : depends
+
+
+ProductCommand --o Store
+User"0" ---o "N" Ticket
+TicketData *-- Ticket
+Product <|.. BasicProduct
+Product <|.. Event
+Event <|.. Food
+Event <|.. Meeting
+BasicProduct <|.. PersonalizedProduct
+
+ProductCommand ..> Product
+Store "0"*-- "200" Product : has_on_stock
+Store ..> Product
+Ticket "0"--o "100" Product : contains
+Ticket --|> Store
+TicketData --* TicketCommand
+CustomerController ..|> TicketData
+CashierController ..|> TicketData
+CashierCommand *-- CashierController
+TicketCommand --> CashierController
+TicketCommand *-- TicketController
+ClientCommand *-- CustomerController
+TicketController ..|> TicketData
+CashierController <|. CustomerController
+CashierController *-- Cashier
+CustomerController +-- Customer
+TicketController --> Store
+
+}
+@enduml
+@enduml
+

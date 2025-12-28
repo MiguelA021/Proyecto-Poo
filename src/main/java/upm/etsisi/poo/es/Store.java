@@ -28,6 +28,13 @@ public class Store {
         return instance;
     }
 
+  public static Store getInstance() {
+    if(instance == null){
+      instance = new Store();
+    }
+    return instance;
+  }
+
   /**
    * The method returns the product if it has been found
    * 
@@ -48,6 +55,19 @@ public class Store {
       }
     }
     return result;
+  }
+  public boolean productExits(int prodId) {
+    boolean found = false;
+    int i = 0;
+    while (i < MAX_PRODUCT && !found) {
+      Product p = productList[i];
+      if (p != null && p.getId() == prodId) {
+        found = true;
+      } else {
+        i++;
+      }
+    }
+    return found;
   }
 
   // We're going to do ckecking of maxPeople using the right now date and the
