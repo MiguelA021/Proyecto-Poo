@@ -34,6 +34,11 @@ public class PersonalizedProduct extends BasicProduct {
         return sb.toString();
     }
 
+    /**
+     * The method adds the personalization if it is allowed
+     * @param personalize the personalization we want to add
+     * @return it returns true if it has been allowed, else returns false
+     */
     public boolean addPersonalized(String personalize) {
         boolean resul = true;
         if (personalizaciones.size() < maxPers) {
@@ -44,6 +49,9 @@ public class PersonalizedProduct extends BasicProduct {
         return resul;
     }
 
+    /**
+     * The method changes the price into the new one with the personalization
+     */
     public void newPrice(){
         this.price = 0.1*this.price*personalizaciones.size() + this.price;
     }

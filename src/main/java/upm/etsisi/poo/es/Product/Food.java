@@ -11,6 +11,9 @@ public class Food extends Event {
     }
 
     @Override
+    /**
+     * It also checks the hours due to foods must be planned with at least 72 hours
+     */
     public boolean fechaValida(LocalDateTime time) {
         // Primero comprobamos la validación general de Event (fecha >= hoy)
         if (!super.fechaValida(time)) {
