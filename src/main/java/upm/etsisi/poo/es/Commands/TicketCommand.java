@@ -1,9 +1,13 @@
 package upm.etsisi.poo.es.Commands;
 
 
+import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.TicketController;
 import upm.etsisi.poo.es.TicketData;
 import upm.etsisi.poo.es.User.Cashier;
+import upm.etsisi.poo.es.User.CashierController;
+import upm.etsisi.poo.es.User.CustomerController;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -128,7 +132,7 @@ public class TicketCommand implements Command {
 
       String cashierId = args[2].replaceAll("UW", "");
       cashId = Integer.parseInt(cashierId);
-      userId = CustomerController.dniToId(args[3]);
+      userId = CustomerController.getInstance().dniToId(args[3]);
       if (args.length == 4) {
         // ticket new <cashId> <userId>
         ticketId = ticketData.addTicket();
@@ -139,7 +143,6 @@ public class TicketCommand implements Command {
         ticketId = Integer.valueOf(args[2]);
         if( !ticketData.addTicket(ticketId)) System.out.println(ID_REPEAT);
         else{
-          CashierController.getInstance().addTicket( ticketId,cashId);
           CustomerController.getInstance().addTicket(ticketId,userId);
         }
       }

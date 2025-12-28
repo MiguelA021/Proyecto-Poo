@@ -23,7 +23,6 @@ public class ProductCommand implements Command {
             System.out.println(INCORRECT);
             return false;
         }
-        Store store = Store.getIteration();
         String sub = args[1];
 
         switch (sub) {

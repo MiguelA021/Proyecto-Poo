@@ -2,22 +2,28 @@ package upm.etsisi.poo.es.User;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.TreeMap;
 
-public  class CashierController {
+public class CashierController {
     private static CashierController instance;
     public static final String ID_ERROR = "The id given has already been  used";
-    TreeMap<Integer, Cashier> cashers;
+    HashMap<Integer, Cashier> cashers;
 
     private CashierController() {
-        this.cashers = new TreeMap<Integer, Cashier>();
+        this.cashers = new HashMap<Integer, Cashier>();
     }
 
-    public static CashierController getInstance(){
-        if(instance == null){
+    public static CashierController getInstance() {
+        if (instance == null) {
             instance = new CashierController();
         }
         return instance;
+    }
+
+
+    public HashMap<Integer, Cashier> getMap() {
+        return this.cashers;
     }
 
     public boolean addCasher(Integer id, String name, String email) {
@@ -86,5 +92,12 @@ public  class CashierController {
         return (cashers.remove(id) != null);
     }
 
+    public boolean exitsTicket(int cashId,int idTicket) {
+        boolean exists = false;
+        if(cashers.get(cashId).getTicketById(idTicket) != null){
+            exists = true;
+        }
+        return exists;
+    }
 
 }

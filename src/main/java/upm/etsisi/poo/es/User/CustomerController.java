@@ -2,6 +2,7 @@ package upm.etsisi.poo.es.User;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 public class CustomerController {
@@ -9,9 +10,11 @@ public class CustomerController {
     public static final String CASHIER_NOT_FOUND = "The cashier given was not found";
     public static CustomerController instance;
     TreeMap<Integer, Customer> customers;
+    HashMap<Integer, Cashier> tickets;
 
     private CustomerController() {
         this.customers = new TreeMap<Integer, Customer>();
+        this.tickets = new HashMap<Integer, Cashier>();
     }
 
     public static CustomerController getInstance() {
@@ -65,6 +68,16 @@ public class CustomerController {
         ArrayList<Customer> resul = new ArrayList<>(customers.values());
         resul.sort(Comparator.comparing(Customer::getName));
         return resul;
+    }
+
+    public void addTicket(Integer ticketId, int cashId) {
+        CashierController cashierController = CashierController.getInstance();
+        try{
+            Cashier cashier =cashierController.getCasher(cashId);
+            tickets.put(ticketId, cashier);
+        }catch (NullPointerException e){
+            System.out.println("no");
+        }
     }
 
 
