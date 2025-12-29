@@ -39,7 +39,7 @@ public class App {
   public void userCommand() {
     boolean end = false;
     Scanner scan = new Scanner(System.in);
-    CommandController controller = new CommandController();
+    CommandController controller = CommandController.getInstance();
 
     while (!end) {
       System.out.print(UPM);
@@ -57,7 +57,7 @@ public class App {
    */
   private void readFile(String[] args) {
     String line;
-    CommandController controller = new CommandController();
+    CommandController controller = CommandController.getInstance();
 
     try {
       BufferedReader reader = new BufferedReader(new FileReader(args[0]));

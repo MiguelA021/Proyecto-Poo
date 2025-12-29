@@ -1,15 +1,21 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Store;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandController {
 
   private final Map<String, Command> commands = new HashMap<>();
+  public static CommandController instance;
 
-  public CommandController() {
+  public static CommandController getInstance() {
+    if (instance == null) {
+      instance = new CommandController();
+    }
+    return instance;
+  }
+
+  private CommandController() {
 
     // Registrar aquí todos los comandos
     register(new CommandEcho());
