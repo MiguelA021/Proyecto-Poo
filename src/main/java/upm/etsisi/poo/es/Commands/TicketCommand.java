@@ -30,7 +30,6 @@ public class TicketCommand implements Command {
 
   @Override
   public boolean execute(String fullLine, String[] args) {
-      Store store = Store.getInstance();
     if (args.length < 2) {
       System.out.println(INCORRECT);
       return false;
