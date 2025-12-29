@@ -8,6 +8,7 @@ import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.User.CashierController;
 import upm.etsisi.poo.es.User.CustomerController;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,11 +26,6 @@ public class TicketCommand implements Command {
   @Override
   public String getName() {
     return "ticket";
-  }
-
-  @Override
-  public String getDescription() {
-    return "ticket add|remove|print ...  - ticket management";
   }
 
   @Override

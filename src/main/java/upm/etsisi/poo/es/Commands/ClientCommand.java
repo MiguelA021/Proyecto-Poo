@@ -10,10 +10,6 @@ public class ClientCommand implements Command {
         return "client";
     }
 
-    @Override
-    public String getDescription() {
-        return "client add|list|update|remove ...  - product management";
-    }
 
     @Override
     public boolean execute(String fullLine, String[] args) {

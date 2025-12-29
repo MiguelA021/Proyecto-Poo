@@ -23,17 +23,17 @@ public class TicketData {
 
 
     public Ticket getTicket(int ticketId) {
-        Ticket resul =tickets.get(ticketId);
-        if(resul == null){
+        Ticket resul = tickets.get(ticketId);
+        if (resul == null) {
             System.out.println(ID_ERROR);
         }
         return resul;
     }
 
     public int addTicket() {
-        int  id ;
+        int id;
         do {
-            id=(int)(Math.random()*100000);
+            id = (int) (Math.random() * 100000);
         } while (tickets.containsKey(id));
         Ticket ticket = new Ticket(id);
         tickets.put(ticket.getId(), ticket);
@@ -43,10 +43,10 @@ public class TicketData {
 
     public boolean addTicket(int idTicket) {
         boolean resul = false;
-        if(tickets.containsKey(idTicket)) System.out.println(ID_ERROR);
-        else{
+        if (tickets.containsKey(idTicket)) System.out.println(ID_ERROR);
+        else {
             Ticket ticket = new Ticket(idTicket);
-            tickets.put(idTicket,ticket);
+            tickets.put(idTicket, ticket);
             resul = true;
             System.out.println(ticket.toStringNew());
         }

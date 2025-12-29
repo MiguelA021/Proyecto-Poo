@@ -11,10 +11,6 @@ public class ProductCommand implements Command {
         return "prod";
     }
 
-    @Override
-    public String getDescription() {
-        return "prod add|addFood|addMeeting|list|update|remove ...  - product management";
-    }
 
     @Override
     public boolean execute(String fullLine, String[] args) {

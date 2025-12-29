@@ -11,10 +11,6 @@ public class CashierCommand implements Command {
     return "cash";
   }
 
-  @Override
-  public String getDescription() {
-    return "cashier add|remove|list|tickets ...  - cashier management";
-  }
 
   @Override
   public boolean execute(String fullLine, String[] args) {

@@ -1,6 +1,7 @@
 package upm.etsisi.poo.es.User;
 
 import upm.etsisi.poo.es.Ticket;
+import upm.etsisi.poo.es.TicketData;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -10,14 +11,12 @@ public class Cashier extends User {
     private static final String UPM_WORKER = "UW";
     private static final String ID_ERROR = "The id given has been already used";
     private static final String ID_NOT_FOUND = "The id given, was not found ";
-    private ArrayList<Integer> ticketIds;
 
     public Cashier(String email, String name, String id) {
-        this.ticketIds = new ArrayList<Integer>();
+        this.tickets = new ArrayList<Integer>();
         this.email = email;
         this.name = name;
         this.id = id;
-        tickets = new TreeMap<>();
     }
 
     /**
@@ -29,8 +28,9 @@ public class Cashier extends User {
      */
     public String listTickets() {
         StringBuilder str = new StringBuilder();
-        for (Map.Entry<Integer, Ticket> it : tickets.entrySet()) {// saca para cada nodo del arbol (K,V) ordenado por la
-            Ticket ticket = it.getValue();
+        tickets.sort(Integer::compareTo);
+        for (Integer id: tickets){
+            Ticket ticket = TicketData.getInstance().getTicket(id);
             str.append(ticket.formatList()).append("\n");
         }
         return str.toString();
@@ -46,13 +46,12 @@ public class Cashier extends User {
         if (id == null) {
             do {
                 id = (int) (Math.random() * 100000);
-            } while (tickets.containsKey(id));
+            } while (tickets.contains(id));
         }
-        if (tickets.containsKey(id)) {
+        if (tickets.contains(id)) {
             System.out.println(ID_ERROR);
         } else {
-            Ticket ticket = new Ticket(id);
-            tickets.put(ticket.getId(), ticket);
+            tickets.add(id);
         }
         return id;
     }
@@ -64,14 +63,15 @@ public class Cashier extends User {
      * @param id the id of the ticket
      * @return the ticket (if it has been found)
      */
-    public Ticket getTicketById(int id) {
-        Ticket ticket = null;
-        if (tickets.containsKey(id)) {
-            ticket = tickets.get(id);
+    public boolean getTicketById(int id) {
+        boolean ticket = false;
+        if (tickets.contains(id)) {
+           ticket = true;
         } else {
             System.out.println(ID_NOT_FOUND);
         }
         return ticket;
+
     }
 
     public String toString() {
@@ -86,7 +86,7 @@ public class Cashier extends User {
      */
     public boolean removeTicket(int id) {
         boolean resul = false;
-        if (tickets.containsKey(id)) {
+        if (tickets.contains(id)) {
             resul = true;
             tickets.remove(id);
         }
@@ -94,7 +94,7 @@ public class Cashier extends User {
     }
 
     public void insertTicket(int id){
-        ticketIds.add(id);
+        tickets.add(id);
     }
 
 }
