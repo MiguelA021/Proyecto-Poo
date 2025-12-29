@@ -1,68 +1,71 @@
 package upm.etsisi.poo.es.User;
 
-import upm.etsisi.poo.es.Ticket;
+import upm.etsisi.poo.es.Ticket.Ticket;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class Cashier extends User {
     private static final String UPM_WORKER = "UW";
     private static final String ID_ERROR = "The id given has been already used";
     private static final String ID_NOT_FOUND = "The id given, was not found ";
-    private ArrayList<Integer> ticketIds;
+    private final ArrayList<Integer> ticketIds;
 
     public Cashier(String email, String name, String id) {
-        this.ticketIds = new ArrayList<Integer>();
+        this.ticketIds = new ArrayList<>();
         this.email = email;
         this.name = name;
         this.id = id;
-        tickets = new TreeMap<>();
+        // tickets ya se inicializa en User, pero si lo quieres asegurar:
+        // this.tickets = new TreeMap<>();
     }
 
     /**
-     * The method runs through the tree and gives back the pair [K,V] ordered by the
-     * key
-     *
-     * @return The string returned is the list of tickets that belongs to the atm
-     * ordered by their id
+     * List tickets belonging to this cashier ordered by id
      */
     public String listTickets() {
         StringBuilder str = new StringBuilder();
-        for (Map.Entry<Integer, Ticket> it : tickets.entrySet()) {// saca para cada nodo del arbol (K,V) ordenado por la
-            Ticket ticket = it.getValue();
-            str.append(ticket.formatList()).append("\n");
+        for (Map.Entry<Integer, Ticket> it : tickets.entrySet()) {
+            Ticket t = it.getValue();
+            str.append("  ")
+                    .append(t.getId())
+                    .append(" - ")
+                    .append(t.getStatus().toString().toUpperCase())
+                    .append("\n");
         }
         return str.toString();
     }
 
     /**
-     * The method adds the ticket given by id into the cashers tree
-     *
-     * @param id the id given by parameter (if it is not given, it generates one
-     *           automatically)
+     * NEW (E3): Adds a ticket object already created (Customer or Enterprise)
+     * @return ticket id, or -1 if invalid
      */
-    public int addTicket(Integer id) {
-        if (id == null) {
-            do {
-                id = (int) (Math.random() * 100000);
-            } while (tickets.containsKey(id));
+    public int addTicket(Ticket ticket) {
+        if (ticket == null) {
+            System.out.println("ERROR: ticket is null");
+            return -1;
         }
+
+        Integer id = ticket.getId();
+        if (id == null) {
+            // In your design tickets always have id, but just in case:
+            id = (int) (Math.random() * 100000);
+            while (tickets.containsKey(id)) {
+                id = (int) (Math.random() * 100000);
+            }
+        }
+
         if (tickets.containsKey(id)) {
             System.out.println(ID_ERROR);
-        } else {
-            Ticket ticket = new Ticket(id);
-            tickets.put(ticket.getId(), ticket);
+            return id;
         }
+
+        tickets.put(id, ticket);
         return id;
     }
 
     /**
-     * .
-     * The method returns the ticket given by id
-     *
-     * @param id the id of the ticket
-     * @return the ticket (if it has been found)
+     * Returns ticket by id (polymorphic)
      */
     public Ticket getTicketById(int id) {
         Ticket ticket = null;
@@ -79,22 +82,22 @@ public class Cashier extends User {
     }
 
     /**
-     * The method removes the ticket given by the id
-     *
-     * @param id the id of the ticket
-     * @return returns true if the ticket has been removed
+     * Remove ticket by id
      */
     public boolean removeTicket(int id) {
-        boolean resul = false;
         if (tickets.containsKey(id)) {
-            resul = true;
             tickets.remove(id);
+            return true;
         }
-        return resul;
+        return false;
     }
 
-    public void insertTicket(int id){
+    public void insertTicket(int id) {
         ticketIds.add(id);
+    }
+
+    public boolean hasTicketId(int id) {
+        return tickets.containsKey(id);
     }
 
 }

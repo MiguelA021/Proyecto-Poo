@@ -17,7 +17,7 @@ public class CommandController {
     register(new ProductCommand());
     register(new TicketCommand());
     register(new ClientCommand());
-    register(new CashierCommand());
+    register(new CashierCommand()); 
     register(new ExitCommand());
   }
 

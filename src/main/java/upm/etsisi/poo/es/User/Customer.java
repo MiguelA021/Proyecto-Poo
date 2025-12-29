@@ -1,5 +1,5 @@
 package upm.etsisi.poo.es.User;
-import upm.etsisi.poo.es.Ticket;
+import upm.etsisi.poo.es.CustomerTicket;
 
 import java.util.TreeMap;
 
@@ -20,10 +20,10 @@ public class Customer extends User {
     /**
      * The method adds the ticket into the tickets associated with the customer
      * @param id the id of the ticket
-     * @param ticket the ticket given
+     * @param customerTicket the ticket given
      */
-    public void addTicket(Integer id, Ticket ticket) {
-        tickets.put(id,ticket);
+    public void addTicket(Integer id, CustomerTicket customerTicket) {
+        tickets.put(id, customerTicket);
     }
 
 }

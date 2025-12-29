@@ -279,6 +279,7 @@ public class Store {
    * The method runs through the Map, getting all cashiers and showing their
    * tickets
    */
+  /*
   public void ticketList() {
     System.out.println("Ticket list: ");
     for (Map.Entry<Integer, Cashier> entry : cashers.entrySet()) {
@@ -287,7 +288,7 @@ public class Store {
     }
     System.out.println("ticket list: ok");
   }
-
+*/
 }
 
 // ticketList??

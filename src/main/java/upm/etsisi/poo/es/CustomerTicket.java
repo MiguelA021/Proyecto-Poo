@@ -4,6 +4,10 @@ import upm.etsisi.poo.es.Product.BasicProduct;
 import upm.etsisi.poo.es.Product.Event;
 import upm.etsisi.poo.es.Product.PersonalizedProduct;
 import upm.etsisi.poo.es.Product.Product;
+import upm.etsisi.poo.es.Ticket.Ticket;
+import upm.etsisi.poo.es.Ticket.print.CustomerTicketPrinter;
+
+
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,11 +16,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
 
-enum Status {
-  EMPTY, OPEN, CLOSED
-}
+public class CustomerTicket extends Ticket{
 
-public class Ticket {
   final static int MAX_PRODUCT = 100;
   public static final String ERROR_FULL = "ERROR: Full Ticket (100 products max)";
     private static final String ERROR_PRODUCT_ID_NOT_FOUND = "ERROR: Product ID not found";
@@ -35,26 +36,21 @@ public class Ticket {
     Product[] productList;
   int amount;
   private ArrayList<LocalDateTime> dates;
-  private int tickId;
   Comparator<Product> nameComp = Comparator.comparing(Product::getName);
-  private Status status;
   private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
 
-  public Ticket(Integer id) {
-    this.productList = new Product[MAX_PRODUCT];
-    LocalDateTime now = LocalDateTime.now();
-    this.dates = new ArrayList<LocalDateTime>();
-    dates.add(now);
-    if (id != null) {
-      this.tickId = id;
-    }
-    this.amount = 0;
-    this.status = Status.EMPTY;
-  }
+    public CustomerTicket(Integer id) {
+        super(id, new CustomerTicketPrinter());
 
-  public int getId() {
-    return this.tickId;
-  }
+        this.productList = new Product[MAX_PRODUCT];
+        LocalDateTime now = LocalDateTime.now();
+        this.dates = new ArrayList<>();
+        dates.add(now);
+
+        this.amount = 0;
+        this.status = Status.EMPTY; // esto lo puedes dejar, aunque super() ya lo pone
+    }
+
 
   /**
    * The method adds the product given, and it also prints it. The ticket status
@@ -75,6 +71,7 @@ public class Ticket {
    *                are we going to add the product into the ticket.
    * @return It returns true if the product has been added successfully.
    */
+
   public boolean ticketAdd(Product product, int amount) {
     boolean resul = true;
     if (this.status != Status.CLOSED) {
@@ -141,6 +138,7 @@ public class Ticket {
    *               This method remove all occurrences of the product
    * @return it's a boolean that checks if the product is removed
    */
+
   public Product ticketRemove(int prodId) {
     Product product = null;
     int iterations = this.amount;
@@ -188,6 +186,7 @@ public class Ticket {
   /**
    * @return the ticket printed
    */
+
   private boolean comprobarFechasTodosEventos(LocalDateTime now) {
     int i = 0;
     boolean valido = true;
@@ -209,6 +208,7 @@ public class Ticket {
    * @param close it shows if the ticket has been already closed
    * @return the String of the ticket
    */
+
   public String ticketPrint(boolean close) {
     StringBuilder sc = new StringBuilder();
 
@@ -217,7 +217,7 @@ public class Ticket {
       dates.add(now);
       boolean validClose = comprobarFechasTodosEventos(now);
       if (validClose) {
-        this.status = Status.CLOSED;
+        this.close();
       } else
         System.out.println(DONT_CLOSE_NOT_VALID_TIME);
     }
@@ -301,6 +301,7 @@ public class Ticket {
   /**
    * The method sorts the names alphabetically
    */
+
   public void sort() {
     Arrays.sort(this.productList, 0, this.amount, nameComp);
   }
@@ -319,14 +320,14 @@ public class Ticket {
     switch (status) {
       case "EMPTY":
         String inicio = dates.get(0).format(DATE_FORMAT);
-        resul.append(inicio).append("-").append(tickId);
+        resul.append(inicio).append("-").append(id);
         break;
       case "OPEN":
-        resul.append(tickId);
+        resul.append(id);
         break;
       case "CLOSED":
         String fin = dates.get(1).format(DATE_FORMAT);
-        resul.append(tickId).append(fin);
+        resul.append(id).append(fin);
         break;
       default:
         resul.append("ERROR, status is undefined");
@@ -340,17 +341,25 @@ public class Ticket {
    * 
    * @return the ticket turned into a String
    */
+
   public String toStringNew() {
     StringBuilder sc = new StringBuilder(); // Soy Aaron, lo de format() esta puesto para que siga el formato que
     // buscamos de fecha.
     // te lo pongo para que asi no te comas la cabeza con eso. Por lo demás ya te
     // dejo que sigas con ello
-    sc.append(TICKET + " " + tickId + "\n");
+    sc.append(TICKET + " " + id + "\n");
     sc.append("  " + TOTAL_PRICE + " 0.0 \n");
     sc.append("  " + TOTAL_DISCOUNT + " 0.0 \n");
     sc.append("  " + FINAL_PRICE + " 0.0 \n");
     sc.append(TICKET_NEW_OK);
     return sc.toString();
   }
+
+    @Override
+    public boolean canBeClosed() {
+        // misma regla que ya usabas implícitamente: si hay productos
+        return this.amount > 0;
+    }
+
 
 }

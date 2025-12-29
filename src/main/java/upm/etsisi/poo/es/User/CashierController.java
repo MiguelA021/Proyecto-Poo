@@ -73,11 +73,6 @@ public  class CashierController {
         return cashers.get(cashId);
     }
 
-    public void addTicket(int ticketId, int cashierId) {
-        Cashier cashier = cashers.get(cashierId);
-        cashier.addTicket(ticketId);
-    }
-
     public Cashier searchCasherById(int id) {
         return cashers.get(id);
     }

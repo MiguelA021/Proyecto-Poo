@@ -1,21 +1,24 @@
 package upm.etsisi.poo.es.User;
-import upm.etsisi.poo.es.Ticket;
+
+import upm.etsisi.poo.es.Ticket.Ticket;
 
 import java.util.TreeMap;
 
 public abstract class User {
-      protected String name;
-      protected String email;
-      protected String id;
-      protected TreeMap<Integer, Ticket> tickets;
+    protected String name;
+    protected String email;
+    protected String id;
+    protected TreeMap<Integer, Ticket> tickets = new TreeMap<>();
 
-      public  String getName(){
-            return name;
-      }
+    public String getName() {
+        return name;
+    }
 
-      public String getId(){return id;}
+    public String getId() {
+        return id;
+    }
 
-      public String getEmail(){
-            return email;
-      }
+    public String getEmail() {
+        return email;
+    }
 }
