@@ -203,7 +203,7 @@ public class Store {
     System.out.println("Catalog:");
     for (Product p : productList) {
       if (p != null) {
-        System.out.print("  " + p.toString());
+        System.out.println("  " + p.toString());
       }
     }
     System.out.println("prod list: ok");
