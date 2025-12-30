@@ -26,6 +26,7 @@ public class Ticket {
     private static final String NO_PRODUCTS_IN_THE_TICKET = "ERROR: No products in the ticket";
     private static final String PRODUCT_DOES_NOT_EXIST = "ERROR: this product does not exist.";
     private static final String ERROR_TICKET_CLOSE = "ERROR: the ticket is closed. It can't be modified";
+    private static final String ERROR_AMOUNT_PRODUCT = "ERROR: The amount for this product can't be zero";
     private static final String DONT_CLOSE_NOT_VALID_TIME = "The ticket can`t be closed because some event's period of time is invalid. \n";
     private static final String TOTAL_PRICE = "Total price:";
     private static final String TOTAL_DISCOUNT = "Total discount:";
@@ -56,6 +57,10 @@ public class Ticket {
     return this.tickId;
   }
 
+  public Status getStatus(){
+    return status;
+  }
+
   /**
    * The method adds the product given, and it also prints it. The ticket status
    * must be
@@ -79,24 +84,27 @@ public class Ticket {
     boolean resul = true;
     if (this.status != Status.CLOSED) {
       int before = this.amount;
-      if (product == null) {
+      if (product == null) { //**Hacer error de producto null
         resul = false;
         System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
 
-      } else {
-        if (this.amount == 0) {
+      }else if(amount==0){
+        resul = false;
+        System.out.println(ERROR_AMOUNT_PRODUCT);
+      }else {
+        if (this.amount == 0) { //Hacer error de amount==0
           this.status = Status.OPEN;
         }
 
         if (product instanceof Event) {
           Event event = (Event) product;
-          if (event.fechaValida(LocalDateTime.now())) {
+          if (event.fechaValida(LocalDateTime.now())) { //Comprobar su funcionamiento con una fecha invalida
             if (amount <= event.getMaxPersonas()) {
 
-              double price = event.getPrice() * amount;
+              double price = event.getPrice() * amount; //Que pasa si amount del parametro es 0
               event.setPrice(price);
 
-              productList[this.amount] = event;
+              productList[this.amount] = event; //Que pasa si el amount ya llego al limite y se intenta añadir un producto mas a ticket¿?
               this.amount++;
 
               System.out.println(ticketPrint(false));
@@ -107,18 +115,19 @@ public class Ticket {
               resul = false;
             }
           } else {
+            resul = false;
             System.out.println(PERIOD_NOT_VALID);
           }
 
         } else {
           int i = 0;
-          while (this.amount < MAX_PRODUCT && i < amount) {
+          while (this.amount < MAX_PRODUCT && i < amount) { //No es mejor unacomprobacion de amount al inicio¿? Porque que pasa si this.amount=95 y amount = 6
             productList[this.amount] = product;
             this.amount++;
             i++;
           }
           System.out.println(ticketPrint(false));
-          if ((this.amount - before) == amount) {
+          if ((this.amount - before) == amount) { //Aqui se corrige pero se tiene en cuenta el fallo puesto en while¿?
             resul = true;
             System.out.println(ADD_OK);
           } else {
