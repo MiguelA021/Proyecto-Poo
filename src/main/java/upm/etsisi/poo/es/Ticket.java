@@ -84,7 +84,7 @@ public class Ticket {
     boolean resul = true;
     if (this.status != Status.CLOSED) {
       int before = this.amount;
-      if (product == null) { //**Hacer error de producto null
+      if (product == null) {
         resul = false;
         System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
 
@@ -92,24 +92,28 @@ public class Ticket {
         resul = false;
         System.out.println(ERROR_AMOUNT_PRODUCT);
       }else {
-        if (this.amount == 0) { //Hacer error de amount==0
+        if (this.amount == 0) {
           this.status = Status.OPEN;
         }
 
         if (product instanceof Event) {
           Event event = (Event) product;
-          if (event.fechaValida(LocalDateTime.now())) { //Comprobar su funcionamiento con una fecha invalida
+          if (event.fechaValida(LocalDateTime.now())) {
             if (amount <= event.getMaxPersonas()) {
 
-              double price = event.getPrice() * amount; //Que pasa si amount del parametro es 0
+              double price = event.getPrice() * amount;
               event.setPrice(price);
 
-              productList[this.amount] = event; //Que pasa si el amount ya llego al limite y se intenta añadir un producto mas a ticket¿?
-              this.amount++;
+              if(this.amount<MAX_PRODUCT){
+                productList[this.amount] = event;
+                this.amount++;
 
-              System.out.println(ticketPrint(false));
-              System.out.println(ADD_OK);
-
+                System.out.println(ticketPrint(false));
+                System.out.println(ADD_OK);
+              }else{
+                resul = false;
+                System.out.println(ERROR_FULL);
+              }
             } else {
               System.out.println(MANY_PEOPLE);
               resul = false;
@@ -121,13 +125,13 @@ public class Ticket {
 
         } else {
           int i = 0;
-          while (this.amount < MAX_PRODUCT && i < amount) { //No es mejor unacomprobacion de amount al inicio¿? Porque que pasa si this.amount=95 y amount = 6
+          while (this.amount < MAX_PRODUCT && i < amount) {
             productList[this.amount] = product;
             this.amount++;
             i++;
           }
           System.out.println(ticketPrint(false));
-          if ((this.amount - before) == amount) { //Aqui se corrige pero se tiene en cuenta el fallo puesto en while¿?
+          if ((this.amount - before) == amount) {
             resul = true;
             System.out.println(ADD_OK);
           } else {
