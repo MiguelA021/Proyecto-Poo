@@ -1,4 +1,4 @@
-package upm.etsisi.poo.es;
+package upm.etsisi.poo.es.Ticket;
 
 import java.util.HashMap;
 
@@ -31,9 +31,9 @@ public class TicketData {
     do {
       id = (int) (Math.random() * 100000);
     } while (tickets.containsKey(id));
-    Ticket ticket = new Ticket(id);
-    tickets.put(ticket.getId(), ticket);
-    System.out.println(ticket.toStringNew());
+    CustomerTicket customerTicket = new CustomerTicket(id);
+    tickets.put(customerTicket.getId(), customerTicket);
+    System.out.println(customerTicket.toStringNew());
     return id;
   }
 
@@ -42,10 +42,10 @@ public class TicketData {
     if (tickets.containsKey(idTicket))
       System.out.println(ID_ERROR);
     else {
-      Ticket ticket = new Ticket(idTicket);
-      tickets.put(idTicket, ticket);
+      CustomerTicket customerTicket = new CustomerTicket(idTicket);
+      tickets.put(idTicket, customerTicket);
       resul = true;
-      System.out.println(ticket.toStringNew());
+      System.out.println(customerTicket.toStringNew());
     }
     return resul;
   }

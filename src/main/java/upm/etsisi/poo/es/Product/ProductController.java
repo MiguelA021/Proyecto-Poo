@@ -1,10 +1,10 @@
-package upm.etsisi.poo.es;
+package upm.etsisi.poo.es.Product;
 
-import upm.etsisi.poo.es.Product.*;
+import upm.etsisi.poo.es.type;
 
 import java.util.*;
 
-public class Store {
+public class ProductController {
   int MAX_PRODUCT = 200;
   Product[] productList;
 
@@ -12,16 +12,16 @@ public class Store {
   public static final String CUSTOMER_NOT_FOUND = "The customer given was not found";
   public static final String ID_ERROR = "The id given has already been  used";
   private int prodAmount;
-  private static Store instance;
+  private static ProductController instance;
 
-  private Store() {
+  private ProductController() {
     this.productList = new Product[MAX_PRODUCT];
     this.prodAmount = 0;
   }
 
-  public static Store getInstance() {
+  public static ProductController getInstance() {
     if (instance == null) {
-      instance = new Store();
+      instance = new ProductController();
     }
     return instance;
   }

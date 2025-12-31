@@ -1,7 +1,5 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Store;
-
 public class CommandEcho implements Command {
 
   @Override

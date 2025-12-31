@@ -71,9 +71,6 @@ public class CashierController {
     }
   }
 
-  public Cashier getCasher(int cashId) {
-    return cashers.get(cashId);
-  }
 
   public void addTicket(int ticketId, int cashierId) {
     Cashier cashier = cashers.get(cashierId);

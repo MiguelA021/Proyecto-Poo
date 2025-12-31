@@ -10,11 +10,9 @@ public class CustomerController {
     public static final String CASHIER_NOT_FOUND = "The cashier given was not found";
     public static CustomerController instance;
     TreeMap<Integer, Customer> customers;
-    HashMap<Integer, Cashier> tickets;
 
     private CustomerController() {
         this.customers = new TreeMap<Integer, Customer>();
-        this.tickets = new HashMap<Integer, Cashier>();
     }
 
     public static CustomerController getInstance() {
@@ -70,11 +68,11 @@ public class CustomerController {
         return resul;
     }
 
-    public void addTicket(Integer ticketId, int cashId) {
+    public void addTicket(Integer ticketId, int userId) {
         CashierController cashierController = CashierController.getInstance();
         try{
-            Cashier cashier =cashierController.getCasher(cashId);
-            tickets.put(ticketId, cashier);
+            Customer customer = customers.get(userId);
+            customer.addTicket(ticketId);
         }catch (NullPointerException e){
             System.out.println("no");
         }

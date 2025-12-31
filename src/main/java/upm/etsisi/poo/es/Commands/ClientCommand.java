@@ -1,7 +1,5 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Store;
-import upm.etsisi.poo.es.User.Customer;
 import upm.etsisi.poo.es.User.CustomerController;
 
 public class ClientCommand implements Command {

@@ -1,7 +1,7 @@
 package upm.etsisi.poo.es.Commands;
 
 import upm.etsisi.poo.es.Product.*;
-import upm.etsisi.poo.es.Store;
+import upm.etsisi.poo.es.Product.ProductController;
 import upm.etsisi.poo.es.type;
 
 public class ProductCommand implements Command {
@@ -14,7 +14,7 @@ public class ProductCommand implements Command {
 
     @Override
     public boolean execute(String fullLine, String[] args) {
-        Store store = Store.getInstance();
+        ProductController store = ProductController.getInstance();
         if (args.length < 2) {
             System.out.println(INCORRECT);
             return false;
@@ -46,7 +46,7 @@ public class ProductCommand implements Command {
         return false;
     }
 
-    private void prodAdd(String fullLine, String[] args, Store store) {
+    private void prodAdd(String fullLine, String[] args, ProductController store) {
         try {
             // fullLine: prod add <id> "<name>" <category> <price>
             int firstQuote = fullLine.indexOf('"');
@@ -106,7 +106,7 @@ public class ProductCommand implements Command {
         }
     }
 
-    private void prodRemove(String[] args, Store store) {
+    private void prodRemove(String[] args, ProductController store) {
         if (args.length != 3) {
             System.out.println(INCORRECT);
             return;
@@ -122,7 +122,7 @@ public class ProductCommand implements Command {
         }
     }
 
-    private void prodUpdate(String fullLine, String[] args, Store store) {
+    private void prodUpdate(String fullLine, String[] args, ProductController store) {
         if (args.length < 4) {
             System.out.println(INCORRECT);
             return;
@@ -172,7 +172,7 @@ public class ProductCommand implements Command {
         }
     }
 
-    private void prodAddFood(String fullLine, String[] args, Store store) {
+    private void prodAddFood(String fullLine, String[] args, ProductController store) {
         // prod addFood <id> "<name>" <price> <expiration> <max_people>
         try {
             // fullLine: prod add <id> "<name>" <category> <price>
@@ -227,7 +227,7 @@ public class ProductCommand implements Command {
         }
     }
 
-    private void prodAddMeeting(String fullLine, String[] args, Store store) {
+    private void prodAddMeeting(String fullLine, String[] args, ProductController store) {
         try {
             // fullLine: prod add <id> "<name>" <category> <price>
             int firstQuote = fullLine.indexOf('"');

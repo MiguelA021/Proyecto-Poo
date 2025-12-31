@@ -1,7 +1,5 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Store;
-
 public interface Command {
 
     String INCORRECT = "Incorrect Format, please try again.";
