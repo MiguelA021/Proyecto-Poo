@@ -1,16 +1,26 @@
 package upm.etsisi.poo.es;
 
+import org.jline.builtins.Completers.TreeCompleter;
+import org.jline.builtins.Completers.TreeCompleter.Node;
+import org.jline.reader.Completer;
+import org.jline.reader.impl.completer.StringsCompleter;
 import upm.etsisi.poo.es.Commands.CommandController;
-
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
+import static org.jline.builtins.Completers.TreeCompleter.node;
+
 public class App {
   private final static String WELCOME_MESSAGE = "Welcome to the ticket module App.";
   private final static String HELP_MESSAGE = "Ticket module. Type 'help' to see commands.";
   private final static String FILE_ERROR = "Error while reading the file, please try again.";
+  private final static String TERMINAL_ERROR= "Error while using the terminal, please try again.";
   public static final String UPM = "tUPM> ";
 
   public static void main(String[] args) {
@@ -40,16 +50,48 @@ public class App {
     boolean end = false;
     Scanner scan = new Scanner(System.in);
     CommandController controller = new CommandController();
-
-    while (!end) {
-      System.out.print(UPM);
-      String line = scan.nextLine();
-      end = controller.handle(line);
-      if (!end) {
-        System.out.println();
+    TreeCompleter completer = new TreeCompleter(
+            node("client",
+                    node("add"),
+                    node("list"),
+                    node("remove")
+            ),
+            node("cash",
+                    node("add"),
+                    node("remove"),
+                    node("list"),
+                    node("tickets")
+            ),
+            node("ticket",
+                    node("new"),
+                    node("add"),
+                    node("remove"),
+                    node("print"),
+                    node("list")
+            ),
+            node("prod",
+                    node("add"),
+                    node("update"),
+                    node("addFood"),
+                    node("addMeeting"),
+                    node("list"),
+                    node("remove")
+            ),
+            node("help"),
+            node("echo"),
+            node("exit")
+    );
+    try{
+      Terminal terminal= TerminalBuilder.builder().system(true).build();
+      LineReader reader = LineReaderBuilder.builder().terminal(terminal).completer(completer).build();
+      while (!end) {
+        String line = reader.readLine(UPM);
+        end = controller.handle(line);
       }
+      scan.close();
+    } catch (IOException e) {
+      System.out.println(TERMINAL_ERROR);
     }
-    scan.close();
   }
 
   /**
