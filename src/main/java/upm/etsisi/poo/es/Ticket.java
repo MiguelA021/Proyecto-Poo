@@ -61,7 +61,11 @@ public class Ticket {
     return status;
   }
 
-  /**
+  public ArrayList<LocalDateTime> getDates(){
+      return dates;
+  }
+
+    /**
    * The method adds the product given, and it also prints it. The ticket status
    * must be
    * OPEN or EMPTY. The ticket must have less than 100 products, if not, the
@@ -339,7 +343,7 @@ public class Ticket {
         break;
       case "CLOSED":
         String fin = dates.get(1).format(DATE_FORMAT);
-        resul.append(tickId).append(fin);
+        resul.append(tickId).append("-").append(fin);
         break;
       default:
         resul.append("ERROR, status is undefined");
