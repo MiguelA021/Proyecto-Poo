@@ -1,6 +1,9 @@
 package upm.etsisi.poo.es.Product;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+
 
 public class Service extends Product {
 
@@ -48,11 +51,13 @@ public class Service extends Product {
         return maxUseDate;
     }
 
-    /**
-     * Para mostrarlo en listados/prints (sin precio ni nombre)
-     */
+     //Para mostrarlo en listados/prints (sin precio ni nombre)
+
     @Override
     public String toString() {
-        return "Service " + idString + " (max use: " + maxUseDate + ")\n";
+
+        Date expiration = Date.from(this.maxUseDate.atStartOfDay(ZoneId.of("Europe/Madrid")).toInstant());
+
+        return "{class:ProductService, id:" + id * -1 + ", category:" + this.name + ", expiration: " + expiration;
     }
 }

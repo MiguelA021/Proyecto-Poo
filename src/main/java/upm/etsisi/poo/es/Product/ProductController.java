@@ -152,11 +152,11 @@ public class ProductController {
    * The method lists the products in the prodList
    */
   public void prodList() {
-    Arrays.sort(productList, 0, this.prodAmount, Comparator.comparing(Product::getName));
+    Arrays.sort(productList, 0, this.prodAmount, Comparator.comparing(Product::getId));
     System.out.println("Catalog:");
     for (Product p : productList) {
       if (p != null) {
-        System.out.print("  " + p.toString());
+        System.out.println("  " + p.toString());
       }
     }
     System.out.println("prod list: ok");
