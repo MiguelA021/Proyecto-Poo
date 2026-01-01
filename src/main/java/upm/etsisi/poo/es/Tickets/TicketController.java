@@ -5,8 +5,11 @@ import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Product.ProductController;
 import upm.etsisi.poo.es.Product.Service;
 import upm.etsisi.poo.es.User.CashierController;
+import upm.etsisi.poo.es.User.Customer;
 import upm.etsisi.poo.es.User.CustomerController;
+import upm.etsisi.poo.es.User.CustomerEnterprise;
 
+import javax.swing.*;
 import java.time.LocalDate;
 
 import static upm.etsisi.poo.es.Commands.Command.*;
@@ -24,10 +27,7 @@ public class TicketController {
             int ticketId = Integer.parseInt(args[2]);
 
             Ticket ticket = TicketData.getInstance().getTicket(ticketId);
-            if (ticket == null) {
-                System.out.println(NOTEXIST);
-                return;
-            }
+
 
             // -------------------------
             // CASE 1: ADD SERVICE
@@ -35,14 +35,18 @@ public class TicketController {
             // -------------------------
 
             if (args.length == 5) {
-                int idProducto = Integer.parseInt(args[4].replace("S", ""));
+                int idProducto = Integer.parseInt(args[4].replace("S", "")) * -1;
                 Service s = (Service) ProductController.getInstance().getProduct(idProducto);
 
                 boolean ok = false;
                 if (ticket instanceof EnterpriseServiceTicket) {
                     ok = ((EnterpriseServiceTicket) ticket).addService(s);
+                    EnterpriseServiceTicket enterpriseServiceTicket = (EnterpriseServiceTicket) ticket;
+                    System.out.println(enterpriseServiceTicket.print(false));
                 } else if (ticket instanceof EnterpriseMixedTicket) {
                     ok = ((EnterpriseMixedTicket) ticket).addService(s);
+                    EnterpriseMixedTicket enterpriseMixedTicket = (EnterpriseMixedTicket) ticket;
+                    System.out.println(enterpriseMixedTicket.print(false));
                 } else {
                     System.out.println(INCORRECT);
                     return;
@@ -79,12 +83,13 @@ public class TicketController {
                 CustomerTicket customerTicket = (CustomerTicket) ticket;
 
                 if (product instanceof PersonalizedProduct) {
+                    int maxPers = ((PersonalizedProduct) product).getMaxPers();
                     PersonalizedProduct local = new PersonalizedProduct(
                             prodId,
                             product.getName(),
                             ((PersonalizedProduct) product).getCategory(),
                             product.getPrice(),
-                            amount
+                            maxPers
                     );
 
                     for (int i = 6; i < args.length; i++) {
@@ -104,12 +109,26 @@ public class TicketController {
             if (ticket instanceof EnterpriseMixedTicket) {
                 EnterpriseMixedTicket mt = (EnterpriseMixedTicket) ticket;
 
-                for (int i = 0; i < amount; i++) {
-                    mt.addProduct(product);
-                }
+                if (product instanceof PersonalizedProduct) {
+                    int maxPers = ((PersonalizedProduct) product).getMaxPers();
+                    PersonalizedProduct local = new PersonalizedProduct(
+                            prodId,
+                            product.getName(),
+                            ((PersonalizedProduct) product).getCategory(),
+                            product.getPrice(),
+                            maxPers
+                    );
 
-                System.out.println("ticket add: ok");
-                return;
+                    for (int i = 6; i < args.length; i++) {
+                        String personalization = args[i].replaceAll("--p", "");
+                        local.addPersonalized(personalization);
+                    }
+                    local.newPrice();
+
+                    mt.addProduct(local, amount);
+                } else {
+                    mt.addProduct(product, amount);
+                }
             }
 
             // EnterpriseServiceTicket (solo servicios) u otros: no aceptan productos
@@ -154,7 +173,7 @@ public class TicketController {
     }
 
     public void ticketNew(String[] args) {
-        if (args.length != 4 && args.length != 5) {
+        if (args.length != 4 && args.length != 5 && args.length != 6) {
             System.out.println(INCORRECT);
             return;
         }
@@ -163,24 +182,87 @@ public class TicketController {
         int cashId;
         int userId;
 
+        // ticket new [<id>] <cashId> <userId> -[c|p|s]
+
         try {
             userId = CustomerController.getInstance().dniToId(args[3]);
-            if (args.length == 4) {
-                // ticket new <cashId> <userId>
-                String cashierId = args[2].replaceAll("UW", "");
-                cashId = Integer.parseInt(cashierId);
-                ticketId = TicketData.getInstance().addTicket();
-                CashierController.getInstance().addTicket(ticketId, cashId);
-                CustomerController.getInstance().addTicket(ticketId, userId);
+            Customer customer = CustomerController.getInstance().getCustomer(userId);
+            if (customer == null) {
+                userId = CustomerController.getInstance().dniToId(args[4]);
+                customer = CustomerController.getInstance().getCustomer(userId);
+                if(customer == null) {
+                    System.out.println("User not found");
+                    return;
+                }
+            }
+            if (customer instanceof CustomerEnterprise) {
+                if (args.length == 5) {
+                    // ticket new [<id>] <cashId> <userId> -[c|p|s]
+                    cashId = Integer.parseInt(args[3].replaceAll("UW", ""));
+                    switch (args[4]) {
+                        case "-c":
+                            ticketId = TicketData.getInstance().addTicket("combined");
+                            CashierController.getInstance().addTicket(ticketId, cashId);
+                            CustomerController.getInstance().addTicket(ticketId, userId);
+                            break;
+                        case "-s":
+                            ticketId = TicketData.getInstance().addTicket("services");
+                            CashierController.getInstance().addTicket(ticketId, cashId);
+                            CustomerController.getInstance().addTicket(ticketId, userId);
+                            break;
+                        default:
+                            System.out.println(INCORRECT);
+                            break;
+                    }
+
+                } else if (args.length == 6) {
+                    // ticket new [<id>] <cashId> <userId> -[c|p|s]
+                    ticketId = Integer.valueOf(args[2]);
+                    cashId = Integer.parseInt(args[3].replaceAll("UW", ""));
+                    switch (args[5]) {
+                        case "-s":
+                            if(!TicketData.getInstance().addTicket(ticketId, "services")){
+                                System.out.println(ID_REPEAT);
+                            }else {
+                                CashierController.getInstance().addTicket(ticketId, cashId);
+                                CustomerController.getInstance().addTicket(ticketId, userId);
+                            }
+                            break;
+                        case "-c":
+                            if(!TicketData.getInstance().addTicket(ticketId, "combined")){
+                                System.out.println(ID_REPEAT);
+                            }else {
+                                CashierController.getInstance().addTicket(ticketId, cashId);
+                                CustomerController.getInstance().addTicket(ticketId, userId);
+                            }
+                            break;
+                        default:
+                            System.out.println(INCORRECT);
+                            break;
+                    }
+                } else {
+                    System.out.println(INCORRECT);
+
+                }
             } else {
-                // ticket new <id> <cashId> <userId>
-                String cashierId = args[3].replaceAll("UW", "");
-                cashId = Integer.parseInt(cashierId);
-                ticketId = Integer.valueOf(args[2]);
-                if (!TicketData.getInstance().addTicket(ticketId)) System.out.println(ID_REPEAT);
-                else {
+                if (args.length == 4) {
+                    // ticket new <cashId> <userId>
+                    String cashierId = args[2].replaceAll("UW", "");
+                    cashId = Integer.parseInt(cashierId);
+                    ticketId = TicketData.getInstance().addTicket("products");
                     CashierController.getInstance().addTicket(ticketId, cashId);
                     CustomerController.getInstance().addTicket(ticketId, userId);
+                } else {
+                    // ticket new <id> <cashId> <userId>
+                    String cashierId = args[3].replaceAll("UW", "");
+                    cashId = Integer.parseInt(cashierId);
+                    ticketId = Integer.valueOf(args[2]);
+                    if (!TicketData.getInstance().addTicket(ticketId, "products"))
+                        System.out.println(ID_REPEAT);
+                    else {
+                        CashierController.getInstance().addTicket(ticketId, cashId);
+                        CustomerController.getInstance().addTicket(ticketId, userId);
+                    }
                 }
             }
 

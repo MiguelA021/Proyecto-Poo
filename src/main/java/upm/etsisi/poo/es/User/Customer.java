@@ -3,7 +3,7 @@ package upm.etsisi.poo.es.User;
 import java.util.ArrayList;
 
 public class Customer extends User {
-  private final int cashierId;
+  protected final int cashierId;
 
   public Customer(String email, String name, String id, int cashierId) {
 

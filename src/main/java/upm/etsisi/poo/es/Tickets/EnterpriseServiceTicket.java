@@ -80,4 +80,15 @@ public class EnterpriseServiceTicket extends Ticket {
         }
 
     }
+
+    @Override
+    public String toStringNew() {
+        StringBuilder sc = new StringBuilder(); // Soy Aaron, lo de format() esta puesto para que siga el formato que
+        // buscamos de fecha.
+        // te lo pongo para que asi no te comas la cabeza con eso. Por lo demás ya te
+        // dejo que sigas con ello
+        sc.append(TICKET + " " + this.id + "\n");
+        sc.append(TICKET_NEW_OK);
+        return sc.toString();
+    }
 }

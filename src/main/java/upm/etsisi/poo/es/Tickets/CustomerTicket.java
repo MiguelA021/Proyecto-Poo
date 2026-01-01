@@ -12,21 +12,6 @@ import java.util.Comparator;
 import java.util.Locale;
 
 public class CustomerTicket extends Ticket {
-    public static final String ERROR_FULL = "ERROR: Full Ticket (100 products max)";
-    private static final String ERROR_PRODUCT_ID_NOT_FOUND = "ERROR: Product ID not found";
-    private static final String ADD_OK = "ticket add: ok";
-    private static final String MANY_PEOPLE = "Too many people";
-    private static final String PERIOD_NOT_VALID = "The period of time is not valid";
-    private static final String NO_PRODUCTS_IN_THE_TICKET = "ERROR: No products in the ticket";
-    private static final String PRODUCT_DOES_NOT_EXIST = "ERROR: this product does not exist.";
-    private static final String ERROR_TICKET_CLOSE = "ERROR: the ticket is closed. It can't be modified";
-    private static final String DONT_CLOSE_NOT_VALID_TIME = "The ticket can`t be closed because some event's period of time is invalid. \n";
-    private static final String TOTAL_PRICE = "Total price:";
-    private static final String TOTAL_DISCOUNT = "Total discount:";
-    private static final String FINAL_PRICE = "Final price:";
-    private static final String TICKET = "Ticket :";
-    private static final String TICKET_NEW_OK = "ticket new: ok";
-    Comparator<Product> nameComp = Comparator.comparing(Product::getName);
     private Status status;
 
     public CustomerTicket(Integer id) {
@@ -288,30 +273,5 @@ public class CustomerTicket extends Ticket {
         Arrays.sort(this.productList, 0, this.amount, nameComp);
     }
 
-
-
-
-
-    /**
-     * The method turns the ticket into a String with the new format
-     *
-     * @return the ticket turned into a String
-     */
-    public String toStringNew() {
-        StringBuilder sc = new StringBuilder(); // Soy Aaron, lo de format() esta puesto para que siga el formato que
-        // buscamos de fecha.
-        // te lo pongo para que asi no te comas la cabeza con eso. Por lo demás ya te
-        // dejo que sigas con ello
-        sc.append(TICKET + " " + tickId + "\n");
-        sc.append("  " + TOTAL_PRICE + " 0.0 \n");
-        sc.append("  " + TOTAL_DISCOUNT + " 0.0 \n");
-        sc.append("  " + FINAL_PRICE + " 0.0 \n");
-        sc.append(TICKET_NEW_OK);
-        return sc.toString();
-    }
-    @Override
-    public String print( boolean close) {
-        return this.ticketPrint(close);
-    }
 
 }
