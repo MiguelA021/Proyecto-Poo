@@ -1,7 +1,5 @@
 package upm.etsisi.poo.es.User;
 
-import upm.etsisi.poo.es.Ticket.CustomerTicket;
-
 import java.util.ArrayList;
 
 public class Customer extends User {

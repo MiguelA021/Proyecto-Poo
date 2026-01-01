@@ -27,7 +27,7 @@ public class App {
 
   public void start(String[] args) {
     if (args.length == 0) {
-      userCommand();
+        userCommand();
     } else {
       readFile(args);
     }

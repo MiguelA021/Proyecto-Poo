@@ -1,17 +1,11 @@
 package upm.etsisi.poo.es.Commands;
 
 
-import upm.etsisi.poo.es.Product.PersonalizedProduct;
-import upm.etsisi.poo.es.Product.Product;
-import upm.etsisi.poo.es.Product.ProductController;
-import upm.etsisi.poo.es.Product.Service;
-import upm.etsisi.poo.es.Ticket.*;
+import upm.etsisi.poo.es.Tickets.*;
 import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.User.CashierController;
-import upm.etsisi.poo.es.User.CustomerController;
 
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -2,29 +2,31 @@ package upm.etsisi.poo.es.Product;
 
 import java.time.LocalDate;
 
-public class Service extends Product{
+public class Service extends Product {
 
     private static int NEXT = 1;
 
-    private final String id;          // "1S", "2S", ...
+    private final String idString;// "1S", "2S", ...
+    private final int id;
     private final LocalDate maxUseDate;
+    private final String name;
 
-    public Service(LocalDate maxUseDate) {
-        this.id = NEXT++ + "S";
+    public Service(LocalDate maxUseDate, String name) {
+        this.id = NEXT*-1;
+        this.idString = NEXT++ + "S";
         this.maxUseDate = maxUseDate;
+        this.name = name;
+
     }
 
-    public String id(){
-        return id;
-    }
-
+    @Override
     public int getId() {
-        return Integer.parseInt(id);
+        return this.id;
     }
 
     @Override
     public String getName() {
-        return "";
+        return this.name;
     }
 
     @Override
@@ -46,9 +48,11 @@ public class Service extends Product{
         return maxUseDate;
     }
 
-    /** Para mostrarlo en listados/prints (sin precio ni nombre) */
+    /**
+     * Para mostrarlo en listados/prints (sin precio ni nombre)
+     */
     @Override
     public String toString() {
-        return "Service " + id + " (max use: " + maxUseDate + ")";
+        return "Service " + idString + " (max use: " + maxUseDate + ")\n";
     }
 }

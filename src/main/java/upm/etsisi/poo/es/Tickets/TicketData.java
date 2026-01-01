@@ -1,4 +1,4 @@
-package upm.etsisi.poo.es.Ticket;
+package upm.etsisi.poo.es.Tickets;
 
 import java.util.HashMap;
 

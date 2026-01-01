@@ -1,8 +1,7 @@
 package upm.etsisi.poo.es.User;
 
-import upm.etsisi.poo.es.Ticket.CustomerTicket;
-import upm.etsisi.poo.es.Ticket.Ticket;
-import upm.etsisi.poo.es.Ticket.TicketData;
+import upm.etsisi.poo.es.Tickets.Ticket;
+import upm.etsisi.poo.es.Tickets.TicketData;
 
 import java.util.ArrayList;
 

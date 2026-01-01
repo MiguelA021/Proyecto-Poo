@@ -1,4 +1,4 @@
-package upm.etsisi.poo.es.Ticket;
+package upm.etsisi.poo.es.Tickets;
 
 import upm.etsisi.poo.es.Product.BasicProduct;
 import upm.etsisi.poo.es.Product.Event;
@@ -7,8 +7,6 @@ import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.type;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;

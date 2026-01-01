@@ -1,4 +1,4 @@
-package upm.etsisi.poo.es.Ticket;
+package upm.etsisi.poo.es.Tickets;
 
 import upm.etsisi.poo.es.Product.PersonalizedProduct;
 import upm.etsisi.poo.es.Product.Product;
@@ -22,7 +22,6 @@ public class TicketController {
     public void prodAdd(String[] args) {
         try {
             int ticketId = Integer.parseInt(args[2]);
-            int casherId = Integer.parseInt(args[3].replace("UW", ""));
 
             Ticket ticket = TicketData.getInstance().getTicket(ticketId);
             if (ticket == null) {
@@ -32,12 +31,12 @@ public class TicketController {
 
             // -------------------------
             // CASE 1: ADD SERVICE
-            // ticket add <ticketId> <cashId> --s <YYYY-MM-DD>
+            // ticket add <ticketId> <cashId> <serviceId>
             // -------------------------
 
-            if (args.length == 6 && args[4].equalsIgnoreCase("--s")) {
-                LocalDate maxUseDate = LocalDate.parse(args[5]);
-                Service s = new Service(maxUseDate);
+            if (args.length == 5) {
+                int idProducto = Integer.parseInt(args[4].replace("S", ""));
+                Service s = (Service) ProductController.getInstance().getProduct(idProducto);
 
                 boolean ok = false;
                 if (ticket instanceof EnterpriseServiceTicket) {
