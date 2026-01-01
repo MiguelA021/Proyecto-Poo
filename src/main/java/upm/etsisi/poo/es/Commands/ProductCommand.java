@@ -79,14 +79,19 @@ public class ProductCommand implements Command {
                 String[] beforeTokens = beforeName.split("\\s+"); // [prod, add, id]
                 String[] afterTokens = afterName.split("\\s+"); // [category, price]
 
-                if (beforeTokens.length != 3) {
+                if (beforeTokens.length != 3 && beforeTokens.length != 2) {
                     System.out.println(INCORRECT);
                     return;
                 }
                 //prod | addMeeting | 23457      | "Graduacion ETSISI" | 40             |2025-11-21  | 30
                 //prod | add        | 5          | "Libro POO"         | BOOK           | 15         | 3
-                //prod | add        | 1          | "Libro POO"         | BOOK           | 25
-                int id = Integer.parseInt(beforeTokens[2]);
+                //prod | add        | 1          | "Libro POO"          | BOOK           | 25
+                int id;
+                if(beforeTokens.length == 2){
+                    id = 0;
+                }else {
+                    id = Integer.parseInt(beforeTokens[2]);
+                }
                 if (afterTokens.length == 2) {
                     type category = type.valueOf(afterTokens[0]);
                     double price = Double.parseDouble(afterTokens[1]);
