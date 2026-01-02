@@ -103,11 +103,12 @@ public class Ticket {
         if (product instanceof Event) {
           Event event = (Event) product;
           if (event.fechaValida(LocalDateTime.now())) {
-            if (amount <= event.getMaxPersonas()) {
-
+            if (amount <= event.getMaxPeopleLocal()){
               double price = event.getPrice() * amount;
               event.setPrice(price);
-
+              if(event.actualPeopleCorrect(amount)){
+                event.setActualPeople(amount);
+              }
               if(this.amount<MAX_PRODUCT){
                 productList[this.amount] = event;
                 this.amount++;
@@ -301,7 +302,7 @@ public class Ticket {
             totalPrice += price;
             // totalDiscount NO cambia (no hay descuento por categoría)
 
-            sc.append(event.toString());
+            sc.append(event.toStringTicketAdd());
           }
         }
       }

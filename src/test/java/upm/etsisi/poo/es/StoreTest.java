@@ -35,7 +35,7 @@ public class StoreTest {
     @Test
     public void addFoodTest(){
         Store objectTest = new Store();
-        Product productTest = new Food(23458, "Cafeteria ETSISI", 5, "2025-12-21");
+        Product productTest = new Food(23458, "Cafeteria ETSISI", 5, "2025-12-21", 10);
         objectTest.prodAdd(productTest);
         assertEquals(1, objectTest.getProdAmount());
     }
@@ -46,7 +46,7 @@ public class StoreTest {
     @Test
     public void addMeetingTest(){
         Store objectTest = new Store();
-        Product productTest = new Meeting(23457, "Graduacion ETSISI", 40, "2025-12-21");
+        Product productTest = new Meeting(23457, "Graduacion ETSISI", 40, "2025-12-21", 80);
         objectTest.prodAdd(productTest);
         assertEquals(1, objectTest.getProdAmount());
     }
@@ -239,8 +239,8 @@ public class StoreTest {
         Store objectTest = new Store();
         Product product1 = new BasicProduct(1, "Libro SQL", type.BOOK, 25);
         Product product2 = new BasicProduct(2, "Calcetines UPM", type.CLOTHES, 10);
-        Product product3 = new Meeting(23457, "Graduacion ETSISI", 40, "2025-12-21");
-        Product product4 = new Meeting(33316, "Fiesta ETSISI", 80, "2026-09-02");
+        Product product3 = new Meeting(23457, "Graduacion ETSISI", 40, "2025-12-21", 60);
+        Product product4 = new Meeting(33316, "Fiesta ETSISI", 80, "2026-09-02", 90);
         objectTest.prodAdd(product1);
         objectTest.prodAdd(product2);
         objectTest.prodAdd(product3);
@@ -280,7 +280,7 @@ public class StoreTest {
     @Test
     public void updateNameEventTest(){
         Store objectTest = new Store();
-        Product productTest = new Meeting(23457, "Graduacion ETSISI", 40.0, "2025-12-21");
+        Product productTest = new Meeting(23457, "Graduacion ETSISI", 40.0, "2025-12-21", 10);
         objectTest.prodAdd(productTest);
         Product updateProductTest = objectTest.updateName(productTest.getId(), "Graduacion Teleco");
         Event updateBasicProductTest = (Event) updateProductTest;
@@ -304,7 +304,7 @@ public class StoreTest {
     @Test
     public void updatePriceEventTest(){
         Store objectTest = new Store();
-        Product productTest = new Meeting(23457, "Graduacion ETSISI", 40.0, "2025-12-21");
+        Product productTest = new Meeting(23457, "Graduacion ETSISI", 40.0, "2025-12-21", 45);
         objectTest.prodAdd(productTest);
         Product updateProductTest = objectTest.updatePrice(productTest.getId(), 30d);
         Event updateBasicProductTest = (Event) updateProductTest;

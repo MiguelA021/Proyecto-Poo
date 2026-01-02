@@ -1,5 +1,6 @@
 package upm.etsisi.poo.es.Commands;
 
+import upm.etsisi.poo.es.Product.Event;
 import upm.etsisi.poo.es.Product.PersonalizedProduct;
 import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.Product.Product;
@@ -79,6 +80,13 @@ public class TicketCommand implements Command {
         personalizedProduct.newPrice();
         ticket.ticketAdd(local, amount);
       } else {
+        if(product instanceof Event){
+          Event productEvent = (Event) product;
+          boolean result = productEvent.actualPeopleCorrect(amount);
+          if(!result){
+            System.out.println("Actual people is over than people max");
+          }
+        }
         ticket.ticketAdd(product, amount);
       }
 
