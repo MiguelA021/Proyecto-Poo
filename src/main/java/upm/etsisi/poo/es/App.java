@@ -3,7 +3,11 @@ package upm.etsisi.poo.es;
 import org.jline.builtins.Completers.TreeCompleter;
 import org.jline.builtins.Completers.TreeCompleter.Node;
 import org.jline.reader.Completer;
+import org.jline.reader.Highlighter;
 import org.jline.reader.impl.completer.StringsCompleter;
+import org.jline.utils.AttributedString;
+import org.jline.utils.AttributedStringBuilder;
+import org.jline.utils.AttributedStyle;
 import upm.etsisi.poo.es.Commands.CommandController;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
@@ -12,7 +16,8 @@ import org.jline.reader.LineReaderBuilder;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.*;
+import java.util.regex.Pattern;
 
 import static org.jline.builtins.Completers.TreeCompleter.node;
 
@@ -22,6 +27,16 @@ public class App {
   private final static String FILE_ERROR = "Error while reading the file, please try again.";
   private final static String TERMINAL_ERROR= "Error while using the terminal, please try again.";
   public static final String UPM = "tUPM> ";
+  private static final Map<String, List<String>> COMMANDS = new HashMap<>();
+  static {
+    COMMANDS.put("client", Arrays.asList("add", "list", "remove"));
+    COMMANDS.put("cash",   Arrays.asList("add", "remove", "list", "tickets"));
+    COMMANDS.put("ticket", Arrays.asList("new", "add", "remove", "print", "list"));
+    COMMANDS.put("prod",   Arrays.asList("add", "update", "addFood", "addMeeting", "list", "remove"));
+    COMMANDS.put("help",   Collections.emptyList());
+    COMMANDS.put("echo",   Collections.emptyList());
+    COMMANDS.put("exit",   Collections.emptyList());
+  }
 
   public static void main(String[] args) {
     App app = new App();
@@ -36,71 +51,90 @@ public class App {
   }
 
   public void start(String[] args) {
+    List<TreeCompleter.Node> nodes = new ArrayList<>();
+    for (Map.Entry<String, List<String>> entry : COMMANDS.entrySet()) {
+      String command = entry.getKey();
+      List<String> subs = entry.getValue();
+      Object[] subNodes = subs.stream().map(TreeCompleter::node).toArray();
+      List<Object> nodeParts = new ArrayList<>();
+      nodeParts.add(command);
+      for (String sub : subs) {
+        nodeParts.add(node(sub));
+      }
+      nodes.add(node(nodeParts.toArray()));
+    }
+    Completer completer = new TreeCompleter(nodes);
     if (args.length == 0) {
-      userCommand();
+      userCommand(completer);
     } else {
-      readFile(args);
+      readFile(args, completer);
     }
   }
 
   /**
    * Modo interactivo por consola
    */
-  public void userCommand() {
+  public void userCommand(Completer completer) {
     boolean end = false;
     Scanner scan = new Scanner(System.in);
     CommandController controller = new CommandController();
-    TreeCompleter completer = new TreeCompleter(
-            node("client",
-                    node("add"),
-                    node("list"),
-                    node("remove")
-            ),
-            node("cash",
-                    node("add"),
-                    node("remove"),
-                    node("list"),
-                    node("tickets")
-            ),
-            node("ticket",
-                    node("new"),
-                    node("add"),
-                    node("remove"),
-                    node("print"),
-                    node("list")
-            ),
-            node("prod",
-                    node("add"),
-                    node("update"),
-                    node("addFood"),
-                    node("addMeeting"),
-                    node("list"),
-                    node("remove")
-            ),
-            node("help"),
-            node("echo"),
-            node("exit")
-    );
+    Highlighter myHighlighter = new Highlighter() {
+      @Override
+      public AttributedString highlight(LineReader reader, String buffer) {
+        AttributedStringBuilder sb = new AttributedStringBuilder();
+        String[] parts = buffer.split("\\s+");
+        for (int i = 0; i < parts.length; i++) {
+          String token = parts[i];
+          if (i == 0) {
+            if (COMMANDS.containsKey(token)) {
+              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.GREEN).bold());
+            } else {
+              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.RED));
+            }
+          } else if (i == 1) {
+            String rootCommand = parts[0];
+            if (COMMANDS.containsKey(rootCommand) && COMMANDS.get(rootCommand).contains(token)) {
+              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.CYAN));
+            } else {
+              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.YELLOW));
+            }
+          } else {
+            sb.style(AttributedStyle.DEFAULT);
+          }
+          sb.append(token);
+          if (i < parts.length - 1 || buffer.endsWith(" ")) {
+            sb.style(AttributedStyle.DEFAULT).append(" ");
+          }
+        }
+        return sb.toAttributedString();
+      }
+      @Override
+      public void setErrorPattern(Pattern pattern) {
+      }//No se modifican estos metodos
+      @Override
+      public void setErrorIndex(int i) {
+      }
+    };
     try{
       Terminal terminal= TerminalBuilder.builder().system(true).build();
-      LineReader reader = LineReaderBuilder.builder().terminal(terminal).completer(completer).build();
+      LineReader reader = LineReaderBuilder.builder().terminal(terminal).completer(completer).highlighter(myHighlighter).build();
       while (!end) {
         String line = reader.readLine(UPM);
         end = controller.handle(line);
       }
-      scan.close();
     } catch (IOException e) {
       System.out.println(TERMINAL_ERROR);
+    } finally {
+      scan.close();
     }
   }
 
   /**
    * Modo lectura de fichero
    */
-  private void readFile(String[] args) {
+  private void readFile(String[] args, Completer completer) {
     String line;
     CommandController controller = new CommandController();
-
     try {
       BufferedReader reader = new BufferedReader(new FileReader(args[0]));
       boolean end = false;
@@ -111,9 +145,8 @@ public class App {
           System.out.println(line);
           end = controller.handle(line);
         } else {
-          // el fichero no tiene exit → pasamos a modo interactivo
           end = true;
-          userCommand();
+          userCommand(completer);
         }
         if (!end) {
           System.out.println();
