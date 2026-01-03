@@ -1,5 +1,4 @@
 package upm.etsisi.poo.es;
-
 import org.jline.builtins.Completers.TreeCompleter;
 import org.jline.builtins.Completers.TreeCompleter.Node;
 import org.jline.reader.Completer;
@@ -80,26 +79,42 @@ public class App {
     CommandController controller = new CommandController();
     Highlighter myHighlighter = new Highlighter() {
       @Override
+      public void setErrorIndex(int errorIndex) {}
+      @Override
+      public void setErrorPattern(Pattern errorPattern) {}
+      @Override
       public AttributedString highlight(LineReader reader, String buffer) {
         AttributedStringBuilder sb = new AttributedStringBuilder();
         String[] parts = buffer.split("\\s+");
         for (int i = 0; i < parts.length; i++) {
           String token = parts[i];
+          String rootCommand = parts[0];
           if (i == 0) {
             if (COMMANDS.containsKey(token)) {
-              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.GREEN).bold());
+              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.GREEN));
             } else {
               sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.RED));
             }
-          } else if (i == 1) {
-            String rootCommand = parts[0];
-            if (COMMANDS.containsKey(rootCommand) && COMMANDS.get(rootCommand).contains(token)) {
-              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.CYAN));
-            } else {
+          }
+          else if (i == 1) {
+            if (rootCommand.equals("echo")) {
               sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.YELLOW));
             }
-          } else {
-            sb.style(AttributedStyle.DEFAULT);
+            else if (rootCommand.equals("help") || rootCommand.equals("exit")) {
+              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.RED));
+            }
+            else if (COMMANDS.containsKey(rootCommand) && COMMANDS.get(rootCommand).contains(token)){
+              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.BLUE));
+            } else {
+              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.RED));
+            }
+          }
+          else {
+            if (rootCommand.equals("client")||rootCommand.equals("cash")||rootCommand.equals(("ticket"))||(rootCommand.equals("prod"))) {
+              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.YELLOW));
+            } else{
+              sb.style(AttributedStyle.DEFAULT.foreground(AttributedStyle.RED));
+            }
           }
           sb.append(token);
           if (i < parts.length - 1 || buffer.endsWith(" ")) {
@@ -107,12 +122,6 @@ public class App {
           }
         }
         return sb.toAttributedString();
-      }
-      @Override
-      public void setErrorPattern(Pattern pattern) {
-      }//No se modifican estos metodos
-      @Override
-      public void setErrorIndex(int i) {
       }
     };
     try{
