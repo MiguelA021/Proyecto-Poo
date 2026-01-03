@@ -92,6 +92,10 @@ public class TicketCommand implements Command {
     }
 
     private void ticketPrint(String[] args) {
+        if(args.length <4){
+            System.out.println(INCORRECT);
+            return;
+        }
         int ticketId = Integer.parseInt(args[2]);
         String casherId = args[3];
         int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));

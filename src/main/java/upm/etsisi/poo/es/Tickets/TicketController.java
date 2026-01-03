@@ -129,6 +129,7 @@ public class TicketController {
                 } else {
                     mt.addProduct(product, amount);
                 }
+                return;
             }
 
             // EnterpriseServiceTicket (solo servicios) u otros: no aceptan productos
