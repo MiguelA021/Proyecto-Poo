@@ -4,10 +4,7 @@ import upm.etsisi.poo.es.Product.PersonalizedProduct;
 import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Product.ProductController;
 import upm.etsisi.poo.es.Product.Service;
-import upm.etsisi.poo.es.User.CashierController;
-import upm.etsisi.poo.es.User.Customer;
-import upm.etsisi.poo.es.User.CustomerController;
-import upm.etsisi.poo.es.User.CustomerEnterprise;
+import upm.etsisi.poo.es.User.*;
 
 import javax.swing.*;
 import java.time.LocalDate;
@@ -202,6 +199,11 @@ public class TicketController {
                 if (args.length == 5) {
                     // ticket new [<id>] <cashId> <userId> -[c|p|s]
                     cashId = Integer.parseInt(args[3].replaceAll("UW", ""));
+                    Cashier cashier = CashierController.getInstance().searchCasherById(cashId);
+                    if(cashier == null){
+                        System.out.println("Cashier not found");
+                        return;
+                    }
                     switch (args[4]) {
                         case "-c":
                             ticketId = TicketData.getInstance().addTicket("combined");
@@ -222,6 +224,11 @@ public class TicketController {
                     // ticket new [<id>] <cashId> <userId> -[c|p|s]
                     ticketId = Integer.valueOf(args[2]);
                     cashId = Integer.parseInt(args[3].replaceAll("UW", ""));
+                    Cashier cashier = CashierController.getInstance().searchCasherById(cashId);
+                    if(cashier == null){
+                        System.out.println("Cashier not found");
+                        return;
+                    }
                     switch (args[5]) {
                         case "-s":
                             if(!TicketData.getInstance().addTicket(ticketId, "services")){
@@ -252,6 +259,12 @@ public class TicketController {
                     // ticket new <cashId> <userId>
                     String cashierId = args[2].replaceAll("UW", "");
                     cashId = Integer.parseInt(cashierId);
+
+                    Cashier cashier = CashierController.getInstance().searchCasherById(cashId);
+                    if(cashier == null){
+                        System.out.println("Cashier not found");
+                        return;
+                    }
                     ticketId = TicketData.getInstance().addTicket("products");
                     CashierController.getInstance().addTicket(ticketId, cashId);
                     CustomerController.getInstance().addTicket(ticketId, userId);
@@ -259,6 +272,11 @@ public class TicketController {
                     // ticket new <id> <cashId> <userId>
                     String cashierId = args[3].replaceAll("UW", "");
                     cashId = Integer.parseInt(cashierId);
+                    Cashier cashier = CashierController.getInstance().searchCasherById(cashId);
+                    if(cashier == null){
+                        System.out.println("Cashier not found");
+                        return;
+                    }
                     ticketId = Integer.valueOf(args[2]);
                     if (!TicketData.getInstance().addTicket(ticketId, "products"))
                         System.out.println(ID_REPEAT);
