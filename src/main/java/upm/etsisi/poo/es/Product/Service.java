@@ -1,21 +1,29 @@
 package upm.etsisi.poo.es.Product;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Service extends Product {
 
     private static int NEXT = 1;
-
     private final String idString;// "1S", "2S", ...
     private final int id;
+
+    @Column(name = "maxUseDate")
     private final LocalDate maxUseDate;
+
     private final String name;
 
     public Service(LocalDate maxUseDate, String name) {
-        this.id = NEXT*-1;
+
+        this.id = NEXT * -1;
         this.idString = NEXT++ + "S";
         this.maxUseDate = maxUseDate;
         this.name = name;
@@ -51,7 +59,7 @@ public class Service extends Product {
         return maxUseDate;
     }
 
-     //Para mostrarlo en listados/prints (sin precio ni nombre)
+    //Para mostrarlo en listados/prints (sin precio ni nombre)
 
     @Override
     public String toString() {

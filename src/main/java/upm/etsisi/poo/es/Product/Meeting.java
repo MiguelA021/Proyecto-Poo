@@ -1,8 +1,12 @@
 package upm.etsisi.poo.es.Product;
 
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Meeting extends Event {
     private final static int TIEMPO_MINIMO = 12; // horas
 

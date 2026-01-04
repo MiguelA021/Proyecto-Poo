@@ -4,6 +4,8 @@ import upm.etsisi.poo.es.type;
 
 import java.util.*;
 
+import static upm.etsisi.poo.es.App.session;
+
 public class ProductController {
   int MAX_PRODUCT = 200;
   Product[] productList;
@@ -114,6 +116,9 @@ public class ProductController {
       } else {
         if (productList[i] == null) {
           productList[i] = product;
+            session.beginTransaction();
+            session.saveOrUpdate(product);
+            session.getTransaction().commit();
           done = true;
           this.prodAmount++;
         }
