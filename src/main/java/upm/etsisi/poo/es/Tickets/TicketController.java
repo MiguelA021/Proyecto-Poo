@@ -12,6 +12,7 @@ import upm.etsisi.poo.es.User.CustomerEnterprise;
 import javax.swing.*;
 import java.time.LocalDate;
 
+import static upm.etsisi.poo.es.App.session;
 import static upm.etsisi.poo.es.Commands.Command.*;
 
 public class TicketController {
@@ -97,6 +98,9 @@ public class TicketController {
                         local.addPersonalized(personalization);
                     }
                     local.newPrice();
+                    session.beginTransaction();
+                    session.saveOrUpdate(local);
+                    session.getTransaction().commit();
 
                     customerTicket.ticketAdd(local, amount);
                 } else {
@@ -119,11 +123,15 @@ public class TicketController {
                             maxPers
                     );
 
+
                     for (int i = 6; i < args.length; i++) {
                         String personalization = args[i].replaceAll("--p", "");
                         local.addPersonalized(personalization);
                     }
                     local.newPrice();
+                    session.beginTransaction();
+                    session.saveOrUpdate(product);
+                    session.getTransaction().commit();
 
                     mt.addProduct(local, amount);
                 } else {

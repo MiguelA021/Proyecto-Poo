@@ -34,7 +34,6 @@
         <mapping class="upm.etsisi.poo.es.Product.Event"/>
         <mapping class="upm.etsisi.poo.es.Product.Food"/>
         <mapping class="upm.etsisi.poo.es.Product.Meeting"/>
-        <mapping class="upm.etsisi.poo.es.Product.Personalization"/>
 
     </session-factory>
 

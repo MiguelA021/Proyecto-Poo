@@ -14,13 +14,18 @@ public class PersonalizedProduct extends BasicProduct {
     @Column(name = "maxPersonalizaciones")
     private int maxPers;
 
-    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL)
-    private Set<Personalization> personalizaciones;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "producto_personalizaciones",
+            joinColumns = @JoinColumn(name = "producto_id")
+    )
+    @Column(name = "personalizacion")
+    private Set<String> personalizaciones;
 
     public PersonalizedProduct(int id, String name, type type, double price, int maxPers) {
         super(id, name, type, price);
         this.maxPers = maxPers;
-        this.personalizaciones = new HashSet<Personalization>(maxPers);
+        this.personalizaciones = new HashSet<String>(maxPers);
     }
 
     public int getMaxPers() {
@@ -57,8 +62,7 @@ public class PersonalizedProduct extends BasicProduct {
     public boolean addPersonalized(String personalize) {
         boolean resul = true;
         if (personalizaciones.size() < maxPers) {
-            Personalization personalization = new Personalization(personalize);
-            personalizaciones.add(personalization);
+            personalizaciones.add(personalize);
         } else {
             resul = false;
         }
