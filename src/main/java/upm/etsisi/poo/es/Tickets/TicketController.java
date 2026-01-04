@@ -189,7 +189,9 @@ public class TicketController {
             userId = CustomerController.getInstance().dniToId(args[3]);
             Customer customer = CustomerController.getInstance().getCustomer(userId);
             if (customer == null) {
-                userId = CustomerController.getInstance().dniToId(args[4]);
+                if(args.length>4) {
+                    userId = CustomerController.getInstance().dniToId(args[4]);
+                }
                 customer = CustomerController.getInstance().getCustomer(userId);
                 if(customer == null) {
                     System.out.println("User not found");
