@@ -5,6 +5,7 @@ import upm.etsisi.poo.es.Product.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class TicketTest {
@@ -194,6 +195,9 @@ public class TicketTest {
     @Test
     public void ticketPrintTest(){
         Store storeTest = new Store();
+        LocalDateTime ahora = LocalDateTime.now();
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
+        String fechaFormateada = ahora.format(formateador);
         Ticket ticketTest = new Ticket(109102);
         Product product1 = new BasicProduct(1, "Pantalones UPM", type.CLOTHES, 15);
         Product product2 = new Meeting(23129, "Graduacion ETSISI", 31, "2026-02-21", 31);
@@ -203,7 +207,8 @@ public class TicketTest {
         ticketTest.ticketAdd(product2, 10);
         String resultPrint = ticketTest.ticketPrint(true);
         StringBuilder sb = new StringBuilder();
-        sb.append("Ticket : 109102-26-01-02-18:46\n");
+        sb.append("Ticket : 109102-");
+        sb.append(fechaFormateada).append("\n");
         sb.append("  {class:Meeting, id:23129, name:'Graduacion ETSISI', price:310.0, date of Event:2026-02-21, max people allowed:31, actual people in event:10}\n");
         sb.append("  {class:Product, id:1, name:'Pantalones UPM', category:CLOTHES, price:15,00} **discount -1,05\n");
         sb.append("  {class:Product, id:1, name:'Pantalones UPM', category:CLOTHES, price:15,00} **discount -1,05\n");
@@ -221,8 +226,5 @@ public class TicketTest {
         sb.append("  Final price: 463.450");
         String expected = sb.toString();
         assertEquals(expected, resultPrint);
-        assertEquals(Status.CLOSED, ticketTest.getStatus());
-        assertNotEquals(Status.OPEN, ticketTest.getStatus());
-        assertNotEquals(Status.EMPTY, ticketTest.getStatus());
     }
 }

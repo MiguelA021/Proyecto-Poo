@@ -21,14 +21,14 @@ public class CashierTest {
         String fechaFormateada = ahora.format(formateador);
         Integer ticket1 = 212121;
         Integer ticket2 = 222226;
-        Integer ticket3 = 111111; //STATUS: EMPTY
+        Integer ticket3 = 111111;
         Cashier cashierTest = new Cashier("pepe0@upm.es", "pepecurro1", "UW1234569");
         cashierTest.addTicket(ticket1);
         cashierTest.addTicket(ticket2);
-        cashierTest.addTicket(ticket3); //STATUS: EMPTY
+        cashierTest.addTicket(ticket3);
         Ticket ticketReal3 = cashierTest.getTicketById(ticket3);
         BasicProduct product1 = new BasicProduct(1, "Libro POO V2", type.BOOK, 30);
-        ticketReal3.ticketAdd(product1, 3); //STATUS: OPEN
+        ticketReal3.ticketAdd(product1, 3);
         String actual = cashierTest.listTickets();
         StringBuilder sb = new StringBuilder();
         sb.append("  111111->OPEN\n");
@@ -79,21 +79,49 @@ public class CashierTest {
         assertEquals(expected, actual);
     }
 
-    //Test: Comprueba que consigue un ticket a partir de su ID
+    /**
+     * Test: Comprueba que consigue un ticket a partir de su ID
+     */
     @Test
     public void getTicketsByIdTest(){
-
+        Cashier cashierTest = new Cashier("pepe0@upm.es", "pepecurro1", "1234569");
+        cashierTest.addTicket(122131);
+        Ticket expected = cashierTest.getTicketById(122131);
+        assertNotNull(expected);
     }
 
-    //Test: Comprueba que no consigue un ticket a partir de un ID inexistente
+    /**
+     * Test: Comprueba que no consigue un ticket a partir de un ID inexistente
+     */
     @Test
     public void getTicketsByIncorrectIdTest(){
-
+        Cashier cashierTest = new Cashier("pepe0@upm.es", "pepecurro1", "1234569");
+        cashierTest.addTicket(122138);
+        Ticket expected = cashierTest.getTicketById(122131);
+        assertNull(expected);
     }
 
-    //Test: Comprueba que se elimina correctamente un ticket a traves de una busqueda en la que no aparezca su ID en el TREEMAP
+    /**
+     * Test: Comprueba que se elimina correctamente un ticket a traves de una busqueda en la que aparezca su ID en el TREEMAP
+     */
     @Test
     public void removeTicketTest(){
+        Cashier cashierTest = new Cashier("pepe0@upm.es", "pepecurro1", "1234569");
+        cashierTest.addTicket(122138);
+        cashierTest.addTicket(626168);
+        boolean result = cashierTest.removeTicket(626168);
+        assertTrue(result);
+    }
 
+    /**
+     * Test: Comprueba que no elimina correctamente un ticket a traves de una busqueda en la que no aparezca su ID en el TREEMAP
+     */
+    @Test
+    public void removeFakeTicketTest(){
+        Cashier cashierTest = new Cashier("pepe0@upm.es", "pepecurro1", "1234569");
+        cashierTest.addTicket(122138);
+        cashierTest.addTicket(626168);
+        boolean result = cashierTest.removeTicket(626161);
+        assertFalse("Este ticket no existe", result);
     }
 }

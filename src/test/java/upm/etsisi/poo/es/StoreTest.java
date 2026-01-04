@@ -13,7 +13,9 @@ import java.util.logging.SocketHandler;
 
 public class StoreTest {
 
-    //TEST QUE ME DEVUELVA UN PRODUCTO ENTRE LOS QUE ESTAN AÑADIDOS (3 PRODUCTOS AÑADIDOS)
+    /**
+     * TEST QUE ME DEVUELVA UN PRODUCTO ENTRE LOS QUE ESTAN AÑADIDOS (3 PRODUCTOS AÑADIDOS)
+     */
     @Test
     public void getProductTest(){
         Store objectTest = new Store();
@@ -29,9 +31,10 @@ public class StoreTest {
         assertEquals(productTest2, productResult);
     }
 
-    //public boolean addFood(int id, String name, int price, String expiryDate, int assistants)
-    //SE USA CON GET PRODUCT PERO TIENE SU TEST SIMPLE de aumento de size 23458 "Cafeteria ETSISI" 5 2025-12-21 300
-
+    /**
+     * Test from public boolean addFood(int id, String name, int price, String expiryDate, int assistants)
+     * SE USA CON GET PRODUCT PERO TIENE SU TEST SIMPLE de aumento de size
+     */
     @Test
     public void addFoodTest(){
         Store objectTest = new Store();
@@ -40,9 +43,10 @@ public class StoreTest {
         assertEquals(1, objectTest.getProdAmount());
     }
 
-    //public boolean addMeeting(int id, String name, double price, String expiryDate, int assistants)
-    //SE USA CON GET PRODUCT PERO TIENE SU TEST SIMPLE 23457 "Graduacion ETSISI" 40 2025-12-21 30
-
+    /**
+     * Test from public boolean addMeeting(int id, String name, double price, String expiryDate, int assistants)
+     * SE USA CON GET PRODUCT PERO TIENE SU TEST SIMPLE
+     */
     @Test
     public void addMeetingTest(){
         Store objectTest = new Store();
@@ -51,11 +55,10 @@ public class StoreTest {
         assertEquals(1, objectTest.getProdAmount());
     }
 
-    //public void addCustomer(String name, String dni, String email, int cashId)
-    //SE USA CON REMOVE CUSTOMER Y ARRAYLIST PERO TIENE SU TEST SIMPLE "Pepe3" 55630667S pepe1@upm.es U1234567
-    // UW1234567 "pepecurro3" pepe0@upm.es
-
-    //FALLO: preferible que el CASHIERID sea STRING
+    /**
+     * Test from public void addCustomer(String name, String dni, String email, int cashId)
+     * SE USA CON REMOVE CUSTOMER Y ARRAYLIST PERO TIENE SU TEST SIMPLE
+     */
     @Test
     public void addCustomerEnterpriseTest(){
         Store objectTest = new Store();
@@ -66,7 +69,9 @@ public class StoreTest {
         assertEquals(3, objectTest.customers.size());
     }
 
-    //Test de ADDCUSTOMER PERO QUE NO SEA ENTERPRISE
+    /**
+     * Test de ADDCUSTOMER PERO QUE NO SEA ENTERPRISE
+     */
     @Test
     public void addCustomerNotEnterpriseTest(){
         Store objectTest = new Store();
@@ -78,8 +83,10 @@ public class StoreTest {
     }
 
 
-    //public Cashier searchCasherById(int id)
-    //TEST QUE ME COMPRUEBA QUE HAYA UN CAJERO ENTRE LOS 3 QUE SE HA AÑADIDO
+    /**
+     * Test from public Cashier searchCasherById(int id)
+     * TEST QUE ME COMPRUEBA QUE HAYA UN CAJERO ENTRE LOS 3 QUE SE HA AÑADIDO
+     */
     @Test
     public void searchCasherByIdTest(){
         Store objectTest = new Store();
@@ -90,10 +97,11 @@ public class StoreTest {
         assertEquals(objectTest.cashers.get(id), objectTest.searchCasherById(id));
     }
 
-    //public int dniToId(String dni)
-    //TEST QUE ME COMPRUEBA LA CONVERSION
-
-    //FALLO: Al hacer id += c hace la suma del CHAR en ASCII, hay que convertir c en un int: id += (c - '0')
+    /**
+     * Test from public int dniToId(String dni)
+     * TEST QUE ME COMPRUEBA LA CONVERSION
+     * FALLO ARREGLADO: Al hacer id += c hace la suma del CHAR en ASCII, hay que convertir c en un int: id += (c - '0')
+     */
     @Test
     public void dniToIdTest(){
         Store objectTest = new Store();
@@ -101,9 +109,10 @@ public class StoreTest {
         assertEquals(55630667, objectTest.dniToId(dniTest));
     }
 
-    //public boolean removeCustomer(String dni)
-    //TEST QUE ME COMPRUEBA LA ELIMINACION DE UN CLIENTE ENTRE LOS 3 QUE SE AÑADIO
-
+    /**
+     * Test from public boolean removeCustomer(String dni)
+     * TEST QUE ME COMPRUEBA LA ELIMINACION DE UN CLIENTE ENTRE LOS 3 QUE SE AÑADIO
+     */
     @Test
     public void removeCustomerTest(){
         Store objectTest = new Store();
@@ -115,10 +124,11 @@ public class StoreTest {
         assertEquals(2, objectTest.customers.size());
     }
 
-    //public void listCustomers()
-    //	TEST QUE ME COMPRUEBA EL FORMATO CON DOS CLIENTES AÑADIDOS A TRAVES DE STRINGBUILDER RESULTADO Y ESPERADO
-
-    //FALLO: Debe ser USER en vez de CLIENT
+    /**
+     * Test from public void listCustomers()
+     * TEST QUE ME COMPRUEBA EL FORMATO CON DOS CLIENTES AÑADIDOS A TRAVES DE STRINGBUILDER RESULTADO Y ESPERADO
+     * FALLO ARREGLADO: Debe ser USER en vez de CLIENT
+     */
     @Test
     public void listCustomersTest(){
         Store objectTest = new Store();
@@ -148,12 +158,10 @@ public class StoreTest {
         System.setOut(originalOut);
     }
 
-   // public void addTicketOnCashier(Integer idTicket, int idCashier, int idCustomer)
-    // TEST QUE ME COMPRUEBA SI UN TICKET PERTENECE A UN CAJERO CON EL DICCIONARIO DE STORE A PARTIR DEL ID DEL CAJERO Y ID DEL CLIENTE
-
-    //FALLO: Mejor que el metodo "addTicketOnCashier" permita que el ID del Customer contenga el DNI con o sin letra. Luego en el metodo
-    //se hace la conversion con el dniToId de Store
-
+    /**
+     * Test from public void addTicketOnCashier(Integer idTicket, int idCashier, int idCustomer)
+     * TEST QUE ME COMPRUEBA SI UN TICKET PERTENECE A UN CAJERO CON EL DICCIONARIO DE STORE A PARTIR DEL ID DEL CAJERO Y ID DEL CLIENTE
+     */
     @Test
     public void addTicketOnCashierTest(){
         Store objectTest = new Store();
@@ -168,11 +176,10 @@ public class StoreTest {
     }
 
 
-    //SI no nos dan ID, llamar al metodo y que solo se permita la adicion si el id generado
-    //NO EXISTE EN CASHERS
-
-    //public boolean addCasher(Integer id, String name, String email)
-    //TEST que me comprueba que SI el id del nuevo cajero ya existe en cashers. NO PERMITE LA ADICION
+    /**
+     * Test from public boolean addCasher(Integer id, String name, String email)
+     * TEST que me comprueba que SI el id del nuevo cajero ya existe en cashers NO PERMITE LA ADICION
+     */
     @Test
     public void addCashierWithIdExistentTest(){
         Store objectTest = new Store();
@@ -184,8 +191,10 @@ public class StoreTest {
         assertFalse("It mustn't exist an Cashier with same id that other cashier", result);
     }
 
-    //public boolean removeCasher(int id)
-    //TEST QUE ME COMPRUEBA QUE ESTAN TODOS LOS CAJEROS MENOS EL ELIMINADO COMPARANDO el tamaño de CASHIERS
+    /**
+     * Test from public boolean removeCasher(int id)
+     * TEST QUE ME COMPRUEBA QUE ESTAN TODOS LOS CAJEROS MENOS EL ELIMINADO COMPARANDO el tamaño de CASHIERS
+     */
     @Test
     public void removeCashierTest(){
         Store objectTest = new Store();
@@ -197,8 +206,10 @@ public class StoreTest {
     }
 
 
-    //public void listCashers()
-    //TEST QUE ME COMPRUEBA CON  EL ASSERT DE STRING EL MISMO STRING DE UNO CON LOS CAJEROS AÑADIDOS RESULTADO DE LA FUNCION Y OTRO PROPIO NUESTRO, USAMOS UN LIST CASHERS DE 3
+    /**
+     * Test from public void listCashers()
+     * TEST QUE ME COMPRUEBA CON  EL ASSERT DE STRING EL MISMO STRING DE UNO CON LOS CAJEROS AÑADIDOS RESULTADO DE LA FUNCION Y OTRO PROPIO NUESTRO, USAMOS UN LIST CASHERS DE 3
+     */
     @Test
     public void listCashiersTest(){
         Store objectTest = new Store();
@@ -225,15 +236,10 @@ public class StoreTest {
         System.setOut(originalOut);
     }
 
-
-
-
-    //public boolean prodRemove(int id)
-    //	TEST QUE ME COMPRUEBA LA ELIMINACION DE UN PRODUCTO TRAS 3 QUE HABIAN
-
-    //prod add 1 "Libro POO" BOOK 25 //BASIC PRODUCT
-    //prod addMeeting 23457 "Graduacion ETSISI" 40 2025-12-21 30
-
+    /**
+     * Test from public boolean prodRemove(int id)
+     * TEST QUE ME COMPRUEBA LA ELIMINACION DE UN PRODUCTO TRAS 3 QUE HABIAN
+     * */
     @Test
     public void prodRemoveTest(){
         Store objectTest = new Store();
@@ -249,11 +255,10 @@ public class StoreTest {
         assertEquals(3, objectTest.getProdAmount());
     }
 
-
-
-    //public Product updateType(int id, type category)
-    //	TEST QUE ME COMRUEBA EL CAMBIO DE TIPO
-
+    /**
+     * Test from public Product updateType(int id, type category)
+     * TEST QUE ME COMRUEBA EL CAMBIO DE TIPO
+     */
     @Test
     public void updateTypeTest(){
         Store objectTest = new Store();
@@ -265,8 +270,10 @@ public class StoreTest {
     }
 
 
-    //public Product updateName(int id, String name)
-    //	TEST QUE ME COMRUEBA EL CAMBIO DE NOMBRE
+    /**
+     * Test from public Product updateName(int id, String name)
+     * TEST QUE ME COMRUEBA EL CAMBIO DE NOMBRE
+     */
     @Test
     public void updateNameTest(){
         Store objectTest = new Store();
@@ -287,10 +294,10 @@ public class StoreTest {
         assertEquals("Graduacion Teleco", updateBasicProductTest.getName());
     }
 
-
-    //public Product updatePrice(int id, double price)
-    //	TEST QUE ME COMRUEBA EL CAMBIO DE PRECIO
-
+    /**
+     * Test from public Product updatePrice(int id, double price)
+     * TEST QUE ME COMRUEBA EL CAMBIO DE PRECIO
+     */
     @Test
     public void updatePriceTest(){
         Store objectTest = new Store();
@@ -312,8 +319,10 @@ public class StoreTest {
     }
 
 
-    //public Cashier getCasher(int cashId)
-    //	PARA COMPROBAR EL CAJERO COMO EN GET PRODUCT CON 5 CAJEROS
+    /**
+     * Test from public Cashier getCasher(int cashId)
+     * PARA COMPROBAR EL CAJERO COMO EN GET PRODUCT CON 5 CAJEROS
+     */
     @Test
     public void getCashierTest(){
         Store objectTest = new Store();
@@ -327,8 +336,9 @@ public class StoreTest {
     }
 
 
-
-    //Test de que no permite hacer PRODADD cuando este lleno
+    /**
+     * Test de que no permite hacer PRODADD cuando este lleno
+     */
     @Test
     public void prodAddOnMaxSizeTest(){
         Store objeto = new Store();
@@ -341,7 +351,9 @@ public class StoreTest {
         assertFalse("El array de ProductList esta lleno", result);
     }
 
-    //TEST QUE ME VERIFIQUE QUE AUMENTA EL TAMAÑO DE PRODUCTLIST
+    /**
+     * TEST QUE ME VERIFIQUE QUE AUMENTA EL TAMAÑO DE PRODUCTLIST
+     */
     @Test
     public void prodAddSizeTest(){
         Store objectTest = new Store();
