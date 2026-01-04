@@ -34,14 +34,12 @@ public class PersonalizedProduct extends BasicProduct {
         return sb.toString();
     }
 
-    public boolean addPersonalized(String personalize) {
-        boolean resul = true;
+    public void addPersonalized(String personalize) {
         if (personalizaciones.size() < maxPers) {
             personalizaciones.add(personalize);
-        } else {
-            resul = false;
+        }else{
+            System.out.println(MAX_PERSONALIZED_ERROR);
         }
-        return resul;
     }
 
     public void newPrice(){
