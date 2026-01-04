@@ -14,7 +14,6 @@ public abstract class Ticket {
     final static int MAX_PRODUCT = 100;
     Product[] productList;
     protected ArrayList<LocalDateTime> dates;
-    protected int tickId;
     private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
     int amount;
 
@@ -93,24 +92,42 @@ public abstract class Ticket {
 
     protected String toStringId() {
         StringBuilder resul = new StringBuilder();
+
         String status = this.status.toString().toUpperCase();
+
         switch (status) {
-            case "EMPTY":
+
+            case "EMPTY": {
+                // Ticket recién creado: se muestra fecha de creación + id
                 String inicio = dates.get(0).format(DATE_FORMAT);
-                resul.append(inicio).append("-").append(tickId);
+                resul.append(inicio).append("-").append(this.id);
                 break;
+            }
             case "OPEN":
-                resul.append(tickId);
+                resul.append(this.id);
                 break;
-            case "CLOSED":
-                String fin = dates.get(1).format(DATE_FORMAT);
-                resul.append(tickId).append(fin);
+
+            case "CLOSED": {
+                String fin;
+
+                if (dates.size() > 1) {
+                    fin = dates.get(1).format(DATE_FORMAT);
+                } else {
+                    fin = dates.get(0).format(DATE_FORMAT);
+                }
+
+                resul.append(fin).append("-").append(this.id);
                 break;
+            }
+
             default:
                 resul.append("ERROR, status is undefined");
                 break;
         }
+
         return resul.toString();
     }
+
+
 
 }

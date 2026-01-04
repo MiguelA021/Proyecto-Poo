@@ -12,11 +12,16 @@ import java.util.Comparator;
 import java.util.Locale;
 
 public class CustomerTicket extends Ticket {
-    private Status status;
 
     public CustomerTicket(Integer id) {
         super(id);
     }
+
+    @Override
+    public String print(boolean close) {
+        return ticketPrint(close);
+    }
+
 
 
     @Override
