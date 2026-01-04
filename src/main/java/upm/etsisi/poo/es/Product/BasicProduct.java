@@ -7,8 +7,8 @@ public class BasicProduct extends Product {
   protected type category;
 
   public BasicProduct(int id, String name, type category, double price) {
-    this.name = name.trim();
-    this.price = price;
+    setName(name);
+    setPrice(price);
     this.id = id;
     this.category = category;
   }
