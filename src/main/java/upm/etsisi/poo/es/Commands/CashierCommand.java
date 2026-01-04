@@ -101,6 +101,10 @@ public class CashierCommand implements Command {
       String casherId = args[2].replaceAll("UW", "");
       int cash = Integer.parseInt(casherId);
       Cashier casher = cashierController.searchCasherById(cash);
+      if(casher == null){
+          System.out.println("Cashier not found");
+          return;
+      }
 
       // Siempre imprimimos el encabezado
       System.out.println("Tickets: ");

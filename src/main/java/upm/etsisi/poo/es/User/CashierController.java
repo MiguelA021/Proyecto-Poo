@@ -78,7 +78,9 @@ public class CashierController {
   }
 
   public Cashier searchCasherById(int id) {
-    return cashers.get(id);
+      if(cashers.containsKey(id)) {
+          return cashers.get(id);
+      }else return null;
   }
 
   public boolean removeCasher(int id) {
