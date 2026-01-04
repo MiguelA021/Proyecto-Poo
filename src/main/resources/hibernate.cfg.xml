@@ -29,12 +29,12 @@
         <mapping class="upm.etsisi.poo.es.Product.Product"/>
         <mapping class="upm.etsisi.poo.es.Product.BasicProduct"/>
         <mapping class="upm.etsisi.poo.es.Product.PersonalizedProduct"/>
-        <mapping class="upm.etsisi.poo.es.Product.Personalization"/>
         <mapping class="java.lang.String"/>
         <mapping class="upm.etsisi.poo.es.Product.Service"/>
         <mapping class="upm.etsisi.poo.es.Product.Event"/>
         <mapping class="upm.etsisi.poo.es.Product.Food"/>
         <mapping class="upm.etsisi.poo.es.Product.Meeting"/>
+        <mapping class="upm.etsisi.poo.es.Product.Personalization"/>
 
     </session-factory>
 
