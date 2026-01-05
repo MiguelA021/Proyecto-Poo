@@ -10,9 +10,7 @@ import upm.etsisi.poo.es.User.CustomerController;
 import upm.etsisi.poo.es.User.CustomerEnterprise;
 
 import javax.swing.*;
-import java.time.LocalDate;
 
-import static upm.etsisi.poo.es.App.session;
 import static upm.etsisi.poo.es.Commands.Command.*;
 
 public class TicketController {
@@ -98,9 +96,7 @@ public class TicketController {
                         local.addPersonalized(personalization);
                     }
                     local.newPrice();
-                    session.beginTransaction();
-                    session.saveOrUpdate(local);
-                    session.getTransaction().commit();
+
 
                     customerTicket.ticketAdd(local, amount);
                 } else {
@@ -129,9 +125,6 @@ public class TicketController {
                         local.addPersonalized(personalization);
                     }
                     local.newPrice();
-                    session.beginTransaction();
-                    session.saveOrUpdate(product);
-                    session.getTransaction().commit();
 
                     mt.addProduct(local, amount);
                 } else {
@@ -230,7 +223,7 @@ public class TicketController {
                     cashId = Integer.parseInt(args[3].replaceAll("UW", ""));
                     switch (args[5]) {
                         case "-s":
-                            if(!TicketData.getInstance().addTicket(ticketId, "services")){
+                            if(!TicketData.getInstance().addTicketId(ticketId, "services")){
                                 System.out.println(ID_REPEAT);
                             }else {
                                 CashierController.getInstance().addTicket(ticketId, cashId);
@@ -238,7 +231,7 @@ public class TicketController {
                             }
                             break;
                         case "-c":
-                            if(!TicketData.getInstance().addTicket(ticketId, "combined")){
+                            if(!TicketData.getInstance().addTicketId(ticketId, "combined")){
                                 System.out.println(ID_REPEAT);
                             }else {
                                 CashierController.getInstance().addTicket(ticketId, cashId);
@@ -266,7 +259,7 @@ public class TicketController {
                     String cashierId = args[3].replaceAll("UW", "");
                     cashId = Integer.parseInt(cashierId);
                     ticketId = Integer.valueOf(args[2]);
-                    if (!TicketData.getInstance().addTicket(ticketId, "products"))
+                    if (!TicketData.getInstance().addTicketId(ticketId, "products"))
                         System.out.println(ID_REPEAT);
                     else {
                         CashierController.getInstance().addTicket(ticketId, cashId);

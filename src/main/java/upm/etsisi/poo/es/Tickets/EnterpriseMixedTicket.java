@@ -5,15 +5,31 @@ import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Product.ProductController;
 import upm.etsisi.poo.es.Product.Service;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static upm.etsisi.poo.es.App.session;
+
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class EnterpriseMixedTicket extends Ticket {
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "productos_ticket_empresa_mixto",
+            joinColumns = @JoinColumn(name = "producto_id")
+    )
     private final List<Product> products = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "servicios_ticket_empresa_mixto",
+            joinColumns = @JoinColumn(name = "producto_id")
+    )
     private final List<Service> services = new ArrayList<>();
 
     public EnterpriseMixedTicket(Integer id) {
@@ -101,6 +117,11 @@ public class EnterpriseMixedTicket extends Ticket {
                 }
 
             }
+            if (this.status == Status.EMPTY)
+                this.status = Status.OPEN;
+            session.beginTransaction();
+            session.update(this);
+            session.getTransaction().commit();
         } else {
             resul = false;
             System.out.println("ERROR: the ticket is closed. It can't be modified");
@@ -123,6 +144,9 @@ public class EnterpriseMixedTicket extends Ticket {
 
         services.add(s);
         if (status == Status.EMPTY) status = Status.OPEN;
+        session.beginTransaction();
+        session.update(this);
+        session.getTransaction().commit();
         return true;
     }
 
@@ -171,6 +195,9 @@ public class EnterpriseMixedTicket extends Ticket {
         if (product instanceof Service) {
             if (services.contains(product)) {
                 services.remove(product);
+                session.beginTransaction();
+                session.update(this);
+                session.getTransaction().commit();
                 return product;
             } else {
                 return null;
@@ -178,6 +205,9 @@ public class EnterpriseMixedTicket extends Ticket {
         } else {
             if (products.contains(product)) {
                 products.remove(product);
+                session.beginTransaction();
+                session.update(this);
+                session.getTransaction().commit();
                 return product;
             } else {
                 return null;

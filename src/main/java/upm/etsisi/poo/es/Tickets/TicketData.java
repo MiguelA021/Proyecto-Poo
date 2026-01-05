@@ -2,6 +2,8 @@ package upm.etsisi.poo.es.Tickets;
 
 import java.util.HashMap;
 
+import static upm.etsisi.poo.es.App.session;
+
 public class TicketData {
     private static final String ID_ERROR = "The id given has been already used";
     HashMap<Integer, Ticket> tickets;
@@ -33,19 +35,28 @@ public class TicketData {
         } while (tickets.containsKey(id));
         switch (tycketType) {
             case "products":
-                CustomerTicket customerTicket = new CustomerTicket(id);
-                tickets.put(customerTicket.getId(), customerTicket);
-                System.out.println(customerTicket.toStringNew());
+                CustomerTicket customerTicketNoId = new CustomerTicket(id);
+                tickets.put(customerTicketNoId.getId(), customerTicketNoId);
+                session.beginTransaction();
+                session.saveOrUpdate(customerTicketNoId);
+                session.getTransaction().commit();
+                System.out.println(customerTicketNoId.toStringNew());
                 break;
             case "services":
-                EnterpriseServiceTicket enterpriseServiceTicket = new EnterpriseServiceTicket(id);
-                tickets.put(enterpriseServiceTicket.getId(), enterpriseServiceTicket);
-                System.out.println(enterpriseServiceTicket.toStringId());
+                EnterpriseServiceTicket enterpriseServiceTicketNoId = new EnterpriseServiceTicket(id);
+                tickets.put(enterpriseServiceTicketNoId.getId(), enterpriseServiceTicketNoId);
+                session.beginTransaction();
+                session.saveOrUpdate(enterpriseServiceTicketNoId);
+                session.getTransaction().commit();
+                System.out.println(enterpriseServiceTicketNoId.toStringId());
                 break;
             case "combined":
-                EnterpriseMixedTicket enterpriseMixedTicket = new EnterpriseMixedTicket(id);
-                tickets.put(enterpriseMixedTicket.getId(), enterpriseMixedTicket);
-                System.out.println(enterpriseMixedTicket.toStringId());
+                EnterpriseMixedTicket enterpriseMixedTicketNoId = new EnterpriseMixedTicket(id);
+                tickets.put(enterpriseMixedTicketNoId.getId(), enterpriseMixedTicketNoId);
+                session.beginTransaction();
+                session.saveOrUpdate(enterpriseMixedTicketNoId);
+                session.getTransaction().commit();
+                System.out.println(enterpriseMixedTicketNoId.toStringId());
                 break;
             default:
                 System.out.println(ID_ERROR);
@@ -55,7 +66,7 @@ public class TicketData {
         return id;
     }
 
-    public boolean addTicket(int idTicket, String ticketType) {
+    public boolean addTicketId(int idTicket, String ticketType) {
         boolean resul = false;
         if (tickets.containsKey(idTicket))
             System.out.println(ID_ERROR);
@@ -65,17 +76,26 @@ public class TicketData {
                     CustomerTicket customerTicket = new CustomerTicket(idTicket);
                     tickets.put(idTicket, customerTicket);
                     resul = true;
+                    session.beginTransaction();
+                    session.saveOrUpdate(customerTicket);
+                    session.getTransaction().commit();
                     System.out.println(customerTicket.toStringNew());
                     break;
                 case "services":
                     EnterpriseServiceTicket enterpriseServiceTicket = new EnterpriseServiceTicket(idTicket);
                     tickets.put(idTicket, enterpriseServiceTicket);
+                    session.beginTransaction();
+                    session.saveOrUpdate(enterpriseServiceTicket);
+                    session.getTransaction().commit();
                     resul = true;
                     System.out.println(enterpriseServiceTicket.toStringNew());
                     break;
                 case "combined":
                     EnterpriseMixedTicket enterpriseMixedTicket = new EnterpriseMixedTicket(idTicket);
                     tickets.put(idTicket, enterpriseMixedTicket);
+                    session.beginTransaction();
+                    session.saveOrUpdate(enterpriseMixedTicket);
+                    session.getTransaction().commit();
                     resul = true;
                     System.out.println(enterpriseMixedTicket.toStringNew());
                     break;

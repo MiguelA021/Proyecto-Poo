@@ -5,14 +5,23 @@ import upm.etsisi.poo.es.Product.ProductController;
 import upm.etsisi.poo.es.Product.Service;
 
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static upm.etsisi.poo.es.App.session;
 
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class EnterpriseServiceTicket extends Ticket {
+    @Transient
     private final String INCORRECT = "Not a Service";
-
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            name = "servicios_ticket_empresa",
+            joinColumns = @JoinColumn(name = "producto_id")
+    )
     private final List<Service> services = new ArrayList<>();
 
     public EnterpriseServiceTicket(Integer id) {
@@ -45,6 +54,9 @@ public class EnterpriseServiceTicket extends Ticket {
 
         services.add(s);
         if (status == Status.EMPTY) status = Status.OPEN;
+        session.beginTransaction();
+        session.update(this);
+        session.getTransaction().commit();
         return true;
     }
 
@@ -76,6 +88,9 @@ public class EnterpriseServiceTicket extends Ticket {
             return null;
         }else{
             this.services.remove((Service) product);
+            session.beginTransaction();
+            session.update(this);
+            session.getTransaction().commit();
             return (Service) product;
         }
 

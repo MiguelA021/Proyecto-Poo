@@ -34,6 +34,10 @@
         <mapping class="upm.etsisi.poo.es.Product.Event"/>
         <mapping class="upm.etsisi.poo.es.Product.Food"/>
         <mapping class="upm.etsisi.poo.es.Product.Meeting"/>
+        <mapping class="upm.etsisi.poo.es.Tickets.Ticket"/>
+        <mapping class="upm.etsisi.poo.es.Tickets.CustomerTicket"/>
+        <mapping class="upm.etsisi.poo.es.Tickets.EnterpriseServiceTicket"/>
+        <mapping class="upm.etsisi.poo.es.Tickets.EnterpriseMixedTicket"/>
 
     </session-factory>
 

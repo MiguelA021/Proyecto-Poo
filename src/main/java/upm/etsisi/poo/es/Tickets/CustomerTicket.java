@@ -6,13 +6,18 @@ import upm.etsisi.poo.es.Product.PersonalizedProduct;
 import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.type;
 
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Locale;
 
+import static upm.etsisi.poo.es.App.session;
+
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class CustomerTicket extends Ticket {
-    private Status status;
 
     public CustomerTicket(Integer id) {
         super(id);
@@ -95,6 +100,9 @@ public class CustomerTicket extends Ticket {
                     }
 
                 }
+                session.beginTransaction();
+                session.update(this);
+                session.getTransaction().commit();
 
             }
         } else {
@@ -145,6 +153,9 @@ public class CustomerTicket extends Ticket {
                 if (iterations == this.amount) {
                     System.out.println(PRODUCT_DOES_NOT_EXIST);
                 }
+                session.beginTransaction();
+                session.update(this);
+                session.getTransaction().commit();
             }
         } else {
             System.out.println(ERROR_TICKET_CLOSE);
@@ -181,9 +192,9 @@ public class CustomerTicket extends Ticket {
         StringBuilder sc = new StringBuilder();
 
         if (close) {
-            LocalDateTime now = LocalDateTime.now();
-            dates.add(now);
-            boolean validClose = comprobarFechasTodosEventos(now);
+            LocalDateTime dateTime = LocalDateTime.now();
+
+            boolean validClose = comprobarFechasTodosEventos(dateTime);
             if (validClose) {
                 this.status = Status.CLOSED;
             } else

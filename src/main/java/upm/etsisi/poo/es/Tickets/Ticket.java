@@ -3,19 +3,33 @@ package upm.etsisi.poo.es.Tickets;
 
 import upm.etsisi.poo.es.Product.Product;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Comparator;
 
+@Entity
+@Table(name = "tickets")
 public abstract class Ticket {
-    protected final Integer id;
+    @Id
+    @Column(name = "Id")
+    protected Integer id;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     protected Status status;
+
+    @Transient
     final static int MAX_PRODUCT = 100;
+    @Transient
     Product[] productList;
-    protected ArrayList<LocalDateTime> dates;
-    protected int tickId;
+
+    @Column(name = "dates")
+    protected LocalDateTime dates;
+    @Transient
     private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
+
+    @Column(name = "amount")
     int amount;
 
     public static final String ERROR_FULL = "ERROR: Full Ticket (100 products max)";
@@ -27,6 +41,7 @@ public abstract class Ticket {
     protected static final String PRODUCT_DOES_NOT_EXIST = "ERROR: this product does not exist.";
     protected static final String ERROR_TICKET_CLOSE = "ERROR: the ticket is closed. It can't be modified";
     protected static final String DONT_CLOSE_NOT_VALID_TIME = "The ticket can`t be closed because some event's period of time is invalid. \n";
+    @Transient
     Comparator<Product> nameComp = Comparator.comparing(Product::getName);
     protected static final String TOTAL_PRICE = "Total price:";
     protected static final String TOTAL_DISCOUNT = "Total discount:";
@@ -34,14 +49,16 @@ public abstract class Ticket {
     protected static final String TICKET = "Ticket :";
     protected static final String TICKET_NEW_OK = "ticket new: ok";
 
+    public Ticket() {
+        //requerido por hibernate
+    }
+
     protected Ticket(Integer id) {
         this.id = id;
         this.amount = 0;
         this.status = Status.EMPTY;
         this.productList = new Product[MAX_PRODUCT];
-        this.dates = new ArrayList<LocalDateTime>();
-        LocalDateTime now = LocalDateTime.now();
-        dates.add(now);
+        this.dates = LocalDateTime.now();
     }
 
     public Integer getId() {
@@ -78,6 +95,7 @@ public abstract class Ticket {
         resul.append("  " + toStringId()).append(" - ").append(this.status.toString().toUpperCase());
         return resul.toString();
     }
+
     public String toStringNew() {
         StringBuilder sc = new StringBuilder(); // Soy Aaron, lo de format() esta puesto para que siga el formato que
         // buscamos de fecha.
@@ -96,15 +114,15 @@ public abstract class Ticket {
         String status = this.status.toString().toUpperCase();
         switch (status) {
             case "EMPTY":
-                String inicio = dates.get(0).format(DATE_FORMAT);
-                resul.append(inicio).append("-").append(tickId);
+                String inicio = dates.format(DATE_FORMAT);
+                resul.append(inicio).append("-").append(id);
                 break;
             case "OPEN":
-                resul.append(tickId);
+                resul.append(id);
                 break;
             case "CLOSED":
-                String fin = dates.get(1).format(DATE_FORMAT);
-                resul.append(tickId).append(fin);
+                String fin = dates.format(DATE_FORMAT);
+                resul.append(id).append(fin);
                 break;
             default:
                 resul.append("ERROR, status is undefined");
