@@ -1,9 +1,7 @@
 package upm.etsisi.poo.es;
 import org.jline.builtins.Completers.TreeCompleter;
-import org.jline.builtins.Completers.TreeCompleter.Node;
 import org.jline.reader.Completer;
 import org.jline.reader.Highlighter;
-import org.jline.reader.impl.completer.StringsCompleter;
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
@@ -15,6 +13,7 @@ import org.jline.reader.LineReaderBuilder;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -126,7 +125,7 @@ public class App {
     };
     try{
       Terminal terminal= TerminalBuilder.builder().system(true).build();
-      LineReader reader = LineReaderBuilder.builder().terminal(terminal).completer(completer).highlighter(myHighlighter).build();
+      LineReader reader = LineReaderBuilder.builder().terminal(terminal).completer(completer).highlighter(myHighlighter).variable(LineReader.HISTORY_FILE, Paths.get("record_poo.txt")).variable(LineReader.HISTORY_SIZE, 50).build();
       while (!end) {
         String line = reader.readLine(UPM);
         end = controller.handle(line);
