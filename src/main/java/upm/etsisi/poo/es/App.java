@@ -1,21 +1,21 @@
 package upm.etsisi.poo.es;
 import org.jline.builtins.Completers.TreeCompleter;
-import org.jline.reader.Completer;
-import org.jline.reader.Highlighter;
+import org.jline.reader.*;
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 import upm.etsisi.poo.es.Commands.CommandController;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
+import org.jline.keymap.KeyMap;
 
 import static org.jline.builtins.Completers.TreeCompleter.node;
 
@@ -126,12 +126,46 @@ public class App {
     try{
       Terminal terminal= TerminalBuilder.builder().system(true).build();
       LineReader reader = LineReaderBuilder.builder().terminal(terminal).completer(completer).highlighter(myHighlighter).variable(LineReader.HISTORY_FILE, Paths.get("record_poo.txt")).variable(LineReader.HISTORY_SIZE, 50).build();
+      BiConsumer<String, String> registerKey = (seq, text) -> {
+        reader.getKeyMaps().get(LineReader.MAIN).bind(
+                new Widget() {
+                  @Override
+                  public boolean apply() {
+                    reader.getBuffer().write(text + " ");
+                    reader.callWidget(LineReader.REDRAW_LINE);
+                    reader.callWidget(LineReader.REDISPLAY);
+                    return true;
+                  }
+                },
+                seq
+        );
+      };
+      registerKey.accept("\u001BOP", "client");
+      registerKey.accept("\u001B[11~", "client");
+      registerKey.accept("\u001BOQ", "cash");
+      registerKey.accept("\u001B[12~", "cash");
+      registerKey.accept("\u001BOR", "ticket");
+      registerKey.accept("\u001B[13~", "ticket");
+      registerKey.accept("\u001BOS", "prod");
+      registerKey.accept("\u001B[14~", "prod");
+      registerKey.accept("\u001B[15~", "help");
+      registerKey.accept("\u001B[17~", "echo");
+      registerKey.accept("\u001Ba", "add");
+      registerKey.accept("\u001Br", "remove");
+      registerKey.accept("\u001Bl", "list");
+      registerKey.accept("\u001Bn", "new");
+      registerKey.accept("\u001Bt", "ticket");
+      registerKey.accept("\u001Bu", "update");
+      registerKey.accept("\u001Bf", "addFood");
+      registerKey.accept("\u001Bm", "addMeeting");
       while (!end) {
         String line = reader.readLine(UPM);
         end = controller.handle(line);
       }
     } catch (IOException e) {
       System.out.println(TERMINAL_ERROR);
+    }catch (EndOfFileException e) {
+      System.out.println("Ctrl+D detected, closing App");
     } finally {
       scan.close();
     }
