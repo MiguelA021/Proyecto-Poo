@@ -1,13 +1,10 @@
-package upm.etsisi.poo.es;
+package upm.etsisi.poo.es.Product;
 
-import upm.etsisi.poo.es.Product.*;
-import upm.etsisi.poo.es.User.Cashier;
-import upm.etsisi.poo.es.User.CashierController;
-
+import upm.etsisi.poo.es.type;
 
 import java.util.*;
 
-public class Store {
+public class ProductController {
   int MAX_PRODUCT = 200;
   Product[] productList;
 
@@ -15,20 +12,19 @@ public class Store {
   public static final String CUSTOMER_NOT_FOUND = "The customer given was not found";
   public static final String ID_ERROR = "The id given has already been  used";
   private int prodAmount;
-  private static Store instance;
+  private static ProductController instance;
 
-  private Store() {
+  private ProductController() {
     this.productList = new Product[MAX_PRODUCT];
     this.prodAmount = 0;
   }
-    public static Store getInstance(){
-        if(instance == null){
-            instance = new Store();
-        }
-        return instance;
+
+  public static ProductController getInstance() {
+    if (instance == null) {
+      instance = new ProductController();
     }
-
-
+    return instance;
+  }
 
   /**
    * The method returns the product if it has been found
@@ -51,6 +47,7 @@ public class Store {
     }
     return result;
   }
+
   public boolean productExits(int prodId) {
     boolean found = false;
     int i = 0;
@@ -101,65 +98,6 @@ public class Store {
     }
     return done;
   }
-
-  /**
-   * The method adds the client if the casher given was found
-   * 
-   * @param name   the name of the new client
-   * @param dni    the ID number of the new client
-   * @param email  the eamail of the new client
-   * @param cashId the id of the casher given
-   */
-  /*public void addCustomer(String name, String dni, String email, int cashId) {
-    Customer customer;
-    if (cashers.containsKey(cashId)) {
-      int id = dniToId(dni);
-      if (!isEnterprise(dni)) {
-        customer = new Customer(email, name, dni, cashId);
-      }else {
-        customer = new CustomerEnterprise(email, name, dni, cashId);
-      }
-      customers.put(id, customer);
-      System.out.println(customer.toString());
-      System.out.println("client add: ok");
-    } else {
-      System.out.println(CASHIER_NOT_FOUND);
-    }
-  }
-
-   */
-
-  /**
-   * The method checks if the id given is from a DNI/NIE or a NIF
-   * @param id the id given by parameter
-   * @return it returns true if the id is a NIF, else returns false
-   */
-  private boolean isEnterprise(String id){
-    boolean resul=true;
-    if (Character.isDigit(id.charAt(id.length()-1))){
-      resul=false;
-    }
-    return resul;
-  }
-
-  /*
-  public void addTicketOnCashier(Integer idTicket, int idCashier, int idCustomer) {
-    if (cashers.containsKey(idCashier) && customers.containsKey(idCustomer)) {
-      Cashier c = cashers.get(idCashier);
-      idTicket = c.addTicket(idTicket);
-      Ticket resul = cashers.get(idCashier).getTicketById(idTicket);
-      System.out.println(resul.toStringNew());
-      customers.get(idCustomer).addTicket(idTicket, resul);
-    } else {
-      if (cashers.containsKey(idCashier)) {
-        System.out.println(CASHIER_NOT_FOUND);
-      }
-      if (customers.containsKey(idCustomer)) {
-        System.out.println(CUSTOMER_NOT_FOUND);
-      }
-    }
-  }
-*/
 
   /**
    * The method adds a product tho the productList if there is below 100 products
@@ -214,11 +152,11 @@ public class Store {
    * The method lists the products in the prodList
    */
   public void prodList() {
-    Arrays.sort(productList, 0, this.prodAmount, Comparator.comparing(Product::getName));
+    Arrays.sort(productList, 0, this.prodAmount, Comparator.comparing(Product::getId));
     System.out.println("Catalog:");
     for (Product p : productList) {
       if (p != null) {
-        System.out.print("  " + p.toString());
+        System.out.println("  " + p.toString());
       }
     }
     System.out.println("prod list: ok");
@@ -290,22 +228,4 @@ public class Store {
     return resul;
   }
 
-  /**
-   * The method runs through the Map, getting all cashiers and showing their
-   * tickets
-   */
-  /*
-  public void ticketList() {
-    System.out.println("Ticket list: ");
-    for (Map.Entry<Integer, Cashier> entry : cashers.entrySet()) {
-      Cashier casher = entry.getValue();
-      System.out.print(casher.listTickets());
-    }
-    System.out.println("ticket list: ok");
-  }
-
-   */
-
 }
-
-// ticketList??

@@ -10,11 +10,9 @@ public class CustomerController {
     public static final String CASHIER_NOT_FOUND = "The cashier given was not found";
     public static CustomerController instance;
     TreeMap<Integer, Customer> customers;
-    HashMap<Integer, Cashier> tickets;
 
     private CustomerController() {
         this.customers = new TreeMap<Integer, Customer>();
-        this.tickets = new HashMap<Integer, Cashier>();
     }
 
     public static CustomerController getInstance() {
@@ -27,7 +25,11 @@ public class CustomerController {
     public void addCustomer(String name, String dni, String email, int cashId) {
         Customer customer;
         int id = dniToId(dni);
-        customer = new Customer(email, name, dni, cashId);
+        if (dni.charAt(0) > 64 && dni.charAt(0) < 91) {
+            customer = new CustomerEnterprise(email, name, dni, cashId);
+        } else {
+            customer = new Customer(email, name, dni, cashId);
+        }
         customers.put(id, customer);
         System.out.println(customer.toString());
         System.out.println("client add: ok");
@@ -42,6 +44,10 @@ public class CustomerController {
             }
         }
         return id;
+    }
+
+    public Customer getCustomer(int userId){
+        return customers.get(userId);
     }
 
     public boolean removeCustomer(String dni) {
@@ -70,12 +76,12 @@ public class CustomerController {
         return resul;
     }
 
-    public void addTicket(Integer ticketId, int cashId) {
+    public void addTicket(Integer ticketId, int userId) {
         CashierController cashierController = CashierController.getInstance();
-        try{
-            Cashier cashier =cashierController.getCasher(cashId);
-            tickets.put(ticketId, cashier);
-        }catch (NullPointerException e){
+        try {
+            Customer customer = customers.get(userId);
+            customer.addTicket(ticketId);
+        } catch (NullPointerException e) {
             System.out.println("no");
         }
     }

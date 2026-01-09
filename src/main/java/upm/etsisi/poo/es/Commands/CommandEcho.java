@@ -1,7 +1,5 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Store;
-
 public class CommandEcho implements Command {
 
   @Override
@@ -9,10 +7,6 @@ public class CommandEcho implements Command {
     return "echo";
   }
 
-  @Override
-  public String getDescription() {
-    return "\"<text>\"  - prints the text";
-  }
 
   @Override
   public boolean execute(String fullLine, String[] args) {

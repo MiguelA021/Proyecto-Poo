@@ -1,7 +1,5 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Store;
-import upm.etsisi.poo.es.User.Customer;
 import upm.etsisi.poo.es.User.CustomerController;
 
 public class ClientCommand implements Command {
@@ -10,10 +8,6 @@ public class ClientCommand implements Command {
         return "client";
     }
 
-    @Override
-    public String getDescription() {
-        return "client add|list|update|remove ...  - product management";
-    }
 
     @Override
     public boolean execute(String fullLine, String[] args) {

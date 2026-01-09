@@ -1,7 +1,5 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Store;
-
 public class ExitCommand implements Command {
 
   @Override
@@ -9,10 +7,6 @@ public class ExitCommand implements Command {
     return "exit";
   }
 
-  @Override
-  public String getDescription() {
-    return "exit  - closes the application";
-  }
 
   @Override
   public boolean execute(String fullLine, String[] args) {

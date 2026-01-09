@@ -176,7 +176,8 @@ public class App {
    */
   private void readFile(String[] args, Completer completer) {
     String line;
-    CommandController controller = new CommandController();
+    CommandController controller = CommandController.getInstance();
+
     try {
       BufferedReader reader = new BufferedReader(new FileReader(args[0]));
       boolean end = false;

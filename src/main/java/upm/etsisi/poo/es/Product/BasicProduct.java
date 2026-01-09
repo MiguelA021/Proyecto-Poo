@@ -87,8 +87,8 @@ public class BasicProduct extends Product {
   }
 
   public String toString() {
-    return "{class:Product, id: " + this.id + ", name: '" + this.name + "', category: " + this.category + ", price:"
-        + this.price + "}\n";
+    return "{class:Product, id:" + this.id + ", name:'" + this.name + "', category:" + this.category + ", price:"
+        + this.price + "}";
   }
 
   /**

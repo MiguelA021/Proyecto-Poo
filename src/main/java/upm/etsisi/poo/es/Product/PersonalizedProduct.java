@@ -15,6 +15,10 @@ public class PersonalizedProduct extends BasicProduct {
         this.personalizaciones = new ArrayList<String>(maxPers);
     }
 
+    public int getMaxPers() {
+        return this.maxPers;
+    }
+
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -22,9 +26,9 @@ public class PersonalizedProduct extends BasicProduct {
             sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("', category: ").append(this.category).append(", price:").append(this.price).append(",");
             sb.append(" maxPersonal:").append(maxPers).append(",\n");
             for (int i = 0; i < this.personalizaciones.size(); i++) {
-                if(i == this.personalizaciones.size() - 1) {
+                if (i == this.personalizaciones.size() - 1) {
                     sb.append(personalizaciones.get(i));
-                }else sb.append(personalizaciones.get(i)).append( "\t");
+                } else sb.append(personalizaciones.get(i)).append("\t");
             }
         } else {
             sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("', category: ").append(this.category).append(", price:").append(this.price);
@@ -36,6 +40,7 @@ public class PersonalizedProduct extends BasicProduct {
 
     /**
      * The method adds the personalization if it is allowed
+     *
      * @param personalize the personalization we want to add
      * @return it returns true if it has been allowed, else returns false
      */
@@ -52,8 +57,8 @@ public class PersonalizedProduct extends BasicProduct {
     /**
      * The method changes the price into the new one with the personalization
      */
-    public void newPrice(){
-        this.price = 0.1*this.price*personalizaciones.size() + this.price;
+    public void newPrice() {
+        this.price = 0.1 * this.price * personalizaciones.size() + this.price;
     }
 
     @Override
@@ -65,15 +70,15 @@ public class PersonalizedProduct extends BasicProduct {
             sb.append("personalizationList:[");
 
             for (int i = 0; i < this.personalizaciones.size(); i++) {
-                if( i == this.personalizaciones.size() - 1) sb.append(personalizaciones.get(i));
+                if (i == this.personalizaciones.size() - 1) sb.append(personalizaciones.get(i));
                 else sb.append(personalizaciones.get(i)).append(", ");
 
             }
             sb.append("]} ");
-        }else {
+        } else {
             sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("', category: ").append(this.category).append(", price:").append(this.price).append(", maxPersonal:").append(maxPers).append("}");
         }
-        sb.append(String.format(Locale.US, "**discount -%.3f \n",discountValue));
+        sb.append(String.format(Locale.US, "**discount -%.3f \n", discountValue));
 
         return sb.toString();
 

@@ -1,6 +1,5 @@
 package upm.etsisi.poo.es.Commands;
 
-import upm.etsisi.poo.es.Store;
 import upm.etsisi.poo.es.User.Cashier;
 import upm.etsisi.poo.es.User.CashierController;
 
@@ -11,10 +10,6 @@ public class CashierCommand implements Command {
     return "cash";
   }
 
-  @Override
-  public String getDescription() {
-    return "cashier add|remove|list|tickets ...  - cashier management";
-  }
 
   @Override
   public boolean execute(String fullLine, String[] args) {
@@ -106,6 +101,10 @@ public class CashierCommand implements Command {
       String casherId = args[2].replaceAll("UW", "");
       int cash = Integer.parseInt(casherId);
       Cashier casher = cashierController.searchCasherById(cash);
+      if(casher == null){
+          System.out.println("Cashier not found");
+          return;
+      }
 
       // Siempre imprimimos el encabezado
       System.out.println("Tickets: ");
