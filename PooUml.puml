@@ -7,12 +7,11 @@ interface Command{
  +String EMPTY_TICKET
  +String ID_REPEAT
  +String getName()
- +String getDescription()
  +boolean execute(String fullLine, String[] args)
 }
 class CommandController{
 -Map<String, Command> commands
-- Store store
++{static} CommandController instance
 +CommandController()
 -void register(Command command)
 +Map<String, Command> getCommands()
@@ -20,63 +19,51 @@ class CommandController{
 }
 class CommandEcho{
 +String getName()
-+String getDescription()
 +boolean execute(String fullLine, String[] args)
 }
 class CommandHelp{
 +String getName()
-+String getDescription()
 +boolean execute(String fullLine, String[] args)
 }
 class ExitCommand{
 +String getName()
-+String getDescription()
 +boolean execute(String fullLine, String[] args)
 }
 class ProductCommand{
-- Store store
---
 +String getName()
-+String getDescription()
 +boolean execute(String fullLine, String[] args)
-+void prodAdd(String fullLine, String[] args)
-+void prodRemove(String[] args)
+-void prodAdd(String fullLine, String[] args)
+-void prodRemove(String[] args)
+-void prodUpdate(String fullLine, String[] args, ProductController store)
+-prodAddFood(String fullLine, String[] args, ProductController store)
+-prodAddMeeting(String fullLine, String[] args, ProductController store)
+
 }
 
 class TicketCommand{
-- TicketData almacen
 - TicketController controller
---
 +String getName()
-+String getDescription()
 +boolean execute(String fullLine, String[] args)
 -void ticketAdd(String[] args)
 -void ticketRemove(String[] args)
 -void ticketPrint(String[] args)
--void ticketNew(String[] args)
+-void ticketList()
 }
 
 class CashierCommand{
-- CashierController controller
---
 +String getName()
-+String getDescription()
 +boolean execute(String fullLine, String[] args)
--void cashierAdd(String[] args)
--void cashierRemove(String[] args)
--void list()
--void cashTickets(String[] args)
--boolean exits(int id)
+-void cashierAdd(String[] args, CashierController cashierController)
+-void cashierRemove(String[] args, CashierController cashierController)
+-void list(CashierController cashierController)
+-void cashTickets(String[] args, CashierController cashierController)
 }
 class ClientCommand{
-- CustomerController controller
---
 +String getName()
-+String getDescription()
 +boolean execute(String fullLine, String[] args)
--void clientAdd(String[] args)
--void remove(String[] args)
--void list()
+-void clientAdd(String[] args, CustomerController customerController)
+-void remove(String[] args, CustomerController customerController)
+-void list(CustomerController customerController)
 }
 
 }
@@ -101,9 +88,40 @@ class Cashier{
     +boolean removeTicket(int id)
 }
 class Customer{
--Cashier cashier
+-int cashierId
 +String toString()
-+void addTicket(Integer id, Ticket ticket)
++void addTicket(Integer id)
+}
+class CustomerEnterprise{
++String toString()
+}
+class CashierController{
+-{static} CashierController instance
++{static} String ID_ERROR
+-HashMap<Integer, Cashier> cashers
++{static} CashierController getInstance()
++HashMap<Integer, Cashier> getMap()
++boolean addCasher(Integer id, String name, String email)
++void listCashers()
+-ArrayList<Cashier> cashersToList()
++void listTicketsOnCasher(int id)
++void addTicket(int ticketId, int cashierId)
++Cashier searchCasherById(int id)
++boolean removeCasher(int id)
++boolean exitsTicket(int cashId, int idTicket)
+}
+class CustomerController{
++{static} String CASHIER_NOT_FOUND
++{static} CustomerController instance
+-TreeMap<Integer, Customer> customers
++{static} CustomerController getInstance()
++void addCustomer(String name, String dni, String email, int cashId)
++int dniToId(String dni)
++Customer getCustomer(int userId)
++boolean removeCustomer(String dni)
++void listCustomers()
+-ArrayList<Customer> customersToList()
++void addTicket(Integer ticketId, int userId)
 }
 }
 package product{
@@ -282,7 +300,6 @@ enum Status{
  - CLOSED
 }
 App ..> CommandController : uses
-
 User <|- Cashier
 User <|-- Customer
 Command <|.. CommandEcho
@@ -292,12 +309,8 @@ Command <|.. ProductCommand
 Command <|.. TicketCommand
 Command <|.. CashierCommand
 Command <|.. ClientCommand
-
-
 CommandController "0" --o "many" Command : keeps
 CommandController "0" --> "1" Store : depends
-
-
 ProductCommand --o Store
 User"0" ---o "N" Ticket
 TicketData *-- Ticket
@@ -306,7 +319,6 @@ Product <|.. Event
 Event <|.. Food
 Event <|.. Meeting
 BasicProduct <|.. PersonalizedProduct
-
 ProductCommand ..> Product
 Store "0"*-- "200" Product : has_on_stock
 Store ..> Product
@@ -328,4 +340,3 @@ TicketController --> Store
 }
 @enduml
 @enduml
-
