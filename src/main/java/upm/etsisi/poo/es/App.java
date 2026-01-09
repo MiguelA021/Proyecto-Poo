@@ -75,7 +75,7 @@ public class App {
   public void userCommand(Completer completer) {
     boolean end = false;
     Scanner scan = new Scanner(System.in);
-    CommandController controller = new CommandController();
+    CommandController controller = CommandController.getInstance();
     Highlighter myHighlighter = new Highlighter() {
       @Override
       public void setErrorIndex(int errorIndex) {}
