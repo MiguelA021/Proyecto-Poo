@@ -132,7 +132,6 @@ abstract class Product{
 #{static} String NAME_LENGTH_ERROR
 #{static} String NAME_NULL_ERROR
 #{static} String PRICE_POSITIVE_ERROR
--ArrayList<String> personalizaciones
 +{abstract} int getId()
 +{abstract}  String getName()
 +{abstract} double getPrice()
@@ -141,7 +140,7 @@ abstract class Product{
 }
 
 class BasicProduct{
--type category
+#type category
 +int getId()
 +String getName()
 +double getPrice()
@@ -158,6 +157,7 @@ class BasicProduct{
 class Event{
 #LocalDateTime expiracyDate
 #int maxPersonas
+#double pricePerPerson
 +boolean fechaValida(LocalDateTime time)
 +int getMaxPersonas()
 +LocalDateTime getExpiryDate()
@@ -189,6 +189,92 @@ class PersonalizedProduct{
 +boolean addPersonalized(String personalize)
 + String toStringDiscount(double discountValue)
 }
+class PersonalizedProduct{
+-int maxPers
+-ArrayList<String> personalizaciones
++int getMaxPers()
++String toString()
++boolean addPersonalized(String personalize)
++void newPrice()
++String toStringDiscount(double discountValue)
+}
+class ProductController{
++int MAX_PRODUCT
++Product[] productList
++{static} String CASHIER_NOT_FOUND
++{static} String CUSTOMER_NOT_FOUND
++{static} String ID_ERROR
+-int prodAmount
+-{static} ProductController instance
++{static} ProductController getInstance()
++Product getProduct(int prodId)
++boolean productExits(int prodId)
++boolean addFood(int id, String name, int price, String expiryDate, int assistants)
++boolean addMeeting(int id, String name, double price, String expiryDate, int assistants)
++boolean prodAdd(Product product)
++boolean prodRemove(int id)
++void prodList()
++Product updateType(int id, type category)
++Product updateName(int id, String name)
++Product updatePrice(int id, double price)
+}
+class Service{
+-{static} int NEXT
+-String idString
+-int id
+-LocalDate maxUseDate
+-String name
++int getId()
++String getName()
++double getPrice()
++void setPrice(double price)
++void setName(String name)
++LocalDate getMaxUseDate()
++String toString()
+}
+}
+package Tickets{
+abstract class Ticket{
+ #Integer id
+ #Status status
+ -{static} int MAX_PRODUCT
+ Product[] productList
+ #ArrayList<LocalDateTime> dates
+ -{static} DateTimeFormatter DATE_FORMAT
+ -int amount
+ Comparator <Product> nameComp
+ +{static} String ERROR_FULL
+ #{static} String ERROR_PRODUCT_ID_NOT_FOUND
+ #{static} String ADD_OK
+ #{static} String MANY_PEOPLE
+ #{static} String PERIOD_NOT_VALID
+ #{static} String NO_PRODUCTS_IN_THE_TICKET
+ #{static} String PRODUCT_DOES_NOT_EXIST
+ #{static} String ERROR_TICKET_CLOSE
+ #{static} String DONT_CLOSE_NOT_VALID_TIME
+ #{static} String TOTAL_PRICE
+ #{static} String TOTAL_DISCOUNT
+ #{static} String FINAL_PRICE
+ #{static} String TICKET
+ #{static} String TICKET_NEW_OK
+ +Integer getId()
+ +Status getStatus()
+ +boolean canBeClosed()
+ +boolean close()
+ +String print(boolean close)
+ +String formatList()
+ +String toStringId()
+ +String toStringNew()
+}
+class TicketData {
+   -{static} String ID_ERROR
+   HashMap<Integer, Ticket> tickets
+   -{static}TicketData instance
+   +{static} TicketData getInstance()
+   +Ticket getTicket(int ticketId)
+   +int addTicket(String tycketType)
+   +boolean addTicket(int idTicket, String ticketType)
+}
 }
 class App{
  -{static} String WELCOME_MESSAGE
@@ -201,81 +287,6 @@ class App{
  -void userCommand()
  -void readFile(String[] args)
  -void init()
-}
-
-class Ticket{
- -{static} int MAX_PRODUCT
- -Product[] productList
- -int ticketId
- -int amount
- -Comparator <Product> nameComp
- -Status status
- -LocalDateTime now
- -ArrayList<LocalDateTime> dates
---
- +boolean ticketAdd(Product product, int amount)
- +Product ticketRemove(int prodId)
- +boolean comprobarFechasTodosEventos(LocalDateTime now)
- +String ticketPrint(boolean close)
- +void sort()
- +String toStringId()
- +String toStringNew()
-}
-class CashierController{
- -{static} CASHER_NOT_FOUND
-TreeMap <Integer,Cashier> cashers
----
-+CashierController()
- +boolean addCashier(Integer id, String name, String email)
-+void listCashiers()
-+void listTicketsOnCashier(int id)
-+Cashier getCashier(int cashId)
-+boolean removeCashier(int id)
--ArrayList<Cashier> cashiersToList()
-+void addTicket(int idTicket,int idCashier)
- +Cashier searchCasherById(int id)
-
-}
-
-class CustomerController{
- -{static} CUSTOMER_NOT_FOUND
-TreeMap <Integer,Customer> customers
---
-+void addCustomer(String name, String dni, String email, int cashId)
--ArrayList<Customer> customersToList()
-+boolean removeCustomer(String dni)
- +int dniToId(String dni)
-+ void listCustomers()
-+void addTicket(int idTicket, int idCustomer)
-
-}
-
-
-class Store{
- -{static} int MAX_PRODUCT
- -Product[] productList
--{static} ID_ERROR
--int prodAmount
- --
- - Store()
- + Store getIterationStore()
- +boolean prodRemove(int id)
- +boolean prodAdd(Product product)
- +Product getProduct(int prodId)
- +void prodList()
- +Product updateType(int id, type category)
- +boolean updateName(int id, String name)
- +booelan updatePrice(int id, double price)
- }
-class TicketData {
-    TreeMap<id,Ticket> tickets
-
-  - TicketData ()
-  + TicketData getTicketController()
-  +boolean addTicket (int id)
-  + Ticket getTicket( int id)
-  + boolean ticketRemove(int id)
-  +void ticketList()
 }
 class TicketController {
          + TicketController ()
