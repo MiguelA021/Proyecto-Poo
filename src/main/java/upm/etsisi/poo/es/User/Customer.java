@@ -14,7 +14,7 @@ public class Customer extends User {
         tickets=new TreeMap<>();
     }
     public String toString(){
-        return "USER{identifier='"+id+"', name='"+name+"', email='"+email+"', cash='UW"+cashierId+"'}";
+        return "Client{identifier='"+id+"', name='"+name+"', email='"+email+"', cash=UW"+cashierId+"}";
     }
 
     /**
@@ -24,10 +24,6 @@ public class Customer extends User {
      */
     public void addTicket(Integer id, Ticket ticket) {
         tickets.put(id,ticket);
-    }
-
-    public TreeMap<Integer, Ticket> getTickets(){
-        return tickets;
     }
 
 }

@@ -26,7 +26,6 @@ public class Ticket {
     private static final String NO_PRODUCTS_IN_THE_TICKET = "ERROR: No products in the ticket";
     private static final String PRODUCT_DOES_NOT_EXIST = "ERROR: this product does not exist.";
     private static final String ERROR_TICKET_CLOSE = "ERROR: the ticket is closed. It can't be modified";
-    private static final String ERROR_AMOUNT_PRODUCT = "ERROR: The amount for this product can't be zero";
     private static final String DONT_CLOSE_NOT_VALID_TIME = "The ticket can`t be closed because some event's period of time is invalid. \n";
     private static final String TOTAL_PRICE = "Total price:";
     private static final String TOTAL_DISCOUNT = "Total discount:";
@@ -57,15 +56,7 @@ public class Ticket {
     return this.tickId;
   }
 
-  public Status getStatus(){
-    return status;
-  }
-
-  public ArrayList<LocalDateTime> getDates(){
-      return dates;
-  }
-
-    /**
+  /**
    * The method adds the product given, and it also prints it. The ticket status
    * must be
    * OPEN or EMPTY. The ticket must have less than 100 products, if not, the
@@ -92,10 +83,7 @@ public class Ticket {
         resul = false;
         System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
 
-      }else if(amount==0){
-        resul = false;
-        System.out.println(ERROR_AMOUNT_PRODUCT);
-      }else {
+      } else {
         if (this.amount == 0) {
           this.status = Status.OPEN;
         }
@@ -103,28 +91,22 @@ public class Ticket {
         if (product instanceof Event) {
           Event event = (Event) product;
           if (event.fechaValida(LocalDateTime.now())) {
-            if (amount <= event.getMaxPeopleLocal()){
-              double price = event.getPrice() * amount;
-              event.setPrice(price);
-              if(event.actualPeopleCorrect(amount)){
-                event.setActualPeople(amount);
-              }
-              if(this.amount<MAX_PRODUCT){
-                productList[this.amount] = event;
-                this.amount++;
+            if (amount <= event.getMaxPersonas()) {
 
-                System.out.println(ticketPrint(false));
-                System.out.println(ADD_OK);
-              }else{
-                resul = false;
-                System.out.println(ERROR_FULL);
-              }
+              double price = event.getPricePerPerson() * amount;
+              event.setPrice(price);
+
+              productList[this.amount] = event;
+              this.amount++;
+
+              System.out.println(ticketPrint(false));
+              System.out.println(ADD_OK);
+
             } else {
               System.out.println(MANY_PEOPLE);
               resul = false;
             }
           } else {
-            resul = false;
             System.out.println(PERIOD_NOT_VALID);
           }
 
@@ -298,11 +280,11 @@ public class Ticket {
           } else if (p instanceof Event) {
             // Meeting / Food (u otros eventos): sin descuento por categoría
             Event event = (Event) p;
-            //**
+
             totalPrice += price;
             // totalDiscount NO cambia (no hay descuento por categoría)
 
-            sc.append(event.toStringTicketAdd());
+            sc.append(event.toString());
           }
         }
       }
@@ -327,7 +309,7 @@ public class Ticket {
     // Si esta cerrado fecha de cierre
     StringBuilder resul = new StringBuilder();
 
-    resul.append("  " + toStringId()).append("->").append(this.status.toString().toUpperCase());
+    resul.append("  " + toStringId()).append(" - ").append(this.status.toString().toUpperCase());
     return resul.toString();
   }
 
@@ -344,7 +326,7 @@ public class Ticket {
         break;
       case "CLOSED":
         String fin = dates.get(1).format(DATE_FORMAT);
-        resul.append(tickId).append("-").append(fin);
+        resul.append(tickId).append(fin);
         break;
       default:
         resul.append("ERROR, status is undefined");

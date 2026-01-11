@@ -50,11 +50,8 @@ public class ClientCommand implements Command {
             String email = args[4];
             String casherId = args[5];
             int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
-            if(Dni.length() == 9){
-                store.addCustomer(name, Dni, email,casherIdGood);
-            }else{
-                System.out.println(INCORRECT);
-            }
+
+            store.addCustomer(name, Dni, email,casherIdGood);
         } catch (NumberFormatException e) {
             System.out.println(INCORRECT);
         }

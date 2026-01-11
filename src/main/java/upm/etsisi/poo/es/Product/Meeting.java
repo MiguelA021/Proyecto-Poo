@@ -6,8 +6,8 @@ import java.time.temporal.ChronoUnit;
 public class Meeting extends Event {
     private final static int TIEMPO_MINIMO = 12; // horas
 
-    public Meeting(int id, String name, double price, String expiracyDate, int maxPeople) {
-        super(id, name, price, expiracyDate, maxPeople);
+    public Meeting(int id, String name, double price, String expiracyDate) {
+        super(id, name, price, expiracyDate);
     }
 
     @Override
@@ -30,17 +30,6 @@ public class Meeting extends Event {
                 ", name:'" + this.name + "'" +
                 ", price:" + this.price +
                 ", date of Event:" + this.expiracyDate.toLocalDate() +
-                ", max people allowed:" + this.maxPeopleLocal + "}\n";
-    }
-
-    @Override
-    public String toStringTicketAdd() {
-        return "{class:Meeting" +
-                ", id:" + this.id +
-                ", name:'" + this.name + "'"+
-                ", price:" + this.price +
-                ", date of Event:" + this.expiracyDate.toLocalDate() +
-                ", max people allowed:" + this.maxPeopleLocal +
-                ", actual people in event:"+ this.actualPeople + "}\n";
+                ", max people allowed:" + this.maxPersonas + "}\n";
     }
 }

@@ -175,7 +175,7 @@ public class ProductCommand implements Command {
             System.out.println(INCORRECT);
         }
     }
-    //TICKET ADD - PEOPLE IN EVENT; PROD ADD - PEOPLE MAX IN EVENT
+
     private void prodAddFood(String fullLine, String[] args, Store store) {
         // prod addFood <id> "<name>" <price> <expiration> <max_people>
         try {
@@ -207,10 +207,11 @@ public class ProductCommand implements Command {
                 String date = afterTokens[1];
                 int maxPeople = Integer.parseInt(afterTokens[2]);
 
-                Food food = new Food(id, name, precio, date, maxPeople);
-                if (maxPeople<=food.getMaxPeopleGeneral()) {
+                Food food = new Food(id, name, precio, date);
+                if (maxPeople <= food.getMaxPersonas()) {
                     // guardamos el max_people concreto
-                    food.setMaxPeopleGeneral(maxPeople);
+                    food.setMaxPersonas(maxPeople);
+
                     boolean done = store.prodAdd(food);
                     if (!done) {
                         System.out.println(ID_REPEAT);
@@ -260,12 +261,13 @@ public class ProductCommand implements Command {
                 String date = afterTokens[1];
                 int maxPeople = Integer.parseInt(afterTokens[2]);
 
-                Meeting meeting = new Meeting(id, name, precio, date, maxPeople);
+                Meeting meeting = new Meeting(id, name, precio, date);
 
                 // Validamos que no supere el límite general (100)
-                if (maxPeople <= meeting.getMaxPeopleGeneral()) {
+                if (maxPeople <= meeting.getMaxPersonas()) {
                     // Guardamos el max_people concreto en el objeto
-                    meeting.setMaxPeopleGeneral(maxPeople);
+                    meeting.setMaxPersonas(maxPeople);
+
                     boolean done = store.prodAdd(meeting);
                     if (!done) {
                         System.out.println(ID_REPEAT);

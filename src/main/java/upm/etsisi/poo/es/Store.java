@@ -24,14 +24,6 @@ public class Store {
     this.prodAmount = 0;
   }
 
-  public int getMAX_PRODUCT() {
-    return MAX_PRODUCT;
-  }
-
-  public int getProdAmount(){
-    return prodAmount;
-  }
-
   /**
    * The method returns the product if it has been found
    * 
@@ -54,6 +46,43 @@ public class Store {
     return result;
   }
 
+  // We're going to do ckecking of maxPeople using the right now date and the
+  // expiry date for knowing
+  // if we can create the Food or Meeting object
+  public boolean addFood(int id, String name, int price, String expiryDate, int assistants) {
+    boolean done = false;
+    boolean found = false;
+    Event food = new Food(id, name, price, expiryDate);
+    for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
+      if (productList[i] != null && productList[i].getId() == food.getId()) {
+        found = true;
+      } else {
+        if (productList[i] == null) {
+          productList[i] = food;
+          done = true;
+        }
+      }
+    }
+    return done;
+  }
+
+  public boolean addMeeting(int id, String name, double price, String expiryDate, int assistants) {
+    boolean done = false;
+    boolean found = false;
+    Product meeting = new Meeting(id, name, price, expiryDate);
+    for (int i = 0; i < MAX_PRODUCT && !done && !found; i++) {
+      if (productList[i] != null && productList[i].getId() == meeting.getId()) {
+        found = true;
+      } else {
+        if (productList[i] == null) {
+          productList[i] = meeting;
+          done = true;
+        }
+      }
+    }
+    return done;
+  }
+
   /**
    * The method adds the client if the casher given was found
    * 
@@ -62,10 +91,6 @@ public class Store {
    * @param email  the eamail of the new client
    * @param cashId the id of the casher given
    */
-
-  //NOT ENTERPRISE: 9 difgitos
-  //ENTERPRISE: 8 digitos
-
   public void addCustomer(String name, String dni, String email, int cashId) {
     Customer customer;
     if (cashers.containsKey(cashId)) {
@@ -117,7 +142,7 @@ public class Store {
     for (char c : dni.toCharArray()) {
       if (Character.isDigit(c)) {
         id = id * 10;
-        id += c - '0';
+        id += c;
       }
     }
     return id;
@@ -173,10 +198,10 @@ public class Store {
       System.out.println(resul.toStringNew());
       customers.get(idCustomer).addTicket(idTicket, resul);
     } else {
-      if (!cashers.containsKey(idCashier)) {
+      if (cashers.containsKey(idCashier)) {
         System.out.println(CASHIER_NOT_FOUND);
       }
-      if (!customers.containsKey(idCustomer)) {
+      if (customers.containsKey(idCustomer)) {
         System.out.println(CUSTOMER_NOT_FOUND);
       }
     }
@@ -410,3 +435,4 @@ public class Store {
 
 }
 
+// ticketList??
