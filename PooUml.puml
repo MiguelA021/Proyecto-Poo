@@ -275,12 +275,57 @@ class TicketData {
    +int addTicket(String tycketType)
    +boolean addTicket(int idTicket, String ticketType)
 }
+class TicketController {
+    -TicketData ticketData
+    +boolean prodAdd(Product product)
+    +void ticketNew(String[] args)
+    +boolean ticketRemove(int id)
+    +String ticketPrint(int id)
+}
+class CustomerTicket{
++String print(boolean close)
++boolean canBeClosed()
++boolean ticketAdd(Product product, int amount)
++Product ticketRemove(int prodId)
++boolean comprobarFechasTodosEventos(LocalDateTime now)
++String ticketPrint(boolean close)
++void sort()
+}
+class EnterpriseMixedTicket{
+-List<Product> products
+-List<Service> services
++boolean canBeClosed()
++double getExtraDiscountRate()
++boolean addProduct(Product p, int amount)
++List<Product> getProducts()
++List<Service> getServices()
++String print(boolean close)
++Product ticketRemove(int prodId)
++String toStringNew()
+}
+class EnterpriseServiceTicket{
+-String INCORRECT
+-List<Service> services
++boolean canBeClosed()
++boolean addService(Service s)
++List<Service> getServices()
++String print( boolean close)
++Service ticketRemove(int prodId)
++String toStringNew()
+}
+enum Status{
+ - EMPTY
+ - ACTIVE
+ - CLOSED
+}
 }
 class App{
  -{static} String WELCOME_MESSAGE
  -{static} String HELP_MESSAGE
  -{static} String FILE_ERROR
+ -{static} String TERMINAL_ERROR
  -{static} String UPM
+ -{static} final Map<String, List<String>> COMMANDS
  +main(String[] args)
  -void end()
  -void start()
@@ -288,27 +333,12 @@ class App{
  -void readFile(String[] args)
  -void init()
 }
-class TicketController {
-         + TicketController ()
-         +boolean addFood(int id, String name, int price, String expiryDate, int assistants)
-         +boolean addMeeting(int id, String name, int price, String expiryDate, int assistants)
-         +boolean prodAdd(Product product)
-         +boolean ticketRemove(int id)
-         +String ticketPrint(int id)
-         +String ticketList()
-}
-
 enum type{
  -MERCH
  -STATIONARY
  -CLOTHES
  -BOOK
  -ELECTRONICS
-}
-enum Status{
- - EMPTY
- - ACTIVE
- - CLOSED
 }
 App ..> CommandController : uses
 User <|- Cashier
@@ -321,8 +351,10 @@ Command <|.. TicketCommand
 Command <|.. CashierCommand
 Command <|.. ClientCommand
 CommandController "0" --o "many" Command : keeps
-CommandController "0" --> "1" Store : depends
-ProductCommand --o Store
+CommandController ..> Command
+ProductCommand ..> ProductController
+TicketCommand --* TicketController
+CashierCommand ..> CashierController
 User"0" ---o "N" Ticket
 TicketData *-- Ticket
 Product <|.. BasicProduct
@@ -330,7 +362,6 @@ Product <|.. Event
 Event <|.. Food
 Event <|.. Meeting
 BasicProduct <|.. PersonalizedProduct
-ProductCommand ..> Product
 Store "0"*-- "200" Product : has_on_stock
 Store ..> Product
 Ticket "0"--o "100" Product : contains
@@ -339,7 +370,6 @@ TicketData --* TicketCommand
 CustomerController ..|> TicketData
 CashierController ..|> TicketData
 CashierCommand *-- CashierController
-TicketCommand --> CashierController
 TicketCommand *-- TicketController
 ClientCommand *-- CustomerController
 TicketController ..|> TicketData
@@ -347,7 +377,6 @@ CashierController <|. CustomerController
 CashierController *-- Cashier
 CustomerController +-- Customer
 TicketController --> Store
-
 }
 @enduml
 @enduml
