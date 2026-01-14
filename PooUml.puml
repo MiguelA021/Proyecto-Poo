@@ -37,7 +37,6 @@ class ProductCommand{
 -void prodUpdate(String fullLine, String[] args, ProductController store)
 -prodAddFood(String fullLine, String[] args, ProductController store)
 -prodAddMeeting(String fullLine, String[] args, ProductController store)
-
 }
 
 class TicketCommand{
@@ -138,7 +137,6 @@ abstract class Product{
 +{abstract} void setPrice(double price)
 +{abstract} void setName(String name)
 }
-
 class BasicProduct{
 #type category
 +int getId()
@@ -153,7 +151,6 @@ class BasicProduct{
 +String toString()
 +String toStringDiscount()
 }
-
 class Event{
 #LocalDateTime expiracyDate
 #int maxPersonas
@@ -169,25 +166,15 @@ class Event{
 +void setmaxPersonas(int maxPersonas)
 +double getpricePerPerson()
 }
-
 class Food{
 -{static} int TIEMPO_MINIMO
 +boolean fechaValida(LocalDateTime time)
 +String toString()
 }
-
 class Meeting{
 -{static} int TIEMPO_MINIMO
 +boolean fechaValida(LocalDateTime time)
 +String toString()
-}
-
-class PersonalizedProduct{
--int maxPers
--ArrayList<String> personalizaciones
-+String toString()
-+boolean addPersonalized(String personalize)
-+ String toStringDiscount(double discountValue)
 }
 class PersonalizedProduct{
 -int maxPers
@@ -343,6 +330,7 @@ enum type{
 App ..> CommandController : uses
 User <|- Cashier
 User <|-- Customer
+Customer <|-- CustomerEnterprise
 Command <|.. CommandEcho
 Command <|.. CommandHelp
 Command <|.. ExitCommand
@@ -353,30 +341,36 @@ Command <|.. ClientCommand
 CommandController "0" --o "many" Command : keeps
 CommandController ..> Command
 ProductCommand ..> ProductController
-TicketCommand --* TicketController
 CashierCommand ..> CashierController
+ClientCommand..> CustomerController
 User"0" ---o "N" Ticket
-TicketData *-- Ticket
-Product <|.. BasicProduct
-Product <|.. Event
-Event <|.. Food
-Event <|.. Meeting
-BasicProduct <|.. PersonalizedProduct
-Store "0"*-- "200" Product : has_on_stock
-Store ..> Product
+TicketData --o Ticket
+Product <|-- BasicProduct
+Product <|-- Event
+Product <|-- Service
+Event <|-- Food
+Event <|-- Meeting
+BasicProduct <|-- PersonalizedProduct
 Ticket "0"--o "100" Product : contains
-Ticket --|> Store
 TicketData --* TicketCommand
-CustomerController ..|> TicketData
-CashierController ..|> TicketData
 CashierCommand *-- CashierController
 TicketCommand *-- TicketController
 ClientCommand *-- CustomerController
-TicketController ..|> TicketData
-CashierController <|. CustomerController
-CashierController *-- Cashier
-CustomerController +-- Customer
-TicketController --> Store
+TicketController *-- TicketData
+TicketController ..> Product
+Ticket<|-- CustomerTicket
+Ticket<|-- EnterpriseMixedTicket
+Ticket<|-- EnterpriseServiceTicket
+EnterpriseMixedTicket --o Product
+EnterpriseMixedTicket --o Service
+EnterpriseMixedTicket ..> Product
+EnterpriseServiceTicket --o Service
+EnterpriseServiceTicket ..> Service
+CustomerTicket ..> Product
+CashierController o-- Cashier
+CustomerController *-- Customer
+ProductController "0" --o "200" Product
+ProductController ..> Product
 }
 @enduml
 @enduml
