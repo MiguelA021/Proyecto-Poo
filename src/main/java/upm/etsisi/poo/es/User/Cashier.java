@@ -98,9 +98,9 @@ public class Cashier extends User {
   }
 
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
-      csvPrinter.printRecord(email, name, id);
+      csvPrinter.printRecord("Cashier",email, name, id);
       for(Integer tickid:tickets){
-          csvPrinter.printRecord(tickid);
+          csvPrinter.printRecord(id, tickid);
       }
     }
 }
