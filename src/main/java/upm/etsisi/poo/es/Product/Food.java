@@ -38,7 +38,7 @@ public class Food extends Event {
                 ", price:" + this.price +
                 ", date of Event:" + this.expiracyDate.toLocalDate() +
                 ", max people allowed:" + this.maxPersonas +
-                "}\n";
+                "}";
     }
 
     @Override

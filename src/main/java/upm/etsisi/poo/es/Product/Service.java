@@ -66,6 +66,6 @@ public class Service extends Product {
 
     @Override
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
-        csvPrinter.printRecord("Service", id, name, maxUseDate);
+        csvPrinter.printRecord("Service", maxUseDate, name);
     }
 }

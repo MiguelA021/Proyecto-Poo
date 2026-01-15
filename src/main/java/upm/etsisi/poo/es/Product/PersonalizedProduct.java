@@ -34,7 +34,7 @@ public class PersonalizedProduct extends BasicProduct {
             }
         } else {
             sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("', category: ").append(this.category).append(", price:").append(this.price);
-            sb.append(" maxPersonal:").append(maxPers).append("}\n");
+            sb.append(" maxPersonal:").append(maxPers).append("}");
         }
 
         return sb.toString();
