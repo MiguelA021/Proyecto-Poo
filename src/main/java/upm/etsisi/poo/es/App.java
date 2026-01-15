@@ -257,6 +257,8 @@ public class App {
                 ProductController.getInstance().renovateInventory(csvRecord, where);
             }else if(!where[0] && where[1]) {
                 CashierController.getInstance().csvCashiers(csvRecord, where);
+            }else if(!where[0] && !where[1] && where[2]){
+                CustomerController.getInstance().csvCustomers(csvRecord, where);
             }
         }
     }

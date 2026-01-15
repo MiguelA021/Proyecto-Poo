@@ -1,6 +1,7 @@
 package upm.etsisi.poo.es.User;
 
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import upm.etsisi.poo.es.Tickets.Ticket;
 
 import java.io.IOException;
@@ -37,17 +38,19 @@ public class CustomerController {
      * @param email the email given by parameter
      * @param cashId the cashier that will be linked to our customer
      */
-    public void addCustomer(String name, String dni, String email, int cashId) {
-        Customer customer;
+    public Customer addCustomer(String name, String dni, String email, int cashId) {
+        Customer customer = null;
         int id = dniToId(dni);
-        if (dni.charAt(0) > 64 && dni.charAt(0) < 91) {
-            customer = new CustomerEnterprise(email, name, dni, cashId);
-        } else {
-            customer = new Customer(email, name, dni, cashId);
+        if(!customers.containsKey(id)) {
+            if (dni.charAt(0) > 64 && dni.charAt(0) < 91) {
+                customer = new CustomerEnterprise(email, name, dni, cashId);
+            } else {
+                customer = new Customer(email, name, dni, cashId);
+            }
+            customers.put(id, customer);
+
         }
-        customers.put(id, customer);
-        System.out.println(customer.toString());
-        System.out.println("client add: ok");
+        return  customer;
     }
 
     /**
@@ -125,6 +128,23 @@ public class CustomerController {
     public void saveCustomers(CSVPrinter csvPrinter) throws IOException {
         for (Map.Entry<Integer, Customer> entry : customers.entrySet()) {
             entry.getValue().printCsv(csvPrinter);
+        }
+    }
+
+    public void csvCustomers(CSVRecord csvRecord, boolean[] where) {
+        if (csvRecord.get(0).equals("Tickets")) {
+            where[2] = false;
+        }
+        if(where[2]){
+            if(!csvRecord.get(0).equals("EnterpriseCustomer") && !csvRecord.get(0).equals("Customer")){
+               this.addTicket(Integer.parseInt(csvRecord.get(1)), dniToId(csvRecord.get(0)));
+            }else{
+                if(csvRecord.get(0).equals("EnterpriseCustomer")){
+                    this.addCustomer(csvRecord.get(2), csvRecord.get(4),csvRecord.get(1),Integer.parseInt(csvRecord.get(3)));
+                } else if (csvRecord.get(0).equals("Customer")){
+                    this.addCustomer(csvRecord.get(2), csvRecord.get(4),csvRecord.get(1),Integer.parseInt(csvRecord.get(3)));
+                }
+            }
         }
     }
 }

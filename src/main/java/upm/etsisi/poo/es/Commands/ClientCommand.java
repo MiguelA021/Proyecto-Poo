@@ -1,5 +1,6 @@
 package upm.etsisi.poo.es.Commands;
 
+import upm.etsisi.poo.es.User.Customer;
 import upm.etsisi.poo.es.User.CustomerController;
 
 public class ClientCommand implements Command {
@@ -48,7 +49,11 @@ public class ClientCommand implements Command {
             String casherId = args[5];
             int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
 
-            customerController.addCustomer(name, Dni, email,casherIdGood);
+          Customer customer = customerController.addCustomer(name, Dni, email,casherIdGood);
+            if (customer != null) {
+                System.out.println(customer.toString());
+                System.out.println("client add: ok");
+            }
         } catch (NumberFormatException e) {
             System.out.println(INCORRECT);
         }

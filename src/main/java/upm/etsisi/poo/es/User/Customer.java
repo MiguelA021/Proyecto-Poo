@@ -33,7 +33,7 @@ public class Customer extends User {
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
        csvPrinter.printRecord("Customer", email, name, cashierId, id);
        for(Integer tickid:tickets){
-           csvPrinter.printRecord(tickid);
+           csvPrinter.printRecord(id, tickid);
        }
     }
 }
