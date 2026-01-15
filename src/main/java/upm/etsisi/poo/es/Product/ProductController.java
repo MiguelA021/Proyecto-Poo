@@ -247,69 +247,66 @@ public class ProductController {
         }
     }
 
-    public void renovateInventory(CSVParser csvParser) {
-        boolean cont = true;
-        for (CSVRecord csvRecord : csvParser) {
-            if (csvRecord.get(0).equals("Cashiers")) {
-                cont = false;
+    public void renovateInventory(CSVRecord csvRecord, boolean[] cont) throws IOException {
+        if (csvRecord.get(0).equals("Cashiers")) {
+            cont[0] = false;
+        }
+        if (!csvRecord.get(0).equals("Products") && cont[0]) {
+            String type = csvRecord.get(0);
+            switch (type) {
+                case "BasicProduct":
+                    try {
+                        BasicProduct basicProduct = new BasicProduct(Integer.parseInt(csvRecord.get(1)), csvRecord.get(2),
+                                upm.etsisi.poo.es.type.valueOf(csvRecord.get(3)), Double.parseDouble(csvRecord.get(4)));
+                        this.prodAdd(basicProduct);
+                    } catch (NullPointerException e) {
+                        System.out.println("could not get product");
+                    }
+                    break;
+                case "Meeting":
+                    try {
+                        Meeting basicProduct = new Meeting(Integer.parseInt(csvRecord.get(1)), csvRecord.get(2),
+                                Double.parseDouble(csvRecord.get(3)), csvRecord.get(4).replaceAll("T00:00", ""));
+                        this.prodAdd(basicProduct);
+                    } catch (NullPointerException e) {
+                        System.out.println("could not get product");
+                    }
+                    break;
+                case "Food":
+                    try {
+                        Food basicProduct = new Food(Integer.parseInt(csvRecord.get(1)), csvRecord.get(2),
+                                Double.parseDouble(csvRecord.get(3)), csvRecord.get(4).replaceAll("T00:00", ""));
+                        this.prodAdd(basicProduct);
+                    } catch (NullPointerException e) {
+                        System.out.println("could not get product");
+                    }
+                    break;
+                case "Service":
+                    try {
+                        Service basicProduct = new Service(LocalDate.parse(csvRecord.get(1)), csvRecord.get(2));
+                        this.prodAdd(basicProduct);
+                    } catch (NullPointerException e) {
+                        System.out.println("could not get product");
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Incorrect format");
+                    }
+                    break;
+                case "PersonalizedProduct":
+                    try {
+                        PersonalizedProduct basicProduct = new PersonalizedProduct(Integer.parseInt(csvRecord.get(1)), csvRecord.get(2),
+                                upm.etsisi.poo.es.type.valueOf(csvRecord.get(3)), Double.parseDouble(csvRecord.get(4)), Integer.parseInt(csvRecord.get(5)));
+                        this.prodAdd(basicProduct);
+                    } catch (NullPointerException e) {
+                        System.out.println("could not get product");
+                    }
+                    break;
+                default:
+                    System.out.println("Impossible to retrieve product");
+                    break;
             }
-            if (!csvRecord.get(0).equals("Products") && cont) {
-                String type = csvRecord.get(0);
-                switch (type) {
-                    case "BasicProduct":
-                        try {
-                            BasicProduct basicProduct = new BasicProduct(Integer.parseInt(csvRecord.get(1)), csvRecord.get(2),
-                                    upm.etsisi.poo.es.type.valueOf(csvRecord.get(3)), Double.parseDouble(csvRecord.get(4)));
-                            this.prodAdd(basicProduct);
-                        } catch (NullPointerException e) {
-                            System.out.println("could not get product");
-                        }
-                        break;
-                    case "Meeting":
-                        try {
-                            Meeting basicProduct = new Meeting(Integer.parseInt(csvRecord.get(1)), csvRecord.get(2),
-                                    Double.parseDouble(csvRecord.get(3)), csvRecord.get(4).replaceAll("T00:00", ""));
-                            this.prodAdd(basicProduct);
-                        } catch (NullPointerException e) {
-                            System.out.println("could not get product");
-                        }
-                        break;
-                    case "Food":
-                        try {
-                            Food basicProduct = new Food(Integer.parseInt(csvRecord.get(1)), csvRecord.get(2),
-                                    Double.parseDouble(csvRecord.get(3)), csvRecord.get(4).replaceAll("T00:00", ""));
-                            this.prodAdd(basicProduct);
-                        } catch (NullPointerException e) {
-                            System.out.println("could not get product");
-                        }
-                        break;
-                    case "Service":
-                        try {
-                            Service basicProduct = new Service(LocalDate.parse(csvRecord.get(1)), csvRecord.get(2));
-                            this.prodAdd(basicProduct);
-                        } catch (NullPointerException e) {
-                            System.out.println("could not get product");
-                        } catch (DateTimeParseException e) {
-                            System.out.println("Incorrect format");
-                        }
-                        break;
-                    case "PersonalizedProduct":
-                        try {
-                            PersonalizedProduct basicProduct = new PersonalizedProduct(Integer.parseInt(csvRecord.get(1)), csvRecord.get(2),
-                                    upm.etsisi.poo.es.type.valueOf(csvRecord.get(3)), Double.parseDouble(csvRecord.get(4)), Integer.parseInt(csvRecord.get(5)));
-                            this.prodAdd(basicProduct);
-                        } catch (NullPointerException e) {
-                            System.out.println("could not get product");
-                        }
-                        break;
-                    default:
-                        System.out.println("Impossible to retrieve product");
-                        break;
-                }
-            }
-
         }
 
     }
+
 
 }

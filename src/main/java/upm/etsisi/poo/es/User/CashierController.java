@@ -1,6 +1,8 @@
 package upm.etsisi.poo.es.User;
 
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class CashierController {
         return this.cashers;
     }
 
-    public boolean addCasher(Integer id, String name, String email) {
+    public boolean addCasher(Integer id, String name, String email, boolean charge) {
         boolean resul = true;
         if (id == null) {
             do {
@@ -38,8 +40,9 @@ public class CashierController {
         if (!cashers.containsKey(id)) {
             Cashier cashier = new Cashier(email, name, id.toString());
             cashers.put(id, cashier);
-            System.out.println(cashier.toString());
-            System.out.println("cash add: ok");
+            if(!charge) {
+                System.out.println(cashier.toString());
+            }
         } else {
             System.out.println(ID_ERROR);
             resul = false;
@@ -104,4 +107,23 @@ public class CashierController {
             entry.getValue().printCsv(csvPrinter);
         }
     }
+
+    public void csvCashiers(CSVRecord csvRecord, boolean[] cont) throws IOException {
+        if (csvRecord.get(0).equals("Customers")) {
+            cont[1] = false;
+        }
+        if (cont[1]) {
+            if (!csvRecord.get(0).equals("Cashier")) {
+                this.addTicket(Integer.parseInt(csvRecord.get(1)), Integer.parseInt(csvRecord.get(0)));
+
+            } else {
+                try {
+                   this.addCasher(Integer.parseInt(csvRecord.get(3)), csvRecord.get(2), csvRecord.get(1), true);
+                } catch (NullPointerException e) {
+                    System.out.println("could not add cashier");
+                }
+            }
+        }
+    }
 }
+

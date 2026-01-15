@@ -3,6 +3,7 @@ package upm.etsisi.poo.es;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
 import org.jline.builtins.Completers.TreeCompleter;
 import org.jline.reader.*;
 import org.jline.utils.AttributedString;
@@ -238,13 +239,24 @@ public class App {
             savefile = filePath.toFile();
             Reader reader = Files.newBufferedReader(filePath);
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
-            ProductController.getInstance().renovateInventory(csvParser);
-            //cargar
+            renovate(csvParser);
+
         } else {
             try {
                 savefile = new File("savefile.csv");
             } catch (NullPointerException e) {
                 System.out.println("couldn't create savefile");
+            }
+        }
+    }
+
+    private void renovate(CSVParser csvParser) throws IOException {
+        boolean[] where = {true, true, true, true};
+        for(CSVRecord csvRecord:csvParser) {
+            if (csvRecord.get(0).equals("Products") || where[0]) {
+                ProductController.getInstance().renovateInventory(csvRecord, where);
+            }else if(!where[0] && where[1]) {
+                CashierController.getInstance().csvCashiers(csvRecord, where);
             }
         }
     }
