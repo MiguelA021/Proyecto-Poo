@@ -1,7 +1,9 @@
 package upm.etsisi.poo.es.Product;
 
+import org.apache.commons.csv.CSVPrinter;
 import upm.etsisi.poo.es.type;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -82,5 +84,9 @@ public class PersonalizedProduct extends BasicProduct {
 
         return sb.toString();
 
+    }
+    @Override
+    public void printCsv(CSVPrinter csvPrinter) throws IOException {
+        csvPrinter.printRecord("PersonalizedProduct", id, name,category.name(), price, maxPers);
     }
 }

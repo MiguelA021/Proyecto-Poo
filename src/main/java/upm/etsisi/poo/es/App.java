@@ -1,4 +1,8 @@
 package upm.etsisi.poo.es;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.jline.builtins.Completers.TreeCompleter;
 import org.jline.reader.*;
 import org.jline.utils.AttributedString;
@@ -8,13 +12,14 @@ import upm.etsisi.poo.es.Commands.CommandController;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
+import upm.etsisi.poo.es.Product.ProductController;
 
 import static org.jline.builtins.Completers.TreeCompleter.node;
 
@@ -25,7 +30,10 @@ public class App {
   private final static String TERMINAL_ERROR= "Error while using the terminal, please try again.";
   public static final String UPM = "tUPM> ";
   private static final Map<String, List<String>> COMMANDS = new HashMap<>();
-  static {
+    public static String path = "savefile.csv";
+    public static File savefile;
+
+    static {
     COMMANDS.put("client", Arrays.asList("add", "list", "remove"));
     COMMANDS.put("cash",   Arrays.asList("add", "remove", "list", "tickets"));
     COMMANDS.put("ticket", Arrays.asList("new", "add", "remove", "print", "list"));
@@ -35,17 +43,25 @@ public class App {
     COMMANDS.put("exit",   Collections.emptyList());
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws Exception {
     App app = new App();
     app.init();
     app.start(args);
     app.end();
   }
 
-  private void end() {
-    System.out.println("Closing application");
-    System.out.println("Goodbye!");
-  }
+    private void end() throws Exception{
+        ProductController pd = ProductController.getInstance();
+        FileWriter writer = new FileWriter(App.path, false);
+        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+        pd.saveInventory(csvPrinter);
+        System.out.println("Closing application");
+        System.out.println("Goodbye!");
+
+        writer.close();
+        csvPrinter.close();
+
+    }
 
   public void start(String[] args) {
     List<TreeCompleter.Node> nodes = new ArrayList<>();
@@ -203,7 +219,19 @@ public class App {
    * It initializes the App
    */
   private void init() {
-    System.out.println(WELCOME_MESSAGE);
-    System.out.println(HELP_MESSAGE);
+      System.out.println(WELCOME_MESSAGE);
+      System.out.println(HELP_MESSAGE);
+
+      Path filePath = Paths.get(path);
+      if(Files.exists(filePath)){
+          savefile = filePath.toFile();
+          //cargar
+      }else{
+          try {
+              savefile = new File("savefile.csv");
+          }catch (NullPointerException e){
+              System.out.println("couldn't create savefile");
+          }
+      }
   }
 }
