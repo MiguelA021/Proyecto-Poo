@@ -41,6 +41,6 @@ public class Meeting extends Event {
 
     @Override
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
-        csvPrinter.printRecord("Meeting", id, name, pricePerPerson, expiracyDate);
+        csvPrinter.printRecord("Meeting", id, name, pricePerPerson, expiracyDate.toLocalDate());
     }
 }

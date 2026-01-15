@@ -88,5 +88,8 @@ public class PersonalizedProduct extends BasicProduct {
     @Override
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
         csvPrinter.printRecord("PersonalizedProduct", id, name,category.name(), price, maxPers);
+        for(String s: personalizaciones){
+            csvPrinter.printRecord(s);
+        }
     }
 }

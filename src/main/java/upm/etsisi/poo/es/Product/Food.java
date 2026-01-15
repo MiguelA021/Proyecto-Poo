@@ -43,7 +43,7 @@ public class Food extends Event {
 
     @Override
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
-        csvPrinter.printRecord("Food", id, name, pricePerPerson, expiracyDate);
+        csvPrinter.printRecord("Food", id, name, pricePerPerson, expiracyDate.toLocalDate());
     }
 }
 
