@@ -53,35 +53,47 @@ public abstract class Ticket {
 
     public abstract boolean canBeClosed();
 
+    /**
+     * The method closes the ticket
+     * @return returns true if the ticket has been closed successfully, else returns false
+     */
     public boolean close() {
-
         if (status == Status.CLOSED) {
             return false;
         }
         if (!canBeClosed()) {
             return false;
         }
-
         status = Status.CLOSED;
         return true;
     }
 
+    /**
+     * The method prints the ticket
+     * @param close shows if the ticket is closed or not
+     * @return returns the String
+     */
     public String print(boolean close) {
         return "";
     }
 
-    public String formatList() {// si esta abierto mostramos solo id. Si esta vacio mostramos fecha de creacion.
-        // Si esta cerrado fecha de cierre
+    /**
+     * The method returns a String with a specific format, if it's open it only shows the id.
+     * If it's empty it shows only the creation date. If it's closed it shows the closing date
+     * @return It returns the String
+     */
+    public String formatList() {
         StringBuilder resul = new StringBuilder();
-
         resul.append("  " + toStringId()).append(" - ").append(this.status.toString().toUpperCase());
         return resul.toString();
     }
+
+    /**
+     * The method makes a String with a specific format
+     * @return the String with the format
+     */
     public String toStringNew() {
-        StringBuilder sc = new StringBuilder(); // Soy Aaron, lo de format() esta puesto para que siga el formato que
-        // buscamos de fecha.
-        // te lo pongo para que asi no te comas la cabeza con eso. Por lo demás ya te
-        // dejo que sigas con ello
+        StringBuilder sc = new StringBuilder();
         sc.append(TICKET + " " + this.id + "\n");
         sc.append("  " + TOTAL_PRICE + " 0.0 \n");
         sc.append("  " + TOTAL_DISCOUNT + " 0.0 \n");
@@ -90,15 +102,15 @@ public abstract class Ticket {
         return sc.toString();
     }
 
+    /**
+     * The method creates a String with a specific format
+     * @return returns the String with the format
+     */
     protected String toStringId() {
         StringBuilder resul = new StringBuilder();
-
         String status = this.status.toString().toUpperCase();
-
         switch (status) {
-
             case "EMPTY": {
-                // Ticket recién creado: se muestra fecha de creación + id
                 String inicio = dates.get(0).format(DATE_FORMAT);
                 resul.append(inicio).append("-").append(this.id);
                 break;
@@ -106,7 +118,6 @@ public abstract class Ticket {
             case "OPEN":
                 resul.append(this.id);
                 break;
-
             case "CLOSED": {
                 String fin;
 
@@ -119,15 +130,10 @@ public abstract class Ticket {
                 resul.append(fin).append("-").append(this.id);
                 break;
             }
-
             default:
                 resul.append("ERROR, status is undefined");
                 break;
         }
-
         return resul.toString();
     }
-
-
-
 }
