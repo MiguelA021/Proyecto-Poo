@@ -2,7 +2,6 @@ package upm.etsisi.poo.es.User;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 public class CustomerController {
@@ -15,6 +14,10 @@ public class CustomerController {
         this.customers = new TreeMap<Integer, Customer>();
     }
 
+    /**
+     * The method returns the unique instance of the class
+     * @return the instance of the class
+     */
     public static CustomerController getInstance() {
         if (instance == null) {
             instance = new CustomerController();
@@ -22,6 +25,13 @@ public class CustomerController {
         return instance;
     }
 
+    /**
+     * The method adds the customer into the treemap, it automatically decides if the customer is regular or enterprise
+     * @param name the name given by parameter
+     * @param dni the DNI/NIE/NIF which will give us the key for the treemap
+     * @param email the email given by parameter
+     * @param cashId the cashier that will be linked to our customer
+     */
     public void addCustomer(String name, String dni, String email, int cashId) {
         Customer customer;
         int id = dniToId(dni);
@@ -35,6 +45,11 @@ public class CustomerController {
         System.out.println("client add: ok");
     }
 
+    /**
+     * The method gives us the numerical part of the NIE/DNI/NIF
+     * @param dni the NIE/DNI/NIF given by parameter
+     * @return it returns only the numerical part
+     */
     public int dniToId(String dni) {
         int id = 0;
         for (char c : dni.toCharArray()) {
@@ -50,13 +65,20 @@ public class CustomerController {
         return customers.get(userId);
     }
 
+    /**
+     * The method removes the customer from the treemap
+     * @param dni the NIE/DNI/NIF given by parameter
+     * @return the method returns true if the customer has been removed successfully, else returns false
+     */
     public boolean removeCustomer(String dni) {
         int id = dniToId(dni);
         Customer customer = customers.remove(id);
         return customer != null;
     }
 
-
+    /**
+     * The method list the customers ordered by their name
+     */
     public void listCustomers() {
         ArrayList<Customer> listSort = customersToList();
         if (!listSort.isEmpty()) {
@@ -70,14 +92,22 @@ public class CustomerController {
         }
     }
 
+    /**
+     * The method turns the tree into a List ordered by the name of the customer
+     * @return the list ordered by the name of it's customers
+     */
     private ArrayList<Customer> customersToList() {
         ArrayList<Customer> resul = new ArrayList<>(customers.values());
         resul.sort(Comparator.comparing(Customer::getName));
         return resul;
     }
 
+    /**
+     * The method adds a ticket to their customer
+     * @param ticketId the id of the ticket we are going to add
+     * @param userId the id of the user that we are adding their ticket
+     */
     public void addTicket(Integer ticketId, int userId) {
-        CashierController cashierController = CashierController.getInstance();
         try {
             Customer customer = customers.get(userId);
             customer.addTicket(ticketId);
