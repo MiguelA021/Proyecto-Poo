@@ -1,6 +1,10 @@
 package upm.etsisi.poo.es.Tickets;
 
+import org.apache.commons.csv.CSVPrinter;
+
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class TicketData {
     private static final String ID_ERROR = "The id given has been already used";
@@ -107,5 +111,11 @@ public class TicketData {
 
         }
         return resul;
+    }
+
+    public void saveTickets(CSVPrinter csvPrinter) throws Exception {
+        for(Map.Entry<Integer,Ticket> entry: tickets.entrySet()){
+            entry.getValue().printCsv(csvPrinter);
+        }
     }
 }

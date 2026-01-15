@@ -1,5 +1,10 @@
 package upm.etsisi.poo.es.User;
 
+import org.apache.commons.csv.CSVPrinter;
+import upm.etsisi.poo.es.Tickets.Ticket;
+
+import java.io.IOException;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.TreeMap;
@@ -61,7 +66,7 @@ public class CustomerController {
         return id;
     }
 
-    public Customer getCustomer(int userId){
+    public Customer getCustomer(int userId) {
         return customers.get(userId);
     }
 
@@ -117,4 +122,9 @@ public class CustomerController {
     }
 
 
+    public void saveCustomers(CSVPrinter csvPrinter) throws IOException {
+        for (Map.Entry<Integer, Customer> entry : customers.entrySet()) {
+            entry.getValue().printCsv(csvPrinter);
+        }
+    }
 }

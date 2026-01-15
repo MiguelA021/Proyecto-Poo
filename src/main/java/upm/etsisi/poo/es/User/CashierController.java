@@ -1,17 +1,21 @@
 package upm.etsisi.poo.es.User;
 
+import org.apache.commons.csv.CSVPrinter;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CashierController {
-  private static CashierController instance;
-  public static final String ID_ERROR = "The id given has already been  used";
-  HashMap<Integer, Cashier> cashers;
+    private static CashierController instance;
+    public static final String ID_ERROR = "The id given has already been  used";
+    HashMap<Integer, Cashier> cashers;
 
-  private CashierController() {
-    this.cashers = new HashMap<Integer, Cashier>();
-  }
+    private CashierController() {
+        this.cashers = new HashMap<Integer, Cashier>();
+    }
 
   /**
    * The method returns the unique instance of the class
@@ -73,7 +77,7 @@ public class CashierController {
       System.out.println("no cashiers in store");
     }
 
-  }
+    }
 
   /**
    * The method turns the tree into a list ordered by the name of the cashiers
@@ -85,13 +89,13 @@ public class CashierController {
     return resul;
   }
 
-  public void listTicketsOnCasher(int id) {
-    if (cashers.containsKey(id)) {
-      System.out.print(cashers.get(id).listTickets());
-    } else {
-      System.out.println(ID_ERROR);
+    public void listTicketsOnCasher(int id) {
+        if (cashers.containsKey(id)) {
+            System.out.print(cashers.get(id).listTickets());
+        } else {
+            System.out.println(ID_ERROR);
+        }
     }
-  }
 
   /**
    * The method adds the ticket to the cashier
@@ -137,4 +141,9 @@ public class CashierController {
     return exists;
   }
 
+    public void saveCashiers(CSVPrinter csvPrinter) throws IOException {
+        for (Map.Entry<Integer, Cashier> entry : cashers.entrySet()) {
+            entry.getValue().printCsv(csvPrinter);
+        }
+    }
 }

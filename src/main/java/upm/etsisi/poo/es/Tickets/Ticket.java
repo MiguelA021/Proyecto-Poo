@@ -1,6 +1,7 @@
 package upm.etsisi.poo.es.Tickets;
 
 
+import org.apache.commons.csv.CSVPrinter;
 import upm.etsisi.poo.es.Product.Product;
 
 import java.time.LocalDateTime;
@@ -53,10 +54,6 @@ public abstract class Ticket {
 
     public abstract boolean canBeClosed();
 
-    /**
-     * The method closes the ticket
-     * @return returns true if the ticket has been closed successfully, else returns false
-     */
     public boolean close() {
         if (status == Status.CLOSED) {
             return false;
@@ -135,5 +132,10 @@ public abstract class Ticket {
                 break;
         }
         return resul.toString();
+    }
+
+
+    public void printCsv(CSVPrinter csvPrinter) throws Exception{
+
     }
 }

@@ -1,8 +1,10 @@
 package upm.etsisi.poo.es.User;
 
+import org.apache.commons.csv.CSVPrinter;
 import upm.etsisi.poo.es.Tickets.Ticket;
 import upm.etsisi.poo.es.Tickets.TicketData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Cashier extends User {
@@ -95,4 +97,10 @@ public class Cashier extends User {
     tickets.add(id);
   }
 
+    public void printCsv(CSVPrinter csvPrinter) throws IOException {
+      csvPrinter.printRecord(email, name, id);
+      for(Integer tickid:tickets){
+          csvPrinter.printRecord(tickid);
+      }
+    }
 }
