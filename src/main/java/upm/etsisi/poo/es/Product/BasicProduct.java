@@ -1,6 +1,9 @@
 package upm.etsisi.poo.es.Product;
 
+import org.apache.commons.csv.CSVPrinter;
 import upm.etsisi.poo.es.type;
+
+import java.io.IOException;
 
 public class BasicProduct extends Product {
 
@@ -102,5 +105,9 @@ public class BasicProduct extends Product {
         this.id, this.name, this.category, this.price, discountValue));
     return sc.toString();
   }
+    @Override
+    public void printCsv(CSVPrinter csvPrinter) throws IOException {
+        csvPrinter.printRecord("BasicProduct", id, name,category.name(), price);
+    }
 
 }

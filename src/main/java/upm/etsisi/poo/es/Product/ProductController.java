@@ -1,7 +1,13 @@
 package upm.etsisi.poo.es.Product;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import upm.etsisi.poo.es.App;
 import upm.etsisi.poo.es.type;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class ProductController {
@@ -227,5 +233,18 @@ public class ProductController {
     }
     return resul;
   }
+    public void saveInventory(CSVPrinter csvPrinter) throws IOException {
+
+        for(int i = 0; i< productList.length; i++){
+            if(productList[i] != null) {
+                productList[i].printCsv(csvPrinter);
+            }
+        }
+
+    }
+
+    public void renovateInventory(CSVParser csvParser){
+
+    }
 
 }

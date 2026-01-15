@@ -1,5 +1,8 @@
 package upm.etsisi.poo.es.Product;
 
+import org.apache.commons.csv.CSVPrinter;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -75,4 +78,8 @@ public class Event extends Product {
   public double getPricePerPerson() {
     return pricePerPerson;
   }
+    @Override
+    public void printCsv(CSVPrinter csvPrinter) throws IOException {
+        csvPrinter.printRecord(id, name, pricePerPerson, expiracyDate);
+    }
 }
