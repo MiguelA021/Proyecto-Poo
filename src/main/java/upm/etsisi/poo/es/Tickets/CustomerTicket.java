@@ -1,5 +1,6 @@
 package upm.etsisi.poo.es.Tickets;
 
+import org.apache.commons.csv.CSVPrinter;
 import upm.etsisi.poo.es.Product.BasicProduct;
 import upm.etsisi.poo.es.Product.Event;
 import upm.etsisi.poo.es.Product.PersonalizedProduct;
@@ -278,5 +279,12 @@ public class CustomerTicket extends Ticket {
         Arrays.sort(this.productList, 0, this.amount, nameComp);
     }
 
+
+    @Override
+    public void printCsv(CSVPrinter csvPrinter)throws Exception{
+        for(int i = 0; i< this.amount; i++){
+            productList[i].printCsv(csvPrinter);
+        }
+    }
 
 }

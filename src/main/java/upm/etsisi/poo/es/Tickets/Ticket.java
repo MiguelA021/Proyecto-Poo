@@ -1,6 +1,7 @@
 package upm.etsisi.poo.es.Tickets;
 
 
+import org.apache.commons.csv.CSVPrinter;
 import upm.etsisi.poo.es.Product.Product;
 
 import java.time.LocalDateTime;
@@ -129,5 +130,7 @@ public abstract class Ticket {
     }
 
 
+    public void printCsv(CSVPrinter csvPrinter) throws Exception{
 
+    }
 }
