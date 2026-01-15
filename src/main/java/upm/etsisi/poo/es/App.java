@@ -1,5 +1,6 @@
 package upm.etsisi.poo.es;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.jline.builtins.Completers.TreeCompleter;
 import org.jline.reader.*;
@@ -217,13 +218,17 @@ public class App {
   /**
    * It initializes the App
    */
-  private void init() {
+  private void init() throws IOException {
       System.out.println(WELCOME_MESSAGE);
       System.out.println(HELP_MESSAGE);
 
       Path filePath = Paths.get(path);
       if(Files.exists(filePath)){
           savefile = filePath.toFile();
+          Reader reader = Files.newBufferedReader(filePath);
+          CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
+          ProductController pd = ProductController.getInstance();
+          pd.renovateInventory(csvParser);
           //cargar
       }else{
           try {
