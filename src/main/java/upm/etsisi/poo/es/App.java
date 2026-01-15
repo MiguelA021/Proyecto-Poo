@@ -55,6 +55,7 @@ public class App {
         ProductController pd = ProductController.getInstance();
         FileWriter writer = new FileWriter(App.path, false);
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+        csvPrinter.printRecord("Products");
         pd.saveInventory(csvPrinter);
         System.out.println("Closing application");
         System.out.println("Goodbye!");
