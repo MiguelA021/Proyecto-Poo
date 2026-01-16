@@ -10,7 +10,12 @@ public class CashierCommand implements Command {
     return "cash";
   }
 
-
+  /**
+   * The method calls the method related to the command given by the user
+   * @param fullLine the whole sentence written by the user
+   * @param args     tokens detached by blanks
+   * @return returns false always
+   */
   @Override
   public boolean execute(String fullLine, String[] args) {
       CashierController cashierController = CashierController.getInstance();
@@ -18,9 +23,7 @@ public class CashierCommand implements Command {
       System.out.println(INCORRECT);
       return false;
     }
-
     String sub = args[1];
-
     switch (sub) {
       case "add":
         cashierAdd(args, cashierController);
@@ -37,10 +40,14 @@ public class CashierCommand implements Command {
       default:
         System.out.println(INCORRECT);
     }
-
     return false;
   }
 
+  /**
+   * The method adds a cashier into the controller's instance
+   * @param args the args of the command, it must follow the syntax
+   * @param cashierController the unique instance of the class controller
+   */
   private void cashierAdd(String[] args, CashierController cashierController) {
     if (args.length != 5 && args.length != 4) {
       System.out.println(INCORRECT);
@@ -66,6 +73,11 @@ public class CashierCommand implements Command {
 
   }
 
+  /**
+   * The method removes the cashier form the instance
+   * @param args the args of the command, it must follow the syntax
+   * @param cashierController the unique instance of the class controller
+   */
   private void cashierRemove(String[] args, CashierController cashierController) {
     if (args.length != 3) {
       System.out.println(INCORRECT);
@@ -80,17 +92,24 @@ public class CashierCommand implements Command {
       } else {
         System.out.println("cash remove: ok");
       }
-
     } catch (NumberFormatException e) {
       System.out.println(INCORRECT);
-      return;
     }
   }
 
+  /**
+   * The method list all the cashiers
+   * @param cashierController the unique instance of the class controller
+   */
   private void list(CashierController cashierController) {
     cashierController.listCashers();
   }
 
+  /**
+   * The method prints the tickets of a cashier given by his id
+   * @param args the args of the command, it must follow the syntax
+   * @param cashierController the unique instance of the class controller
+   */
   private void cashTickets(String[] args, CashierController cashierController) {
     // cash tickets <id>
     if (args.length != 3) {
@@ -105,22 +124,17 @@ public class CashierCommand implements Command {
           System.out.println("Cashier not found");
           return;
       }
-
       // Siempre imprimimos el encabezado
       System.out.println("Tickets: ");
-
       if (casher != null) {
         String ticketsStr = casher.listTickets(); // lo que ya tengas implementado
-
         // Si hay algo que imprimir, lo sacamos tal cual
         if (ticketsStr != null && !ticketsStr.isEmpty()) {
           System.out.print(ticketsStr); // ojo: print, no println, por si ya lleva \n
         }
       }
-
       // Siempre imprimimos el "ok" al final
       System.out.println("cash tickets: ok");
-
     } catch (NumberFormatException e) {
       System.out.println(INCORRECT);
     }
