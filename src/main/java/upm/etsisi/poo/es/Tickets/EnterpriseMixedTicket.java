@@ -1,6 +1,7 @@
 package upm.etsisi.poo.es.Tickets;
 
 import org.apache.commons.csv.CSVPrinter;
+import org.jline.nativ.Kernel32;
 import upm.etsisi.poo.es.Product.*;
 
 import java.time.LocalDate;
@@ -86,8 +87,15 @@ public class EnterpriseMixedTicket extends Ticket {
                         if (amount <= event.getMaxPersonas()) {
 
                             double price = event.getPricePerPerson() * amount;
-                            event.setPrice(price);
-                            products.add(event);
+                            if(event instanceof Meeting){
+                                Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
+                                meeting.setPrice(price);
+                                products.add(meeting);
+                            }else{
+                                Food food = new Food(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
+                                food.setPrice(price);
+                                products.add(food);
+                            }
                             System.out.println(print(false));
                             System.out.println(ADD_OK);
 
@@ -140,10 +148,16 @@ public class EnterpriseMixedTicket extends Ticket {
                     Event event = (Event) p;
                     if (event.fechaValida(LocalDateTime.now())) {
                         if (amount <= event.getMaxPersonas()) {
-
                             double price = event.getPricePerPerson() * amount;
-                            event.setPrice(price);
-                            products.add(event);
+                            if(event instanceof Meeting){
+                                Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
+                                meeting.setPrice(price);
+                                products.add(meeting);
+                            }else{
+                                Food food = new Food(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
+                                food.setPrice(price);
+                                products.add(food);
+                            }
 
                         } else {
                             System.out.println(MANY_PEOPLE);

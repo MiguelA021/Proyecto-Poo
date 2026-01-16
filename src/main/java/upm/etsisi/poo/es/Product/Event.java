@@ -20,7 +20,8 @@ public class Event extends Product {
 
       this.pricePerPerson = price;
 
-      this.price = 0.0;
+      this.price = price
+      ;
 
       LocalDate date = LocalDate.parse(expiryDate);
       this.expiracyDate = date.atStartOfDay();
