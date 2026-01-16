@@ -122,11 +122,7 @@ public class EnterpriseMixedTicket extends Ticket {
         return resul;
     }
 
-    /**
-     * The method adds the service if the dates are correct
-     * @param s the service given by parameter
-     * @return returns true if the service has been added successfully
-     */
+
     public boolean addProductNoString(Product p, int amount) {
         boolean resul = true;
         if (this.status != Status.CLOSED) {
@@ -178,7 +174,11 @@ public class EnterpriseMixedTicket extends Ticket {
         return resul;
     }
 
-
+    /**
+     * The method adds the service if the dates are correct
+     * @param s the service given by parameter
+     * @return returns true if the service has been added successfully
+     */
     public boolean addService(Service s) {
         if (s == null) {
             return false;
