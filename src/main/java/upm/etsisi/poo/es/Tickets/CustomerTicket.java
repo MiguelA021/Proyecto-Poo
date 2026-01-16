@@ -1,15 +1,13 @@
 package upm.etsisi.poo.es.Tickets;
 
 import org.apache.commons.csv.CSVPrinter;
-import upm.etsisi.poo.es.Product.BasicProduct;
-import upm.etsisi.poo.es.Product.Event;
-import upm.etsisi.poo.es.Product.PersonalizedProduct;
-import upm.etsisi.poo.es.Product.Product;
+import upm.etsisi.poo.es.Product.*;
 import upm.etsisi.poo.es.type;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Map;
 
 public class CustomerTicket extends Ticket {
 
@@ -287,7 +285,23 @@ public class CustomerTicket extends Ticket {
     public void printCsv(CSVPrinter csvPrinter)throws Exception{
         csvPrinter.printRecord("CustomerTicket", id, status);
         for(int i = 0; i< this.amount; i++){
-            productList[i].printCsv(csvPrinter);
+            Product p = productList[i];
+            if(p instanceof PersonalizedProduct) {
+               PersonalizedProduct pp = (PersonalizedProduct) p;
+                csvPrinter.printRecord(id,"PersonalizedProduct",pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice(), pp.getMaxPers(), pp.getPerstonalizations());
+            }else if(p instanceof BasicProduct){
+                BasicProduct pp = (BasicProduct) p;
+                csvPrinter.printRecord(id,"BasicProduct",pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice());
+            } else if (p instanceof Meeting) {
+                Meeting m = (Meeting) p;
+                csvPrinter.printRecord(id, "Meeting", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
+            }else if(p instanceof Food){
+                Food m = (Food) p;
+                csvPrinter.printRecord(id, "Food", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
+            }else{
+                Service s = (Service) p;
+                csvPrinter.printRecord(id, "Service", s.getMaxUseDate(), s.getName(), s.getId());
+            }
         }
     }
 

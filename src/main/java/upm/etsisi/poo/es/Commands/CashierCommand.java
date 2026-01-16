@@ -5,10 +5,10 @@ import upm.etsisi.poo.es.User.CashierController;
 
 public class CashierCommand implements Command {
 
-  @Override
-  public String getName() {
-    return "cash";
-  }
+    @Override
+    public String getName() {
+        return "cash";
+    }
 
   /**
    * The method calls the method related to the command given by the user
