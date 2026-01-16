@@ -34,11 +34,19 @@ public class EnterpriseMixedTicket extends Ticket {
 
         //Todos los servicios tienen que tener una fecha válida
 
-        LocalDate today = LocalDate.now();
+        LocalDateTime today = LocalDateTime.now();
         for (Service s : services) {
-            if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today)) {
+            if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today.toLocalDate())) {
                 return false;
             }
+        for(Product product : products){
+            if(product instanceof Event){
+                Event event = (Event) product;
+                if(!event.fechaValida(today)) {
+                    return false;
+                }
+            }
+        }
         }
         return true;
     }
@@ -140,7 +148,7 @@ public class EnterpriseMixedTicket extends Ticket {
     @Override
     public String print(boolean close) {
 
-        if (close) this.close(); // solo cerrará si hay >=1 producto y >=1 servicio
+        if (close) if(!this.close()) System.out.println(PERIOD_NOT_VALID); // solo cerrará si hay >=1 producto y >=1 servicio
 
         StringBuilder sb = new StringBuilder();
         sb.append("Ticket : ").append(this.getId()).append("\n");
