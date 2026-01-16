@@ -20,12 +20,15 @@ public class EnterpriseServiceTicket extends Ticket {
         this.productList = null;
     }
 
+    /**
+     * The method checks if the Ticket can be closed, it must not be empty and if it has services, the services must be on a valid date
+     * @return returns true if it can be closed, else returns false
+     */
     @Override
     public boolean canBeClosed() {
         if (services.isEmpty()) {
             return false;
         }
-
         LocalDate today = LocalDate.now();
         for (Service s : services) {
             if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today)) {
@@ -35,14 +38,17 @@ public class EnterpriseServiceTicket extends Ticket {
         return true;
     }
 
+    /**
+     * The method adds a service into the ticket if the ticket is not closed and the dates are valid
+     * @param s the service that we are going to add
+     * @return returns true if the service has been added successfully, else returns false
+     */
     public boolean addService(Service s) {
         if (s == null) return false;
         if (status == Status.CLOSED) return false;
-
         // Regla de inclusión por fecha máxima: si ya está caducado, no se añade
         LocalDate today = LocalDate.now();
         if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today)) return false;
-
         services.add(s);
         if (status == Status.EMPTY) status = Status.OPEN;
         return true;
@@ -52,23 +58,29 @@ public class EnterpriseServiceTicket extends Ticket {
         return new ArrayList<>(services);
     }
 
+    /**
+     * The method creates a String with a specific format
+     * @param close shows if the ticket is closed or not
+     * @return the String ready to print
+     */
     @Override
     public String print( boolean close) {
-
         if (close) {
             this.close();
         }
-
         StringBuilder sb = new StringBuilder();
         sb.append("Ticket : ").append(this.getId()).append("\n");
-
         for (Service s : this.getServices()) {
             sb.append("  ").append(s.toString()).append("\n");
         }
-
         return sb.toString();
     }
 
+    /**
+     * The method removes the product from the ticket
+     * @param prodId the id of the product we want to remove
+     * @return if it has been removed successfully returns the product, else returns null
+     */
     public Service ticketRemove(int prodId) {
         Product product = ProductController.getInstance().getProduct(prodId);
         if(!(product instanceof Service)){
@@ -78,15 +90,15 @@ public class EnterpriseServiceTicket extends Ticket {
             this.services.remove((Service) product);
             return (Service) product;
         }
-
     }
 
+    /**
+     * The method creates a String with a specific format
+     * @return the String ready to print
+     */
     @Override
     public String toStringNew() {
-        StringBuilder sc = new StringBuilder(); // Soy Aaron, lo de format() esta puesto para que siga el formato que
-        // buscamos de fecha.
-        // te lo pongo para que asi no te comas la cabeza con eso. Por lo demás ya te
-        // dejo que sigas con ello
+        StringBuilder sc = new StringBuilder();
         sc.append(TICKET + " " + this.id + "\n");
         sc.append(TICKET_NEW_OK);
         return sc.toString();
