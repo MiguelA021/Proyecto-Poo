@@ -8,17 +8,15 @@ public interface Command {
     String ID_REPEAT = "This ID is used, try to use another.";
 
     /**
-     * Nombre del comando (primer token). Ej: "echo", "help", "prod", "ticket"
+     * command's forename (first token). Ej: "echo", "help", "prod", "ticket"
      */
     String getName();
 
     /**
-     * Ejecuta el comando.
-     *
-     * @param fullLine línea completa que ha escrito el usuario
-     * @param args     tokens separados por espacios
-     * @return true si el comando quiere terminar la aplicación (exit), false en
-     * otro caso
+     * Executes the command
+     * @param fullLine the whole sentence written by the user
+     * @param args     tokens detached by blanks
+     * @return returns true if the command executed is exit, else returns false
      */
     boolean execute(String fullLine, String[] args);
 }
