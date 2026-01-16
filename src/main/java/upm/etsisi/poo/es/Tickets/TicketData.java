@@ -119,20 +119,20 @@ public class TicketData {
                                         p.addPersonalized(pers[i]);
                                     }
                                 }
-                                ((CustomerTicket) ticket).ticketAdd(p, 1);
+                                ((CustomerTicket) ticket).ticketAddNoString(p, 1);
                                 break;
                             case "BasicProduct":
                                 BasicProduct b = new BasicProduct(Integer.parseInt(record.get(2)), record.get(3), upm.etsisi.poo.es.type.valueOf(record.get(4)),
                                         Double.parseDouble(record.get(5)));
-                                ((CustomerTicket) ticket).ticketAdd(b, 1);
+                                ((CustomerTicket) ticket).ticketAddNoString(b, 1);
                                 break;
                             case "Meeting":
                                 Meeting m = new Meeting(Integer.parseInt(record.get(2)), record.get(3), Double.parseDouble(record.get(4)), record.get(5));
-                                ((CustomerTicket) ticket).ticketAdd(m, 1);
+                                ((CustomerTicket) ticket).ticketAddNoString(m, 1);
                                 break;
                             case "Food":
                                 Food f = new Food(Integer.parseInt(record.get(2)), record.get(3), Double.parseDouble(record.get(4)), record.get(5));
-                                ((CustomerTicket) ticket).ticketAdd(f, 1);
+                                ((CustomerTicket) ticket).ticketAddNoString(f, 1);
                                 break;
                             case "Service":
                                 System.out.println("Can not add Service to this product");
@@ -151,20 +151,20 @@ public class TicketData {
                                         p.addPersonalized(pers[i]);
                                     }
                                 }
-                                ((EnterpriseMixedTicket) ticket).addProduct(p, 1);
+                                ((EnterpriseMixedTicket) ticket).addProductNoString(p, 1);
                                 break;
                             case "BasicProduct":
                                 BasicProduct b = new BasicProduct(Integer.parseInt(record.get(2)), record.get(3), upm.etsisi.poo.es.type.valueOf(record.get(4)),
                                         Double.parseDouble(record.get(5)));
-                                ((EnterpriseMixedTicket) ticket).addProduct(b, 1);
+                                ((EnterpriseMixedTicket) ticket).addProductNoString(b, 1);
                                 break;
                             case "Meeting":
                                 Meeting m = new Meeting(Integer.parseInt(record.get(2)), record.get(3), Double.parseDouble(record.get(4)), record.get(5));
-                                ((EnterpriseMixedTicket) ticket).addProduct(m, 1);
+                                ((EnterpriseMixedTicket) ticket).addProductNoString(m, 1);
                                 break;
                             case "Food":
                                 Food f = new Food(Integer.parseInt(record.get(2)), record.get(3), Double.parseDouble(record.get(4)), record.get(5));
-                                ((EnterpriseMixedTicket) ticket).addProduct(f, 1);
+                                ((EnterpriseMixedTicket) ticket).addProductNoString(f, 1);
                                 break;
                             case "Service":
                                 Service s = new Service(LocalDate.parse(record.get(2)), record.get(3), Integer.parseInt(record.get(4)));
@@ -195,7 +195,7 @@ public class TicketData {
                                 System.out.println("could not find product type");
                         }
                     }
-                } else if (ticket.status == Status.OPEN) {
+                } else {
                     if (ticket instanceof CustomerTicket) {
                         switch (record.get(1)) {
                             case "PersonalizedProduct":
@@ -207,13 +207,13 @@ public class TicketData {
                                         p.addPersonalized(pers[i]);
                                     }
                                 }
-                                ((CustomerTicket) ticket).ticketAdd(p, 1);
+                                ((CustomerTicket) ticket).ticketAddNoString(p, 1);
                                 break;
                             case "BasicProduct":
                                 Product b = ProductController.getInstance().getProduct(Integer.parseInt(record.get(2)));
                                 if (b != null) {
                                     if (b instanceof BasicProduct) {
-                                        ((CustomerTicket) ticket).ticketAdd(b, 1);
+                                        ((CustomerTicket) ticket).ticketAddNoString(b, 1);
                                     } else {
                                         System.out.println("wrong type of product");
                                     }
@@ -225,7 +225,7 @@ public class TicketData {
                                 Product m = ProductController.getInstance().getProduct(Integer.parseInt(record.get(2)));
                                 if (m != null) {
                                     if (m instanceof Meeting) {
-                                        ((CustomerTicket) ticket).ticketAdd(m, 1);
+                                        ((CustomerTicket) ticket).ticketAddNoString(m, 1);
                                     } else {
                                         System.out.println("wrong type of product");
                                     }
@@ -238,7 +238,7 @@ public class TicketData {
                                 Product f = ProductController.getInstance().getProduct(Integer.parseInt(record.get(2)));
                                 if (f != null) {
                                     if (f instanceof Food) {
-                                        ((CustomerTicket) ticket).ticketAdd(f, 1);
+                                        ((CustomerTicket) ticket).ticketAddNoString(f, 1);
                                     } else {
                                         System.out.println("wrong type of product");
                                     }
@@ -263,13 +263,13 @@ public class TicketData {
                                         p.addPersonalized(pers[i]);
                                     }
                                 }
-                                ((EnterpriseMixedTicket) ticket).addProduct(p, 1);
+                                ((EnterpriseMixedTicket) ticket).addProductNoString(p, 1);
                                 break;
                             case "BasicProduct":
                                 Product b = ProductController.getInstance().getProduct(Integer.parseInt(record.get(2)));
                                 if (b != null) {
                                     if (b instanceof BasicProduct) {
-                                        ((EnterpriseMixedTicket) ticket).addProduct(b, 1);
+                                        ((EnterpriseMixedTicket) ticket).addProductNoString(b, 1);
                                     } else {
                                         System.out.println("wrong type of product");
                                     }
@@ -281,7 +281,7 @@ public class TicketData {
                                 Product m = ProductController.getInstance().getProduct(Integer.parseInt(record.get(2)));
                                 if (m != null) {
                                     if (m instanceof Meeting) {
-                                        ((EnterpriseMixedTicket) ticket).addProduct(m, 1);
+                                        ((EnterpriseMixedTicket) ticket).addProductNoString(m, 1);
                                     } else {
                                         System.out.println("wrong type of product");
                                     }
@@ -294,7 +294,7 @@ public class TicketData {
                                 Product f = ProductController.getInstance().getProduct(Integer.parseInt(record.get(2)));
                                 if (f != null) {
                                     if (f instanceof Food) {
-                                        ((EnterpriseMixedTicket) ticket).addProduct(f, 1);
+                                        ((EnterpriseMixedTicket) ticket).addProductNoString(f, 1);
                                     } else {
                                         System.out.println("wrong type of product");
                                     }

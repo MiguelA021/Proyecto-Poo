@@ -264,6 +264,10 @@ public class App {
 
                 TicketData.getInstance().csvTickets(csvRecord, ticket);
             }
+
+        }
+        if(ticket[1] == 2){
+            TicketData.getInstance().getTicket(ticket[0]).close();
         }
     }
 }
