@@ -10,10 +10,10 @@ public class Meeting extends Event {
         super(id, name, price, expiracyDate);
     }
 
-    @Override
     /**
-     * t also checks the hours due to meetings must be planned with at least 12 hours
+     * it also checks the hours due to meetings must be planned with at least 12 hours
      */
+    @Override
     public boolean fechaValida(LocalDateTime time) {
         // Primero comprobamos la validación general de Event (fecha >= hoy)
         if (!super.fechaValida(time)) {
