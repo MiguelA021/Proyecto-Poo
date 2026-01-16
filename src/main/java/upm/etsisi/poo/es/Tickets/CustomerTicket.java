@@ -1,6 +1,5 @@
 package upm.etsisi.poo.es.Tickets;
 
-import jdk.internal.foreign.abi.Binding;
 import org.apache.commons.csv.CSVPrinter;
 import upm.etsisi.poo.es.Product.*;
 import upm.etsisi.poo.es.type;
