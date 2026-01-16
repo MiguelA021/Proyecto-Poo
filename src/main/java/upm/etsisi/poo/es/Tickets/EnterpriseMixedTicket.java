@@ -119,6 +119,58 @@ public class EnterpriseMixedTicket extends Ticket {
         return resul;
     }
 
+    public boolean addProductNoString(Product p, int amount) {
+        boolean resul = true;
+        if (this.status != Status.CLOSED) {
+            int before = this.amount;
+            if (p == null) {
+                resul = false;
+                System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
+
+            } else {
+                if (this.amount == 0) {
+                    this.status = Status.OPEN;
+                }
+
+                if (p instanceof Event) {
+                    Event event = (Event) p;
+                    if (event.fechaValida(LocalDateTime.now())) {
+                        if (amount <= event.getMaxPersonas()) {
+
+                            double price = event.getPricePerPerson() * amount;
+                            event.setPrice(price);
+                            products.add(event);
+
+                        } else {
+                            System.out.println(MANY_PEOPLE);
+                            resul = false;
+                        }
+                    } else {
+                        System.out.println(PERIOD_NOT_VALID);
+                    }
+
+                } else {
+                    for (int i = 0; i < amount; i++) {
+                        products.add(p);
+                    }
+                    if ((this.amount - before) == amount) {
+                        resul = true;
+                    } else {
+                        resul = false;
+                        System.out.println(ERROR_FULL);
+                    }
+
+                }
+
+            }
+        } else {
+            resul = false;
+            System.out.println("ERROR: the ticket is closed. It can't be modified");
+        }
+        return resul;
+    }
+
+
     public boolean addService(Service s) {
         if (s == null) {
             return false;

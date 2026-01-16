@@ -8,6 +8,7 @@ import upm.etsisi.poo.es.type;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Map;
 
 public class CustomerTicket extends Ticket {
 
@@ -31,7 +32,6 @@ public class CustomerTicket extends Ticket {
         LocalDateTime now = LocalDateTime.now();
         return comprobarFechasTodosEventos(now);
     }
-
 
     /**
      * The method adds the product given, and it also prints it. The ticket status
@@ -101,6 +101,59 @@ public class CustomerTicket extends Ticket {
                     } else {
                         resul = false;
                         System.out.println(ERROR_FULL);
+                    }
+
+                }
+
+            }
+        } else {
+            resul = false;
+            System.out.println("ERROR: the ticket is closed. It can't be modified");
+        }
+        return resul;
+    }
+
+    public boolean ticketAddNoString(Product product, int amount) {
+        boolean resul = true;
+        if (this.status != Status.CLOSED) {
+            int before = this.amount;
+            if (product == null) {
+                resul = false;
+
+            } else {
+                if (this.amount == 0) {
+                    this.status = Status.OPEN;
+                }
+
+                if (product instanceof Event) {
+                    Event event = (Event) product;
+                    if (event.fechaValida(LocalDateTime.now())) {
+                        if (amount <= event.getMaxPersonas()) {
+
+                            double price = event.getPricePerPerson() * amount;
+                            event.setPrice(price);
+
+                            productList[this.amount] = event;
+                            this.amount++;
+
+
+                        } else {
+                            resul = false;
+                        }
+                    } else {
+                    }
+
+                } else {
+                    int i = 0;
+                    while (this.amount < MAX_PRODUCT && i < amount) {
+                        productList[this.amount] = product;
+                        this.amount++;
+                        i++;
+                    }
+                    if ((this.amount - before) == amount) {
+                        resul = true;
+                    } else {
+                        resul = false;
                     }
 
                 }
@@ -278,23 +331,23 @@ public class CustomerTicket extends Ticket {
 
 
     @Override
-    public void printCsv(CSVPrinter csvPrinter)throws Exception{
+    public void printCsv(CSVPrinter csvPrinter) throws Exception {
         csvPrinter.printRecord("CustomerTicket", id, status);
-        for(int i = 0; i< this.amount; i++){
+        for (int i = 0; i < this.amount; i++) {
             Product p = productList[i];
-            if(p instanceof PersonalizedProduct) {
-               PersonalizedProduct pp = (PersonalizedProduct) p;
-                csvPrinter.printRecord(id,"PersonalizedProduct",pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice(), pp.getMaxPers(), pp.getPerstonalizations());
-            }else if(p instanceof BasicProduct){
+            if (p instanceof PersonalizedProduct) {
+                PersonalizedProduct pp = (PersonalizedProduct) p;
+                csvPrinter.printRecord(id, "PersonalizedProduct", pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice(), pp.getMaxPers(), pp.getPerstonalizations());
+            } else if (p instanceof BasicProduct) {
                 BasicProduct pp = (BasicProduct) p;
-                csvPrinter.printRecord(id,"BasicProduct",pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice());
+                csvPrinter.printRecord(id, "BasicProduct", pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice());
             } else if (p instanceof Meeting) {
                 Meeting m = (Meeting) p;
                 csvPrinter.printRecord(id, "Meeting", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
-            }else if(p instanceof Food){
+            } else if (p instanceof Food) {
                 Food m = (Food) p;
                 csvPrinter.printRecord(id, "Food", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
-            }else{
+            } else {
                 Service s = (Service) p;
                 csvPrinter.printRecord(id, "Service", s.getMaxUseDate(), s.getName(), s.getId());
             }
