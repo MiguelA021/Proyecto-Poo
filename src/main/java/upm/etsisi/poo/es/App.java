@@ -15,7 +15,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
-import org.jline.keymap.KeyMap;
 
 import static org.jline.builtins.Completers.TreeCompleter.node;
 
@@ -53,7 +52,6 @@ public class App {
     for (Map.Entry<String, List<String>> entry : COMMANDS.entrySet()) {
       String command = entry.getKey();
       List<String> subs = entry.getValue();
-      Object[] subNodes = subs.stream().map(TreeCompleter::node).toArray();
       List<Object> nodeParts = new ArrayList<>();
       nodeParts.add(command);
       for (String sub : subs) {

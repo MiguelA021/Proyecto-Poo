@@ -20,17 +20,15 @@ public class EnterpriseMixedTicket extends Ticket {
         super(id);
     }
 
+    /**
+     * The method checks if the Ticket can be closed, it must have at least either a product or a service.
+     * And if it has services, all of them must be on a valid date
+     */
     @Override
     public boolean canBeClosed() {
-
-        //Tiene al menos un producto y un servicio
-
         if (products.isEmpty() || services.isEmpty()) {
             return false;
         }
-
-        //Todos los servicios tienen que tener una fecha válida
-
         LocalDate today = LocalDate.now();
         for (Service s : services) {
             if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today)) {
@@ -40,19 +38,24 @@ public class EnterpriseMixedTicket extends Ticket {
         return true;
     }
 
+    /**
+     * The method returns the discount applied to the services
+     * @return the discount yet to apply
+     */
     public double getExtraDiscountRate() {
         double rate = services.size() * 0.15;
-
-        /* Sirve de tope por si se pasa de descuentos si quereis lo meteis o no si lo veis absurdo
-
-        if (rate > 1.0) {
+        if (rate > 1.0) {//Se puede quitar, ya que topa el descuento
             rate = 1.0;
         }
-
-         */
         return rate;
     }
 
+    /**
+     * The method adds the product into the ticket
+     * @param p The product we are adding
+     * @param amount if it's an event, it shows the amount of people are coming to it. If it's just a product it shows the amount
+     * @return returns true if the product has been added successfully, else returns false
+     */
     public boolean addProduct(Product p, int amount) {
         boolean resul = true;
         if (this.status != Status.CLOSED) {
@@ -60,12 +63,10 @@ public class EnterpriseMixedTicket extends Ticket {
             if (p == null) {
                 resul = false;
                 System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
-
             } else {
                 if (this.amount == 0) {
                     this.status = Status.OPEN;
                 }
-
                 if (p instanceof Event) {
                     Event event = (Event) p;
                     if (event.fechaValida(LocalDateTime.now())) {
@@ -76,7 +77,6 @@ public class EnterpriseMixedTicket extends Ticket {
                             products.add(event);
                             System.out.println(print(false));
                             System.out.println(ADD_OK);
-
                         } else {
                             System.out.println(MANY_PEOPLE);
                             resul = false;
@@ -108,6 +108,11 @@ public class EnterpriseMixedTicket extends Ticket {
         return resul;
     }
 
+    /**
+     * The method adds the service if the dates are correct
+     * @param s the service given by parameter
+     * @return returns true if the service has been added successfully
+     */
     public boolean addService(Service s) {
         if (s == null) {
             return false;
@@ -115,12 +120,9 @@ public class EnterpriseMixedTicket extends Ticket {
         if (status == Status.CLOSED) {
             return false;
         }
-
         //No valen servicios con fechas caducadas
-
         LocalDate today = LocalDate.now();
         if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today)) return false;
-
         services.add(s);
         if (status == Status.EMPTY) status = Status.OPEN;
         return true;
@@ -134,11 +136,14 @@ public class EnterpriseMixedTicket extends Ticket {
         return new ArrayList<>(services);
     }
 
+    /**
+     * The method prints the ticket
+     * @param close shows if the ticket is closed or not
+     * @return the String ready to print
+     */
     @Override
     public String print(boolean close) {
-
         if (close) this.close(); // solo cerrará si hay >=1 producto y >=1 servicio
-
         StringBuilder sb = new StringBuilder();
         sb.append("Ticket : ").append(this.getId()).append("\n");
         sb.append("Services Included:\n");
@@ -154,11 +159,9 @@ public class EnterpriseMixedTicket extends Ticket {
                 totalPrice += p.getPrice();
                 sb.append("  ").append(p.toString());
             }
-
             double extraRate = this.getExtraDiscountRate();
             double extraDiscount = totalPrice * extraRate;
             double finalPrice = totalPrice - extraDiscount;
-
             sb.append("  Total price: ").append(String.format(Locale.US, "%.3f", totalPrice)).append("\n");
             sb.append("  Total discount: ").append(String.format(Locale.US, "%.3f", extraDiscount)).append("\n");
             sb.append("  Final price: ").append(String.format(Locale.US, "%.3f", finalPrice));
@@ -166,6 +169,11 @@ public class EnterpriseMixedTicket extends Ticket {
         return sb.toString();
     }
 
+    /**
+     * The method removes the ticket with the id given
+     * @param prodId the id of the product, given by parameter
+     * @return returns the product if it has been removed successfully, else returns null
+     */
     public Product ticketRemove(int prodId) {
         Product product = ProductController.getInstance().getProduct(prodId);
         if (product instanceof Service) {
@@ -185,12 +193,13 @@ public class EnterpriseMixedTicket extends Ticket {
         }
     }
 
+    /**
+     * The method returns the String with a specific format
+     * @return the string with the specific format
+     */
     @Override
     public String toStringNew() {
-        StringBuilder sc = new StringBuilder(); // Soy Aaron, lo de format() esta puesto para que siga el formato que
-        // buscamos de fecha.
-        // te lo pongo para que asi no te comas la cabeza con eso. Por lo demás ya te
-        // dejo que sigas con ello
+        StringBuilder sc = new StringBuilder();
         sc.append(TICKET + " " + this.id + "\n");
         sc.append(TICKET_NEW_OK);
         return sc.toString();
