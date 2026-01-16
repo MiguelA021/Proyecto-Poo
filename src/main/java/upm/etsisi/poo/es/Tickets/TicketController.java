@@ -18,14 +18,14 @@ public class TicketController {
         this.ticketData = TicketData.getInstance();
     }
 
-
+    /**
+     * The method adds the product into the ticket,
+     * @param args arguments such as ids or amounts, it must follow the syntax of the command. If not, it won't add it.
+     */
     public void prodAdd(String[] args) {
         try {
             int ticketId = Integer.parseInt(args[2]);
-
             Ticket ticket = TicketData.getInstance().getTicket(ticketId);
-
-
             // -------------------------
             // CASE 1: ADD SERVICE
             // ticket add <ticketId> <cashId> <serviceId>
@@ -34,7 +34,6 @@ public class TicketController {
             if (args.length == 5) {
                 int idProducto = Integer.parseInt(args[4].replace("S", "")) * -1;
                 Service s = (Service) ProductController.getInstance().getProduct(idProducto);
-
                 boolean ok = false;
                 if (ticket instanceof EnterpriseServiceTicket) {
                     ok = ((EnterpriseServiceTicket) ticket).addService(s);
@@ -48,16 +47,13 @@ public class TicketController {
                     System.out.println(INCORRECT);
                     return;
                 }
-
                 if (!ok) {
                     System.out.println(INCORRECT);
                     return;
                 }
-
                 System.out.println("ticket add: ok");
                 return;
             }
-
             // -------------------------
             // CASE 2: ADD PRODUCT
             // ticket add <ticketId> <cashId> <prodId> <amount> [--p...]
@@ -66,10 +62,8 @@ public class TicketController {
                 System.out.println(INCORRECT);
                 return;
             }
-
             int prodId = Integer.parseInt(args[4]);
             int amount = Integer.parseInt(args[5]);
-
             Product product = ProductController.getInstance().getProduct(prodId);
             if (product == null) {
                 System.out.println(NOTEXIST);
@@ -88,13 +82,11 @@ public class TicketController {
                             product.getPrice(),
                             maxPers
                     );
-
                     for (int i = 6; i < args.length; i++) {
                         String personalization = args[i].replaceAll("--p", "");
                         local.addPersonalized(personalization);
                     }
                     local.newPrice();
-
                     customerTicket.ticketAdd(local, amount);
                 } else {
                     customerTicket.ticketAdd(product, amount);
@@ -115,37 +107,32 @@ public class TicketController {
                             product.getPrice(),
                             maxPers
                     );
-
                     for (int i = 6; i < args.length; i++) {
                         String personalization = args[i].replaceAll("--p", "");
                         local.addPersonalized(personalization);
                     }
                     local.newPrice();
-
                     mt.addProduct(local, amount);
                 } else {
                     mt.addProduct(product, amount);
                 }
                 return;
             }
-
             // EnterpriseServiceTicket (solo servicios) u otros: no aceptan productos
             System.out.println(INCORRECT);
-
-
         } catch (NumberFormatException e) {
-
             //TODO catch all exceptions
-
-
             System.out.println(INCORRECT);
         }
     }
 
+    /**
+     * The method removes the product from the ticket, both given by their ids
+     * @param ticketId the id of the ticket, given by parameter
+     * @param prodId the id of the product, given by parameter
+     */
     public void ticketRemove(int ticketId, int prodId) {
-
         Ticket t = TicketData.getInstance().getTicket(ticketId);
-
         if (t instanceof CustomerTicket) {
             Product customerProduct = ((CustomerTicket) t).ticketRemove(prodId);
             if (customerProduct == null) {
@@ -170,18 +157,19 @@ public class TicketController {
         }
     }
 
+    /**
+     * The method adds a new ticket into the customer and also the cashier both given by parameter
+     * @param args arguments such as ids or choices, it must follow the syntax of the command. If not, it won't add it.
+     */
     public void ticketNew(String[] args) {
         if (args.length != 4 && args.length != 5 && args.length != 6) {
             System.out.println(INCORRECT);
             return;
         }
-
         Integer ticketId;
         int cashId;
         int userId;
-
         // ticket new [<id>] <cashId> <userId> -[c|p|s]
-
         try {
             userId = CustomerController.getInstance().dniToId(args[3]);
             Customer customer = CustomerController.getInstance().getCustomer(userId);
@@ -286,14 +274,16 @@ public class TicketController {
                     }
                 }
             }
-
         } catch (NumberFormatException e) {
             System.out.println(INCORRECT);
         }
 
     }
 
-
+    /**
+     * The method prints the ticket if it's not empty
+     * @param idTicket the id of the ticket given by parameter
+     */
     public void ticketPrint(int idTicket) {
         Ticket ticket = ticketData.getTicket(idTicket);
         if (ticket != null) {
