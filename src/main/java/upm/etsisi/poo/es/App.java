@@ -6,12 +6,16 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.jline.builtins.Completers.TreeCompleter;
 import org.jline.reader.*;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.AttributedString;
 import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.AttributedStyle;
 import upm.etsisi.poo.es.Commands.CommandController;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
+import upm.etsisi.poo.es.Product.ProductController;
+import upm.etsisi.poo.es.Tickets.TicketData;
+import upm.etsisi.poo.es.User.CashierController;
+import upm.etsisi.poo.es.User.CustomerController;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -20,11 +24,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
-
-import upm.etsisi.poo.es.Product.ProductController;
-import upm.etsisi.poo.es.Tickets.TicketData;
-import upm.etsisi.poo.es.User.CashierController;
-import upm.etsisi.poo.es.User.CustomerController;
 
 import static org.jline.builtins.Completers.TreeCompleter.node;
 
@@ -251,15 +250,16 @@ public class App {
     }
 
     private void renovate(CSVParser csvParser) throws IOException {
-        boolean[] where = {true, true, true, true};
+        boolean[] where = {true, true, true};
         for(CSVRecord csvRecord:csvParser) {
             if (csvRecord.get(0).equals("Products") || where[0]) {
                 ProductController.getInstance().renovateInventory(csvRecord, where);
-            }else if(!where[0] && where[1]) {
+            }else if(where[1]) {
                 CashierController.getInstance().csvCashiers(csvRecord, where);
-            }else if(!where[0] && !where[1] && where[2]){
+            }else if( where[2]){
                 CustomerController.getInstance().csvCustomers(csvRecord, where);
             }
         }
+        TicketData.getInstance().csvTickets(csvParser);
     }
 }

@@ -7,14 +7,21 @@ import upm.etsisi.poo.es.Product.Service;
 import upm.etsisi.poo.es.User.*;
 
 import javax.swing.*;
-import java.time.LocalDate;
 
 import static upm.etsisi.poo.es.Commands.Command.*;
 
 public class TicketController {
+    private static TicketController instance;
     private TicketData ticketData;
 
-    public TicketController() {
+    public static TicketController getInstance() {
+        if (instance == null) {
+            instance = new TicketController();
+        }
+        return instance;
+    }
+
+    private TicketController() {
         this.ticketData = TicketData.getInstance();
     }
 
@@ -186,11 +193,11 @@ public class TicketController {
             userId = CustomerController.getInstance().dniToId(args[3]);
             Customer customer = CustomerController.getInstance().getCustomer(userId);
             if (customer == null) {
-                if(args.length>4) {
+                if (args.length > 4) {
                     userId = CustomerController.getInstance().dniToId(args[4]);
                 }
                 customer = CustomerController.getInstance().getCustomer(userId);
-                if(customer == null) {
+                if (customer == null) {
                     System.out.println("User not found");
                     return;
                 }
@@ -200,7 +207,7 @@ public class TicketController {
                     // ticket new [<id>] <cashId> <userId> -[c|p|s]
                     cashId = Integer.parseInt(args[3].replaceAll("UW", ""));
                     Cashier cashier = CashierController.getInstance().searchCasherById(cashId);
-                    if(cashier == null){
+                    if (cashier == null) {
                         System.out.println("Cashier not found");
                         return;
                     }
@@ -225,23 +232,23 @@ public class TicketController {
                     ticketId = Integer.valueOf(args[2]);
                     cashId = Integer.parseInt(args[3].replaceAll("UW", ""));
                     Cashier cashier = CashierController.getInstance().searchCasherById(cashId);
-                    if(cashier == null){
+                    if (cashier == null) {
                         System.out.println("Cashier not found");
                         return;
                     }
                     switch (args[5]) {
                         case "-s":
-                            if(!TicketData.getInstance().addTicket(ticketId, "services")){
+                            if (!TicketData.getInstance().addTicket(ticketId, "services")) {
                                 System.out.println(ID_REPEAT);
-                            }else {
+                            } else {
                                 CashierController.getInstance().addTicket(ticketId, cashId);
                                 CustomerController.getInstance().addTicket(ticketId, userId);
                             }
                             break;
                         case "-c":
-                            if(!TicketData.getInstance().addTicket(ticketId, "combined")){
+                            if (!TicketData.getInstance().addTicket(ticketId, "combined")) {
                                 System.out.println(ID_REPEAT);
-                            }else {
+                            } else {
                                 CashierController.getInstance().addTicket(ticketId, cashId);
                                 CustomerController.getInstance().addTicket(ticketId, userId);
                             }
@@ -261,7 +268,7 @@ public class TicketController {
                     cashId = Integer.parseInt(cashierId);
 
                     Cashier cashier = CashierController.getInstance().searchCasherById(cashId);
-                    if(cashier == null){
+                    if (cashier == null) {
                         System.out.println("Cashier not found");
                         return;
                     }
@@ -273,7 +280,7 @@ public class TicketController {
                     String cashierId = args[3].replaceAll("UW", "");
                     cashId = Integer.parseInt(cashierId);
                     Cashier cashier = CashierController.getInstance().searchCasherById(cashId);
-                    if(cashier == null){
+                    if (cashier == null) {
                         System.out.println("Cashier not found");
                         return;
                     }

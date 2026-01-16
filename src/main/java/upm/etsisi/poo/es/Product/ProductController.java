@@ -283,7 +283,7 @@ public class ProductController {
                     break;
                 case "Service":
                     try {
-                        Service basicProduct = new Service(LocalDate.parse(csvRecord.get(1)), csvRecord.get(2));
+                        Service basicProduct = new Service(LocalDate.parse(csvRecord.get(1)), csvRecord.get(2), Integer.parseInt(csvRecord.get(3)));
                         this.prodAdd(basicProduct);
                     } catch (NullPointerException e) {
                         System.out.println("could not get product");

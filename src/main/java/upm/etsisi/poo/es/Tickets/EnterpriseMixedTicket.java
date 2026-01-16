@@ -1,5 +1,6 @@
 package upm.etsisi.poo.es.Tickets;
 
+import org.apache.commons.csv.CSVPrinter;
 import upm.etsisi.poo.es.Product.Event;
 import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Product.ProductController;
@@ -18,6 +19,10 @@ public class EnterpriseMixedTicket extends Ticket {
 
     public EnterpriseMixedTicket(Integer id) {
         super(id);
+    }
+    public EnterpriseMixedTicket(Integer id, Status status){
+        super(id);
+        this.status = status;
     }
 
     @Override
@@ -194,6 +199,17 @@ public class EnterpriseMixedTicket extends Ticket {
         sc.append(TICKET + " " + this.id + "\n");
         sc.append(TICKET_NEW_OK);
         return sc.toString();
+    }
+
+    @Override
+    public void printCsv(CSVPrinter csvPrinter) throws Exception {
+        csvPrinter.printRecord("EnterpriseMixedTicket", id, status);
+        for (Product product : products) {
+            product.printCsv(csvPrinter);
+        }
+        for(Service service:services){
+            service.printCsv(csvPrinter);
+        }
     }
 
 }
