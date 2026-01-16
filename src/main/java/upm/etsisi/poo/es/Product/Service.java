@@ -17,6 +17,12 @@ public class Service extends Product {
     private final LocalDate maxUseDate;
     private final String name;
 
+    public Service(LocalDate maxUseDate, String name, Integer id){
+        this.id = id;
+        this.idString = id + "S";
+        this.maxUseDate = maxUseDate;
+        this.name = name;
+    }
     public Service(LocalDate maxUseDate, String name) {
         this.id = NEXT * -1;
         this.idString = NEXT++ + "S";
@@ -66,6 +72,6 @@ public class Service extends Product {
 
     @Override
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
-        csvPrinter.printRecord("Service", maxUseDate, name);
+        csvPrinter.printRecord("Service", maxUseDate, name, id);
     }
 }

@@ -9,13 +9,16 @@ import upm.etsisi.poo.es.type;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Locale;
 
 public class CustomerTicket extends Ticket {
 
     public CustomerTicket(Integer id) {
         super(id);
+    }
+    public CustomerTicket(Integer id, Status status){
+        super(id);
+        this.status = status;
     }
 
     @Override
@@ -282,6 +285,7 @@ public class CustomerTicket extends Ticket {
 
     @Override
     public void printCsv(CSVPrinter csvPrinter)throws Exception{
+        csvPrinter.printRecord("CustomerTicket", id, status);
         for(int i = 0; i< this.amount; i++){
             productList[i].printCsv(csvPrinter);
         }

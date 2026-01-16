@@ -31,7 +31,9 @@ public class Cashier extends User {
     tickets.sort(Integer::compareTo);
     for (Integer id : tickets) {
       Ticket ticket = TicketData.getInstance().getTicket(id);
-      str.append(ticket.formatList()).append("\n");
+      if(ticket!= null) {
+          str.append(ticket.formatList()).append("\n");
+      }
     }
     return str.toString();
   }

@@ -85,11 +85,13 @@ public class PersonalizedProduct extends BasicProduct {
         return sb.toString();
 
     }
+
     @Override
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
-        csvPrinter.printRecord("PersonalizedProduct", id, name,category.name(), price, maxPers);
-        for(String s: personalizaciones){
-            csvPrinter.printRecord(s);
+        if (personalizaciones.isEmpty()) {
+            csvPrinter.printRecord("PersonalizedProduct", id, name, category.name(), price, maxPers);
+        } else {
+            csvPrinter.printRecord("PersonalizedProduct", id, name, category.name(), price, maxPers, personalizaciones);
         }
     }
 }
