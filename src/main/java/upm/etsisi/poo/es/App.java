@@ -251,6 +251,8 @@ public class App {
 
     private void renovate(CSVParser csvParser) throws IOException {
         boolean[] where = {true, true, true};
+        int[] ticket = new int[2]; // el primer int es el id del ticket, el segundo es el estado al que se tiene que dejar{0:EMPTY, 1:OPEN, 2:CLOSE}
+        ticket[0] = Integer.MIN_VALUE;
         for(CSVRecord csvRecord:csvParser) {
             if (csvRecord.get(0).equals("Products") || where[0]) {
                 ProductController.getInstance().renovateInventory(csvRecord, where);
@@ -258,8 +260,10 @@ public class App {
                 CashierController.getInstance().csvCashiers(csvRecord, where);
             }else if( where[2]){
                 CustomerController.getInstance().csvCustomers(csvRecord, where);
+            }else{
+
+                TicketData.getInstance().csvTickets(csvRecord, ticket);
             }
         }
-        TicketData.getInstance().csvTickets(csvParser);
     }
 }

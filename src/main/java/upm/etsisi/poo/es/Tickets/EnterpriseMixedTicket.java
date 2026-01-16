@@ -1,10 +1,7 @@
 package upm.etsisi.poo.es.Tickets;
 
 import org.apache.commons.csv.CSVPrinter;
-import upm.etsisi.poo.es.Product.Event;
-import upm.etsisi.poo.es.Product.Product;
-import upm.etsisi.poo.es.Product.ProductController;
-import upm.etsisi.poo.es.Product.Service;
+import upm.etsisi.poo.es.Product.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +17,8 @@ public class EnterpriseMixedTicket extends Ticket {
     public EnterpriseMixedTicket(Integer id) {
         super(id);
     }
-    public EnterpriseMixedTicket(Integer id, Status status){
+
+    public EnterpriseMixedTicket(Integer id, Status status) {
         super(id);
         this.status = status;
     }
@@ -203,13 +201,26 @@ public class EnterpriseMixedTicket extends Ticket {
 
     @Override
     public void printCsv(CSVPrinter csvPrinter) throws Exception {
-        csvPrinter.printRecord("EnterpriseMixedTicket", id, status);
-        for (Product product : products) {
-            product.printCsv(csvPrinter);
-        }
-        for(Service service:services){
-            service.printCsv(csvPrinter);
-        }
-    }
 
+        csvPrinter.printRecord("EnterpriseMixedTicket", id, status);
+        for (Product p : products) {
+            if (p instanceof PersonalizedProduct) {
+                PersonalizedProduct pp = (PersonalizedProduct) p;
+                csvPrinter.printRecord(id, "PersonalizedProduct", pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice(), pp.getMaxPers(), pp.getPerstonalizations());
+            } else if (p instanceof BasicProduct) {
+                BasicProduct pp = (BasicProduct) p;
+                csvPrinter.printRecord(id, "BasicProduct", pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice());
+            } else if (p instanceof Meeting) {
+                Meeting m = (Meeting) p;
+                csvPrinter.printRecord(id, "Meeting", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
+            } else if (p instanceof Food) {
+                Food m = (Food) p;
+                csvPrinter.printRecord(id, "Food", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
+            }
+        }
+        for (Service s : services) {
+            csvPrinter.printRecord(id, "Service", s.getMaxUseDate(), s.getName(), s.getId());
+        }
+
+    }
 }

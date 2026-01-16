@@ -20,7 +20,8 @@ public class EnterpriseServiceTicket extends Ticket {
         super(id);
         this.productList = null;
     }
-    public EnterpriseServiceTicket(Integer id, Status status){
+
+    public EnterpriseServiceTicket(Integer id, Status status) {
         super(id);
         this.productList = null;
         this.status = status;
@@ -59,7 +60,7 @@ public class EnterpriseServiceTicket extends Ticket {
     }
 
     @Override
-    public String print( boolean close) {
+    public String print(boolean close) {
 
         if (close) {
             this.close();
@@ -77,10 +78,10 @@ public class EnterpriseServiceTicket extends Ticket {
 
     public Service ticketRemove(int prodId) {
         Product product = ProductController.getInstance().getProduct(prodId);
-        if(!(product instanceof Service)){
+        if (!(product instanceof Service)) {
             System.out.println(INCORRECT);
             return null;
-        }else{
+        } else {
             this.services.remove((Service) product);
             return (Service) product;
         }
@@ -97,11 +98,12 @@ public class EnterpriseServiceTicket extends Ticket {
         sc.append(TICKET_NEW_OK);
         return sc.toString();
     }
+
     @Override
     public void printCsv(CSVPrinter csvPrinter) throws Exception {
-        csvPrinter.printRecord("EnterpriseServiceTicket",  id, status);
-        for (Product product : services) {
-            product.printCsv(csvPrinter);
+        csvPrinter.printRecord("EnterpriseServiceTicket", id, status);
+        for (Service s : services) {
+            csvPrinter.printRecord(id, "Service", s.getMaxUseDate(), s.getName(), s.getId());
         }
     }
 }

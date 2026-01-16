@@ -94,4 +94,8 @@ public class PersonalizedProduct extends BasicProduct {
             csvPrinter.printRecord("PersonalizedProduct", id, name, category.name(), price, maxPers, personalizaciones);
         }
     }
+
+    public Object getPerstonalizations() {
+        return this.personalizaciones;
+    }
 }

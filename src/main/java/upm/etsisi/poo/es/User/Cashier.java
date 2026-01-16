@@ -19,24 +19,7 @@ public class Cashier extends User {
     this.id = id;
   }
 
-  /**
-   * The method runs through the tree and gives back the pair [K,V] ordered by the
-   * key
-   *
-   * @return The string returned is the list of tickets that belongs to the atm
-   *         ordered by their id
-   */
-  public String listTickets() {
-    StringBuilder str = new StringBuilder();
-    tickets.sort(Integer::compareTo);
-    for (Integer id : tickets) {
-      Ticket ticket = TicketData.getInstance().getTicket(id);
-      if(ticket!= null) {
-          str.append(ticket.formatList()).append("\n");
-      }
-    }
-    return str.toString();
-  }
+
 
   /**
    * The method adds the ticket given by id into the cashers tree
@@ -104,5 +87,15 @@ public class Cashier extends User {
       for(Integer tickid:tickets){
           csvPrinter.printRecord(id, tickid);
       }
+    }
+
+    public String listTickets() {
+      StringBuilder sb = new StringBuilder();
+      if(!tickets.isEmpty()) {
+          for (Integer id : tickets) {
+              sb.append(TicketData.getInstance().getTicket(id).formatList() + "\n");
+          }
+      }
+        return sb.toString();
     }
 }
