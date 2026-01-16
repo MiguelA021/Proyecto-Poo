@@ -1,5 +1,8 @@
 package upm.etsisi.poo.es.Product;
 
+import org.apache.commons.csv.CSVPrinter;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -33,6 +36,11 @@ public class Meeting extends Event {
                 ", name:'" + this.name + "'" +
                 ", price:" + this.price +
                 ", date of Event:" + this.expiracyDate.toLocalDate() +
-                ", max people allowed:" + this.maxPersonas + "}\n";
+                ", max people allowed:" + this.maxPersonas + "}";
+    }
+
+    @Override
+    public void printCsv(CSVPrinter csvPrinter) throws IOException {
+        csvPrinter.printRecord("Meeting", id, name, pricePerPerson, expiracyDate.toLocalDate());
     }
 }

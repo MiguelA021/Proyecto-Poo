@@ -13,7 +13,7 @@ public class TicketCommand implements Command {
     private TicketController ticketController;
 
     public TicketCommand() {
-        this.ticketController = new TicketController();
+        this.ticketController = TicketController.getInstance();
     }
 
     @Override
@@ -106,15 +106,11 @@ public class TicketCommand implements Command {
 
 
     private void ticketList() {
-        CashierController custC = CashierController.getInstance();
-        HashMap<Integer, Cashier> cashers = custC.getMap();
-        System.out.println("Ticket list: ");
-
-        for (Map.Entry<Integer, Cashier> entry : cashers.entrySet()) {
-            Cashier casher = entry.getValue();
-            System.out.print(casher.listTickets());
+        CashierController cashierController = CashierController.getInstance();
+        HashMap<Integer,Cashier> cashiers = cashierController.getMap();
+        for (Integer id : cashiers.keySet()){
+            cashierController.listTicketsOnCasher(id);
         }
-        System.out.println("ticket list: ok");
     }
 
 

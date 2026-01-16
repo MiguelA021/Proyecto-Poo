@@ -1,5 +1,8 @@
 package upm.etsisi.poo.es.Product;
 
+import org.apache.commons.csv.CSVPrinter;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -14,8 +17,14 @@ public class Service extends Product {
     private final LocalDate maxUseDate;
     private final String name;
 
+    public Service(LocalDate maxUseDate, String name, Integer id){
+        this.id = id;
+        this.idString = id + "S";
+        this.maxUseDate = maxUseDate;
+        this.name = name;
+    }
     public Service(LocalDate maxUseDate, String name) {
-        this.id = NEXT*-1;
+        this.id = NEXT * -1;
         this.idString = NEXT++ + "S";
         this.maxUseDate = maxUseDate;
         this.name = name;
@@ -51,7 +60,7 @@ public class Service extends Product {
         return maxUseDate;
     }
 
-     //Para mostrarlo en listados/prints (sin precio ni nombre)
+    //Para mostrarlo en listados/prints (sin precio ni nombre)
 
     @Override
     public String toString() {
@@ -59,5 +68,10 @@ public class Service extends Product {
         Date expiration = Date.from(this.maxUseDate.atStartOfDay(ZoneId.of("Europe/Madrid")).toInstant());
 
         return "{class:ProductService, id:" + id * -1 + ", category:" + this.name + ", expiration: " + expiration + "}";
+    }
+
+    @Override
+    public void printCsv(CSVPrinter csvPrinter) throws IOException {
+        csvPrinter.printRecord("Service", maxUseDate, name, id);
     }
 }

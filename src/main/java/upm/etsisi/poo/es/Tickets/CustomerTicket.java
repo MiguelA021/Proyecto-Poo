@@ -1,14 +1,11 @@
 package upm.etsisi.poo.es.Tickets;
 
-import upm.etsisi.poo.es.Product.BasicProduct;
-import upm.etsisi.poo.es.Product.Event;
-import upm.etsisi.poo.es.Product.PersonalizedProduct;
-import upm.etsisi.poo.es.Product.Product;
+import org.apache.commons.csv.CSVPrinter;
+import upm.etsisi.poo.es.Product.*;
 import upm.etsisi.poo.es.type;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Locale;
 
 public class CustomerTicket extends Ticket {
@@ -17,17 +14,23 @@ public class CustomerTicket extends Ticket {
         super(id);
     }
 
+    public CustomerTicket(Integer id, Status status) {
+        super(id);
+        this.status = status;
+    }
+
     @Override
     public String print(boolean close) {
         return ticketPrint(close);
     }
 
 
-
     @Override
     public boolean canBeClosed() {
-        return false;
+        LocalDateTime now = LocalDateTime.now();
+        return comprobarFechasTodosEventos(now);
     }
+
 
     /**
      * The method adds the product given, and it also prints it. The ticket status
@@ -67,10 +70,19 @@ public class CustomerTicket extends Ticket {
                         if (amount <= event.getMaxPersonas()) {
 
                             double price = event.getPricePerPerson() * amount;
-                            event.setPrice(price);
+                            if (event instanceof Meeting) {
+                                System.out.println(event.getExpiryDate().toLocalDate().toString());
+                                Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPricePerPerson(), event.getExpiryDate().toLocalDate().toString());
+                                meeting.setPrice(price);
+                                productList[this.amount] = meeting;
+                                this.amount++;
+                            } else {
+                                Food food = new Food(event.getId(), event.getName(), event.getPricePerPerson(), event.getExpiryDate().toLocalDate().toString());
+                                food.setPrice(price);
+                                productList[this.amount] = food;
+                                this.amount++;
+                            }
 
-                            productList[this.amount] = event;
-                            this.amount++;
 
                             System.out.println(ticketPrint(false));
                             System.out.println(ADD_OK);
@@ -97,6 +109,64 @@ public class CustomerTicket extends Ticket {
                     } else {
                         resul = false;
                         System.out.println(ERROR_FULL);
+                    }
+
+                }
+
+            }
+        } else {
+            resul = false;
+            System.out.println("ERROR: the ticket is closed. It can't be modified");
+        }
+        return resul;
+    }
+
+    public boolean ticketAddNoString(Product product, int amount) {
+        boolean resul = true;
+        if (this.status != Status.CLOSED) {
+            int before = this.amount;
+            if (product == null) {
+                resul = false;
+
+            } else {
+                if (this.amount == 0) {
+                    this.status = Status.OPEN;
+                }
+
+                if (product instanceof Event) {
+                    Event event = (Event) product;
+                    if (event.fechaValida(LocalDateTime.now())) {
+                        if (amount <= event.getMaxPersonas()) {
+                            double price = event.getPricePerPerson() * amount;
+                            if (event instanceof Meeting) {
+                                System.out.println(event.getExpiryDate().toLocalDate().toString());
+                                Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPricePerPerson(), event.getExpiryDate().toLocalDate().toString());
+                                meeting.setPrice(price);
+                                productList[this.amount] = meeting;
+                                this.amount++;
+                            } else {
+                                Food food = new Food(event.getId(), event.getName(), event.getPricePerPerson(), event.getExpiryDate().toLocalDate().toString());
+                                food.setPrice(price);
+                                productList[this.amount] = food;
+                                this.amount++;
+                            }
+                        } else {
+                            resul = false;
+                        }
+                    } else {
+                    }
+
+                } else {
+                    int i = 0;
+                    while (this.amount < MAX_PRODUCT && i < amount) {
+                        productList[this.amount] = product;
+                        this.amount++;
+                        i++;
+                    }
+                    if ((this.amount - before) == amount) {
+                        resul = true;
+                    } else {
+                        resul = false;
                     }
 
                 }
@@ -186,13 +256,8 @@ public class CustomerTicket extends Ticket {
         StringBuilder sc = new StringBuilder();
 
         if (close) {
-            LocalDateTime now = LocalDateTime.now();
-            dates.add(now);
-            boolean validClose = comprobarFechasTodosEventos(now);
-            if (validClose) {
-                this.status = Status.CLOSED;
-            } else
-                System.out.println(DONT_CLOSE_NOT_VALID_TIME);
+            this.close();
+            if (!this.close()) System.out.println(PERIOD_NOT_VALID);
         }
         sc.append(TICKET + " ").append(toStringId()).append("\n");
         if (this.amount > 0 && this.productList[0] != null) {
@@ -278,5 +343,29 @@ public class CustomerTicket extends Ticket {
         Arrays.sort(this.productList, 0, this.amount, nameComp);
     }
 
+
+    @Override
+    public void printCsv(CSVPrinter csvPrinter) throws Exception {
+        csvPrinter.printRecord("CustomerTicket", id, status);
+        for (int i = 0; i < this.amount; i++) {
+            Product p = productList[i];
+            if (p instanceof PersonalizedProduct) {
+                PersonalizedProduct pp = (PersonalizedProduct) p;
+                csvPrinter.printRecord(id, "PersonalizedProduct", pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice(), pp.getMaxPers(), pp.getPerstonalizations());
+            } else if (p instanceof BasicProduct) {
+                BasicProduct pp = (BasicProduct) p;
+                csvPrinter.printRecord(id, "BasicProduct", pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice());
+            } else if (p instanceof Meeting) {
+                Meeting m = (Meeting) p;
+                csvPrinter.printRecord(id, "Meeting", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
+            } else if (p instanceof Food) {
+                Food m = (Food) p;
+                csvPrinter.printRecord(id, "Food", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
+            } else {
+                Service s = (Service) p;
+                csvPrinter.printRecord(id, "Service", s.getMaxUseDate(), s.getName(), s.getId());
+            }
+        }
+    }
 
 }

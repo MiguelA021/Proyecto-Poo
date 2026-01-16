@@ -5,10 +5,10 @@ import upm.etsisi.poo.es.User.CashierController;
 
 public class CashierCommand implements Command {
 
-  @Override
-  public String getName() {
-    return "cash";
-  }
+    @Override
+    public String getName() {
+        return "cash";
+    }
 
   /**
    * The method calls the method related to the command given by the user
@@ -52,19 +52,23 @@ public class CashierCommand implements Command {
     if (args.length != 5 && args.length != 4) {
       System.out.println(INCORRECT);
     }
+    boolean resul = false;
     try {
       String name;
       String email;
       if (args.length == 4) {
         name = args[2];
         email = args[3];
-        cashierController.addCasher(null, name, email);
+        resul = cashierController.addCasher(null, name, email, false);
       } else {
         String casherId = args[2].replaceAll("UW", "");
         int cash = Integer.parseInt(casherId);
         name = args[3];
         email = args[4];
-        cashierController.addCasher(cash, name, email);
+        resul = cashierController.addCasher(cash, name, email,false);
+      }
+      if(resul) {
+          System.out.println("cash add: ok");
       }
     } catch (NumberFormatException e) {
       System.out.println(INCORRECT);

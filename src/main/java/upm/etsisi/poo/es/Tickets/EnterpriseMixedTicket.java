@@ -1,9 +1,8 @@
 package upm.etsisi.poo.es.Tickets;
 
-import upm.etsisi.poo.es.Product.Event;
-import upm.etsisi.poo.es.Product.Product;
-import upm.etsisi.poo.es.Product.ProductController;
-import upm.etsisi.poo.es.Product.Service;
+import org.apache.commons.csv.CSVPrinter;
+import org.jline.nativ.Kernel32;
+import upm.etsisi.poo.es.Product.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +19,11 @@ public class EnterpriseMixedTicket extends Ticket {
         super(id);
     }
 
+    public EnterpriseMixedTicket(Integer id, Status status) {
+        super(id);
+        this.status = status;
+    }
+
     /**
      * The method checks if the Ticket can be closed, it must have at least either a product or a service.
      * And if it has services, all of them must be on a valid date
@@ -29,11 +33,19 @@ public class EnterpriseMixedTicket extends Ticket {
         if (products.isEmpty() || services.isEmpty()) {
             return false;
         }
-        LocalDate today = LocalDate.now();
+        LocalDateTime today = LocalDateTime.now();
         for (Service s : services) {
-            if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today)) {
+            if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today.toLocalDate())) {
                 return false;
             }
+        for(Product product : products){
+            if(product instanceof Event){
+                Event event = (Event) product;
+                if(!event.fechaValida(today)) {
+                    return false;
+                }
+            }
+        }
         }
         return true;
     }
@@ -63,20 +75,30 @@ public class EnterpriseMixedTicket extends Ticket {
             if (p == null) {
                 resul = false;
                 System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
+
             } else {
                 if (this.amount == 0) {
                     this.status = Status.OPEN;
                 }
+
                 if (p instanceof Event) {
                     Event event = (Event) p;
                     if (event.fechaValida(LocalDateTime.now())) {
                         if (amount <= event.getMaxPersonas()) {
 
                             double price = event.getPricePerPerson() * amount;
-                            event.setPrice(price);
-                            products.add(event);
+                            if(event instanceof Meeting){
+                                Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
+                                meeting.setPrice(price);
+                                products.add(meeting);
+                            }else{
+                                Food food = new Food(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
+                                food.setPrice(price);
+                                products.add(food);
+                            }
                             System.out.println(print(false));
                             System.out.println(ADD_OK);
+
                         } else {
                             System.out.println(MANY_PEOPLE);
                             resul = false;
@@ -108,6 +130,64 @@ public class EnterpriseMixedTicket extends Ticket {
         return resul;
     }
 
+
+    public boolean addProductNoString(Product p, int amount) {
+        boolean resul = true;
+        if (this.status != Status.CLOSED) {
+            int before = this.amount;
+            if (p == null) {
+                resul = false;
+                System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
+
+            } else {
+                if (this.amount == 0) {
+                    this.status = Status.OPEN;
+                }
+
+                if (p instanceof Event) {
+                    Event event = (Event) p;
+                    if (event.fechaValida(LocalDateTime.now())) {
+                        if (amount <= event.getMaxPersonas()) {
+                            double price = event.getPricePerPerson() * amount;
+                            if(event instanceof Meeting){
+                                Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
+                                meeting.setPrice(price);
+                                products.add(meeting);
+                            }else{
+                                Food food = new Food(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
+                                food.setPrice(price);
+                                products.add(food);
+                            }
+
+                        } else {
+                            System.out.println(MANY_PEOPLE);
+                            resul = false;
+                        }
+                    } else {
+                        System.out.println(PERIOD_NOT_VALID);
+                    }
+
+                } else {
+                    for (int i = 0; i < amount; i++) {
+                        products.add(p);
+                    }
+                    if ((this.amount - before) == amount) {
+                        resul = true;
+                    } else {
+                        resul = false;
+                        System.out.println(ERROR_FULL);
+                    }
+
+                }
+
+            }
+        } else {
+            resul = false;
+            System.out.println("ERROR: the ticket is closed. It can't be modified");
+        }
+        return resul;
+    }
+
     /**
      * The method adds the service if the dates are correct
      * @param s the service given by parameter
@@ -120,9 +200,12 @@ public class EnterpriseMixedTicket extends Ticket {
         if (status == Status.CLOSED) {
             return false;
         }
+
         //No valen servicios con fechas caducadas
+
         LocalDate today = LocalDate.now();
         if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today)) return false;
+
         services.add(s);
         if (status == Status.EMPTY) status = Status.OPEN;
         return true;
@@ -143,7 +226,9 @@ public class EnterpriseMixedTicket extends Ticket {
      */
     @Override
     public String print(boolean close) {
-        if (close) this.close(); // solo cerrará si hay >=1 producto y >=1 servicio
+
+        if (close) if(!this.close()) System.out.println(PERIOD_NOT_VALID); // solo cerrará si hay >=1 producto y >=1 servicio
+
         StringBuilder sb = new StringBuilder();
         sb.append("Ticket : ").append(this.getId()).append("\n");
         sb.append("Services Included:\n");
@@ -159,9 +244,11 @@ public class EnterpriseMixedTicket extends Ticket {
                 totalPrice += p.getPrice();
                 sb.append("  ").append(p.toString());
             }
+
             double extraRate = this.getExtraDiscountRate();
             double extraDiscount = totalPrice * extraRate;
             double finalPrice = totalPrice - extraDiscount;
+
             sb.append("  Total price: ").append(String.format(Locale.US, "%.3f", totalPrice)).append("\n");
             sb.append("  Total discount: ").append(String.format(Locale.US, "%.3f", extraDiscount)).append("\n");
             sb.append("  Final price: ").append(String.format(Locale.US, "%.3f", finalPrice));
@@ -205,4 +292,28 @@ public class EnterpriseMixedTicket extends Ticket {
         return sc.toString();
     }
 
+    @Override
+    public void printCsv(CSVPrinter csvPrinter) throws Exception {
+
+        csvPrinter.printRecord("EnterpriseMixedTicket", id, status);
+        for (Product p : products) {
+            if (p instanceof PersonalizedProduct) {
+                PersonalizedProduct pp = (PersonalizedProduct) p;
+                csvPrinter.printRecord(id, "PersonalizedProduct", pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice(), pp.getMaxPers(), pp.getPerstonalizations());
+            } else if (p instanceof BasicProduct) {
+                BasicProduct pp = (BasicProduct) p;
+                csvPrinter.printRecord(id, "BasicProduct", pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice());
+            } else if (p instanceof Meeting) {
+                Meeting m = (Meeting) p;
+                csvPrinter.printRecord(id, "Meeting", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
+            } else if (p instanceof Food) {
+                Food m = (Food) p;
+                csvPrinter.printRecord(id, "Food", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
+            }
+        }
+        for (Service s : services) {
+            csvPrinter.printRecord(id, "Service", s.getMaxUseDate(), s.getName(), s.getId());
+        }
+
+    }
 }

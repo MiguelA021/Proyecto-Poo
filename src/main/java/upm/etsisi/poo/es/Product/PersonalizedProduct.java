@@ -1,7 +1,9 @@
 package upm.etsisi.poo.es.Product;
 
+import org.apache.commons.csv.CSVPrinter;
 import upm.etsisi.poo.es.type;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -32,7 +34,7 @@ public class PersonalizedProduct extends BasicProduct {
             }
         } else {
             sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("', category: ").append(this.category).append(", price:").append(this.price);
-            sb.append(" maxPersonal:").append(maxPers).append("}\n");
+            sb.append(" maxPersonal:").append(maxPers).append("}");
         }
 
         return sb.toString();
@@ -82,5 +84,18 @@ public class PersonalizedProduct extends BasicProduct {
 
         return sb.toString();
 
+    }
+
+    @Override
+    public void printCsv(CSVPrinter csvPrinter) throws IOException {
+        if (personalizaciones.isEmpty()) {
+            csvPrinter.printRecord("PersonalizedProduct", id, name, category.name(), price, maxPers);
+        } else {
+            csvPrinter.printRecord("PersonalizedProduct", id, name, category.name(), price, maxPers, personalizaciones);
+        }
+    }
+
+    public Object getPerstonalizations() {
+        return this.personalizaciones;
     }
 }

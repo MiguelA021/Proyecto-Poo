@@ -1,17 +1,23 @@
 package upm.etsisi.poo.es.User;
 
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVRecord;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 
 public class CashierController {
-  private static CashierController instance;
-  public static final String ID_ERROR = "The id given has already been  used";
-  HashMap<Integer, Cashier> cashers;
+    private static CashierController instance;
+    public static final String ID_ERROR = "The id given has already been  used";
+    HashMap<Integer, Cashier> cashers;
 
-  private CashierController() {
-    this.cashers = new HashMap<Integer, Cashier>();
-  }
+    private CashierController() {
+        this.cashers = new HashMap<Integer, Cashier>();
+    }
 
   /**
    * The method returns the unique instance of the class
@@ -32,31 +38,25 @@ public class CashierController {
     return this.cashers;
   }
 
-  /**
-   * The method adds the cashier if the id has not been already used
-   * @param id The id given by parameter, if null it generates one randomly
-   * @param name the name given by parameter
-   * @param email the email given by parameter
-   * @return the method returns true if the cashier has been added successfully, else return false
-   */
-  public boolean addCasher(Integer id, String name, String email) {
-    boolean resul = true;
-    if (id == null) {
-      do {
-        id = (int) (Math.random() * 10000000);
-      } while (cashers.containsKey(id));
+    public boolean addCasher(Integer id, String name, String email, boolean charge) {
+        boolean resul = true;
+        if (id == null) {
+            do {
+                id = (int) (Math.random() * 10000000);
+            } while (cashers.containsKey(id));
+        }
+        if (!cashers.containsKey(id)) {
+            Cashier cashier = new Cashier(email, name, id.toString());
+            cashers.put(id, cashier);
+            if(!charge) {
+                System.out.println(cashier.toString());
+            }
+        } else {
+            System.out.println(ID_ERROR);
+            resul = false;
+        }
+        return resul;
     }
-    if (!cashers.containsKey(id)) {
-      Cashier cashier = new Cashier(email, name, id.toString());
-      cashers.put(id, cashier);
-      System.out.println(cashier.toString());
-      System.out.println("cash add: ok");
-    } else {
-      System.out.println(ID_ERROR);
-      resul = false;
-    }
-    return resul;
-  }
 
   /**
    * The method list the cashiers ordered by their name
@@ -73,7 +73,7 @@ public class CashierController {
       System.out.println("no cashiers in store");
     }
 
-  }
+    }
 
   /**
    * The method turns the tree into a list ordered by the name of the cashiers
@@ -85,13 +85,13 @@ public class CashierController {
     return resul;
   }
 
-  public void listTicketsOnCasher(int id) {
-    if (cashers.containsKey(id)) {
-      System.out.print(cashers.get(id).listTickets());
-    } else {
-      System.out.println(ID_ERROR);
+    public void listTicketsOnCasher(int id) {
+        if (cashers.containsKey(id)) {
+            System.out.print(cashers.get(id).listTickets());
+        } else {
+            System.out.println(ID_ERROR);
+        }
     }
-  }
 
   /**
    * The method adds the ticket to the cashier
@@ -137,4 +137,27 @@ public class CashierController {
     return exists;
   }
 
+    public void saveCashiers(CSVPrinter csvPrinter) throws IOException {
+        for (Map.Entry<Integer, Cashier> entry : cashers.entrySet()) {
+            entry.getValue().printCsv(csvPrinter);
+        }
+    }
+
+    public void csvCashiers(CSVRecord csvRecord, boolean[] cont) throws IOException {
+        if (csvRecord.get(0).equals("Customers")) {
+            cont[1] = false;
+        }
+        if (cont[1]) {
+            if (!csvRecord.get(0).equals("Cashier")) {
+                this.addTicket(Integer.parseInt(csvRecord.get(1)), Integer.parseInt(csvRecord.get(0)));
+
+            } else {
+                try {
+                   this.addCasher(Integer.parseInt(csvRecord.get(3)), csvRecord.get(2), csvRecord.get(1), true);
+                } catch (NullPointerException e) {
+                    System.out.println("could not add cashier");
+                }
+            }
+        }
+    }
 }

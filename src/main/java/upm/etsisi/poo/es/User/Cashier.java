@@ -1,8 +1,10 @@
 package upm.etsisi.poo.es.User;
 
+import org.apache.commons.csv.CSVPrinter;
 import upm.etsisi.poo.es.Tickets.Ticket;
 import upm.etsisi.poo.es.Tickets.TicketData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Cashier extends User {
@@ -17,22 +19,7 @@ public class Cashier extends User {
     this.id = id;
   }
 
-  /**
-   * The method runs through the tree and gives back the pair [K,V] ordered by the
-   * key
-   *
-   * @return The string returned is the list of tickets that belongs to the atm
-   *         ordered by their id
-   */
-  public String listTickets() {
-    StringBuilder str = new StringBuilder();
-    tickets.sort(Integer::compareTo);
-    for (Integer id : tickets) {
-      Ticket ticket = TicketData.getInstance().getTicket(id);
-      str.append(ticket.formatList()).append("\n");
-    }
-    return str.toString();
-  }
+
 
   /**
    * The method adds the ticket given by id into the cashers tree
@@ -41,11 +28,6 @@ public class Cashier extends User {
    *           automatically)
    */
   public int addTicket(Integer id) {
-    if (id == null) {
-      do {
-        id = (int) (Math.random() * 100000);
-      } while (tickets.contains(id));
-    }
     if (tickets.contains(id)) {
       System.out.println(ID_ERROR);
     } else {
@@ -95,4 +77,20 @@ public class Cashier extends User {
     tickets.add(id);
   }
 
+    public void printCsv(CSVPrinter csvPrinter) throws IOException {
+      csvPrinter.printRecord("Cashier",email, name, id);
+      for(Integer tickid:tickets){
+          csvPrinter.printRecord(id, tickid);
+      }
+    }
+
+    public String listTickets() {
+      StringBuilder sb = new StringBuilder();
+      if(!tickets.isEmpty()) {
+          for (Integer id : tickets) {
+              sb.append(TicketData.getInstance().getTicket(id).formatList() + "\n");
+          }
+      }
+        return sb.toString();
+    }
 }
