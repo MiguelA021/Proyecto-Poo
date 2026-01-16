@@ -11,6 +11,10 @@ public class TicketData {
         this.tickets = new HashMap<>();
     }
 
+    /**
+     * The method returns the unique instance of the class
+     * @return the instance
+     */
     public static TicketData getInstance() {
         if (instance == null) {
             instance = new TicketData();
@@ -18,6 +22,11 @@ public class TicketData {
         return instance;
     }
 
+    /**
+     * The method returns the ticket wit the id given by parameter
+     * @param ticketId the id of the ticket
+     * @return the ticket if it has been found, if not returns null
+     */
     public Ticket getTicket(int ticketId) {
         Ticket resul = tickets.get(ticketId);
         if (resul == null) {
@@ -26,6 +35,11 @@ public class TicketData {
         return resul;
     }
 
+    /**
+     * The method adds the ticket into the HashMap
+     * @param tycketType gives the type of ticket
+     * @return it returns the id of the ticket
+     */
     public int addTicket(String tycketType) {
         int id;
         do {
@@ -55,6 +69,12 @@ public class TicketData {
         return id;
     }
 
+    /**
+     * The method adds the ticket into the HashMap
+     * @param idTicket the id of the ticket we are going to add
+     * @param ticketType gives the type of ticket
+     * @return returns true if the ticket has been added successfully, else returns false
+     */
     public boolean addTicket(int idTicket, String ticketType) {
         boolean resul = false;
         if (tickets.containsKey(idTicket))
