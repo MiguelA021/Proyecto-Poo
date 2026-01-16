@@ -14,7 +14,8 @@ public class CustomerTicket extends Ticket {
     public CustomerTicket(Integer id) {
         super(id);
     }
-    public CustomerTicket(Integer id, Status status){
+
+    public CustomerTicket(Integer id, Status status) {
         super(id);
         this.status = status;
     }
@@ -101,6 +102,59 @@ public class CustomerTicket extends Ticket {
                     } else {
                         resul = false;
                         System.out.println(ERROR_FULL);
+                    }
+
+                }
+
+            }
+        } else {
+            resul = false;
+            System.out.println("ERROR: the ticket is closed. It can't be modified");
+        }
+        return resul;
+    }
+
+    public boolean ticketAddNoString(Product product, int amount) {
+        boolean resul = true;
+        if (this.status != Status.CLOSED) {
+            int before = this.amount;
+            if (product == null) {
+                resul = false;
+
+            } else {
+                if (this.amount == 0) {
+                    this.status = Status.OPEN;
+                }
+
+                if (product instanceof Event) {
+                    Event event = (Event) product;
+                    if (event.fechaValida(LocalDateTime.now())) {
+                        if (amount <= event.getMaxPersonas()) {
+
+                            double price = event.getPricePerPerson() * amount;
+                            event.setPrice(price);
+
+                            productList[this.amount] = event;
+                            this.amount++;
+
+
+                        } else {
+                            resul = false;
+                        }
+                    } else {
+                    }
+
+                } else {
+                    int i = 0;
+                    while (this.amount < MAX_PRODUCT && i < amount) {
+                        productList[this.amount] = product;
+                        this.amount++;
+                        i++;
+                    }
+                    if ((this.amount - before) == amount) {
+                        resul = true;
+                    } else {
+                        resul = false;
                     }
 
                 }
