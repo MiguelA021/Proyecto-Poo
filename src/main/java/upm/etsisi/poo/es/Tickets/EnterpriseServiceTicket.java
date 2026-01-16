@@ -74,7 +74,7 @@ public class EnterpriseServiceTicket extends Ticket {
     public String print(boolean close) {
 
         if (close) {
-            this.close();
+            if(!this.close()) System.out.println(PERIOD_NOT_VALID);
         }
 
         StringBuilder sb = new StringBuilder();

@@ -32,11 +32,19 @@ public class EnterpriseMixedTicket extends Ticket {
         if (products.isEmpty() || services.isEmpty()) {
             return false;
         }
-        LocalDate today = LocalDate.now();
+        LocalDateTime today = LocalDateTime.now();
         for (Service s : services) {
-            if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today)) {
+            if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today.toLocalDate())) {
                 return false;
             }
+        for(Product product : products){
+            if(product instanceof Event){
+                Event event = (Event) product;
+                if(!event.fechaValida(today)) {
+                    return false;
+                }
+            }
+        }
         }
         return true;
     }
@@ -66,10 +74,12 @@ public class EnterpriseMixedTicket extends Ticket {
             if (p == null) {
                 resul = false;
                 System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
+
             } else {
                 if (this.amount == 0) {
                     this.status = Status.OPEN;
                 }
+
                 if (p instanceof Event) {
                     Event event = (Event) p;
                     if (event.fechaValida(LocalDateTime.now())) {
@@ -80,6 +90,7 @@ public class EnterpriseMixedTicket extends Ticket {
                             products.add(event);
                             System.out.println(print(false));
                             System.out.println(ADD_OK);
+
                         } else {
                             System.out.println(MANY_PEOPLE);
                             resul = false;
@@ -123,9 +134,12 @@ public class EnterpriseMixedTicket extends Ticket {
         if (status == Status.CLOSED) {
             return false;
         }
+
         //No valen servicios con fechas caducadas
+
         LocalDate today = LocalDate.now();
         if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today)) return false;
+
         services.add(s);
         if (status == Status.EMPTY) status = Status.OPEN;
         return true;
@@ -146,7 +160,9 @@ public class EnterpriseMixedTicket extends Ticket {
      */
     @Override
     public String print(boolean close) {
-        if (close) this.close(); // solo cerrará si hay >=1 producto y >=1 servicio
+
+        if (close) if(!this.close()) System.out.println(PERIOD_NOT_VALID); // solo cerrará si hay >=1 producto y >=1 servicio
+
         StringBuilder sb = new StringBuilder();
         sb.append("Ticket : ").append(this.getId()).append("\n");
         sb.append("Services Included:\n");
@@ -162,9 +178,11 @@ public class EnterpriseMixedTicket extends Ticket {
                 totalPrice += p.getPrice();
                 sb.append("  ").append(p.toString());
             }
+
             double extraRate = this.getExtraDiscountRate();
             double extraDiscount = totalPrice * extraRate;
             double finalPrice = totalPrice - extraDiscount;
+
             sb.append("  Total price: ").append(String.format(Locale.US, "%.3f", totalPrice)).append("\n");
             sb.append("  Total discount: ").append(String.format(Locale.US, "%.3f", extraDiscount)).append("\n");
             sb.append("  Final price: ").append(String.format(Locale.US, "%.3f", finalPrice));

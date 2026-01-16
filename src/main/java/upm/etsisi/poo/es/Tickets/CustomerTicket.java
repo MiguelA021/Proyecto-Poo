@@ -1,5 +1,6 @@
 package upm.etsisi.poo.es.Tickets;
 
+import jdk.internal.foreign.abi.Binding;
 import org.apache.commons.csv.CSVPrinter;
 import upm.etsisi.poo.es.Product.*;
 import upm.etsisi.poo.es.type;
@@ -7,7 +8,6 @@ import upm.etsisi.poo.es.type;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Map;
 
 public class CustomerTicket extends Ticket {
 
@@ -28,8 +28,10 @@ public class CustomerTicket extends Ticket {
 
     @Override
     public boolean canBeClosed() {
-        return false;
+        LocalDateTime now = LocalDateTime.now();
+        return comprobarFechasTodosEventos(now);
     }
+
 
     /**
      * The method adds the product given, and it also prints it. The ticket status
@@ -187,14 +189,8 @@ public class CustomerTicket extends Ticket {
     public String ticketPrint(boolean close) {
         StringBuilder sc = new StringBuilder();
 
-        if (close) {
-            LocalDateTime now = LocalDateTime.now();
-            dates.add(now);
-            boolean validClose = comprobarFechasTodosEventos(now);
-            if (validClose) {
-                this.status = Status.CLOSED;
-            } else
-                System.out.println(DONT_CLOSE_NOT_VALID_TIME);
+        if (close) { this.close();
+            if(!this.close()) System.out.println(PERIOD_NOT_VALID);
         }
         sc.append(TICKET + " ").append(toStringId()).append("\n");
         if (this.amount > 0 && this.productList[0] != null) {

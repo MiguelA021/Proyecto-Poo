@@ -28,11 +28,6 @@ public class Cashier extends User {
    *           automatically)
    */
   public int addTicket(Integer id) {
-    if (id == null) {
-      do {
-        id = (int) (Math.random() * 100000);
-      } while (tickets.contains(id));
-    }
     if (tickets.contains(id)) {
       System.out.println(ID_ERROR);
     } else {

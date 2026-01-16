@@ -106,8 +106,11 @@ public class TicketCommand implements Command {
 
 
     private void ticketList() {
-        System.out.println(TicketData.getInstance().listTickets());
-        System.out.println("ticket list: ok");
+        CashierController cashierController = CashierController.getInstance();
+        HashMap<Integer,Cashier> cashiers = cashierController.getMap();
+        for (Integer id : cashiers.keySet()){
+            cashierController.listTicketsOnCasher(id);
+        }
     }
 
 
