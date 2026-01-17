@@ -248,9 +248,9 @@ public class EnterpriseMixedTicket extends Ticket {
             double finalPrice = totalPrice - extraDiscount;
             //Extra Discount from services:72.0 **discount -72.0
             sb.append("  Total price: ").append(String.format(Locale.US, "%.1f", totalPrice)).append("\n");
-            sb.append("  Extra Discount from services: ").append(String.format(Locale.US, "%.1f", extraDiscount)).append(" **discount -72.0").append("\n");
+            sb.append("  Extra Discount from services:").append(String.format(Locale.US, "%.1f", extraDiscount)).append(" **discount -72.0").append("\n");
             sb.append("  Total discount: ").append(String.format(Locale.US, "%.1f", extraDiscount)).append("\n");
-            sb.append("  Final price: ").append(String.format(Locale.US, "%.1f", finalPrice));
+            sb.append("  Final Price: ").append(String.format(Locale.US, "%.1f", finalPrice));
         }
         return sb.toString();
     }
