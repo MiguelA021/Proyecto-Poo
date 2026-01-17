@@ -78,10 +78,10 @@ public class EnterpriseServiceTicket extends Ticket {
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Ticket : ").append(this.getId()).append("\n");
+        sb.append("Services Included:").append(this.getId());
 
         for (Service s : this.getServices()) {
-            sb.append("  ").append(s.toString()).append("\n");
+            sb.append("\n  ").append(s.toString());
         }
 
         return sb.toString();
