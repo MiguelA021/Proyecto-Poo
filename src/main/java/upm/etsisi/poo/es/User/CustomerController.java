@@ -66,7 +66,7 @@ public class CustomerController {
     for (char c : dni.toCharArray()) {
       if (Character.isDigit(c)) {
         id = id * 10;
-        id += c;
+        id += c-'0';
       }
     }
     return id;
