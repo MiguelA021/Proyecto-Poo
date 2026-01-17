@@ -130,7 +130,7 @@ public class CustomerTicket extends Ticket {
             }
         } else {
             resul = false;
-            System.out.println("ERROR: the ticket is closed. It can't be modified");
+            System.out.println(ERROR_TICKET_CLOSE);
         }
         return resul;
     }
@@ -187,7 +187,7 @@ public class CustomerTicket extends Ticket {
             }
         } else {
             resul = false;
-            System.out.println("ERROR: the ticket is closed. It can't be modified");
+            System.out.println(ERROR_TICKET_CLOSE);
         }
         return resul;
     }
@@ -313,9 +313,9 @@ public class CustomerTicket extends Ticket {
                         totalDiscount += discountValue;
 
                         if (discountValue > 0.0) {
-                            sc.append(product.toStringDiscount(discountValue));
+                            sc.append(product.toStringDiscount(discountValue)).append("\n");
                         } else {
-                            sc.append(product);
+                            sc.append(product).append("\n");
                         }
 
                     } else if (p instanceof BasicProduct) {
@@ -332,7 +332,7 @@ public class CustomerTicket extends Ticket {
                         if (discountValue > 0.0) {
                             sc.append(product.toStringDiscount(discountValue));
                         } else {
-                            sc.append(product.toString());
+                            sc.append(product.toString()).append("\n");
                         }
 
                     } else if (p instanceof Event) {
