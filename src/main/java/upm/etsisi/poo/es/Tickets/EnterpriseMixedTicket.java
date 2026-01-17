@@ -254,18 +254,18 @@ public class EnterpriseMixedTicket extends Ticket {
 
         StringBuilder sb = new StringBuilder();
         sb.append(TICKET).append(this.toStringId());
-        sb.append("\nServices Included:\n");
+        sb.append("\nServices Included:");
         // Servicios: sin precio
         for (Service s : this.getServices()) {
-            sb.append("  ").append(s.toString()).append("\n");
+            sb.append("\n  ").append(s.toString());
         }
         if (!products.isEmpty()) {
-            sb.append("Products Included:\n");
+            sb.append("\nProducts Included:");
             // Productos: con precio, aplicando descuento extra (15% por servicio)
             double totalPrice = 0.0;
             for (Product p : this.getProducts()) {
                 totalPrice += p.getPrice();
-                sb.append("  ").append(p.toString()).append("\n");
+                sb.append("\n  ").append(p.toString());
             }
 
             double extraRate = this.getExtraDiscountRate();
