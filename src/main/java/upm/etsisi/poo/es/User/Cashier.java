@@ -1,7 +1,6 @@
 package upm.etsisi.poo.es.User;
 
 import org.apache.commons.csv.CSVPrinter;
-import upm.etsisi.poo.es.Tickets.Ticket;
 import upm.etsisi.poo.es.Tickets.TicketData;
 
 import java.io.IOException;
@@ -18,8 +17,6 @@ public class Cashier extends User {
     this.name = name;
     this.id = id;
   }
-
-
 
   /**
    * The method adds the ticket given by id into the cashers tree
@@ -77,30 +74,30 @@ public class Cashier extends User {
     tickets.add(id);
   }
 
-    public void printCsv(CSVPrinter csvPrinter) throws IOException {
-      csvPrinter.printRecord("Cashier",email, name, id);
-      for(Integer tickid:tickets){
-          csvPrinter.printRecord(id, tickid);
+  public void printCsv(CSVPrinter csvPrinter) throws IOException {
+    csvPrinter.printRecord("Cashier", email, name, id);
+    for (Integer tickid : tickets) {
+      csvPrinter.printRecord(id, tickid);
+    }
+  }
+
+  public String listTickets() {
+    StringBuilder sb = new StringBuilder();
+    if (!tickets.isEmpty()) {
+      for (Integer id : tickets) {
+        sb.append(TicketData.getInstance().getTicket(id).formatList() + "\n");
       }
     }
+    return sb.toString();
+  }
 
-    public String listTickets() {
-      StringBuilder sb = new StringBuilder();
-      if(!tickets.isEmpty()) {
-          for (Integer id : tickets) {
-              sb.append(TicketData.getInstance().getTicket(id).formatList() + "\n");
-          }
+  public String cashTickets() {
+    StringBuilder sb = new StringBuilder();
+    if (!tickets.isEmpty()) {
+      for (Integer id : tickets) {
+        sb.append(TicketData.getInstance().getTicket(id).formatListCashList() + "\n");
       }
-        return sb.toString();
     }
-
-    public String cashTickets() {
-        StringBuilder sb = new StringBuilder();
-        if(!tickets.isEmpty()) {
-            for (Integer id : tickets) {
-                sb.append(TicketData.getInstance().getTicket(id).formatListCashList() + "\n");
-            }
-        }
-        return sb.toString();
-    }
+    return sb.toString();
+  }
 }
