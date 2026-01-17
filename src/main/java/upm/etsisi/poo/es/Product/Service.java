@@ -9,66 +9,68 @@ import java.util.Date;
 
 public class Service extends Product {
 
-  private static int NEXT = 1;
+    private static int NEXT = 1;
 
-  private final int id;
-  private final LocalDate maxUseDate;
-  private final String name;
+    private final int id;
+    private final LocalDate maxUseDate;
+    private final String name;
 
-  public Service(LocalDate maxUseDate, String name, Integer id) {
-    this.id = id;
-    this.maxUseDate = maxUseDate;
-    this.name = name;
-  }
+    public Service(LocalDate maxUseDate, String name, Integer id) {
+        this.id = id;
+        NEXT++;
+        this.maxUseDate = maxUseDate;
+        this.name = name;
+    }
 
-  public Service(LocalDate maxUseDate, String name) {
-    this.id = NEXT * -1;
-    this.maxUseDate = maxUseDate;
-    this.name = name;
+    public Service(LocalDate maxUseDate, String name) {
+        this.id = NEXT * -1;
+        this.maxUseDate = maxUseDate;
+        NEXT++;
+        this.name = name;
 
-  }
+    }
 
-  @Override
-  public int getId() {
-    return this.id;
-  }
+    @Override
+    public int getId() {
+        return this.id;
+    }
 
-  @Override
-  public String getName() {
-    return this.name;
-  }
+    @Override
+    public String getName() {
+        return this.name;
+    }
 
-  @Override
-  public double getPrice() {
-    return 0;
-  }
+    @Override
+    public double getPrice() {
+        return 0;
+    }
 
-  @Override
-  public void setPrice(double price) {
+    @Override
+    public void setPrice(double price) {
 
-  }
+    }
 
-  @Override
-  public void setName(String name) {
+    @Override
+    public void setName(String name) {
 
-  }
+    }
 
-  public LocalDate getMaxUseDate() {
-    return maxUseDate;
-  }
+    public LocalDate getMaxUseDate() {
+        return maxUseDate;
+    }
 
-  // Para mostrarlo en listados/prints (sin precio ni nombre)
+    // Para mostrarlo en listados/prints (sin precio ni nombre)
 
-  @Override
-  public String toString() {
+    @Override
+    public String toString() {
 
-    Date expiration = Date.from(this.maxUseDate.atStartOfDay(ZoneId.of("Europe/Madrid")).toInstant());
+        Date expiration = Date.from(this.maxUseDate.atStartOfDay(ZoneId.of("Europe/Madrid")).toInstant());
 
-    return "{class:ProductService, id:" + id * -1 + ", category:" + this.name + ", expiration: " + expiration + "}";
-  }
+        return "{class:ProductService, id:" + id * -1 + ", category:" + this.name + ", expiration: " + expiration + "}";
+    }
 
-  @Override
-  public void printCsv(CSVPrinter csvPrinter) throws IOException {
-    csvPrinter.printRecord("Service", maxUseDate, name, id);
-  }
+    @Override
+    public void printCsv(CSVPrinter csvPrinter) throws IOException {
+        csvPrinter.printRecord("Service", maxUseDate, name, id);
+    }
 }

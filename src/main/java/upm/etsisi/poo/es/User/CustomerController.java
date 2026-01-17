@@ -51,6 +51,8 @@ public class CustomerController {
       }
       customers.put(id, customer);
 
+    }else{
+        System.out.println("This Id is already used");
     }
     return customer;
   }

@@ -139,8 +139,11 @@ public class CashierController {
    */
   public boolean exitsTicket(int cashId, int idTicket) {
     boolean exists = false;
-    if (cashers.get(cashId).getTicketById(idTicket)) {
-      exists = true;
+    Cashier cashier = cashers.get(cashId);
+    if(cashier!= null) {
+        if (cashers.get(cashId).getTicketById(idTicket)) {
+            exists = true;
+        }
     }
     return exists;
   }

@@ -81,6 +81,6 @@ public class Event extends Product {
   }
     @Override
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
-        csvPrinter.printRecord(id, name, pricePerPerson, expiracyDate);
+        csvPrinter.printRecord(id, name, price, expiracyDate);
     }
 }

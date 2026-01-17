@@ -109,8 +109,6 @@ public class BasicProduct extends Product {
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
         csvPrinter.printRecord("BasicProduct", id, name,category.name(), price);
     }
-    public BasicProduct copy(){
-    return new BasicProduct(this.id,this.name,this.category,this.price);
-    }
+
 
 }

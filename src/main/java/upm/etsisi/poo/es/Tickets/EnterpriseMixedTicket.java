@@ -23,6 +23,24 @@ public class EnterpriseMixedTicket extends Ticket {
         this.status = status;
     }
 
+    @Override
+    public boolean close(){
+
+        if (status == Status.CLOSE) {
+            return true;
+        }
+        if(!this.canBeClosed()){
+            return false;
+        }
+        status = Status.CLOSE;
+       for (Product p : products){
+           if(p instanceof BasicProduct){
+               p = copy((BasicProduct) p);
+           }
+       }
+
+        return true;    }
+
     /**
      * The method checks if the Ticket can be closed, it must have at least either a product or a service.
      * And if it has services, all of them must be on a valid date
@@ -304,10 +322,10 @@ public class EnterpriseMixedTicket extends Ticket {
                 csvPrinter.printRecord(id, "BasicProduct", pp.getId(), pp.getName(), pp.getCategory().name(), pp.getPrice());
             } else if (p instanceof Meeting) {
                 Meeting m = (Meeting) p;
-                csvPrinter.printRecord(id, "Meeting", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
+                csvPrinter.printRecord(id, "Meeting", m.getId(), m.getName(), m.getPrice(), m.getExpiryDate().toLocalDate());
             } else if (p instanceof Food) {
                 Food m = (Food) p;
-                csvPrinter.printRecord(id, "Food", m.getId(), m.getName(), m.getPricePerPerson(), m.getExpiryDate().toLocalDate());
+                csvPrinter.printRecord(id, "Food", m.getId(), m.getName(), m.getPrice(), m.getExpiryDate().toLocalDate());
             }
         }
         for (Service s : services) {

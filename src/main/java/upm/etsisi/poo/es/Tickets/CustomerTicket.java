@@ -24,6 +24,21 @@ public class CustomerTicket extends Ticket {
         return ticketPrint(close);
     }
 
+    @Override
+    public boolean close() {
+        if (status == Status.CLOSE) {
+            return true;
+        }
+            status = Status.CLOSE;
+            for (int i = 0; i<this.amount; i++){
+                if(productList[i] instanceof BasicProduct){
+                    this.productList[i] = copy((BasicProduct) productList[i]);
+                }
+            }
+
+        return true;
+    }
+
 
     @Override
     public boolean canBeClosed() {

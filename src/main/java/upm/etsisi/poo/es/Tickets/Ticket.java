@@ -2,6 +2,7 @@ package upm.etsisi.poo.es.Tickets;
 
 
 import org.apache.commons.csv.CSVPrinter;
+import upm.etsisi.poo.es.Product.BasicProduct;
 import upm.etsisi.poo.es.Product.Product;
 
 import java.time.LocalDateTime;
@@ -56,7 +57,7 @@ public abstract class Ticket {
 
     public boolean close() {
         if (status == Status.CLOSE) {
-            return false;
+            return true;
         }
         if (!canBeClosed()) {
             return false;
@@ -141,6 +142,11 @@ public abstract class Ticket {
                 break;
         }
         return resul.toString();
+    }
+
+
+    public BasicProduct copy(BasicProduct b){
+        return new BasicProduct(b.getId(), b.getName(),b.getCategory() , b.getPrice());
     }
 
 

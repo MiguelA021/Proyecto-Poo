@@ -60,7 +60,8 @@ public class TicketCommand implements Command {
       int ticketId = Integer.parseInt(args[2]);
       int casherId = Integer.parseInt(args[3].replace("UW", ""));
 
-      if (CashierController.getInstance().exitsTicket(casherId, ticketId)) {
+      if (CashierController.getInstance().
+              exitsTicket(casherId, ticketId)) {
         ticketController.prodAdd(args);
       }
     } catch (NumberFormatException e) {
