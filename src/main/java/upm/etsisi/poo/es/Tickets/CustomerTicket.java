@@ -71,7 +71,6 @@ public class CustomerTicket extends Ticket {
 
                             double price = event.getPricePerPerson() * amount;
                             if (event instanceof Meeting) {
-                                System.out.println(event.getExpiryDate().toLocalDate().toString());
                                 Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPricePerPerson(), event.getExpiryDate().toLocalDate().toString());
                                 meeting.setPrice(price);
                                 productList[this.amount] = meeting;
@@ -139,7 +138,6 @@ public class CustomerTicket extends Ticket {
                         if (amount <= event.getMaxPersonas()) {
                             double price = event.getPricePerPerson() * amount;
                             if (event instanceof Meeting) {
-                                System.out.println(event.getExpiryDate().toLocalDate().toString());
                                 Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPricePerPerson(), event.getExpiryDate().toLocalDate().toString());
                                 meeting.setPrice(price);
                                 productList[this.amount] = meeting;
@@ -256,8 +254,8 @@ public class CustomerTicket extends Ticket {
         StringBuilder sc = new StringBuilder();
 
         if (close) {
-            this.close();
-            if (!this.close()) System.out.println(PERIOD_NOT_VALID);
+            if (!this.close())
+                return PERIOD_NOT_VALID;
         }
         sc.append(TICKET + " ").append(toStringId()).append("\n");
         if (this.amount > 0 && this.productList[0] != null) {
