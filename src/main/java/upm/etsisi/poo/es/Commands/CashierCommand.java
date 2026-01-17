@@ -131,7 +131,7 @@ public class CashierCommand implements Command {
       // Siempre imprimimos el encabezado
       System.out.println("Tickets: ");
       if (casher != null) {
-        String ticketsStr = casher.listTickets(); // lo que ya tengas implementado
+        String ticketsStr = casher.cashTickets(); // lo que ya tengas implementado
         // Si hay algo que imprimir, lo sacamos tal cual
         if (ticketsStr != null && !ticketsStr.isEmpty()) {
           System.out.print(ticketsStr); // ojo: print, no println, por si ya lleva \n
