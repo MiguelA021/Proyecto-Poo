@@ -53,7 +53,7 @@ public class CustomerTicket extends Ticket {
      */
     public boolean ticketAdd(Product product, int amount) {
         boolean resul = true;
-        if (this.status != Status.CLOSED) {
+        if (this.status != Status.CLOSE) {
             int before = this.amount;
             if (product == null) {
                 resul = false;
@@ -123,7 +123,7 @@ public class CustomerTicket extends Ticket {
 
     public boolean ticketAddNoString(Product product, int amount) {
         boolean resul = true;
-        if (this.status != Status.CLOSED) {
+        if (this.status != Status.CLOSE) {
             int before = this.amount;
             if (product == null) {
                 resul = false;
@@ -187,7 +187,7 @@ public class CustomerTicket extends Ticket {
     public Product ticketRemove(int prodId) {
         Product product = null;
         int iterations = this.amount;
-        if (this.status != Status.CLOSED) {
+        if (this.status != Status.CLOSE) {
             if (this.amount == 0) {
                 System.out.println(NO_PRODUCTS_IN_THE_TICKET);
 

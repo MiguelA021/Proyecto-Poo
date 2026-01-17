@@ -1,7 +1,6 @@
 package upm.etsisi.poo.es.Tickets;
 
 import org.apache.commons.csv.CSVPrinter;
-import org.jline.nativ.Kernel32;
 import upm.etsisi.poo.es.Product.*;
 
 import java.time.LocalDate;
@@ -70,7 +69,7 @@ public class EnterpriseMixedTicket extends Ticket {
      */
     public boolean addProduct(Product p, int amount) {
         boolean resul = true;
-        if (this.status != Status.CLOSED) {
+        if (this.status != Status.CLOSE) {
             int before = this.amount;
             if (p == null) {
                 resul = false;
@@ -133,7 +132,7 @@ public class EnterpriseMixedTicket extends Ticket {
 
     public boolean addProductNoString(Product p, int amount) {
         boolean resul = true;
-        if (this.status != Status.CLOSED) {
+        if (this.status != Status.CLOSE) {
             int before = this.amount;
             if (p == null) {
                 resul = false;
@@ -197,7 +196,7 @@ public class EnterpriseMixedTicket extends Ticket {
         if (s == null) {
             return false;
         }
-        if (status == Status.CLOSED) {
+        if (status == Status.CLOSE) {
             return false;
         }
 

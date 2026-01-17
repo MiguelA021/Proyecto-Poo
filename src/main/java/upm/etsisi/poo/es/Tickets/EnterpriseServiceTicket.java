@@ -52,7 +52,7 @@ public class EnterpriseServiceTicket extends Ticket {
      */
     public boolean addService(Service s) {
         if (s == null) return false;
-        if (status == Status.CLOSED) return false;
+        if (status == Status.CLOSE) return false;
         // Regla de inclusión por fecha máxima: si ya está caducado, no se añade
         LocalDate today = LocalDate.now();
         if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today)) return false;

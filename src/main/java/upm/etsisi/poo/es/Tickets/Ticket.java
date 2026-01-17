@@ -55,13 +55,13 @@ public abstract class Ticket {
     public abstract boolean canBeClosed();
 
     public boolean close() {
-        if (status == Status.CLOSED) {
+        if (status == Status.CLOSE) {
             return false;
         }
         if (!canBeClosed()) {
             return false;
         }
-        status = Status.CLOSED;
+        status = Status.CLOSE;
         return true;
     }
 
@@ -87,7 +87,7 @@ public abstract class Ticket {
 
     public String formatListCashList(){
         StringBuilder resul = new StringBuilder();
-        resul.append("  " + toStringId()).append(" -> ").append(this.status.toString().toUpperCase());
+        resul.append("  " + toStringId()).append(" - ").append(this.status.toString().toUpperCase());
         return resul.toString();
     }
     /**
@@ -124,7 +124,7 @@ public abstract class Ticket {
             case "OPEN":
                 resul.append(this.id);
                 break;
-            case "CLOSED": {
+            case "CLOSE": {
                 String fin;
 
                 if (dates.size() > 1) {
@@ -133,7 +133,7 @@ public abstract class Ticket {
                     fin = dates.get(0).format(DATE_FORMAT);
                 }
 
-                resul.append(fin).append("-").append(this.id);
+                resul.append(this.id).append("-").append(fin);
                 break;
             }
             default:
