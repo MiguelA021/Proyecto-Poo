@@ -217,7 +217,6 @@ public class EnterpriseMixedTicket extends Ticket {
     public List<Service> getServices() {
         return new ArrayList<>(services);
     }
-
     /**
      * The method prints the ticket
      * @param close shows if the ticket is closed or not
@@ -241,16 +240,17 @@ public class EnterpriseMixedTicket extends Ticket {
             double totalPrice = 0.0;
             for (Product p : this.getProducts()) {
                 totalPrice += p.getPrice();
-                sb.append("  ").append(p.toString());
+                sb.append("  ").append(p.toString()).append("\n");
             }
 
             double extraRate = this.getExtraDiscountRate();
             double extraDiscount = totalPrice * extraRate;
             double finalPrice = totalPrice - extraDiscount;
-
-            sb.append("  Total price: ").append(String.format(Locale.US, "%.3f", totalPrice)).append("\n");
-            sb.append("  Total discount: ").append(String.format(Locale.US, "%.3f", extraDiscount)).append("\n");
-            sb.append("  Final price: ").append(String.format(Locale.US, "%.3f", finalPrice));
+            //Extra Discount from services:72.0 **discount -72.0
+            sb.append("  Total price: ").append(String.format(Locale.US, "%.1f", totalPrice)).append("\n");
+            sb.append("  Extra Discount from services: ").append(String.format(Locale.US, "%.1f", extraDiscount)).append(" **discount -72.0").append("\n");
+            sb.append("  Total discount: ").append(String.format(Locale.US, "%.1f", extraDiscount)).append("\n");
+            sb.append("  Final price: ").append(String.format(Locale.US, "%.1f", finalPrice));
         }
         return sb.toString();
     }

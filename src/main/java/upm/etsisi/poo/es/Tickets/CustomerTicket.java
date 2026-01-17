@@ -243,6 +243,27 @@ public class CustomerTicket extends Ticket {
         return valido;
     }
 
+    private String formatOutput(double val) {
+        String text = String.valueOf(val);
+        int pointIndex = text.indexOf('.');
+        if (pointIndex == -1) return text;
+
+        String decimals = text.substring(pointIndex + 1);
+        int dirtyZeroIndex = decimals.indexOf("0000");
+        if (dirtyZeroIndex != -1) {
+            if (dirtyZeroIndex == 0) return text.substring(0, pointIndex + 2);
+            return text.substring(0, pointIndex + 1 + dirtyZeroIndex);
+        }
+        int ninesIndex = decimals.indexOf("99999");
+        if (ninesIndex != -1) {
+            return text.substring(0, pointIndex + 1 + ninesIndex + 5);
+        }
+        if (decimals.length() > 3) {
+            return text.substring(0, pointIndex + 1 + 3);
+        }
+        return text;
+    }
+
     /**
      * The method closes the ticket (if the Events are on date) and turns it into a
      * String.
@@ -326,9 +347,9 @@ public class CustomerTicket extends Ticket {
             }
 
             double finalPrice = totalPrice - totalDiscount;
-            sc.append("  " + TOTAL_PRICE + " ").append(String.format(Locale.US, "%.3f", totalPrice));
-            sc.append("\n  " + TOTAL_DISCOUNT + " ").append(String.format(Locale.US, "%.3f", totalDiscount));
-            sc.append("\n  " + FINAL_PRICE + " ").append(String.format(Locale.US, "%.3f", finalPrice));
+            sc.append("  " + TOTAL_PRICE + " ").append(formatOutput(totalPrice));
+            sc.append("\n  " + TOTAL_DISCOUNT + " ").append(formatOutput(totalDiscount));
+            sc.append("\n  " + FINAL_PRICE + " ").append(formatOutput(finalPrice));
         }
 
         return sc.toString();
