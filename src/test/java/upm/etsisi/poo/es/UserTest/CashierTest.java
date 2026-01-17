@@ -1,6 +1,6 @@
 package upm.etsisi.poo.es.UserTest;
-import static org.junit.Assert.*;
-import org.junit.Test;
+import junit.framework.Test;
+import junit.framework.TestCase;
 import upm.etsisi.poo.es.Product.BasicProduct;
 import upm.etsisi.poo.es.Tickets.CustomerTicket;
 import upm.etsisi.poo.es.Tickets.Ticket;
@@ -12,11 +12,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
-public class CashierTest {
+public class CashierTest extends TestCase {
 
     //String of the tickets that belongs to one cashier and it's ordering by key
-    @Test
-    public void listTicketsTest(){
+    public void testListTicket(){
         LocalDateTime ahora = LocalDateTime.now();
         DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
         String fechaFormateada = ahora.format(formateador);
@@ -53,8 +52,7 @@ public class CashierTest {
 
     //Primero crear un cajero, luego tener que añadirlo a CashierController, a partir de ese Controller localizar al cajero y añadir ese ticket,
     //para mas restriccion, el assert sera sobre el id del ticket y el tamaño de tickets que tendra dicho cajero
-    @Test
-    public void addTicketTest(){
+    public void testAddTicket(){
         Cashier cashierTest = new Cashier("pepe0@upm.es", "pepecurro1", "1234569");
         Integer t1 = 212121;
         Integer t2 = 222226;
@@ -68,8 +66,7 @@ public class CashierTest {
         assertTrue(cashierTest.getTicketById(111111));
     }
 
-    @Test
-    public void getTicketByIdTest(){
+    public void testGetTicketById(){
         Cashier cashierTest = new Cashier("pepe0@upm.es", "pepecurro1", "1234569");
         Integer t1 = 212121;
         Integer t2 = 222226;
@@ -83,35 +80,10 @@ public class CashierTest {
     }
 
     //Comparar formato
-    @Test
-    public void toStringTest(){
+    public void testToStringTest(){
         Cashier cashierTest = new Cashier("pepe0@upm.es", "pepecurro1", "1234569");
         String expected = "Cash{identifier='UW1234569', name='pepecurro1', email='pepe0@upm.es'}";
         String actual = cashierTest.toString();
         assertEquals(expected, actual);
     }
-
-    /*
-    //Este test necesita correccion del metodo remove
-    @Test
-    public void removeTicketTest(){
-        Cashier cashierTest = new Cashier("pepe0@upm.es", "pepecurro1", "1234569");
-        Integer t1 = 212121;
-        Integer t2 = 222226;
-        Integer t3 = 111111;
-        Integer t4 = 775326;
-        int ticket1 = cashierTest.addTicket(t1);
-        int ticket2 = cashierTest.addTicket(t2);
-        int ticket3 = cashierTest.addTicket(t3);
-        boolean result1 = cashierTest.removeTicket(ticket2);
-        boolean result2 = cashierTest.removeTicket(t4); //assertFalse
-        boolean result3 = cashierTest.getTicketById(ticket3);//assertTrue
-        boolean result4 = cashierTest.getTicketById(ticket1);//assertTrue
-        assertTrue(result1);
-        assertFalse(result2);
-        assertTrue(result3);
-        assertTrue(result4);
-    }
-
-     */
 }
