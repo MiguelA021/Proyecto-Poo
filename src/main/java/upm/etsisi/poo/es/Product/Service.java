@@ -63,9 +63,7 @@ public class Service extends Product {
 
     @Override
     public String toString() {
-
         Date expiration = Date.from(this.maxUseDate.atStartOfDay(ZoneId.of("Europe/Madrid")).toInstant());
-
         return "{class:ProductService, id:" + id * -1 + ", category:" + this.name + ", expiration: " + expiration + "}";
     }
 

@@ -279,7 +279,7 @@ public class CustomerTicket extends Ticket {
             if (!this.close())
                 return PERIOD_NOT_VALID;
         }
-        sc.append(TICKET + " ").append(toStringId()).append("\n");
+        sc.append(TICKET ).append(toStringId()).append("\n");
         if (this.amount > 0 && this.productList[0] != null) {
             sort();
             int n = this.amount;
