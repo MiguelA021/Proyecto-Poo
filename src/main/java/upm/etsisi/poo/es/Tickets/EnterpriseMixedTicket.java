@@ -285,7 +285,7 @@ public class EnterpriseMixedTicket extends Ticket {
      * @return the string with the specific format
      */
     @Override
-    public String toStringNew() {
+    public String toStringNew(boolean withId) {
         StringBuilder sc = new StringBuilder();
         sc.append(TICKET + " " + this.id + "\n");
         sc.append(TICKET_NEW_OK);

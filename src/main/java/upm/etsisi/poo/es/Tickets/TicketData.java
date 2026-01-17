@@ -56,7 +56,7 @@ public class TicketData {
             case "products":
                 CustomerTicket customerTicket = new CustomerTicket(id);
                 tickets.put(customerTicket.getId(), customerTicket);
-                System.out.println(customerTicket.toStringNew());
+                System.out.println(customerTicket.toStringNew(false));
                 break;
             case "services":
                 EnterpriseServiceTicket enterpriseServiceTicket = new EnterpriseServiceTicket(id);
@@ -92,19 +92,19 @@ public class TicketData {
                     CustomerTicket customerTicket = new CustomerTicket(idTicket);
                     tickets.put(idTicket, customerTicket);
                     resul = true;
-                    System.out.println(customerTicket.toStringNew());
+                    System.out.println(customerTicket.toStringNew(true));
                     break;
                 case "services":
                     EnterpriseServiceTicket enterpriseServiceTicket = new EnterpriseServiceTicket(idTicket);
                     tickets.put(idTicket, enterpriseServiceTicket);
                     resul = true;
-                    System.out.println(enterpriseServiceTicket.toStringNew());
+                    System.out.println(enterpriseServiceTicket.toStringNew(true));
                     break;
                 case "combined":
                     EnterpriseMixedTicket enterpriseMixedTicket = new EnterpriseMixedTicket(idTicket);
                     tickets.put(idTicket, enterpriseMixedTicket);
                     resul = true;
-                    System.out.println(enterpriseMixedTicket.toStringNew());
+                    System.out.println(enterpriseMixedTicket.toStringNew(true));
                     break;
                 default:
                     System.out.println(ID_ERROR);

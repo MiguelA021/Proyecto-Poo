@@ -94,9 +94,13 @@ public abstract class Ticket {
      * The method makes a String with a specific format
      * @return the String with the format
      */
-    public String toStringNew() {
+    public String toStringNew(boolean withId) {
         StringBuilder sc = new StringBuilder();
-        sc.append(TICKET + " " + this.id + "\n");
+        if (withId) {
+            sc.append(TICKET + " " + this.id + "\n");
+        } else{
+            sc.append(TICKET + " " +this.dates.get(0).format(DATE_FORMAT)+"-"+ this.id + "\n");
+        }
         sc.append("  " + TOTAL_PRICE + " 0.0 \n");
         sc.append("  " + TOTAL_DISCOUNT + " 0.0 \n");
         sc.append("  " + FINAL_PRICE + " 0.0 \n");

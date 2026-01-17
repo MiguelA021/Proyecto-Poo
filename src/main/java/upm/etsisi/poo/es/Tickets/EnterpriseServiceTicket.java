@@ -109,7 +109,7 @@ public class EnterpriseServiceTicket extends Ticket {
      * @return the String ready to print
      */
     @Override
-    public String toStringNew() {
+    public String toStringNew(boolean withId) {
         StringBuilder sc = new StringBuilder();
         sc.append(TICKET + " " + this.id + "\n");
         sc.append(TICKET_NEW_OK);

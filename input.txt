@@ -3,6 +3,7 @@ echo "Agrego Libro"
 prod add 1 "Libro POO" BOOK 25
 echo "Agrego Camiseta"
 prod add 2 "Camiseta talla:M UPM" CLOTHES 15
+prod add "Camiseta talla:M UPM" CLOTHES 15
 echo "Listo Productos"
 prod list
 echo "Actualizo Nombre y Precio del Libro"
@@ -26,43 +27,57 @@ cash add UW1234569 "pepecurro1" pepe0@upm.es
 cash list
 cash remove UW1234569
 cash list
-echo "miro los tickets de UW1234567 creo un customerTicket y vuelvo a printar"
+echo "miro los tickets de UW1234567 creo un ticket y vuelvo a printar"
 cash tickets UW1234567
-customerTicket new UW1234567 55630667S
+ticket new UW1234567 55630667S
 cash tickets UW1234567
-echo "creo un customerTicket con ID"
-customerTicket new 212121 UW1234567 55630667S
-echo "Agrego un producto al customerTicket e imprimo el customerTicket"
-customerTicket add 212121 UW1234567 1 20
-customerTicket list
-customerTicket print 212121 UW1234567
-customerTicket list
-echo "Agrego dos productos al customerTicket e imprimo el customerTicket"
-customerTicket new 212123 UW1234567 98948334B
-customerTicket add 212123 UW1234567 1 20
-customerTicket add 212123 UW1234567 2 1
-customerTicket remove 212123 UW1234567 2
-customerTicket add 212123 UW1234567 2 3
-customerTicket list
-customerTicket print 212123 UW1234567
-customerTicket list
+echo "creo un ticket con ID"
+ticket new 212121 UW1234567 55630667S
+echo "Agrego un producto al ticket e imprimo el ticket"
+ticket add 212121 UW1234567 1 20
+ticket list
+ticket print 212121 UW1234567
+ticket list
+echo "Agrego dos productos al ticket e imprimo el ticket"
+ticket new 212123 UW1234567 98948334B
+ticket add 212123 UW1234567 1 20
+ticket add 212123 UW1234567 2 1
+ticket remove 212123 UW1234567 2
+ticket add 212123 UW1234567 2 3
+ticket list
+ticket print 212123 UW1234567
+ticket list
 echo "Trabajamos con productos de personas"
-prod addMeeting 23456 "Reunion Rotonda" 12 2025-11-21 100
-prod addMeeting 23457 "Graduacion ETSISI" 40 2025-11-21 30
-prod addFood 23458 "Cafeteria ETSISI" 5 2025-11-21 300
-prod addFood 23459 "Restaurante Asador" 50 2025-11-21 40
+prod addMeeting 23456 "Reunion Rotonda" 12 2025-12-21 100
+prod addMeeting 23457 "Graduacion ETSISI" 40 2025-12-21 30
+prod addFood 23458 "Cafeteria ETSISI" 5 2025-12-21 300
+prod addFood 23459 "Restaurante Asador" 50 2025-12-21 40
 prod list
-customerTicket new 212127 UW1234567 98948334B
-customerTicket add 212127 UW1234567 23456 20
-customerTicket add 212127 UW1234567 2 3
-customerTicket print 212127 UW1234567
-customerTicket list
+ticket new 212127 UW1234567 98948334B
+ticket add 212127 UW1234567 23456 20
+ticket add 212127 UW1234567 2 3
+ticket print 212127 UW1234567
+ticket list
 echo "Trabajamos con productos personalizados"
 prod add 5 "Camiseta talla:M UPM" CLOTHES 15 3
 prod add 6 "Camiseta talla:L UPM" CLOTHES 20 4
-customerTicket new 212128 UW1234567 98948334B
-customerTicket add 212128 UW1234567 5 1
-customerTicket add 212128 UW1234567 5 3 --pred --pblue --pgreen
-customerTicket add 212128 UW1234567 6 3 --pred --pblue
-customerTicket print 212128 UW1234567
+ticket new 212128 UW1234567 98948334B
+ticket add 212128 UW1234567 5 1
+ticket add 212128 UW1234567 5 3 --pred --pblue --pgreen
+ticket add 212128 UW1234567 6 3 --pred --pblue
+ticket print 212128 UW1234567
+echo "Iniciamos productos servicio"
+prod add 2025-12-21 INSURANCE
+prod add 2025-12-24 TRANSPORT
+echo "Iniciamos empresas"
+client add "pepe2" B12345674 pepe5@upm.es UW1234567
+ticket new 212129 UW1234567 B12345674 -s
+ticket add 212129 UW1234567 1S
+ticket add 212129 UW1234567 2S
+ticket print 212129 UW1234567
+ticket new 212130 UW1234567 B12345674 -c
+ticket add 212130 UW1234567 1S
+ticket add 212130 UW1234567 2S
+ticket add 212130 UW1234567 23456 20
+ticket print 212130 UW1234567
 exit
