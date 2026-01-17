@@ -71,7 +71,6 @@ public class CustomerTicket extends Ticket {
 
                             double price = event.getPricePerPerson() * amount;
                             if (event instanceof Meeting) {
-                                System.out.println(event.getExpiryDate().toLocalDate().toString());
                                 Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPricePerPerson(), event.getExpiryDate().toLocalDate().toString());
                                 meeting.setPrice(price);
                                 productList[this.amount] = meeting;
