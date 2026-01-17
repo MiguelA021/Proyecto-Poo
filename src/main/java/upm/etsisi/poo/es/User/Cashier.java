@@ -88,7 +88,7 @@ public class Cashier extends User {
       StringBuilder sb = new StringBuilder();
       if(!tickets.isEmpty()) {
           for (Integer id : tickets) {
-              sb.append(TicketData.getInstance().getTicket(id).formatList() + "\n");
+              sb.append(TicketData.getInstance().getTicket(id).formatListCashList() + "\n");
           }
       }
         return sb.toString();

@@ -85,6 +85,11 @@ public abstract class Ticket {
         return resul.toString();
     }
 
+    public String formatListCashList(){
+        StringBuilder resul = new StringBuilder();
+        resul.append("  " + toStringId()).append(" -> ").append(this.status.toString().toUpperCase());
+        return resul.toString();
+    }
     /**
      * The method makes a String with a specific format
      * @return the String with the format

@@ -10,11 +10,6 @@ public class CustomerEnterprise extends Customer{
     }
 
     @Override
-    public String toString(){
-        return "COMPANY{identifier='" + id + "', name='" + name + "', email='" + email + "', cash=UW" + cashierId + "}";
-    }
-
-    @Override
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
         csvPrinter.printRecord("EnterpriseCustomer", email, name, cashierId, id);
         for(Integer tickid:tickets){

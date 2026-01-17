@@ -18,7 +18,7 @@ public class Customer extends User {
   }
 
   public String toString() {
-    return "Client{identifier='" + id + "', name='" + name + "', email='" + email + "', cash=UW" + cashierId + "}";
+    return "USER{identifier='" + id + "', name='" + name + "', email='" + email + "', cash=UW" + cashierId + "}";
   }
 
   /**
