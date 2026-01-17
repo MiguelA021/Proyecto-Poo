@@ -80,7 +80,4 @@ public class CustomerControllerTest extends TestCase{
 
         assertEquals(expected, actual);
     }
-    public void testAddTicket(){
-
-    }
 }
