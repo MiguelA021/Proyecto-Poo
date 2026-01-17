@@ -259,24 +259,10 @@ public class CustomerTicket extends Ticket {
     }
 
     private String formatOutput(double val) {
-        String text = String.valueOf(val);
-        int pointIndex = text.indexOf('.');
-        if (pointIndex == -1) return text;
 
-        String decimals = text.substring(pointIndex + 1);
-        int dirtyZeroIndex = decimals.indexOf("0000");
-        if (dirtyZeroIndex != -1) {
-            if (dirtyZeroIndex == 0) return text.substring(0, pointIndex + 2);
-            return text.substring(0, pointIndex + 1 + dirtyZeroIndex);
-        }
-        int ninesIndex = decimals.indexOf("99999");
-        if (ninesIndex != -1) {
-            return text.substring(0, pointIndex + 1 + ninesIndex + 5);
-        }
-        if (decimals.length() > 3) {
-            return text.substring(0, pointIndex + 1 + 3);
-        }
-        return text;
+        double rounded = Math.round(val * 1000.0) / 1000.0;
+
+        return String.valueOf(rounded);
     }
 
     /**

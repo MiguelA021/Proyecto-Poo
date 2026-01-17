@@ -21,7 +21,7 @@ public class CustomerController {
 
   /**
    * The method returns the unique instance of the class
-   * 
+   *
    * @return the instance of the class
    */
   public static CustomerController getInstance() {
@@ -34,32 +34,49 @@ public class CustomerController {
   /**
    * The method adds the customer into the treemap, it automatically decides if
    * the customer is regular or enterprise
-   * 
+   *
    * @param name   the name given by parameter
    * @param dni    the DNI/NIE/NIF which will give us the key for the treemap
    * @param email  the email given by parameter
    * @param cashId the cashier that will be linked to our customer
    */
   public Customer addCustomer(String name, String dni, String email, int cashId) {
-    Customer customer = null;
-    int id = dniToId(dni);
-    if (!customers.containsKey(id)) {
-      if (dni.charAt(0) > 64 && dni.charAt(0) < 91) {
-        customer = new CustomerEnterprise(email, name, dni, cashId);
-      } else {
-        customer = new Customer(email, name, dni, cashId);
-      }
-      customers.put(id, customer);
 
-    }else{
-        System.out.println("This Id is already used");
+    String dninew = dni.trim().toUpperCase();
+    int id = dniToId(dninew);
+
+    if (customers.containsKey(id)) {
+      System.out.println("This Id is already used");
+      return null;
     }
+
+    Customer customer;
+
+    IdType type = IdType.detect(dninew);
+
+    switch (type) {
+      case DNI:
+      case NIE:
+        customer = new Customer(email, name, dninew, cashId);
+        break;
+
+      case COMPANY:
+        customer = new CustomerEnterprise(email, name, dninew, cashId);
+        break;
+
+      default:
+        System.out.println("Incorrect Format, please try again.");
+        return null;
+    }
+
+    customers.put(id, customer);
     return customer;
   }
 
+
   /**
    * The method gives us the numerical part of the NIE/DNI/NIF
-   * 
+   *
    * @param dni the NIE/DNI/NIF given by parameter
    * @return it returns only the numerical part
    */
@@ -80,7 +97,7 @@ public class CustomerController {
 
   /**
    * The method removes the customer from the treemap
-   * 
+   *
    * @param dni the NIE/DNI/NIF given by parameter
    * @return the method returns true if the customer has been removed
    *         successfully, else returns false
@@ -109,7 +126,7 @@ public class CustomerController {
 
   /**
    * The method turns the tree into a List ordered by the name of the customer
-   * 
+   *
    * @return the list ordered by the name of it's customers
    */
   private ArrayList<Customer> customersToList() {
@@ -120,7 +137,7 @@ public class CustomerController {
 
   /**
    * The method adds a ticket to their customer
-   * 
+   *
    * @param ticketId the id of the ticket we are going to add
    * @param userId   the id of the user that we are adding their ticket
    */

@@ -31,7 +31,7 @@ public abstract class Ticket {
     Comparator<Product> nameComp = Comparator.comparing(Product::getName);
     protected static final String TOTAL_PRICE = "Total price:";
     protected static final String TOTAL_DISCOUNT = "Total discount:";
-    protected static final String FINAL_PRICE = "Final price:";
+    protected static final String FINAL_PRICE = "Final Price:";
     protected static final String TICKET = "Ticket :";
     protected static final String TICKET_NEW_OK = "ticket new: ok";
 
