@@ -5,10 +5,11 @@ import org.apache.commons.csv.CSVPrinter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class Event extends Product {
-
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
   protected LocalDateTime expiracyDate;
   protected int maxPersonas = 100;
   protected double pricePerPerson;
@@ -83,4 +84,7 @@ public class Event extends Product {
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
         csvPrinter.printRecord(id, name, pricePerPerson, expiracyDate);
     }
+   public Product copy(){
+      return new Event(this.id,this.name,this.price,this.expiracyDate.format(formatter));
+  }
 }

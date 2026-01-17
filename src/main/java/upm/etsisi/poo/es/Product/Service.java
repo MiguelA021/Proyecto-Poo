@@ -71,4 +71,7 @@ public class Service extends Product {
   public void printCsv(CSVPrinter csvPrinter) throws IOException {
     csvPrinter.printRecord("Service", maxUseDate, name, id);
   }
+  public Product copy(){
+      return new Service(this.maxUseDate,this.name);
+  }
 }

@@ -93,7 +93,7 @@ public class TicketController {
                     local.newPrice();
                     customerTicket.ticketAdd(local, amount);
                 } else {
-                    customerTicket.ticketAdd(product, amount);
+                    customerTicket.ticketAdd( product.copy(), amount);
                 }
 
         return;
@@ -118,7 +118,7 @@ public class TicketController {
                     local.newPrice();
                     mt.addProduct(local, amount);
                 } else {
-                    mt.addProduct(product, amount);
+                    mt.addProduct(product.copy(), amount);
                 }
                 return;
             }

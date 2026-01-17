@@ -45,5 +45,8 @@ public class Food extends Event {
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
         csvPrinter.printRecord("Food", id, name, pricePerPerson, expiracyDate.toLocalDate());
     }
+    public Product copy(){
+        return new Food(this.id,this.name,this.price,this.expiracyDate.format(formatter));
+    }
 }
 

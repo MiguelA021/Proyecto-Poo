@@ -24,4 +24,5 @@ public abstract class Product {
 
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
     }
+    public abstract Product copy();
 }
