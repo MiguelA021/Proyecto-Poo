@@ -56,7 +56,7 @@ public abstract class Ticket {
 
     public boolean close() {
         if (status == Status.CLOSED) {
-            return false;
+            return true;
         }
         if (!canBeClosed()) {
             return false;
