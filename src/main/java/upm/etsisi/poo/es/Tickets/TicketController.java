@@ -1,9 +1,6 @@
 package upm.etsisi.poo.es.Tickets;
 
-import upm.etsisi.poo.es.Product.PersonalizedProduct;
-import upm.etsisi.poo.es.Product.Product;
-import upm.etsisi.poo.es.Product.ProductController;
-import upm.etsisi.poo.es.Product.Service;
+import upm.etsisi.poo.es.Product.*;
 import upm.etsisi.poo.es.User.*;
 
 import javax.swing.*;
@@ -96,7 +93,7 @@ public class TicketController {
                     local.newPrice();
                     customerTicket.ticketAdd(local, amount);
                 } else {
-                    customerTicket.ticketAdd(product, amount);
+                    customerTicket.ticketAdd(((BasicProduct) product).copy(), amount);
                 }
 
                 return;
@@ -121,7 +118,7 @@ public class TicketController {
                     local.newPrice();
                     mt.addProduct(local, amount);
                 } else {
-                    mt.addProduct(product, amount);
+                    mt.addProduct(((BasicProduct)product).copy(), amount);
                 }
                 return;
             }
