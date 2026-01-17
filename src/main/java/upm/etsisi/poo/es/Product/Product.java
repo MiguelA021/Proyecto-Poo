@@ -18,4 +18,6 @@ public abstract class Product {
 
   public abstract void setName(String name);
 
+  public abstract String getType();
+
 }

@@ -15,9 +15,11 @@ public class EnterpriseMixedTicket extends Ticket {
 
     private final List<Product> products = new ArrayList<>();
     private final List<Service> services = new ArrayList<>();
+    private int amount;
 
     public EnterpriseMixedTicket(Integer id) {
         super(id);
+        this.amount = 0;
     }
 
     @Override
@@ -64,6 +66,8 @@ public class EnterpriseMixedTicket extends Ticket {
             } else {
                 if (this.amount == 0) {
                     this.status = Status.OPEN;
+                    TicketDAO.getInstance().setStatus(this.id_bd, Status.OPEN);
+
                 }
 
                 if (p instanceof Event) {
@@ -194,6 +198,19 @@ public class EnterpriseMixedTicket extends Ticket {
         sc.append(TICKET + " " + this.id + "\n");
         sc.append(TICKET_NEW_OK);
         return sc.toString();
+    }
+    public void addProducts(Product [] listaProductos ) {
+        for (Product p : listaProductos) {
+            if (p instanceof Service) {
+                addService((Service)p);
+            } else if (p instanceof  Product) {
+                addProduct(p,1);
+
+            }
+        }
+    }
+    public String getType(){
+        return TicketController.COMBINED;
     }
 
 }

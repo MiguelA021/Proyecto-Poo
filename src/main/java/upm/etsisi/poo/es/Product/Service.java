@@ -1,5 +1,8 @@
 package upm.etsisi.poo.es.Product;
 
+import upm.etsisi.poo.es.Tickets.TicketController;
+import upm.etsisi.poo.es.Tickets.TicketDAO;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -59,5 +62,8 @@ public class Service extends Product {
         Date expiration = Date.from(this.maxUseDate.atStartOfDay(ZoneId.of("Europe/Madrid")).toInstant());
 
         return "{class:ProductService, id:" + id * -1 + ", category:" + this.name + ", expiration: " + expiration + "}";
+    }
+    public String getType(){
+        return ProductDAO.SERVICE;
     }
 }

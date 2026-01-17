@@ -11,12 +11,13 @@ import java.util.Comparator;
 public abstract class Ticket {
     protected final Integer id;
     protected Status status;
-    final static int MAX_PRODUCT = 100;
+    public final static int MAX_PRODUCT = 100;
     Product[] productList;
-    protected ArrayList<LocalDateTime> dates;
+    protected LocalDateTime date;
     protected int tickId;
-    private static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
+    public static DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
     int amount;
+    protected int id_bd;
 
     public static final String ERROR_FULL = "ERROR: Full Ticket (100 products max)";
     protected static final String ERROR_PRODUCT_ID_NOT_FOUND = "ERROR: Product ID not found";
@@ -39,9 +40,12 @@ public abstract class Ticket {
         this.amount = 0;
         this.status = Status.EMPTY;
         this.productList = new Product[MAX_PRODUCT];
-        this.dates = new ArrayList<LocalDateTime>();
-        LocalDateTime now = LocalDateTime.now();
-        dates.add(now);
+        this.date = LocalDateTime.now();
+
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public Integer getId() {
@@ -50,6 +54,9 @@ public abstract class Ticket {
 
     public Status getStatus() {
         return status;
+    }
+    public void  setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public abstract boolean canBeClosed();
@@ -64,6 +71,8 @@ public abstract class Ticket {
         }
 
         status = Status.CLOSED;
+        TicketDAO.getInstance().setStatus(this.id_bd, Status.CLOSED);
+
         return true;
     }
 
@@ -96,14 +105,14 @@ public abstract class Ticket {
         String status = this.status.toString().toUpperCase();
         switch (status) {
             case "EMPTY":
-                String inicio = dates.get(0).format(DATE_FORMAT);
+                String inicio = date.format(DATE_FORMAT);
                 resul.append(inicio).append("-").append(tickId);
                 break;
             case "OPEN":
                 resul.append(tickId);
                 break;
             case "CLOSED":
-                String fin = dates.get(1).format(DATE_FORMAT);
+                String fin = date.format(DATE_FORMAT);
                 resul.append(tickId).append(fin);
                 break;
             default:
@@ -112,5 +121,15 @@ public abstract class Ticket {
         }
         return resul.toString();
     }
+
+    public int getAmount() {
+        return amount;
+    }
+
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
 
 }

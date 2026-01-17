@@ -35,4 +35,7 @@ public class Meeting extends Event {
                 ", date of Event:" + this.expiracyDate.toLocalDate() +
                 ", max people allowed:" + this.maxPersonas + "}\n";
     }
+    public String getType() {
+        return ProductDAO.MEETING;
+    }
 }

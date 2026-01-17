@@ -1,10 +1,12 @@
 package upm.etsisi.poo.es;
 
 import upm.etsisi.poo.es.Commands.CommandController;
+import upm.etsisi.poo.es.Product.ProductDAO;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class App {
@@ -89,5 +91,10 @@ public class App {
   private void init() {
     System.out.println(WELCOME_MESSAGE);
     System.out.println(HELP_MESSAGE);
+    initDataBase();
   }
+
+    private void initDataBase() {
+      ConexionDB.inicializarTablas();
+    }
 }

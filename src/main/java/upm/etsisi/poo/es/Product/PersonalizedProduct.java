@@ -1,5 +1,6 @@
 package upm.etsisi.poo.es.Product;
 
+import upm.etsisi.poo.es.Tickets.TicketDAO;
 import upm.etsisi.poo.es.type;
 
 import java.util.ArrayList;
@@ -82,5 +83,17 @@ public class PersonalizedProduct extends BasicProduct {
 
         return sb.toString();
 
+    }
+    public String getCustomsBD(){
+        StringBuilder customs = new StringBuilder();
+        for (int i = 0; i < this.personalizaciones.size(); i++) {
+            if (i == 0) customs.append(personalizaciones.get(i));
+            else customs.append(personalizaciones.get(i)).append(",");
+        }return customs.toString();
+    }
+
+    @Override
+    public String getType() {
+        return ProductDAO.PERSONALIZEDPRODUCT;
     }
 }

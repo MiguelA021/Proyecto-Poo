@@ -54,6 +54,7 @@ public class CustomerTicket extends Ticket {
             } else {
                 if (this.amount == 0) {
                     this.status = Status.OPEN;
+                    TicketDAO.getInstance().setStatus(this.id_bd, Status.OPEN);
                 }
 
                 if (product instanceof Event) {
@@ -182,10 +183,12 @@ public class CustomerTicket extends Ticket {
 
         if (close) {
             LocalDateTime now = LocalDateTime.now();
-            dates.add(now);
+            setDate(now);
             boolean validClose = comprobarFechasTodosEventos(now);
             if (validClose) {
                 this.status = Status.CLOSED;
+                TicketDAO.getInstance().setStatus(this.id_bd, Status.CLOSED);
+
             } else
                 System.out.println(DONT_CLOSE_NOT_VALID_TIME);
         }
@@ -265,7 +268,15 @@ public class CustomerTicket extends Ticket {
 
         return sc.toString();
     }
-
+    public void setAmount (int amount) {
+        this.amount = amount;
+    }
+    public void setProductList ( Product[] productList) {
+        this.productList = productList;
+    }
+    public String getType(){
+        return TicketController.PRODUCTS1;
+    }
     /**
      * The method sorts the names alphabetically
      */

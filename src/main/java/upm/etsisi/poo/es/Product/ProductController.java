@@ -1,11 +1,14 @@
 package upm.etsisi.poo.es.Product;
 
+
+import upm.etsisi.poo.es.Tickets.Ticket;
+import upm.etsisi.poo.es.Tickets.TicketDAO;
 import upm.etsisi.poo.es.type;
 
 import java.util.*;
 
 public class ProductController {
-  int MAX_PRODUCT = 200;
+  public static int MAX_PRODUCT = 200;
   Product[] productList;
 
   public static final String CASHIER_NOT_FOUND = "The cashier given was not found";
@@ -13,10 +16,16 @@ public class ProductController {
   public static final String ID_ERROR = "The id given has already been  used";
   private int prodAmount;
   private static ProductController instance;
+  ProductDAO productDAO = ProductDAO.getInstance();
 
-  private ProductController() {
+    public void setProductList(Product[] productList) {
+        this.productList = productList;
+    }
+
+    private ProductController() {
     this.productList = new Product[MAX_PRODUCT];
     this.prodAmount = 0;
+    this.productList = productDAO.loadProducts();
   }
 
   public static ProductController getInstance() {
@@ -118,7 +127,10 @@ public class ProductController {
           this.prodAmount++;
         }
       }
-    }
+    }if(done){
+        if( productDAO.prodAdd(product,product.getType())){
+            System.out.println(TicketDAO.ERROR_DB);}
+      }
     return done;
   }
 
@@ -141,6 +153,7 @@ public class ProductController {
     }
     if (found) {
       this.prodAmount--;
+      if(!productDAO.removeProduct(id)) System.out.println(TicketDAO.ERROR_DB);;
       System.out.println(product.toString());
       System.out.println("prod remove: ok");
 
@@ -180,6 +193,7 @@ public class ProductController {
           basic.SetCategory(category);
           resul = basic;
           done = true;
+          productDAO.updateType(id, category);
         }
       }
     }
@@ -201,6 +215,7 @@ public class ProductController {
       if (this.productList[i].getId() == id) {
         this.productList[i].setName(name.replaceAll("\"", ""));
         resul = productList[i];
+        productDAO.updateName(id, name);
         done = true;
       }
     }
@@ -222,10 +237,12 @@ public class ProductController {
       if (productList[i].getId() == id) {
         productList[i].setPrice(price);
         resul = productList[i];
+        productDAO.updatePrice(id, price);
         done = true;
       }
     }
     return resul;
   }
+
 
 }

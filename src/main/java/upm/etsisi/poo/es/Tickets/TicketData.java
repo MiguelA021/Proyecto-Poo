@@ -6,9 +6,13 @@ public class TicketData {
     private static final String ID_ERROR = "The id given has been already used";
     HashMap<Integer, Ticket> tickets;
     private static TicketData instance;
+    TicketDAO ticketDAO;
 
     private TicketData() {
-        this.tickets = new HashMap<>();
+
+        this.ticketDAO = TicketDAO.getInstance();
+        this.tickets = ticketDAO.loadTickets();
+
     }
 
     public static TicketData getInstance() {
@@ -26,7 +30,7 @@ public class TicketData {
         return resul;
     }
 
-    public int addTicket(String tycketType) {
+    public int addTicket(String tycketType, int cashId, int userId) {
         int id;
         do {
             id = (int) (Math.random() * 100000);
@@ -34,17 +38,20 @@ public class TicketData {
         switch (tycketType) {
             case "products":
                 CustomerTicket customerTicket = new CustomerTicket(id);
-                tickets.put(customerTicket.getId(), customerTicket);
+                tickets.put(id, customerTicket);
+                ticketDAO.addTicket(customerTicket,tycketType,cashId,userId);
                 System.out.println(customerTicket.toStringNew());
                 break;
             case "services":
                 EnterpriseServiceTicket enterpriseServiceTicket = new EnterpriseServiceTicket(id);
-                tickets.put(enterpriseServiceTicket.getId(), enterpriseServiceTicket);
+                tickets.put(id,enterpriseServiceTicket);
+                ticketDAO.addTicket(enterpriseServiceTicket,tycketType,cashId,userId);
                 System.out.println(enterpriseServiceTicket.toStringId());
                 break;
             case "combined":
                 EnterpriseMixedTicket enterpriseMixedTicket = new EnterpriseMixedTicket(id);
-                tickets.put(enterpriseMixedTicket.getId(), enterpriseMixedTicket);
+                tickets.put(id,enterpriseMixedTicket);
+                ticketDAO.addTicket(enterpriseMixedTicket,tycketType,cashId,userId);
                 System.out.println(enterpriseMixedTicket.toStringId());
                 break;
             default:
@@ -55,7 +62,7 @@ public class TicketData {
         return id;
     }
 
-    public boolean addTicket(int idTicket, String ticketType) {
+    public boolean addTicket(int idTicket, String ticketType, int cashId, int userId) {
         boolean resul = false;
         if (tickets.containsKey(idTicket))
             System.out.println(ID_ERROR);
@@ -64,18 +71,21 @@ public class TicketData {
                 case "products":
                     CustomerTicket customerTicket = new CustomerTicket(idTicket);
                     tickets.put(idTicket, customerTicket);
+                    ticketDAO.addTicket(customerTicket,ticketType,cashId,userId);
                     resul = true;
                     System.out.println(customerTicket.toStringNew());
                     break;
                 case "services":
                     EnterpriseServiceTicket enterpriseServiceTicket = new EnterpriseServiceTicket(idTicket);
-                    tickets.put(idTicket, enterpriseServiceTicket);
+                    tickets.put(idTicket,enterpriseServiceTicket);
+                    ticketDAO.addTicket(enterpriseServiceTicket,ticketType,cashId,userId);
                     resul = true;
                     System.out.println(enterpriseServiceTicket.toStringNew());
                     break;
                 case "combined":
                     EnterpriseMixedTicket enterpriseMixedTicket = new EnterpriseMixedTicket(idTicket);
-                    tickets.put(idTicket, enterpriseMixedTicket);
+                    tickets.put(idTicket,enterpriseMixedTicket);
+                    ticketDAO.addTicket(enterpriseMixedTicket,ticketType,cashId,userId);
                     resul = true;
                     System.out.println(enterpriseMixedTicket.toStringNew());
                     break;
@@ -87,5 +97,9 @@ public class TicketData {
 
         }
         return resul;
+    }
+
+    public void setTickets(HashMap<Integer, Ticket> tickets) {
+        this.tickets = tickets;
     }
 }

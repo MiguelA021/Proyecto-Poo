@@ -26,5 +26,11 @@ public class Customer extends User {
   public void addTicket(Integer id) {
     this.tickets.add(id);
   }
+  public int getCashierId(){
+      return this.cashierId;
+  }
+  public int getIdBD(){
+      return Integer.parseInt(this.id);
+  }
 
 }

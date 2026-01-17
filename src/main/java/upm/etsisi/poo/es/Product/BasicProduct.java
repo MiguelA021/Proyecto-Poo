@@ -102,5 +102,8 @@ public class BasicProduct extends Product {
         this.id, this.name, this.category, this.price, discountValue));
     return sc.toString();
   }
+  public String getType() {
+        return ProductDAO.BASICPRODUCT;
+    }
 
 }

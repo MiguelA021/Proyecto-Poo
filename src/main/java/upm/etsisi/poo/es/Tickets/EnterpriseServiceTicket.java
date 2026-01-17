@@ -44,7 +44,11 @@ public class EnterpriseServiceTicket extends Ticket {
         if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today)) return false;
 
         services.add(s);
-        if (status == Status.EMPTY) status = Status.OPEN;
+        if (status == Status.EMPTY) {
+            status = Status.OPEN;
+            TicketDAO.getInstance().setStatus(this.id_bd, Status.OPEN);
+        }
+;
         return true;
     }
 
@@ -91,4 +95,14 @@ public class EnterpriseServiceTicket extends Ticket {
         sc.append(TICKET_NEW_OK);
         return sc.toString();
     }
+    public void addProducts(Product [] listaProductos ) {
+        for (Product producto : listaProductos){
+            Service s = (Service) producto;
+            this.addService(s);
+        }
+        }public String getType(){
+        return TicketController.SERVICE;
+    }
+
+
 }

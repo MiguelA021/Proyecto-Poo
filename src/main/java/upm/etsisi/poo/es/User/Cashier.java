@@ -17,6 +17,7 @@ public class Cashier extends User {
     this.id = id;
   }
 
+
   /**
    * The method runs through the tree and gives back the pair [K,V] ordered by the
    * key

@@ -37,5 +37,8 @@ public class Food extends Event {
                 ", max people allowed:" + this.maxPersonas +
                 "}\n";
     }
+    public String getType() {
+        return ProductDAO.FOOD;
+    }
 }
 

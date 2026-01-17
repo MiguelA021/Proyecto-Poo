@@ -13,7 +13,7 @@ public class TicketCommand implements Command {
     private TicketController ticketController;
 
     public TicketCommand() {
-        this.ticketController = new TicketController();
+        this.ticketController = TicketController.getInstance();
     }
 
     @Override

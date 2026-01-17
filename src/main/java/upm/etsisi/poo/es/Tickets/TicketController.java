@@ -15,10 +15,25 @@ import java.time.LocalDate;
 import static upm.etsisi.poo.es.Commands.Command.*;
 
 public class TicketController {
-    private TicketData ticketData;
+    public static final String COMBINED = "combined";
+    public static final String SERVICE = "services";
+    public static final String PRODUCTS1 = "products";
 
-    public TicketController() {
+    private TicketData ticketData;
+    private TicketDAO ticketDAO;
+    public static TicketController instance;
+
+    private TicketController() {
         this.ticketData = TicketData.getInstance();
+        this.ticketDAO = TicketDAO.getInstance();
+        ticketData.setTickets(ticketDAO.loadTickets());
+    }
+
+    public static TicketController getInstance() {
+        if (instance == null) {
+            instance = new TicketController();
+        }
+        return instance;
     }
 
 
@@ -41,10 +56,17 @@ public class TicketController {
                 boolean ok = false;
                 if (ticket instanceof EnterpriseServiceTicket) {
                     ok = ((EnterpriseServiceTicket) ticket).addService(s);
+                    if (ok) {
+                        ticketDAO.addProduct(ticket.getId(), idProducto, 1, null);
+                    }
                     EnterpriseServiceTicket enterpriseServiceTicket = (EnterpriseServiceTicket) ticket;
                     System.out.println(enterpriseServiceTicket.print(false));
+
                 } else if (ticket instanceof EnterpriseMixedTicket) {
                     ok = ((EnterpriseMixedTicket) ticket).addService(s);
+                    if (ok) {
+                        ticketDAO.addProduct(ticket.getId(), idProducto, 1, null);
+                    }
                     EnterpriseMixedTicket enterpriseMixedTicket = (EnterpriseMixedTicket) ticket;
                     System.out.println(enterpriseMixedTicket.print(false));
                 } else {
@@ -91,16 +113,21 @@ public class TicketController {
                             product.getPrice(),
                             maxPers
                     );
+                    StringBuilder customs = new StringBuilder();
 
                     for (int i = 6; i < args.length; i++) {
                         String personalization = args[i].replaceAll("--p", "");
                         local.addPersonalized(personalization);
+                        if (i == 6) customs.append(personalization);
+                        else customs.append(personalization).append(",");
                     }
                     local.newPrice();
 
-                    customerTicket.ticketAdd(local, amount);
+                    boolean ok = customerTicket.ticketAdd(local, amount);
+                    if (ok) ticketDAO.addProduct(customerTicket.getId(), prodId, amount, customs.toString());
                 } else {
-                    customerTicket.ticketAdd(product, amount);
+                    boolean ok = customerTicket.ticketAdd(product, amount);
+                    if (ok) ticketDAO.addProduct(customerTicket.getId(), prodId, amount, null);
                 }
 
                 return;
@@ -118,16 +145,22 @@ public class TicketController {
                             product.getPrice(),
                             maxPers
                     );
+                    StringBuilder customs = new StringBuilder();
 
                     for (int i = 6; i < args.length; i++) {
                         String personalization = args[i].replaceAll("--p", "");
                         local.addPersonalized(personalization);
+                        if (i == 6) customs.append(personalization);
+                        else customs.append(personalization).append(",");
                     }
                     local.newPrice();
 
-                    mt.addProduct(local, amount);
+                    boolean ok = mt.addProduct(local, amount);
+                    if (ok) ticketDAO.addProduct(mt.getId(), prodId, amount, customs.toString());
                 } else {
-                    mt.addProduct(product, amount);
+                    boolean ok =
+                            mt.addProduct(product, amount);
+                    if (ok) ticketDAO.addProduct(mt.getId(), prodId, amount, null);
                 }
             }
 
@@ -147,27 +180,50 @@ public class TicketController {
     public void ticketRemove(int ticketId, int prodId) {
 
         Ticket t = TicketData.getInstance().getTicket(ticketId);
+        int idBD = t.getId();
 
         if (t instanceof CustomerTicket) {
+            boolean borrado = false;
             Product customerProduct = ((CustomerTicket) t).ticketRemove(prodId);
-            if (customerProduct == null) {
-                System.out.println(NOTEXIST);
-            } else {
-                System.out.println(((CustomerTicket) t).print(false));
-            }
+            if (customerProduct != null) {
+                if (customerProduct instanceof PersonalizedProduct) {
+                    PersonalizedProduct local = (PersonalizedProduct) customerProduct;
+                    String customs = local.getCustomsBD();
+                    borrado = true;
+                    if (!ticketDAO.removeProduct(idBD, prodId, customs)) {
+                        System.out.println(TicketDAO.ERROR_DB);
+                    }
+                }
+                if (borrado) System.out.println(((CustomerTicket) t).print(false));
+
+
+            } else System.out.println(NOTEXIST);
+
         } else if (t instanceof EnterpriseServiceTicket) {
             Product serviceProduct = ((EnterpriseServiceTicket) t).ticketRemove(prodId);
             if (serviceProduct == null) {
                 System.out.println(NOTEXIST);
             } else {
+
+                if (!ticketDAO.removeProduct(idBD, prodId, null)) System.out.println(TicketDAO.ERROR_DB);
+                ;
                 System.out.println(((EnterpriseServiceTicket) t).print(false));
+
             }
         } else if (t instanceof EnterpriseMixedTicket) {
             Product mixedProduct = ((EnterpriseMixedTicket) t).ticketRemove(prodId);
             if (mixedProduct == null) {
                 System.out.println(NOTEXIST);
             } else {
-                System.out.println(((EnterpriseMixedTicket) t).print(false));
+                if (mixedProduct instanceof PersonalizedProduct) {
+                    PersonalizedProduct local = (PersonalizedProduct) mixedProduct;
+                    String customs = local.getCustomsBD();
+                    if(!ticketDAO.removeProduct(idBD, prodId, customs)){System.out.println(TicketDAO.ERROR_DB);}
+                    System.out.println(((EnterpriseMixedTicket) t).print(false));
+                }
+                boolean borrado = ticketDAO.removeProduct(idBD, prodId, null);
+                if (borrado) System.out.println(((EnterpriseMixedTicket) t).print(false));
+                else System.out.println(TicketDAO.ERROR_DB);
             }
         }
     }
@@ -190,7 +246,7 @@ public class TicketController {
             if (customer == null) {
                 userId = CustomerController.getInstance().dniToId(args[4]);
                 customer = CustomerController.getInstance().getCustomer(userId);
-                if(customer == null) {
+                if (customer == null) {
                     System.out.println("User not found");
                     return;
                 }
@@ -201,12 +257,12 @@ public class TicketController {
                     cashId = Integer.parseInt(args[3].replaceAll("UW", ""));
                     switch (args[4]) {
                         case "-c":
-                            ticketId = TicketData.getInstance().addTicket("combined");
+                            ticketId = TicketData.getInstance().addTicket(COMBINED, cashId, userId);
                             CashierController.getInstance().addTicket(ticketId, cashId);
                             CustomerController.getInstance().addTicket(ticketId, userId);
                             break;
                         case "-s":
-                            ticketId = TicketData.getInstance().addTicket("services");
+                            ticketId = TicketData.getInstance().addTicket(SERVICE, cashId, userId);
                             CashierController.getInstance().addTicket(ticketId, cashId);
                             CustomerController.getInstance().addTicket(ticketId, userId);
                             break;
@@ -221,17 +277,17 @@ public class TicketController {
                     cashId = Integer.parseInt(args[3].replaceAll("UW", ""));
                     switch (args[5]) {
                         case "-s":
-                            if(!TicketData.getInstance().addTicket(ticketId, "services")){
+                            if (!TicketData.getInstance().addTicket(ticketId, SERVICE, cashId, userId)) {
                                 System.out.println(ID_REPEAT);
-                            }else {
+                            } else {
                                 CashierController.getInstance().addTicket(ticketId, cashId);
                                 CustomerController.getInstance().addTicket(ticketId, userId);
                             }
                             break;
                         case "-c":
-                            if(!TicketData.getInstance().addTicket(ticketId, "combined")){
+                            if (!TicketData.getInstance().addTicket(ticketId, COMBINED, cashId, userId)) {
                                 System.out.println(ID_REPEAT);
-                            }else {
+                            } else {
                                 CashierController.getInstance().addTicket(ticketId, cashId);
                                 CustomerController.getInstance().addTicket(ticketId, userId);
                             }
@@ -249,7 +305,7 @@ public class TicketController {
                     // ticket new <cashId> <userId>
                     String cashierId = args[2].replaceAll("UW", "");
                     cashId = Integer.parseInt(cashierId);
-                    ticketId = TicketData.getInstance().addTicket("products");
+                    ticketId = TicketData.getInstance().addTicket(PRODUCTS1, cashId, userId);
                     CashierController.getInstance().addTicket(ticketId, cashId);
                     CustomerController.getInstance().addTicket(ticketId, userId);
                 } else {
@@ -257,7 +313,7 @@ public class TicketController {
                     String cashierId = args[3].replaceAll("UW", "");
                     cashId = Integer.parseInt(cashierId);
                     ticketId = Integer.valueOf(args[2]);
-                    if (!TicketData.getInstance().addTicket(ticketId, "products"))
+                    if (!TicketData.getInstance().addTicket(ticketId, PRODUCTS1, cashId, userId))
                         System.out.println(ID_REPEAT);
                     else {
                         CashierController.getInstance().addTicket(ticketId, cashId);

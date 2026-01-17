@@ -10,9 +10,11 @@ public class CustomerController {
     public static final String CASHIER_NOT_FOUND = "The cashier given was not found";
     public static CustomerController instance;
     TreeMap<Integer, Customer> customers;
+    CustomerDAO customerDAO;
 
     private CustomerController() {
-        this.customers = new TreeMap<Integer, Customer>();
+        this.customerDAO = CustomerDAO.getInstance();
+        this.customers = customerDAO.loadCustomers();
     }
 
     public static CustomerController getInstance() {
@@ -31,11 +33,12 @@ public class CustomerController {
             customer = new Customer(email, name, dni, cashId);
         }
         customers.put(id, customer);
+        customerDAO.addCustomer(customer);
         System.out.println(customer.toString());
         System.out.println("client add: ok");
     }
 
-    public int dniToId(String dni) {
+    public static int dniToId(String dni) {
         int id = 0;
         for (char c : dni.toCharArray()) {
             if (Character.isDigit(c)) {
@@ -53,6 +56,7 @@ public class CustomerController {
     public boolean removeCustomer(String dni) {
         int id = dniToId(dni);
         Customer customer = customers.remove(id);
+        customerDAO.removeCustomer(customer);
         return customer != null;
     }
 

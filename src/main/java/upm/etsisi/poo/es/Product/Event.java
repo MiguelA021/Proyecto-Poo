@@ -75,4 +75,7 @@ public class Event extends Product {
   public double getPricePerPerson() {
     return pricePerPerson;
   }
+  public String getType() {
+        return ProductDAO.EVENT;
+    }
 }
