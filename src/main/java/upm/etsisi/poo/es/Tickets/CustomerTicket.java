@@ -254,7 +254,8 @@ public class CustomerTicket extends Ticket {
         StringBuilder sc = new StringBuilder();
 
         if (close) {
-            if (!this.close()) System.out.println(PERIOD_NOT_VALID);
+            if (!this.close())
+                return PERIOD_NOT_VALID;
         }
         sc.append(TICKET + " ").append(toStringId()).append("\n");
         if (this.amount > 0 && this.productList[0] != null) {
