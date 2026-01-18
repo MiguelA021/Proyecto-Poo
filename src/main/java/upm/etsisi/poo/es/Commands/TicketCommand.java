@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 public class TicketCommand implements Command {
   private TicketController ticketController;
+  private final static String ERROR_ID="The id given doesn't follow the syntax";
 
   public TicketCommand() {
     this.ticketController = TicketController.getInstance();
@@ -94,25 +95,29 @@ public class TicketCommand implements Command {
       System.out.println(INCORRECT);
       return;
     }
-    int ticketId = Integer.parseInt(args[2]);
-    String casherId = args[3];
-    int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
-    Cashier cashier = CashierController.getInstance().searchCasherById(casherIdGood);
+    try {
+      int ticketId = Integer.parseInt(args[2]);
+      String casherId = args[3];
+      int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
+      Cashier cashier = CashierController.getInstance().searchCasherById(casherIdGood);
 
       Ticket ticket = TicketData.getInstance().getTicket(ticketId);
-    if(cashier == null && ticket == null){
+      if (cashier == null && ticket == null) {
         System.out.println("Cashier and ticket don't exist");
-    }else if(cashier == null){
+      } else if (cashier == null) {
         System.out.println("Cashier doesn't exist");
         return;
-    }else if(ticket == null){
+      } else if (ticket == null) {
         System.out.println("Ticket doesn't exist");
         return;
-    }
-    if (CashierController.getInstance().exitsTicket(casherIdGood, ticketId)) {
+      }
+      if (CashierController.getInstance().exitsTicket(casherIdGood, ticketId)) {
         ticketController.ticketPrint(ticketId);
-    }else{
+      } else {
         System.out.println("This ticket does not belong to cashier");
+      }
+    } catch (NumberFormatException e) {
+      System.out.println(ERROR_ID);
     }
   }
 
