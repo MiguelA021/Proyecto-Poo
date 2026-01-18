@@ -9,10 +9,10 @@ import java.util.ArrayList;
 public class Cashier extends User {
   private static final String UPM_WORKER = "UW";
   private static final String ID_ERROR = "The id given has been already used";
-  private static final String ID_NOT_FOUND = "The id given, was not found ";
-
+  private ArrayList<String> customers;
   public Cashier(String email, String name, String id) {
     this.tickets = new ArrayList<Integer>();
+    this.customers = new ArrayList<String>();
     this.email = email;
     this.name = name;
     this.id = id;
@@ -33,6 +33,14 @@ public class Cashier extends User {
     return id;
   }
 
+  public ArrayList<String> getCustomers(){
+      return this.customers;
+  }
+
+  public void addCustomer(String id){
+      customers.add(id);
+  }
+
   /**
    * .
    * The method returns the ticket given by id
@@ -49,24 +57,6 @@ public class Cashier extends User {
     return "Cash{identifier='" + UPM_WORKER + id + "', name='" + name + "', email='" + email + "'}";
   }
 
-  /**
-   * The method removes the ticket given by the id
-   *
-   * @param id the id of the ticket
-   * @return returns true if the ticket has been removed
-   */
-  public boolean removeTicket(int id) {
-    boolean resul = false;
-    if (tickets.contains(id)) {
-      resul = true;
-      tickets.remove(id);
-    }
-    return resul;
-  }
-
-  public void insertTicket(int id) {
-    tickets.add(id);
-  }
 
   public void printCsv(CSVPrinter csvPrinter) throws IOException {
     csvPrinter.printRecord("Cashier", email, name, id);

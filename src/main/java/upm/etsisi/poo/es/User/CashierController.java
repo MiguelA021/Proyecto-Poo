@@ -2,6 +2,7 @@ package upm.etsisi.poo.es.User;
 
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import upm.etsisi.poo.es.Tickets.TicketData;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -127,7 +128,18 @@ public class CashierController {
    * @return the method returns true if the cashier has been removed successfully
    */
   public boolean removeCasher(int id) {
-    return (cashers.remove(id) != null);
+      if(cashers.containsKey(id)){
+          Cashier cashier = cashers.get(id);
+          for(Integer tickId: cashier.tickets){
+              TicketData.getInstance().eraseticket(tickId);
+          }
+          for(String custId:cashier.getCustomers()){
+              CustomerController.getInstance().removeCustomer(custId);
+          }
+          cashers.remove(id);
+          return true;
+      }
+    return false;
   }
 
   /**

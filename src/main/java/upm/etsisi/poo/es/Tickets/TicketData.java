@@ -29,6 +29,10 @@ public class TicketData {
         return instance;
     }
 
+    public void eraseticket(int id){
+        tickets.remove(id, getTicket(id));
+    }
+
     /**
      * The method returns the ticket wit the id given by parameter
      *
