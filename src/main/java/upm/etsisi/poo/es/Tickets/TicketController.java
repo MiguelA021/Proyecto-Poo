@@ -7,7 +7,7 @@ import static upm.etsisi.poo.es.Commands.Command.*;
 
 public class TicketController {
     private static TicketController instance;
-    private TicketData ticketData;
+    private final TicketData ticketData;
 
     public static TicketController getInstance() {
         if (instance == null) {

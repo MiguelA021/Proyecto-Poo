@@ -4,9 +4,9 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.IOException;
-import java.util.*;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class CustomerController {
@@ -42,8 +42,8 @@ public class CustomerController {
      */
     public Customer addCustomer(String name, String dni, String email, int cashId) {
 
-        String dninew = dni.trim().toUpperCase();
-        int id = dniToId(dninew);
+        String dniNew = dni.trim().toUpperCase();
+        int id = dniToId(dniNew);
 
         if (customers.containsKey(id)) {
             System.out.println("This Id is already used");
@@ -56,17 +56,17 @@ public class CustomerController {
 
         Customer customer;
 
-        IdType type = IdType.detect(dninew);
+        IdType type = IdType.detect(dniNew);
 
         switch (type) {
             case DNI:
             case NIE:
-                customer = new Customer(email, name, dninew, cashId);
+                customer = new Customer(email, name, dniNew, cashId);
                 CashierController.getInstance().cashers.get(cashId).addCustomer(dni);
                 break;
 
             case COMPANY:
-                customer = new CustomerEnterprise(email, name, dninew, cashId);
+                customer = new CustomerEnterprise(email, name, dniNew, cashId);
                 CashierController.getInstance().cashers.get(cashId).addCustomer(dni);
                 break;
 

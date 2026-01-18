@@ -8,9 +8,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 public class Service extends Product {
-
     private static int NEXT = 1;
-
     private final int id;
     private final LocalDate maxUseDate;
     private final String name;

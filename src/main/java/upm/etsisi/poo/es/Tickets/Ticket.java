@@ -68,6 +68,7 @@ public abstract class Ticket {
 
     /**
      * The method prints the ticket
+     *
      * @param close shows if the ticket is closed or not
      * @return returns the String
      */
@@ -78,6 +79,7 @@ public abstract class Ticket {
     /**
      * The method returns a String with a specific format, if it's open it only shows the id.
      * If it's empty it shows only the creation date. If it's closed it shows the closing date
+     *
      * @return It returns the String
      */
     public String formatList() {
@@ -86,21 +88,23 @@ public abstract class Ticket {
         return resul.toString();
     }
 
-    public String formatListCashList(){
+    public String formatListCashList() {
         StringBuilder resul = new StringBuilder();
         resul.append("  " + toStringId()).append("->").append(this.status.toString().toUpperCase());
         return resul.toString();
     }
+
     /**
      * The method makes a String with a specific format
+     *
      * @return the String with the format
      */
     public String toStringNew(boolean withId) {
         StringBuilder sc = new StringBuilder();
         if (withId) {
             sc.append(TICKET + this.id + "\n");
-        } else{
-            sc.append(TICKET +this.dates.get(0).format(DATE_FORMAT)+"-"+ this.id + "\n");
+        } else {
+            sc.append(TICKET + this.dates.get(0).format(DATE_FORMAT) + "-" + this.id + "\n");
         }
         sc.append("  " + TOTAL_PRICE + " 0.0 \n");
         sc.append("  " + TOTAL_DISCOUNT + " 0.0 \n");
@@ -111,6 +115,7 @@ public abstract class Ticket {
 
     /**
      * The method creates a String with a specific format
+     *
      * @return returns the String with the format
      */
     protected String toStringId() {
@@ -145,12 +150,12 @@ public abstract class Ticket {
     }
 
 
-    public BasicProduct copy(BasicProduct b){
-        return new BasicProduct(b.getId(), b.getName(),b.getCategory() , b.getPrice());
+    public BasicProduct copy(BasicProduct b) {
+        return new BasicProduct(b.getId(), b.getName(), b.getCategory(), b.getPrice());
     }
 
 
-    public void printCsv(CSVPrinter csvPrinter) throws Exception{
+    public void printCsv(CSVPrinter csvPrinter) throws Exception {
 
     }
 }

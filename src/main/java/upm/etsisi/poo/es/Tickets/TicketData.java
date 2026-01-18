@@ -29,7 +29,7 @@ public class TicketData {
         return instance;
     }
 
-    public void eraseticket(int id){
+    public void eraseticket(int id) {
         tickets.remove(id, getTicket(id));
     }
 
@@ -40,8 +40,7 @@ public class TicketData {
      * @return the ticket if it has been found, if not returns null
      */
     public Ticket getTicket(int ticketId) {
-        Ticket resul = tickets.get(ticketId);
-        return resul;
+        return tickets.get(ticketId);
     }
 
     /**
@@ -89,8 +88,7 @@ public class TicketData {
      */
     public boolean addTicket(int idTicket, String ticketType) {
         boolean resul = false;
-        if (tickets.containsKey(idTicket)) {
-        } else {
+        if (!tickets.containsKey(idTicket)) {
             switch (ticketType) {
                 case "products":
                     CustomerTicket customerTicket = new CustomerTicket(idTicket);
@@ -209,14 +207,8 @@ public class TicketData {
                     } else {
                         switch (record.get(1)) {
                             case "PersonalizedProduct":
-                                System.out.println("can not add product to ticket");
-                                break;
                             case "BasicProduct":
-                                System.out.println("can not add product to ticket");
-                                break;
                             case "Meeting":
-                                System.out.println("can not add product to ticket");
-                                break;
                             case "Food":
                                 System.out.println("can not add product to ticket");
                                 break;
@@ -355,14 +347,8 @@ public class TicketData {
                     } else {
                         switch (record.get(1)) {
                             case "PersonalizedProduct":
-                                System.out.println("can not add product to ticket");
-                                break;
                             case "BasicProduct":
-                                System.out.println("can not add product to ticket");
-                                break;
                             case "Meeting":
-                                System.out.println("can not add product to ticket");
-                                break;
                             case "Food":
                                 System.out.println("can not add product to ticket");
                                 break;

@@ -6,7 +6,6 @@ import upm.etsisi.poo.es.type;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Locale;
 
 public class CustomerTicket extends Ticket {
 
@@ -29,12 +28,12 @@ public class CustomerTicket extends Ticket {
         if (status == Status.CLOSE) {
             return true;
         }
-            status = Status.CLOSE;
-            for (int i = 0; i<this.amount; i++){
-                if(productList[i] instanceof BasicProduct){
-                    this.productList[i] = copy((BasicProduct) productList[i]);
-                }
+        status = Status.CLOSE;
+        for (int i = 0; i < this.amount; i++) {
+            if (productList[i] instanceof BasicProduct) {
+                this.productList[i] = copy((BasicProduct) productList[i]);
             }
+        }
 
         return true;
     }
@@ -64,14 +63,11 @@ public class CustomerTicket extends Ticket {
      *                people that are expected on that Food/Meeting. If not, it
      *                shows how much times
      *                are we going to add the product into the ticket.
-     * @return It returns true if the product has been added successfully.
      */
-    public boolean ticketAdd(Product product, int amount) {
-        boolean resul = true;
+    public void ticketAdd(Product product, int amount) {
         if (this.status != Status.CLOSE) {
             int before = this.amount;
             if (product == null) {
-                resul = false;
                 System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
 
             } else {
@@ -89,21 +85,17 @@ public class CustomerTicket extends Ticket {
                                 Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPricePerPerson(), event.getExpiryDate().toLocalDate().toString());
                                 meeting.setPrice(price);
                                 productList[this.amount] = meeting;
-                                this.amount++;
                             } else {
                                 Food food = new Food(event.getId(), event.getName(), event.getPricePerPerson(), event.getExpiryDate().toLocalDate().toString());
                                 food.setPrice(price);
                                 productList[this.amount] = food;
-                                this.amount++;
                             }
-
-
+                            this.amount++;
                             System.out.println(ticketPrint(false));
                             System.out.println(ADD_OK);
 
                         } else {
                             System.out.println(MANY_PEOPLE);
-                            resul = false;
                         }
                     } else {
                         System.out.println(PERIOD_NOT_VALID);
@@ -118,10 +110,8 @@ public class CustomerTicket extends Ticket {
                     }
                     System.out.println(ticketPrint(false));
                     if ((this.amount - before) == amount) {
-                        resul = true;
                         System.out.println(ADD_OK);
                     } else {
-                        resul = false;
                         System.out.println(ERROR_FULL);
                     }
 
@@ -129,24 +119,16 @@ public class CustomerTicket extends Ticket {
 
             }
         } else {
-            resul = false;
             System.out.println(ERROR_TICKET_CLOSE);
         }
-        return resul;
     }
 
-    public boolean ticketAddNoString(Product product, int amount) {
-        boolean resul = true;
+    public void ticketAddNoString(Product product, int amount) {
         if (this.status != Status.CLOSE) {
-            int before = this.amount;
-            if (product == null) {
-                resul = false;
-
-            } else {
+            if (product != null) {
                 if (this.amount == 0) {
                     this.status = Status.OPEN;
                 }
-
                 if (product instanceof Event) {
                     Event event = (Event) product;
                     if (event.fechaValida(LocalDateTime.now())) {
@@ -156,19 +138,14 @@ public class CustomerTicket extends Ticket {
                                 Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPricePerPerson(), event.getExpiryDate().toLocalDate().toString());
                                 meeting.setPrice(price);
                                 productList[this.amount] = meeting;
-                                this.amount++;
                             } else {
                                 Food food = new Food(event.getId(), event.getName(), event.getPricePerPerson(), event.getExpiryDate().toLocalDate().toString());
                                 food.setPrice(price);
                                 productList[this.amount] = food;
-                                this.amount++;
                             }
-                        } else {
-                            resul = false;
+                            this.amount++;
                         }
-                    } else {
                     }
-
                 } else {
                     int i = 0;
                     while (this.amount < MAX_PRODUCT && i < amount) {
@@ -176,20 +153,11 @@ public class CustomerTicket extends Ticket {
                         this.amount++;
                         i++;
                     }
-                    if ((this.amount - before) == amount) {
-                        resul = true;
-                    } else {
-                        resul = false;
-                    }
-
                 }
-
             }
         } else {
-            resul = false;
             System.out.println(ERROR_TICKET_CLOSE);
         }
-        return resul;
     }
 
     /**
@@ -279,7 +247,7 @@ public class CustomerTicket extends Ticket {
             if (!this.close())
                 return PERIOD_NOT_VALID;
         }
-        sc.append(TICKET ).append(toStringId()).append("\n");
+        sc.append(TICKET).append(toStringId()).append("\n");
         if (this.amount > 0 && this.productList[0] != null) {
             sort();
             int n = this.amount;

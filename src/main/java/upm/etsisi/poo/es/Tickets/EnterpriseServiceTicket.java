@@ -5,7 +5,6 @@ import upm.etsisi.poo.es.Product.Product;
 import upm.etsisi.poo.es.Product.ProductController;
 import upm.etsisi.poo.es.Product.Service;
 
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +28,7 @@ public class EnterpriseServiceTicket extends Ticket {
 
     /**
      * The method checks if the Ticket can be closed, it must not be empty and if it has services, the services must be on a valid date
+     *
      * @return returns true if it can be closed, else returns false
      */
     @Override
@@ -47,6 +47,7 @@ public class EnterpriseServiceTicket extends Ticket {
 
     /**
      * The method adds a service into the ticket if the ticket is not closed and the dates are valid
+     *
      * @param s the service that we are going to add
      * @return returns true if the service has been added successfully, else returns false
      */
@@ -67,6 +68,7 @@ public class EnterpriseServiceTicket extends Ticket {
 
     /**
      * The method creates a String with a specific format
+     *
      * @param close shows if the ticket is closed or not
      * @return the String ready to print
      */
@@ -74,7 +76,7 @@ public class EnterpriseServiceTicket extends Ticket {
     public String print(boolean close) {
 
         if (close) {
-            if(!this.close())
+            if (!this.close())
                 return PERIOD_NOT_VALID;
         }
 
@@ -90,15 +92,16 @@ public class EnterpriseServiceTicket extends Ticket {
 
     /**
      * The method removes the product from the ticket
+     *
      * @param prodId the id of the product we want to remove
      * @return if it has been removed successfully returns the product, else returns null
      */
     public Service ticketRemove(int prodId) {
         Product product = ProductController.getInstance().getProduct(prodId);
-        if(!(product instanceof Service)){
+        if (!(product instanceof Service)) {
             System.out.println(INCORRECT);
             return null;
-        }else{
+        } else {
             this.services.remove((Service) product);
             return (Service) product;
         }
@@ -107,12 +110,13 @@ public class EnterpriseServiceTicket extends Ticket {
 
     /**
      * The method creates a String with a specific format
+     *
      * @return the String ready to print
      */
     @Override
     public String toStringNew(boolean withId) {
         StringBuilder sc = new StringBuilder();
-        sc.append(TICKET+ this.id + "\n");
+        sc.append(TICKET + this.id + "\n");
         sc.append(TICKET_NEW_OK);
         return sc.toString();
     }

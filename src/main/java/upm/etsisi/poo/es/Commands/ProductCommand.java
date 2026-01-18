@@ -28,10 +28,10 @@ public class ProductCommand implements Command {
                 prodAdd(fullLine, store);
                 break;
             case "addFood":
-                prodAddFood(fullLine, args, store);
+                prodAddFood(fullLine, store);
                 break;
             case "addMeeting":
-                prodAddMeeting(fullLine, args, store);
+                prodAddMeeting(fullLine, store);
                 break;
             case "list":
                 store.prodList();
@@ -199,7 +199,7 @@ public class ProductCommand implements Command {
         }
     }
 
-    private void prodAddFood(String fullLine, String[] args, ProductController store) {
+    private void prodAddFood(String fullLine,  ProductController store) {
         // prod addFood <id> "<name>" <price> <expiration> <max_people>
         try {
             // fullLine: prod add <id> "<name>" <category> <price>
@@ -254,7 +254,7 @@ public class ProductCommand implements Command {
         }
     }
 
-    private void prodAddMeeting(String fullLine, String[] args, ProductController store) {
+    private void prodAddMeeting(String fullLine, ProductController store) {
         try {
             // fullLine: prod add <id> "<name>" <category> <price>
             int firstQuote = fullLine.indexOf('"');

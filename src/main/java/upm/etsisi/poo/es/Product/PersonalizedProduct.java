@@ -14,7 +14,7 @@ public class PersonalizedProduct extends BasicProduct {
     public PersonalizedProduct(int id, String name, type type, double price, int maxPers) {
         super(id, name, type, price);
         this.maxPers = maxPers;
-        this.personalizaciones = new ArrayList<String>(maxPers);
+        this.personalizaciones = new ArrayList<>(maxPers);
     }
 
     public int getMaxPers() {

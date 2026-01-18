@@ -94,14 +94,10 @@ public class EnterpriseMixedTicket extends Ticket {
      *
      * @param p      The product we are adding
      * @param amount if it's an event, it shows the amount of people are coming to it. If it's just a product it shows the amount
-     * @return returns true if the product has been added successfully, else returns false
      */
-    public boolean addProduct(Product p, int amount) {
-        boolean resul = true;
+    public void addProduct(Product p, int amount) {
         if (this.status != Status.CLOSE) {
-            int before = this.amount;
             if (p == null) {
-                resul = false;
                 System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
 
             } else {
@@ -129,7 +125,6 @@ public class EnterpriseMixedTicket extends Ticket {
 
                         } else {
                             System.out.println(MANY_PEOPLE);
-                            resul = false;
                         }
                     } else {
                         System.out.println(PERIOD_NOT_VALID);
@@ -145,19 +140,14 @@ public class EnterpriseMixedTicket extends Ticket {
 
             }
         } else {
-            resul = false;
             System.out.println("ERROR: the ticket is closed. It can't be modified");
         }
-        return resul;
     }
 
 
-    public boolean addProductNoString(Product p, int amount) {
-        boolean resul = true;
+    public void addProductNoString(Product p, int amount) {
         if (this.status != Status.CLOSE) {
-            int before = this.amount;
             if (p == null) {
-                resul = false;
                 System.out.println(ERROR_PRODUCT_ID_NOT_FOUND);
 
             } else {
@@ -182,7 +172,6 @@ public class EnterpriseMixedTicket extends Ticket {
 
                         } else {
                             System.out.println(MANY_PEOPLE);
-                            resul = false;
                         }
                     } else {
                         System.out.println(PERIOD_NOT_VALID);
@@ -198,10 +187,8 @@ public class EnterpriseMixedTicket extends Ticket {
 
             }
         } else {
-            resul = false;
             System.out.println("ERROR: the ticket is closed. It can't be modified");
         }
-        return resul;
     }
 
     /**
@@ -308,7 +295,7 @@ public class EnterpriseMixedTicket extends Ticket {
     @Override
     public String toStringNew(boolean withId) {
         StringBuilder sc = new StringBuilder();
-        sc.append(TICKET + this.id + "\n");
+        sc.append(TICKET).append(this.id).append("\n");
         sc.append(TICKET_NEW_OK);
         return sc.toString();
     }
