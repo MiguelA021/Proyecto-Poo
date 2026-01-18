@@ -39,6 +39,7 @@ public class EnterpriseMixedTicket extends Ticket {
                products.add(copyProduct);
 
            }
+
        }
 
         return true;    }
