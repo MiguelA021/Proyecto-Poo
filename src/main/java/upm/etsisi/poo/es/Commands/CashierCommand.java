@@ -92,7 +92,7 @@ public class CashierCommand implements Command {
       int cash = Integer.parseInt(casherId);
       boolean removed = cashierController.removeCasher(cash);
       if (!removed) {
-        System.out.println("Could not find th cashier");
+        System.out.println("Could not find the cashier");
       } else {
         System.out.println("cash remove: ok");
       }

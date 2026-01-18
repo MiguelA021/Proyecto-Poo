@@ -133,7 +133,7 @@ public class CashierController {
           for(Integer tickId: cashier.tickets){
               TicketData.getInstance().eraseticket(tickId);
           }
-          for(String custId:cashier.getCustomers()){
+          for(String custId :cashier.getCustomers()){
               CustomerController.getInstance().removeCustomer(custId);
           }
           cashers.remove(id);
