@@ -94,30 +94,31 @@ public class TicketCommand implements Command {
     if (args.length < 4) {
       System.out.println(INCORRECT);
       return;
-    }
-    try {
-      int ticketId = Integer.parseInt(args[2]);
-      String casherId = args[3];
-      int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
-      Cashier cashier = CashierController.getInstance().searchCasherById(casherIdGood);
+    }else {
+      try {
+        int ticketId = Integer.parseInt(args[2]);
+        String casherId = args[3];
+        int casherIdGood = Integer.parseInt(casherId.replaceAll("UW", ""));
+        Cashier cashier = CashierController.getInstance().searchCasherById(casherIdGood);
 
-      Ticket ticket = TicketData.getInstance().getTicket(ticketId);
-      if (cashier == null && ticket == null) {
-        System.out.println("Cashier and ticket don't exist");
-      } else if (cashier == null) {
-        System.out.println("Cashier doesn't exist");
-        return;
-      } else if (ticket == null) {
-        System.out.println("Ticket doesn't exist");
-        return;
+        Ticket ticket = TicketData.getInstance().getTicket(ticketId);
+        if (cashier == null && ticket == null) {
+          System.out.println("Cashier and ticket don't exist");
+        } else if (cashier == null) {
+          System.out.println("Cashier doesn't exist");
+          return;
+        } else if (ticket == null) {
+          System.out.println("Ticket doesn't exist");
+          return;
+        }
+        if (CashierController.getInstance().exitsTicket(casherIdGood, ticketId)) {
+          ticketController.ticketPrint(ticketId);
+        } else {
+          System.out.println("This ticket does not belong to cashier");
+        }
+      } catch (NumberFormatException e) {
+        System.out.println(ERROR_ID);
       }
-      if (CashierController.getInstance().exitsTicket(casherIdGood, ticketId)) {
-        ticketController.ticketPrint(ticketId);
-      } else {
-        System.out.println("This ticket does not belong to cashier");
-      }
-    } catch (NumberFormatException e) {
-      System.out.println(ERROR_ID);
     }
   }
 
