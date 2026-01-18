@@ -5,6 +5,7 @@ import upm.etsisi.poo.es.Product.ProductController;
 import upm.etsisi.poo.es.type;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ProductCommand implements Command {
 
@@ -262,52 +263,53 @@ public class ProductCommand implements Command {
             if (firstQuote < 0 || secondQuote < 0) {
                 System.out.println(INCORRECT);
                 return;
-            }
+            } else {
 
-            String beforeName = fullLine.substring(0, firstQuote).trim(); // prod add <id>
-            String name = fullLine.substring(firstQuote + 1, secondQuote).trim();
-            String afterName = fullLine.substring(secondQuote + 1).trim(); // <category> <price>
+                String beforeName = fullLine.substring(0, firstQuote).trim(); // prod add <id>
+                String name = fullLine.substring(firstQuote + 1, secondQuote).trim();
+                String afterName = fullLine.substring(secondQuote + 1).trim(); // <category> <price>
 
-            String[] beforeTokens = beforeName.split("\\s+"); // [prod, add, id]
-            String[] afterTokens = afterName.split("\\s+"); // [category, price]
+                String[] beforeTokens = beforeName.split("\\s+"); // [prod, add, id]
+                String[] afterTokens = afterName.split("\\s+"); // [category, price]
 
-            if (beforeTokens.length != 3) {
-                System.out.println(INCORRECT);
-                return;
-            }
-            //prod | addMeeting | 23457 | "Graduacion ETSISI" | 40             |2025-11-21  | 30
-            //prod | add        | 5     | "Libro POO"         | BOOK           | 15         | 3 done 👌 DT es un 🐒
-            //prod | add        | 1     | "Libro POO"         | BOOK           | 25 done 👌
-            int id = Integer.parseInt(beforeTokens[2]);
-            if (afterTokens.length == 3) {
-                double precio = Double.parseDouble(afterTokens[0]);
-                String date = afterTokens[1];
-                int maxPeople = Integer.parseInt(afterTokens[2]);
+                if (beforeTokens.length != 3) {
+                    System.out.println(INCORRECT);
+                    return;
+                }
+                //prod | addMeeting | 23457 | "Graduacion ETSISI" | 40             |2025-11-21  | 30
+                //prod | add        | 5     | "Libro POO"         | BOOK           | 15         | 3 done
+                //prod | add        | 1     | "Libro POO"         | BOOK           | 25 done
+                int id = Integer.parseInt(beforeTokens[2]);
+                if (afterTokens.length == 3) {
+                    double precio = Double.parseDouble(afterTokens[0]);
+                    String date = afterTokens[1];
+                    int maxPeople = Integer.parseInt(afterTokens[2]);
 
-                Meeting meeting = new Meeting(id, name, precio, date);
+                    Meeting meeting = new Meeting(id, name, precio, date);
 
-                // Validamos que no supere el límite general (100)
-                if (maxPeople <= meeting.getMaxPersonas()) {
-                    // Guardamos el max_people concreto en el objeto
-                    meeting.setMaxPersonas(maxPeople);
+                    // Validamos que no supere el límite general (100)
+                    if (maxPeople <= meeting.getMaxPersonas() && meeting.fechaValida(LocalDateTime.parse(date))) {
+                        // Guardamos el max_people concreto en el objeto
+                        meeting.setMaxPersonas(maxPeople);
 
-                    boolean done = store.prodAdd(meeting);
-                    if (!done) {
-                        System.out.println(ID_REPEAT);
+                        boolean done = store.prodAdd(meeting);
+                        if (!done) {
+                            System.out.println(ID_REPEAT);
+                        } else {
+                            System.out.println(meeting.toString());
+                            System.out.println("prod addMeeting: ok");
+                        }
                     } else {
-                        System.out.println(meeting.toString());
-                        System.out.println("prod addMeeting: ok");
+                        System.out.println("Error processing ->prod addMeeting ->Error adding meeting");
                     }
                 } else {
-                    System.out.println("Error processing ->prod addMeeting ->Error adding meeting");
+                    System.out.println(INCORRECT);
                 }
-            } else {
-                System.out.println(INCORRECT);
             }
-
 
         } catch (Exception e) {
             System.out.println(INCORRECT);
         }
+
     }
 }

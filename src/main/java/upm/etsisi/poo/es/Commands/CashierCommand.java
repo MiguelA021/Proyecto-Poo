@@ -51,28 +51,29 @@ public class CashierCommand implements Command {
   private void cashierAdd(String[] args, CashierController cashierController) {
     if (args.length != 5 && args.length != 4) {
       System.out.println(INCORRECT);
-    }
-    boolean resul = false;
-    try {
-      String name;
-      String email;
-      if (args.length == 4) {
-        name = args[2];
-        email = args[3];
-        resul = cashierController.addCasher(null, name, email, false);
-      } else {
-        String casherId = args[2].replaceAll("UW", "");
-        int cash = Integer.parseInt(casherId);
-        name = args[3];
-        email = args[4];
-        resul = cashierController.addCasher(cash, name, email,false);
-      }
-      if(resul) {
+    }else {
+      boolean resul = false;
+      try {
+        String name;
+        String email;
+        if (args.length == 4) {
+          name = args[2];
+          email = args[3];
+          resul = cashierController.addCasher(null, name, email, false);
+        } else {
+          String casherId = args[2].replaceAll("UW", "");
+          int cash = Integer.parseInt(casherId);
+          name = args[3];
+          email = args[4];
+          resul = cashierController.addCasher(cash, name, email, false);
+        }
+        if (resul) {
           System.out.println("cash add: ok");
+        }
+      } catch (NumberFormatException e) {
+        System.out.println(INCORRECT);
+        return;
       }
-    } catch (NumberFormatException e) {
-      System.out.println(INCORRECT);
-      return;
     }
 
   }
