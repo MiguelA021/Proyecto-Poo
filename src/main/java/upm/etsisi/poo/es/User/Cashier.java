@@ -54,12 +54,12 @@ public class Cashier extends User {
   }
 
   public String toString() {
-    return "Cash{identifier='" + UPM_WORKER + id + "', name='" + name + "', email='" + email + "'}";
+    return "Cash{identifier='" + UPM_WORKER + id + "', name='" + name.replace('"', ' ').trim() + "', email='" + email + "'}";
   }
 
 
   public void printCsv(CSVPrinter csvPrinter) throws IOException {
-    csvPrinter.printRecord("Cashier", email, name, id);
+    csvPrinter.printRecord("Cashier", email, name.replace('"', ' ').trim(), id);
     for (Integer tickid : tickets) {
       csvPrinter.printRecord(id, tickid);
     }

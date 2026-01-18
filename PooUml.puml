@@ -12,7 +12,7 @@ interface Command{
 class CommandController{
 -Map<String, Command> commands
 +{static} CommandController instance
-+CommandController()
++CommandController getInstance()
 -void register(Command command)
 +Map<String, Command> getCommands()
 +boolean handle(String line)
@@ -79,19 +79,25 @@ abstract class User{
 class Cashier{
     -{static} String UPM_WORKER
     -{static} String ID_ERROR
-    -{static} String ID_NOT_FOUND
-    +String listTickets()
+    -ArrayList<String> customers
     +void addTicket(Integer id)
+    +ArrayList<String> getCustomers()
+    +void addCustomer(String id)
     +Ticket getTicketById(int id)
     +String toString()
-    +boolean removeTicket(int id)
+    +void printCsv(CSVPrinter csvPrinter)
+    +String listTickets()
+    +String cashTickets()
 }
 class Customer{
 -int cashierId
 +String toString()
 +void addTicket(Integer id)
++void printCsv(CSVPrinter csvPrinter)
 }
 class CustomerEnterprise{
++String toString()
++void printCsv(CSVPrinter csvPrinter)
 +String toString()
 }
 class CashierController{
@@ -108,6 +114,8 @@ class CashierController{
 +Cashier searchCasherById(int id)
 +boolean removeCasher(int id)
 +boolean exitsTicket(int cashId, int idTicket)
++void saveCashiers(CSVPrinter csvPrinter)
++void csvCashiers(CSVRecord csvRecord, boolean[] cont)
 }
 class CustomerController{
 +{static} String CASHIER_NOT_FOUND
@@ -121,6 +129,15 @@ class CustomerController{
 +void listCustomers()
 -ArrayList<Customer> customersToList()
 +void addTicket(Integer ticketId, int userId)
++void saveCustomers(CSVPrinter csvPrinter)
++void csvCustomers(CSVRecord csvRecord, boolean[] where)
+}
+class IdType{
+DNI
+NIE
+COMPANY
+INVALID
++{static} IdType detect(String id)
 }
 }
 package product{
@@ -136,6 +153,7 @@ abstract class Product{
 +{abstract} double getPrice()
 +{abstract} void setPrice(double price)
 +{abstract} void setName(String name)
++void printCsv(CSVPrinter csvPrinter)
 }
 class BasicProduct{
 #type category
@@ -150,6 +168,7 @@ class BasicProduct{
 +double getDiscountedPrice()
 +String toString()
 +String toStringDiscount()
++void printCsv(CSVPrinter csvPrinter)
 }
 class Event{
 #LocalDateTime expiracyDate
@@ -165,16 +184,19 @@ class Event{
 +void setName(String name)
 +void setmaxPersonas(int maxPersonas)
 +double getpricePerPerson()
++void printCsv(CSVPrinter csvPrinter)
 }
 class Food{
 -{static} int TIEMPO_MINIMO
 +boolean fechaValida(LocalDateTime time)
 +String toString()
++void printCsv(CSVPrinter csvPrinter)
 }
 class Meeting{
 -{static} int TIEMPO_MINIMO
 +boolean fechaValida(LocalDateTime time)
 +String toString()
++void printCsv(CSVPrinter csvPrinter)
 }
 class PersonalizedProduct{
 -int maxPers
@@ -184,6 +206,8 @@ class PersonalizedProduct{
 +boolean addPersonalized(String personalize)
 +void newPrice()
 +String toStringDiscount(double discountValue)
++void printCsv(CSVPrinter csvPrinter)
++Object getPerstonalizations()
 }
 class ProductController{
 +int MAX_PRODUCT
@@ -204,6 +228,8 @@ class ProductController{
 +Product updateType(int id, type category)
 +Product updateName(int id, String name)
 +Product updatePrice(int id, double price)
++void saveInventory(CSVPrinter csvPrinter)
++void renovateInventory(CSVRecord csvRecord, boolean[] cont)
 }
 class Service{
 -{static} int NEXT
@@ -218,7 +244,9 @@ class Service{
 +void setName(String name)
 +LocalDate getMaxUseDate()
 +String toString()
++void printCsv(CSVPrinter csvPrinter)
 }
+
 }
 package Tickets{
 abstract class Ticket{
@@ -250,20 +278,27 @@ abstract class Ticket{
  +boolean close()
  +String print(boolean close)
  +String formatList()
+ +String formatListCashList()
  +String toStringId()
  +String toStringNew()
+ +BasicProduct copy(BasicProduct b)
+ +void printCsv(CSVPrinter csvPrinter)
 }
 class TicketData {
    -{static} String ID_ERROR
    HashMap<Integer, Ticket> tickets
    -{static}TicketData instance
    +{static} TicketData getInstance()
+   +void eraseticket(int id)
    +Ticket getTicket(int ticketId)
    +int addTicket(String tycketType)
    +boolean addTicket(int idTicket, String ticketType)
+   +void saveTickets(CSVPrinter csvPrinter)
+   +void csvTickets(CSVRecord record, int[] ticketActual)
 }
 class TicketController {
     -TicketData ticketData
+    -{static} TicketController instance
     +boolean prodAdd(Product product)
     +void ticketNew(String[] args)
     +boolean ticketRemove(int id)
@@ -271,24 +306,31 @@ class TicketController {
 }
 class CustomerTicket{
 +String print(boolean close)
++boolean close()
 +boolean canBeClosed()
 +boolean ticketAdd(Product product, int amount)
+boolean ticketAddNoString(Product product, int amount)
 +Product ticketRemove(int prodId)
 +boolean comprobarFechasTodosEventos(LocalDateTime now)
 +String ticketPrint(boolean close)
 +void sort()
++void printCsv(CSVPrinter csvPrinter)
 }
 class EnterpriseMixedTicket{
 -List<Product> products
 -List<Service> services
++boolean close()
 +boolean canBeClosed()
 +double getExtraDiscountRate()
 +boolean addProduct(Product p, int amount)
++boolean addProductNoString(Product p, int amount)
+boolean addService(Service s)
 +List<Product> getProducts()
 +List<Service> getServices()
 +String print(boolean close)
 +Product ticketRemove(int prodId)
 +String toStringNew()
++void printCsv(CSVPrinter csvPrinter)
 }
 class EnterpriseServiceTicket{
 -String INCORRECT
@@ -299,11 +341,12 @@ class EnterpriseServiceTicket{
 +String print( boolean close)
 +Service ticketRemove(int prodId)
 +String toStringNew()
++void printCsv(CSVPrinter csvPrinter)
 }
 enum Status{
  - EMPTY
  - ACTIVE
- - CLOSED
+ - CLOSE
 }
 }
 class App{
@@ -313,13 +356,16 @@ class App{
  -{static} String TERMINAL_ERROR
  -{static} String UPM
  -{static} final Map<String, List<String>> COMMANDS
+ +{static} String path
+ +{static} File savefile
  +main(String[] args)
  -void end()
  -void start()
  -void userCommand()
  -void readFile(String[] args)
  -void init()
-}
+ -void renovate(CSVParser csvParser)
+ }
 enum type{
  -MERCH
  -STATIONARY
@@ -364,6 +410,7 @@ Ticket<|-- EnterpriseServiceTicket
 EnterpriseMixedTicket --o Product
 EnterpriseMixedTicket --o Service
 EnterpriseMixedTicket ..> Product
+EnterpriseMixedTicket --> Service
 EnterpriseServiceTicket --o Service
 EnterpriseServiceTicket ..> Service
 CustomerTicket ..> Product
@@ -371,6 +418,7 @@ CashierController o-- Cashier
 CustomerController *-- Customer
 ProductController "0" --o "200" Product
 ProductController ..> Product
+Ticket ..> BasicProduct
 }
 @enduml
 @enduml

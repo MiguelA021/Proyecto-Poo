@@ -137,11 +137,12 @@ public class ProductController {
   public boolean prodRemove(int id) {// Se puede mejorar la eficiencia con un while
     boolean found = false;
     Product product = null;
-    for (int i = 0; i < MAX_PRODUCT && !found; i++) {
+    for (int i = 0; i <this.prodAmount && !found; i++) {
       if (productList[i].getId() == id) {
         found = true;
         product = productList[i];
-        productList[i] = null;
+        productList[i] = productList[prodAmount-1];
+        productList[prodAmount] = null;
       }
     }
     if (found) {

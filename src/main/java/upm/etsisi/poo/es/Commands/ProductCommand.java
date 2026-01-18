@@ -95,6 +95,11 @@ public class ProductCommand implements Command {
                 if (afterTokens.length == 2) {
                     type category = type.valueOf(afterTokens[0]);
                     double price = Double.parseDouble(afterTokens[1]);
+
+                    if (price < 0){
+                        System.out.println("WARNING: Price can't be negative.");
+                        return;
+                    }
                     BasicProduct p = new BasicProduct(id, name, category, price);//REVISAR
                     boolean done = store.prodAdd(p);
                     if (!done) {
@@ -107,6 +112,7 @@ public class ProductCommand implements Command {
 
                     type category = type.valueOf(afterTokens[0]);
                     double price = Double.parseDouble(afterTokens[1]);
+
                     int maxPersonalizaciones = Integer.parseInt(afterTokens[2]);
                     PersonalizedProduct p = new PersonalizedProduct(id, name, category, price, maxPersonalizaciones);
                     boolean done = store.prodAdd(p);

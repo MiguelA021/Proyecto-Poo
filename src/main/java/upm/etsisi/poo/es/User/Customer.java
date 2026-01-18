@@ -18,7 +18,7 @@ public class Customer extends User {
   }
 
   public String toString() {
-    return "USER{identifier='" + id + "', name='" + name + "', email='" + email + "', cash=UW" + cashierId + "}";
+    return "USER{identifier='" + id + "', name='" + name.replace('"', ' ').trim() + "', email='" + email + "', cash=UW" + cashierId + "}";
   }
 
   /**
@@ -31,7 +31,7 @@ public class Customer extends User {
   }
 
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
-       csvPrinter.printRecord("Customer", email, name, cashierId, id);
+       csvPrinter.printRecord("Customer", email, name.replace('"', ' ').trim() , cashierId, id);
        for(Integer tickid:tickets){
            csvPrinter.printRecord(id, tickid);
        }
