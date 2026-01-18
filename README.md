@@ -5,6 +5,8 @@
     java -jar Poo-1.0-SNAPSHOT.jar "texto.txt"
     or
     java -jar Poo-1.0-SNAPSHOT.jar
+    If at the execution a warning appears, execute the .jar file like this:
+    java --enable-native-access=ALL-UNNAMED -jar miArchivo.jar
 
 ## Use of Jline
 #### We have used Jline as a termilan completion manager, which also saves a history of last used commands in an execution of the app, similar to terminal emulators like kitty or ghostty, we also implemented keybindings for a faster usage of the app:
