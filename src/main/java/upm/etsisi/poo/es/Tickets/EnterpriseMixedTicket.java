@@ -6,6 +6,7 @@ import upm.etsisi.poo.es.Product.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,14 +34,15 @@ public class EnterpriseMixedTicket extends Ticket {
             return false;
         }
         status = Status.CLOSE;
-       for (Product p : products){
-           if(p instanceof BasicProduct){
-               Product copyProduct =copy((BasicProduct) products.remove(p.getId()));
-               products.add(copyProduct);
-
-           }
-
-       }
+        Iterator<Product> it = products.iterator();
+        while (it.hasNext()){
+            Product actual = it.next();
+            if(actual instanceof BasicProduct){
+                BasicProduct copia = copy((BasicProduct) actual);
+                int indice = products.indexOf(actual);
+                products.set(indice, copia);
+            }
+        }
 
         return true;    }
 
@@ -50,7 +52,11 @@ public class EnterpriseMixedTicket extends Ticket {
      */
     @Override
     public boolean canBeClosed() {
-        if (products.isEmpty() || services.isEmpty()) {
+        if (products.isEmpty() ) {
+            System.out.println("Add product to close ticket");
+            return false;
+        }else if(services.isEmpty()){
+            System.out.println("Add service to close ticket");
             return false;
         }
         LocalDateTime today = LocalDateTime.now();
@@ -58,12 +64,13 @@ public class EnterpriseMixedTicket extends Ticket {
             if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today.toLocalDate())) {
                 return false;
             }
-            for (Product product : products) {
-                if (product instanceof Event) {
-                    Event event = (Event) product;
-                    if (!event.fechaValida(today)) {
-                        return false;
-                    }
+
+        }
+        for (Product product : products) {
+            if (product instanceof Event) {
+                Event event = (Event) product;
+                if (!event.fechaValida(today)) {
+                    return false;
                 }
             }
         }
@@ -133,13 +140,6 @@ public class EnterpriseMixedTicket extends Ticket {
                         products.add(p);
                     }
                     System.out.println(print(false));
-                    if ((this.amount - before) == amount) {
-                        resul = true;
-                        System.out.println(ADD_OK);
-                    } else {
-                        resul = false;
-                        System.out.println(ERROR_FULL);
-                    }
 
                 }
 
@@ -272,7 +272,7 @@ public class EnterpriseMixedTicket extends Ticket {
             double extraRate = this.getExtraDiscountRate();
             double extraDiscount = totalPrice * extraRate;
             double finalPrice = totalPrice - extraDiscount;
-            sb.append("  Total price: ").append(String.format(Locale.US, "%.1f", totalPrice)).append("\n");
+            sb.append("\n  Total price: ").append(String.format(Locale.US, "%.1f", totalPrice)).append("\n");
             sb.append("  Extra Discount from services:").append(String.format(Locale.US, "%.1f", extraDiscount)).append(" **discount -").append(extraDiscount).append("\n");
             sb.append("  Total discount: ").append(String.format(Locale.US, "%.1f", extraDiscount)).append("\n");
             sb.append("  Final Price: ").append(String.format(Locale.US, "%.1f", finalPrice));
