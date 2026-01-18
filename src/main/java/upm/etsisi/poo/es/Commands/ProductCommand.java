@@ -288,8 +288,7 @@ public class ProductCommand implements Command {
                     Meeting meeting = new Meeting(id, name, precio, date);
 
                     // Validamos que no supere el límite general (100)
-                    LocalDate date1 = LocalDate.parse(date);
-                    if (maxPeople <= meeting.getMaxPersonas() && meeting.fechaValida(date1.atStartOfDay())) {
+                    if (maxPeople <= meeting.getMaxPersonas() && meeting.fechaValida(LocalDateTime.now())) {
                         // Guardamos el max_people concreto en el objeto
                         meeting.setMaxPersonas(maxPeople);
 
