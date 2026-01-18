@@ -57,14 +57,14 @@ public class EnterpriseMixedTicket extends Ticket {
             if (s.getMaxUseDate() != null && s.getMaxUseDate().isBefore(today.toLocalDate())) {
                 return false;
             }
-        for(Product product : products){
-            if(product instanceof Event){
-                Event event = (Event) product;
-                if(!event.fechaValida(today)) {
-                    return false;
+            for (Product product : products) {
+                if (product instanceof Event) {
+                    Event event = (Event) product;
+                    if (!event.fechaValida(today)) {
+                        return false;
+                    }
                 }
             }
-        }
         }
         return true;
     }
@@ -83,7 +83,8 @@ public class EnterpriseMixedTicket extends Ticket {
 
     /**
      * The method adds the product into the ticket
-     * @param p The product we are adding
+     *
+     * @param p      The product we are adding
      * @param amount if it's an event, it shows the amount of people are coming to it. If it's just a product it shows the amount
      * @return returns true if the product has been added successfully, else returns false
      */
@@ -106,11 +107,11 @@ public class EnterpriseMixedTicket extends Ticket {
                         if (amount <= event.getMaxPersonas()) {
 
                             double price = event.getPricePerPerson() * amount;
-                            if(event instanceof Meeting){
+                            if (event instanceof Meeting) {
                                 Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
                                 meeting.setPrice(price);
                                 products.add(meeting);
-                            }else{
+                            } else {
                                 Food food = new Food(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
                                 food.setPrice(price);
                                 products.add(food);
@@ -168,11 +169,11 @@ public class EnterpriseMixedTicket extends Ticket {
                     if (event.fechaValida(LocalDateTime.now())) {
                         if (amount <= event.getMaxPersonas()) {
                             double price = event.getPricePerPerson() * amount;
-                            if(event instanceof Meeting){
+                            if (event instanceof Meeting) {
                                 Meeting meeting = new Meeting(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
                                 meeting.setPrice(price);
                                 products.add(meeting);
-                            }else{
+                            } else {
                                 Food food = new Food(event.getId(), event.getName(), event.getPrice(), event.getExpiryDate().toLocalDate().toString());
                                 food.setPrice(price);
                                 products.add(food);
@@ -209,6 +210,7 @@ public class EnterpriseMixedTicket extends Ticket {
 
     /**
      * The method adds the service if the dates are correct
+     *
      * @param s the service given by parameter
      * @return returns true if the service has been added successfully
      */
@@ -237,30 +239,33 @@ public class EnterpriseMixedTicket extends Ticket {
     public List<Service> getServices() {
         return new ArrayList<>(services);
     }
+
     /**
      * The method prints the ticket
+     *
      * @param close shows if the ticket is closed or not
      * @return the String ready to print
      */
     @Override
     public String print(boolean close) {
 
-        if (close) if(!this.close()) System.out.println(PERIOD_NOT_VALID); // solo cerrará si hay >=1 producto y >=1 servicio
+        if (close) if (!this.close())
+            return PERIOD_NOT_VALID; // solo cerrará si hay >=1 producto y >=1 servicio
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Ticket : ").append(this.getId()).append("\n");
-        sb.append("Services Included:\n");
+        sb.append(TICKET).append(this.toStringId());
+        sb.append("\nServices Included:");
         // Servicios: sin precio
         for (Service s : this.getServices()) {
-            sb.append("  ").append(s.toString()).append("\n");
+            sb.append("\n  ").append(s.toString());
         }
         if (!products.isEmpty()) {
-            sb.append("Products Included:\n");
+            sb.append("\nProducts Included:");
             // Productos: con precio, aplicando descuento extra (15% por servicio)
             double totalPrice = 0.0;
             for (Product p : this.getProducts()) {
                 totalPrice += p.getPrice();
-                sb.append("  ").append(p.toString()).append("\n");
+                sb.append("\n  ").append(p.toString());
             }
 
             double extraRate = this.getExtraDiscountRate();
@@ -276,6 +281,7 @@ public class EnterpriseMixedTicket extends Ticket {
 
     /**
      * The method removes the ticket with the id given
+     *
      * @param prodId the id of the product, given by parameter
      * @return returns the product if it has been removed successfully, else returns null
      */
@@ -300,12 +306,13 @@ public class EnterpriseMixedTicket extends Ticket {
 
     /**
      * The method returns the String with a specific format
+     *
      * @return the string with the specific format
      */
     @Override
     public String toStringNew(boolean withId) {
         StringBuilder sc = new StringBuilder();
-        sc.append(TICKET + " " + this.id + "\n");
+        sc.append(TICKET + this.id + "\n");
         sc.append(TICKET_NEW_OK);
         return sc.toString();
     }

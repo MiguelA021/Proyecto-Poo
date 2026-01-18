@@ -64,7 +64,7 @@ public class App {
     CustomerController.getInstance().saveCustomers(csvPrinter);
     csvPrinter.printRecord("Tickets");
     TicketData.getInstance().saveTickets(csvPrinter);
-    System.out.println("Closing application");
+    System.out.println("Closing application.");
     System.out.println("Goodbye!");
 
     writer.close();

@@ -74,12 +74,13 @@ public class EnterpriseServiceTicket extends Ticket {
     public String print(boolean close) {
 
         if (close) {
-            if(!this.close()) System.out.println(PERIOD_NOT_VALID);
+            if(!this.close())
+                return PERIOD_NOT_VALID;
         }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("Services Included:").append(this.getId());
-
+        sb.append(TICKET).append(this.toStringId());
+        sb.append("\nServices Included:");
         for (Service s : this.getServices()) {
             sb.append("\n  ").append(s.toString());
         }
@@ -111,7 +112,7 @@ public class EnterpriseServiceTicket extends Ticket {
     @Override
     public String toStringNew(boolean withId) {
         StringBuilder sc = new StringBuilder();
-        sc.append(TICKET + " " + this.id + "\n");
+        sc.append(TICKET+ this.id + "\n");
         sc.append(TICKET_NEW_OK);
         return sc.toString();
     }

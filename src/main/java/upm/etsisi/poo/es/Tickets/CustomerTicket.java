@@ -130,7 +130,7 @@ public class CustomerTicket extends Ticket {
             }
         } else {
             resul = false;
-            System.out.println("ERROR: the ticket is closed. It can't be modified");
+            System.out.println(ERROR_TICKET_CLOSE);
         }
         return resul;
     }
@@ -187,7 +187,7 @@ public class CustomerTicket extends Ticket {
             }
         } else {
             resul = false;
-            System.out.println("ERROR: the ticket is closed. It can't be modified");
+            System.out.println(ERROR_TICKET_CLOSE);
         }
         return resul;
     }
@@ -259,24 +259,10 @@ public class CustomerTicket extends Ticket {
     }
 
     private String formatOutput(double val) {
-        String text = String.valueOf(val);
-        int pointIndex = text.indexOf('.');
-        if (pointIndex == -1) return text;
 
-        String decimals = text.substring(pointIndex + 1);
-        int dirtyZeroIndex = decimals.indexOf("0000");
-        if (dirtyZeroIndex != -1) {
-            if (dirtyZeroIndex == 0) return text.substring(0, pointIndex + 2);
-            return text.substring(0, pointIndex + 1 + dirtyZeroIndex);
-        }
-        int ninesIndex = decimals.indexOf("99999");
-        if (ninesIndex != -1) {
-            return text.substring(0, pointIndex + 1 + ninesIndex + 5);
-        }
-        if (decimals.length() > 3) {
-            return text.substring(0, pointIndex + 1 + 3);
-        }
-        return text;
+        double rounded = Math.round(val * 1000.0) / 1000.0;
+
+        return String.valueOf(rounded);
     }
 
     /**
@@ -293,7 +279,7 @@ public class CustomerTicket extends Ticket {
             if (!this.close())
                 return PERIOD_NOT_VALID;
         }
-        sc.append(TICKET + " ").append(toStringId()).append("\n");
+        sc.append(TICKET ).append(toStringId()).append("\n");
         if (this.amount > 0 && this.productList[0] != null) {
             sort();
             int n = this.amount;
@@ -327,9 +313,9 @@ public class CustomerTicket extends Ticket {
                         totalDiscount += discountValue;
 
                         if (discountValue > 0.0) {
-                            sc.append(product.toStringDiscount(discountValue));
+                            sc.append(product.toStringDiscount(discountValue)).append("\n");
                         } else {
-                            sc.append(product);
+                            sc.append(product).append("\n");
                         }
 
                     } else if (p instanceof BasicProduct) {
@@ -346,7 +332,7 @@ public class CustomerTicket extends Ticket {
                         if (discountValue > 0.0) {
                             sc.append(product.toStringDiscount(discountValue));
                         } else {
-                            sc.append(product.toString());
+                            sc.append(product.toString()).append("\n");
                         }
 
                     } else if (p instanceof Event) {

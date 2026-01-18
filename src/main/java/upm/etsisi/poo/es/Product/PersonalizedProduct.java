@@ -21,23 +21,36 @@ public class PersonalizedProduct extends BasicProduct {
         return this.maxPers;
     }
 
-
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if (!this.personalizaciones.isEmpty()) {
-            sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("', category: ").append(this.category).append(", price:").append(this.price).append(",");
-            sb.append(" maxPersonal:").append(maxPers).append(",\n");
-            for (int i = 0; i < this.personalizaciones.size(); i++) {
-                if (i == this.personalizaciones.size() - 1) {
-                    sb.append(personalizaciones.get(i));
-                } else sb.append(personalizaciones.get(i)).append("\t");
-            }
-        } else {
-            sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("', category: ").append(this.category).append(", price:").append(this.price);
-            sb.append(" maxPersonal:").append(maxPers).append("}");
-        }
+        sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("', category: ").append(this.category).append(", price:").append(this.price);
+        sb.append(" maxPersonal:").append(maxPers).append("} ");
 
         return sb.toString();
+    }
+
+    @Override
+    public String toStringDiscount(double discountValue) {
+        StringBuilder sb = new StringBuilder();
+        if (!this.personalizaciones.isEmpty()) {
+            sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("'").append(", category:").append(this.category).append(", price:").append(this.price).append(",");
+            sb.append(" maxPersonal:").append(maxPers).append(",");
+            sb.append("personalizationList:[");
+
+            for (int i = 0; i < this.personalizaciones.size(); i++) {
+                if (i == this.personalizaciones.size() - 1) sb.append(personalizaciones.get(i));
+                else sb.append(personalizaciones.get(i)).append(", ");
+
+            }
+            sb.append("]} ");
+        } else {
+            sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("', category: ").append(this.category).append(", price:").append(this.price).append(", maxPersonal:").append(maxPers).append("} ");
+        }
+        sb.append(String.format(Locale.US, "**discount -%.3f ", discountValue));
+
+        return sb.toString();
+
     }
 
     /**
@@ -63,28 +76,6 @@ public class PersonalizedProduct extends BasicProduct {
         this.price = 0.1 * this.price * personalizaciones.size() + this.price;
     }
 
-    @Override
-    public String toStringDiscount(double discountValue) {
-        StringBuilder sb = new StringBuilder();
-        if (!this.personalizaciones.isEmpty()) {
-            sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("'").append(", category: ").append(this.category).append(", price:").append(this.price).append(",");
-            sb.append(" maxPersonal:").append(maxPers).append(",");
-            sb.append("personalizationList:[");
-
-            for (int i = 0; i < this.personalizaciones.size(); i++) {
-                if (i == this.personalizaciones.size() - 1) sb.append(personalizaciones.get(i));
-                else sb.append(personalizaciones.get(i)).append(", ");
-
-            }
-            sb.append("]} ");
-        } else {
-            sb.append("{class:ProductPersonalized, id:").append(this.id).append(", name:'").append(this.name).append("', category: ").append(this.category).append(", price:").append(this.price).append(", maxPersonal:").append(maxPers).append("}");
-        }
-        sb.append(String.format(Locale.US, "**discount -%.3f \n", discountValue));
-
-        return sb.toString();
-
-    }
 
     @Override
     public void printCsv(CSVPrinter csvPrinter) throws IOException {
