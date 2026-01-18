@@ -41,13 +41,7 @@ public class Cashier extends User {
    * @return the ticket (if it has been found)
    */
   public boolean getTicketById(int id) {
-    boolean ticket = false;
-    if (tickets.contains(id)) {
-      ticket = true;
-    } else {
-      System.out.println(ID_NOT_FOUND);
-    }
-    return ticket;
+      return tickets.contains(id);
 
   }
 

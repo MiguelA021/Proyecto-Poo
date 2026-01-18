@@ -192,12 +192,7 @@ public class EnterpriseMixedTicket extends Ticket {
                     for (int i = 0; i < amount; i++) {
                         products.add(p);
                     }
-                    if ((this.amount - before) == amount) {
-                        resul = true;
-                    } else {
-                        resul = false;
-                        System.out.println(ERROR_FULL);
-                    }
+
 
                 }
 
