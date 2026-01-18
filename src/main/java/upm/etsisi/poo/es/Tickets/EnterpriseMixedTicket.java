@@ -35,7 +35,9 @@ public class EnterpriseMixedTicket extends Ticket {
         status = Status.CLOSE;
        for (Product p : products){
            if(p instanceof BasicProduct){
-               p = copy((BasicProduct) p);
+               Product copyProduct =copy((BasicProduct) products.remove(p.getId()));
+               products.add(copyProduct);
+
            }
        }
 
