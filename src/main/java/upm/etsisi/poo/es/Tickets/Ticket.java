@@ -88,7 +88,7 @@ public abstract class Ticket {
 
     public String formatListCashList(){
         StringBuilder resul = new StringBuilder();
-        resul.append("  " + toStringId()).append(" -> ").append(this.status.toString().toUpperCase());
+        resul.append("  " + toStringId()).append("->").append(this.status.toString().toUpperCase());
         return resul.toString();
     }
     /**
